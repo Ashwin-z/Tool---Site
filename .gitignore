@@ -1,0 +1,6 @@
+# Workspace-level ignores (repo root is the parent folder)
+_embedded_repo_backup/
+
+# OS / editor
+.DS_Store
+Thumbs.db
