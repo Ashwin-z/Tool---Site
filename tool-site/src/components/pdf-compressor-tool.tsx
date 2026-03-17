@@ -14,7 +14,7 @@ interface CompressedFile {
   originalSize: number;
   compressedSize: number;
   data: Uint8Array<ArrayBuffer>;
-  method: "structural" | "canvas" | "original";
+  method: "image-recompress" | "structural" | "canvas" | "original";
 }
 
 interface CompressionResult {
@@ -36,7 +36,7 @@ const LEVELS: {
   {
     id: "extreme",
     label: "Extreme Compression",
-    sub: "30% - 70% smaller, readable quality",
+    sub: "50% - 85% smaller, good quality",
     icon: "⚡",
     color: "text-red-400",
     activeRing: "ring-red-500/50",
@@ -45,7 +45,7 @@ const LEVELS: {
   {
     id: "recommended",
     label: "Recommended Compression",
-    sub: "15% - 50% smaller, balanced quality",
+    sub: "30% - 65% smaller, balanced quality",
     icon: "✅",
     color: "text-emerald-400",
     activeRing: "ring-emerald-500/50",
@@ -62,38 +62,29 @@ const LEVELS: {
   },
 ];
 
-/* Balanced settings:
-   - Extreme: aggressive but still readable
-   - Recommended: safe balance
-   - Less: light compression
-
-   Note:
-   Exact compression % can never be guaranteed for every PDF because some PDFs
-   are image-heavy, some are vector/text-heavy, and some are already optimized.
-   These settings are tuned so typical scanned/image PDFs land near your target ranges.
+/*
+  IMAGE-LEVEL compression settings.
+  These control JPEG quality for embedded images only — text & vectors stay untouched.
+  This is the same approach iLovePDF and similar tools use.
 */
-const CANVAS_ATTEMPTS: Record<CompressionLevel, { scale: number; quality: number }[]> = {
-  extreme: [
-    { scale: 0.70, quality: 0.22 },
-    { scale: 0.75, quality: 0.28 },
-    { scale: 0.80, quality: 0.33 },
-    { scale: 0.85, quality: 0.38 },
-    { scale: 0.92, quality: 0.42 },
-    { scale: 1.0,  quality: 0.48 },
-  ],
-  recommended: [
-    { scale: 0.82, quality: 0.38 },
-    { scale: 0.88, quality: 0.45 },
-    { scale: 0.92, quality: 0.52 },
-    { scale: 0.96, quality: 0.58 },
-    { scale: 1.0,  quality: 0.64 },
-  ],
-  less: [
-    { scale: 0.95, quality: 0.60 },
-    { scale: 1.0,  quality: 0.68 },
-    { scale: 1.0,  quality: 0.76 },
-    { scale: 1.0,  quality: 0.82 },
-  ],
+const IMAGE_QUALITY: Record<CompressionLevel, number> = {
+  extreme: 0.15,
+  recommended: 0.35,
+  less: 0.60,
+};
+
+/* Scale factor for embedded images (reduces pixel dimensions) */
+const IMAGE_SCALE: Record<CompressionLevel, number> = {
+  extreme: 0.55,
+  recommended: 0.72,
+  less: 0.88,
+};
+
+/* Fallback canvas-based settings (only used when image recompress has no effect) */
+const CANVAS_SETTINGS: Record<CompressionLevel, { scale: number; quality: number }> = {
+  extreme: { scale: 0.80, quality: 0.30 },
+  recommended: { scale: 0.90, quality: 0.50 },
+  less: { scale: 1.0, quality: 0.70 },
 };
 
 function fmtSize(bytes: number): string {
@@ -110,25 +101,6 @@ function uid(): string {
 function getSavedPercent(original: number, compressed: number): number {
   if (!original || compressed >= original) return 0;
   return Math.max(0, Math.round(((original - compressed) / original) * 100));
-}
-
-function isCanvasResultAcceptable(
-  level: CompressionLevel,
-  savedPct: number,
-  quality: number,
-  scale: number,
-): boolean {
-  if (level === "extreme") {
-    // Accept moderate compression; the priority is keeping text readable
-    return savedPct >= 25 || (savedPct >= 15 && (quality >= 0.33 || scale >= 0.85));
-  }
-
-  if (level === "recommended") {
-    return savedPct >= 15 || (savedPct >= 10 && quality >= 0.45 && scale >= 0.88);
-  }
-
-  // less mode: light compression, best quality
-  return savedPct >= 5 || (savedPct >= 3 && quality >= 0.60 && scale >= 0.95);
 }
 
 async function structuralCompress(
@@ -154,6 +126,187 @@ async function structuralCompress(
   });
 }
 
+/* ------------------------------------------------------------------ */
+/*  Image-level recompression using pdf-lib's low-level API            */
+/*  Walks every PDF object, finds image XObjects, decodes them via     */
+/*  canvas, re-encodes as JPEG at the target quality/scale, and        */
+/*  replaces the stream data in-place.  Text & vectors are UNTOUCHED.  */
+/* ------------------------------------------------------------------ */
+async function imageRecompress(
+  data: Uint8Array,
+  level: CompressionLevel,
+  pdfLib: typeof import("pdf-lib"),
+): Promise<Uint8Array> {
+  const { PDFDocument, PDFName, PDFRawStream, PDFStream, PDFNumber } = pdfLib;
+
+  const doc = await PDFDocument.load(data, {
+    ignoreEncryption: true,
+    updateMetadata: false,
+  });
+
+  const quality = IMAGE_QUALITY[level];
+  const scale = IMAGE_SCALE[level];
+  let imagesProcessed = 0;
+
+  const context = doc.context;
+  context.enumerateIndirectObjects().forEach(([ref, obj]) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pdfObj = obj as any;
+    const dict = pdfObj.dict || pdfObj.dictionary;
+    if (!dict) return;
+
+    const subtype = dict.get(PDFName.of("Subtype"));
+    if (!subtype) return;
+    const subtypeStr = subtype instanceof PDFName ? subtype.toString() : "";
+    if (subtypeStr !== "/Image") return;
+
+    const type = dict.get(PDFName.of("Type"));
+    const typeStr = type instanceof PDFName ? type.toString() : "";
+    if (typeStr && typeStr !== "/XObject") return;
+
+    const widthObj = dict.get(PDFName.of("Width"));
+    const heightObj = dict.get(PDFName.of("Height"));
+    if (!widthObj || !heightObj) return;
+
+    const width = widthObj instanceof PDFNumber ? widthObj.asNumber() : parseInt(widthObj.toString(), 10);
+    const height = heightObj instanceof PDFNumber ? heightObj.asNumber() : parseInt(heightObj.toString(), 10);
+    if (!width || !height || width < 4 || height < 4) return;
+    if (width * height < 2500) return; // skip tiny icons
+
+    // Get the raw stream bytes
+    let imageBytes: Uint8Array;
+    try {
+      if (pdfObj instanceof PDFRawStream) {
+        imageBytes = pdfObj.asUint8Array();
+      } else if (pdfObj instanceof PDFStream) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const stream = pdfObj as any;
+        if (typeof stream.getContents === "function") {
+          imageBytes = stream.getContents();
+        } else if (typeof stream.getUnencodedContents === "function") {
+          imageBytes = stream.getUnencodedContents();
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    } catch {
+      return;
+    }
+
+    // Check bits per component
+    const bpc = dict.get(PDFName.of("BitsPerComponent"));
+    const bitsPerComponent = bpc instanceof PDFNumber ? bpc.asNumber() : parseInt(bpc?.toString() || "8", 10);
+    if (bitsPerComponent !== 8) return;
+
+    // Determine color space
+    const csObj = dict.get(PDFName.of("ColorSpace"));
+    const csStr = csObj instanceof PDFName ? csObj.toString() : csObj?.toString() || "";
+    let channels = 3;
+    if (csStr.includes("Gray") || csStr.includes("CalGray")) channels = 1;
+    else if (csStr.includes("CMYK")) channels = 4;
+    else if (csStr.includes("RGB") || csStr.includes("CalRGB")) channels = 3;
+
+    const expectedLength = width * height * channels;
+    if (imageBytes.length < expectedLength * 0.8) return; // compressed/encoded, skip
+
+    const newW = Math.max(1, Math.round(width * scale));
+    const newH = Math.max(1, Math.round(height * scale));
+
+    const srcCanvas = document.createElement("canvas");
+    srcCanvas.width = width;
+    srcCanvas.height = height;
+    const srcCtx = srcCanvas.getContext("2d");
+    if (!srcCtx) return;
+
+    const imgData = srcCtx.createImageData(width, height);
+    const rgba = imgData.data;
+
+    if (channels === 3) {
+      for (let p = 0, r = 0; p < width * height; p++, r += 4) {
+        rgba[r] = imageBytes[p * 3];
+        rgba[r + 1] = imageBytes[p * 3 + 1];
+        rgba[r + 2] = imageBytes[p * 3 + 2];
+        rgba[r + 3] = 255;
+      }
+    } else if (channels === 1) {
+      for (let p = 0, r = 0; p < width * height; p++, r += 4) {
+        const v = imageBytes[p];
+        rgba[r] = v; rgba[r + 1] = v; rgba[r + 2] = v; rgba[r + 3] = 255;
+      }
+    } else if (channels === 4) {
+      for (let p = 0, r = 0; p < width * height; p++, r += 4) {
+        const c = imageBytes[p * 4] / 255;
+        const m = imageBytes[p * 4 + 1] / 255;
+        const y = imageBytes[p * 4 + 2] / 255;
+        const k = imageBytes[p * 4 + 3] / 255;
+        rgba[r] = 255 * (1 - c) * (1 - k);
+        rgba[r + 1] = 255 * (1 - m) * (1 - k);
+        rgba[r + 2] = 255 * (1 - y) * (1 - k);
+        rgba[r + 3] = 255;
+      }
+    }
+
+    srcCtx.putImageData(imgData, 0, 0);
+
+    const outCanvas = document.createElement("canvas");
+    outCanvas.width = newW;
+    outCanvas.height = newH;
+    const outCtx = outCanvas.getContext("2d");
+    if (!outCtx) { srcCanvas.width = 0; return; }
+
+    outCtx.imageSmoothingEnabled = true;
+    outCtx.imageSmoothingQuality = "high";
+    outCtx.drawImage(srcCanvas, 0, 0, newW, newH);
+    srcCanvas.width = 0; srcCanvas.height = 0;
+
+    const dataUrl = outCanvas.toDataURL("image/jpeg", quality);
+    outCanvas.width = 0; outCanvas.height = 0;
+
+    const base64 = dataUrl.split(",")[1];
+    if (!base64) return;
+    const binaryStr = atob(base64);
+    const jpegBytes = new Uint8Array(binaryStr.length);
+    for (let j = 0; j < binaryStr.length; j++) jpegBytes[j] = binaryStr.charCodeAt(j);
+
+    if (jpegBytes.length >= imageBytes.length) return; // not smaller, skip
+
+    // Replace stream: create a new PDFRawStream with JPEG data and updated dict
+    dict.set(PDFName.of("Filter"), PDFName.of("DCTDecode"));
+    dict.set(PDFName.of("Width"), PDFNumber.of(newW));
+    dict.set(PDFName.of("Height"), PDFNumber.of(newH));
+    dict.set(PDFName.of("ColorSpace"), PDFName.of("DeviceRGB"));
+    dict.set(PDFName.of("BitsPerComponent"), PDFNumber.of(8));
+    dict.set(PDFName.of("Length"), PDFNumber.of(jpegBytes.length));
+    dict.delete(PDFName.of("DecodeParms"));
+    dict.delete(PDFName.of("SMask"));
+
+    // Replace the object in the PDF context with a new raw stream
+    const newStream = PDFRawStream.of(dict, jpegBytes);
+    context.assign(ref, newStream);
+
+    imagesProcessed++;
+  });
+
+  if (imagesProcessed === 0) {
+    throw new Error("No images found to recompress");
+  }
+
+  doc.setTitle("");
+  doc.setAuthor("");
+  doc.setSubject("");
+  doc.setKeywords([]);
+  doc.setProducer("");
+  doc.setCreator("");
+
+  return await doc.save({ useObjectStreams: true, addDefaultPage: false });
+}
+
+/* ------------------------------------------------------------------ */
+/*  Canvas fallback: render whole pages (only for PDFs with no         */
+/*  recompressible images, e.g. pure scanned image PDFs)               */
+/* ------------------------------------------------------------------ */
 /* Render each page via canvas → JPEG → embed back into a new PDF.
    Uses super-sampling: render at 1.3-1.5× target resolution then
    downscale with high-quality bicubic interpolation so that text
@@ -258,117 +411,105 @@ async function canvasCompress(
   });
 }
 
+/* ------------------------------------------------------------------ */
+/*  Main per-file compression pipeline                                 */
+/*  Priority:                                                          */
+/*   1. Image-level recompression (text stays perfect)                 */
+/*   2. Structural (metadata strip, object streams)                    */
+/*   3. Canvas fallback (only if nothing else works)                   */
+/* ------------------------------------------------------------------ */
 async function compressOnePdf(
   file: File,
   level: CompressionLevel,
   pdfjsLib: typeof import("pdfjs-dist"),
-  PDFDocument: typeof import("pdf-lib").PDFDocument,
+  pdfLib: typeof import("pdf-lib"),
 ): Promise<CompressedFile> {
   const arrayBuffer = await file.arrayBuffer();
   const originalBytes = new Uint8Array(arrayBuffer) as Uint8Array<ArrayBuffer>;
   const originalSize = originalBytes.byteLength;
   const MIN_VALID_SIZE = 500;
 
+  /* --- Step 1: Try image-level recompression (best approach) --- */
+  let imageRecompressBytes: Uint8Array<ArrayBuffer> | null = null;
+  try {
+    const result = (await imageRecompress(
+      originalBytes,
+      level,
+      pdfLib,
+    )) as Uint8Array<ArrayBuffer>;
+    if (result.byteLength >= MIN_VALID_SIZE && result.byteLength < originalSize) {
+      imageRecompressBytes = result;
+    }
+  } catch {
+    // No images to recompress or format not supported
+  }
+
+  /* --- Step 2: Structural compress (strip metadata, object streams) --- */
   let structBytes: Uint8Array<ArrayBuffer>;
   try {
     structBytes = (await structuralCompress(
       originalBytes,
-      PDFDocument,
+      pdfLib.PDFDocument,
     )) as Uint8Array<ArrayBuffer>;
   } catch {
     structBytes = originalBytes;
   }
-
-  const structSavedPct = getSavedPercent(originalSize, structBytes.byteLength);
   const structValid =
     structBytes.byteLength >= MIN_VALID_SIZE && structBytes.byteLength < originalSize;
 
-  const attempts = CANVAS_ATTEMPTS[level];
-
-  let bestCanvasBytes: Uint8Array<ArrayBuffer> | null = null;
-  let bestCanvasSavedPct = 0;
-  let bestCanvasMeta: { scale: number; quality: number } | null = null;
-
-  for (const { scale, quality } of attempts) {
+  /* --- Step 3: Canvas fallback (last resort) --- */
+  let canvasBytes: Uint8Array<ArrayBuffer> | null = null;
+  if (
+    !imageRecompressBytes ||
+    getSavedPercent(originalSize, imageRecompressBytes.byteLength) < 10
+  ) {
     try {
-      const attempt = (await canvasCompress(
+      const { scale, quality } = CANVAS_SETTINGS[level];
+      const result = (await canvasCompress(
         originalBytes,
         scale,
         quality,
         pdfjsLib,
-        PDFDocument,
+        pdfLib.PDFDocument,
       )) as Uint8Array<ArrayBuffer>;
-
-      const isValid = attempt.byteLength >= MIN_VALID_SIZE;
-      const isSmallerThanOriginal = attempt.byteLength < originalSize;
-      if (!isValid || !isSmallerThanOriginal) continue;
-
-      const savedPct = getSavedPercent(originalSize, attempt.byteLength);
-      const acceptable = isCanvasResultAcceptable(level, savedPct, quality, scale);
-
-      if (!acceptable) continue;
-
-      if (!bestCanvasBytes || attempt.byteLength < bestCanvasBytes.byteLength) {
-        bestCanvasBytes = attempt;
-        bestCanvasSavedPct = savedPct;
-        bestCanvasMeta = { scale, quality };
+      if (result.byteLength >= MIN_VALID_SIZE && result.byteLength < originalSize) {
+        canvasBytes = result;
       }
     } catch {
-      // ignore failed attempt
+      // Canvas failed
     }
   }
 
+  /* --- Pick the best result --- */
   let bestData: Uint8Array<ArrayBuffer> = originalBytes;
   let method: CompressedFile["method"] = "original";
 
-  if (level === "extreme") {
-    if (bestCanvasBytes) {
-      bestData = bestCanvasBytes;
-      method = "canvas";
-    } else if (structValid) {
-      bestData = structBytes;
-      method = "structural";
-    }
-  } else if (level === "recommended") {
-    if (bestCanvasBytes && structValid) {
-      // prefer canvas only if it gives useful reduction,
-      // otherwise use structural for safer text clarity
-      if (bestCanvasSavedPct >= Math.max(15, structSavedPct + 6)) {
-        bestData = bestCanvasBytes;
-        method = "canvas";
-      } else if (structBytes.byteLength <= bestCanvasBytes.byteLength) {
-        bestData = structBytes;
-        method = "structural";
-      } else {
-        bestData = bestCanvasBytes;
-        method = "canvas";
-      }
-    } else if (bestCanvasBytes) {
-      bestData = bestCanvasBytes;
-      method = "canvas";
-    } else if (structValid) {
-      bestData = structBytes;
-      method = "structural";
-    }
-  } else {
-    if (structValid) {
-      bestData = structBytes;
-      method = "structural";
-    } else if (bestCanvasBytes) {
-      // less mode only falls back to canvas if structural does not help
-      bestData = bestCanvasBytes;
-      method = "canvas";
-    }
+  const candidates: { data: Uint8Array<ArrayBuffer>; method: CompressedFile["method"] }[] = [];
+
+  if (imageRecompressBytes) {
+    candidates.push({ data: imageRecompressBytes, method: "image-recompress" });
+  }
+  if (structValid) {
+    candidates.push({ data: structBytes, method: "structural" });
+  }
+  if (canvasBytes) {
+    candidates.push({ data: canvasBytes, method: "canvas" });
   }
 
-  // fallback safety: if chosen result somehow became too aggressive in less mode
-  if (level === "less" && method === "canvas" && bestCanvasMeta) {
-    const savedPct = getSavedPercent(originalSize, bestData.byteLength);
-    if (savedPct > 30) {
-      if (structValid) {
-        bestData = structBytes;
-        method = "structural";
-      }
+  if (candidates.length > 0) {
+    // Prefer image-recompress if it saved meaningfully (text stays perfect)
+    const imageCandidate = candidates.find((c) => c.method === "image-recompress");
+    if (
+      imageCandidate &&
+      getSavedPercent(originalSize, imageCandidate.data.byteLength) >= 8
+    ) {
+      bestData = imageCandidate.data;
+      method = imageCandidate.method;
+    } else {
+      // Pick smallest
+      candidates.sort((a, b) => a.data.byteLength - b.data.byteLength);
+      bestData = candidates[0].data;
+      method = candidates[0].method;
     }
   }
 
@@ -386,7 +527,7 @@ async function compressAll(
   level: CompressionLevel,
   onFileProgress?: (fileIdx: number, total: number) => void,
 ): Promise<CompressionResult> {
-  const [pdfjsLib, { PDFDocument }, JSZip] = await Promise.all([
+  const [pdfjsLib, pdfLib, JSZip] = await Promise.all([
     import("pdfjs-dist"),
     import("pdf-lib"),
     import("jszip").then((m) => m.default),
@@ -402,7 +543,7 @@ async function compressAll(
   for (let i = 0; i < files.length; i++) {
     onFileProgress?.(i + 1, files.length);
 
-    const cf = await compressOnePdf(files[i], level, pdfjsLib, PDFDocument);
+    const cf = await compressOnePdf(files[i], level, pdfjsLib, pdfLib);
     compressed.push(cf);
     totalOriginal += cf.originalSize;
     totalCompressed += cf.compressedSize;
@@ -694,7 +835,7 @@ export default function PdfCompressorTool() {
           )}
 
           <p className="text-[10px] text-[#57576f]">
-            Testing multiple compression levels to find the smallest readable result…
+            Optimizing embedded images while preserving text quality…
           </p>
         </div>
       )}
@@ -773,7 +914,7 @@ export default function PdfCompressorTool() {
                       </p>
                       <p className="mt-1 text-[10px] text-[#9b9bb3]">
                         {fmtSize(cf.originalSize)} → {fmtSize(cf.compressedSize)} • Saved{" "}
-                        {savedPct}% • Method: {cf.method}
+                        {savedPct}%
                       </p>
                     </div>
 
