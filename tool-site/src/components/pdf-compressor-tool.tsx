@@ -68,24 +68,30 @@ const LEVELS: {
   This is the same approach iLovePDF and similar tools use.
 */
 const IMAGE_QUALITY: Record<CompressionLevel, number> = {
-  extreme: 0.15,
+  extreme: 0.22,
   recommended: 0.35,
   less: 0.60,
 };
 
 /* Scale factor for embedded images (reduces pixel dimensions) */
 const IMAGE_SCALE: Record<CompressionLevel, number> = {
-  extreme: 0.55,
+  extreme: 0.7,
   recommended: 0.72,
   less: 0.88,
 };
 
 /* Fallback canvas-based settings (only used when image recompress has no effect) */
 const CANVAS_SETTINGS: Record<CompressionLevel, { scale: number; quality: number }> = {
-  extreme: { scale: 0.80, quality: 0.30 },
+  extreme: { scale: 0.88, quality: 0.42 },
   recommended: { scale: 0.90, quality: 0.50 },
   less: { scale: 1.0, quality: 0.70 },
 };
+
+interface PdfContentAnalysis {
+  hasMeaningfulText: boolean;
+  sampledPages: number;
+  textCharacters: number;
+}
 
 function fmtSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -101,6 +107,34 @@ function uid(): string {
 function getSavedPercent(original: number, compressed: number): number {
   if (!original || compressed >= original) return 0;
   return Math.max(0, Math.round(((original - compressed) / original) * 100));
+}
+
+async function analyzePdfContent(
+  data: Uint8Array,
+  pdfjsLib: typeof import("pdfjs-dist"),
+): Promise<PdfContentAnalysis> {
+  const pdf = await pdfjsLib.getDocument({ data }).promise;
+  const sampledPages = Math.min(pdf.numPages, 3);
+  let textCharacters = 0;
+
+  for (let i = 1; i <= sampledPages; i++) {
+    try {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      for (const item of textContent.items) {
+        const str = "str" in item ? item.str : "";
+        textCharacters += str.replace(/\s+/g, "").length;
+      }
+    } catch {
+      // Ignore page text extraction failures and continue sampling.
+    }
+  }
+
+  return {
+    hasMeaningfulText: textCharacters >= 80,
+    sampledPages,
+    textCharacters,
+  };
 }
 
 async function structuralCompress(
@@ -428,6 +462,7 @@ async function compressOnePdf(
   const originalBytes = new Uint8Array(arrayBuffer) as Uint8Array<ArrayBuffer>;
   const originalSize = originalBytes.byteLength;
   const MIN_VALID_SIZE = 500;
+  const analysis = await analyzePdfContent(originalBytes, pdfjsLib);
 
   /* --- Step 1: Try image-level recompression (best approach) --- */
   let imageRecompressBytes: Uint8Array<ArrayBuffer> | null = null;
@@ -459,9 +494,12 @@ async function compressOnePdf(
 
   /* --- Step 3: Canvas fallback (last resort) --- */
   let canvasBytes: Uint8Array<ArrayBuffer> | null = null;
+  const allowCanvasFallback = !analysis.hasMeaningfulText;
+
   if (
-    !imageRecompressBytes ||
-    getSavedPercent(originalSize, imageRecompressBytes.byteLength) < 10
+    allowCanvasFallback &&
+    (!imageRecompressBytes ||
+      getSavedPercent(originalSize, imageRecompressBytes.byteLength) < 18)
   ) {
     try {
       const { scale, quality } = CANVAS_SETTINGS[level];
@@ -497,11 +535,35 @@ async function compressOnePdf(
   }
 
   if (candidates.length > 0) {
+    // For searchable/text-heavy PDFs, never choose page rasterization.
+    if (analysis.hasMeaningfulText) {
+      const safeCandidates = candidates.filter((c) => c.method !== "canvas");
+      if (safeCandidates.length > 0) {
+        const imageCandidate = safeCandidates.find((c) => c.method === "image-recompress");
+        if (imageCandidate) {
+          bestData = imageCandidate.data;
+          method = imageCandidate.method;
+        } else {
+          safeCandidates.sort((a, b) => a.data.byteLength - b.data.byteLength);
+          bestData = safeCandidates[0].data;
+          method = safeCandidates[0].method;
+        }
+
+        return {
+          fileName: file.name.replace(/\.pdf$/i, "") + "_compressed.pdf",
+          originalSize,
+          compressedSize: bestData.byteLength,
+          data: bestData,
+          method,
+        };
+      }
+    }
+
     // Prefer image-recompress if it saved meaningfully (text stays perfect)
     const imageCandidate = candidates.find((c) => c.method === "image-recompress");
     if (
       imageCandidate &&
-      getSavedPercent(originalSize, imageCandidate.data.byteLength) >= 8
+      getSavedPercent(originalSize, imageCandidate.data.byteLength) >= 5
     ) {
       bestData = imageCandidate.data;
       method = imageCandidate.method;
