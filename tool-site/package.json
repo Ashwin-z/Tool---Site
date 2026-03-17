@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup:pdf-compressor": "powershell -ExecutionPolicy Bypass -File scripts/setup-pdf-compression.ps1"
   },
   "dependencies": {
     "jszip": "^3.10.1",
