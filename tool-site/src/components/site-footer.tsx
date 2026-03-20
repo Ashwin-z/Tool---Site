@@ -7,8 +7,11 @@ const footerColumns = [
       { label: "PDF Compressor", href: "/tools/pdf-compressor" },
       { label: "PDF Merger", href: "/tools/pdf-merger" },
       { label: "PDF Splitter", href: "/tools/pdf-splitter" },
-      { label: "PDF to Word", href: "/tools/pdf-to-word" },
-      { label: "Rotate PDF", href: "/tools/rotate-pdf" },
+      { label: "Image to PDF", href: "/tools/image-to-pdf" },
+      { label: "Word to PDF", href: "/tools/word-to-pdf" },
+      { label: "PowerPoint to PDF", href: "/tools/powerpoint-to-pdf" },
+      { label: "Excel to PDF", href: "/tools/excel-to-pdf" },
+      { label: "HTML to PDF", href: "/tools/html-to-pdf" },
     ],
   },
   {

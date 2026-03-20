@@ -10,6 +10,11 @@ const popularTools = [
   { icon: "🗜️", name: "Image Compressor", desc: "Compress PNG and JPG without noticeable quality loss.", tag: "Popular", href: "/tools/image-compressor" },
   { icon: "⚖️", name: "BMI Calculator", desc: "Body Mass Index with metric and imperial support.", tag: "New", href: "/tools/bmi-calculator" },
   { icon: "📄", name: "PDF Compressor", desc: "Reduce PDF size while keeping the best quality possible.", tag: "Popular", href: "/tools/pdf-compressor" },
+  { icon: "🧩", name: "PDF Merger", desc: "Merge up to 25 PDFs and rearrange them before download.", tag: "New", href: "/tools/pdf-merger" },
+  { icon: "✂️", name: "PDF Splitter", desc: "Split one PDF by range, fixed intervals, or selected pages.", tag: "New", href: "/tools/pdf-splitter" },
+  { icon: "🔄", name: "Rotate PDF", desc: "Rotate PDF pages left or right with a live preview.", tag: "New", href: "/tools/rotate-pdf" },
+  { icon: "🖼️", name: "Image to PDF", desc: "Combine up to 25 image files into a single PDF.", tag: "New", href: "/tools/image-to-pdf" },
+  { icon: "📝", name: "Word to PDF", desc: "Convert DOCX files to PDF in your browser.", tag: "New", href: "/tools/word-to-pdf" },
   { icon: "🏦", name: "EMI Calculator", desc: "Monthly loan installments with full interest breakdown.", tag: "Hot", href: "/tools/loan-emi-calculator" },
   { icon: "🔑", name: "Password Generator", desc: "Create strong, secure passwords with custom rules.", tag: "New", href: "/tools/password-generator" },
   { icon: "🔤", name: "Case Converter", desc: "Switch between UPPER, lower, Title and camelCase.", tag: "Popular", href: "/tools/text-case-converter" },
@@ -23,7 +28,7 @@ export default function PopularTools() {
       <div className="mb-5 flex items-end justify-between">
         <h2 className="font-display text-2xl font-bold">🔥 Most Popular Tools</h2>
         <Link href="/tools" className="text-sm font-medium text-[#8f86ff] transition hover:text-[#aca7ff]">
-          View all 63 →
+          View all 64 →
         </Link>
       </div>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">

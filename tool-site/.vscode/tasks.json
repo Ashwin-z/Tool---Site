@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Test PDF to Excel API",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-STA",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-File",
+				"$env:TEMP\\tc-api-debug.ps1"
+			],
+			"isBackground": false
+		},
+		{
+			"label": "pdf-api-smoke",
+			"type": "shell",
+			"command": "powershell -NoProfile -STA -ExecutionPolicy Bypass -File \"$env:TEMP\\tc-api-debug.ps1\"",
+			"isBackground": false
+		}
+	]
+}

@@ -7,6 +7,24 @@ export const metadata: Metadata = {
 };
 
 const tools = [
+  ["PDF Merger", "/tools/pdf-merger"],
+  ["PDF Compressor", "/tools/pdf-compressor"],
+  ["PDF Splitter", "/tools/pdf-splitter"],
+  ["Rotate PDF", "/tools/rotate-pdf"],
+  ["Edit PDF", "/tools/edit-pdf"],
+  ["Add page numbers", "/tools/add-page-numbers"],
+  ["Add watermark", "/tools/add-watermark"],
+  ["Crop PDF", "/tools/crop-pdf"],
+  ["Image to PDF", "/tools/image-to-pdf"],
+  ["Word to PDF", "/tools/word-to-pdf"],
+  ["PowerPoint to PDF", "/tools/powerpoint-to-pdf"],
+  ["Excel to PDF", "/tools/excel-to-pdf"],
+  ["HTML to PDF", "/tools/html-to-pdf"],
+  ["PDF to JPG", "/tools/pdf-to-jpg"],
+  ["PDF to Word", "/tools/pdf-to-word"],
+  ["PDF to PowerPoint", "/tools/pdf-to-powerpoint"],
+  ["PDF to Excel", "/tools/pdf-to-excel"],
+  ["PDF to PDF/A", "/tools/pdf-to-pdfa"],
   ["Word Counter", "/tools/word-counter"],
   ["Scientific Calculator", "/tools/scientific-calculator"],
   ["Percentage Calculator", "/tools/percentage-calculator"],
@@ -36,7 +54,7 @@ export default function ToolsPage() {
       </Link>
 
       <h1 className="font-display mt-4 text-4xl font-bold leading-[1.1] tracking-[-0.02em]">All Tools</h1>
-      <p className="mt-3 text-sm leading-7 text-[#9b9bb3]">These are your planned tools. Word Counter is live, others can be launched next.</p>
+      <p className="mt-3 text-sm leading-7 text-[#9b9bb3]">Browse live tools and upcoming utilities across PDF, text, calculator, and developer workflows.</p>
 
       <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {tools.map(([name, href]) => (
