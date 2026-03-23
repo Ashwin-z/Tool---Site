@@ -210,7 +210,7 @@ async function fileToDataUrl(file: File): Promise<string> {
 
 async function loadImageElement(source: string): Promise<HTMLImageElement> {
   return await new Promise((resolve, reject) => {
-    const image = new Image();
+    const image = document.createElement("img");
     image.onload = () => resolve(image);
     image.onerror = () => reject(new Error("Unsupported image format."));
     image.src = source;
@@ -561,7 +561,7 @@ export default function AddWatermarkTool() {
 
         const urls: string[] = [];
         for (const pageNumber of previewPages) {
-          urls.push(await renderPreview(previewBytes, pageNumber));
+          urls.push(await renderPreview(previewBytes.buffer.slice(previewBytes.byteOffset, previewBytes.byteOffset + previewBytes.byteLength) as ArrayBuffer, pageNumber));
         }
 
         if (previewTokenRef.current === token) {
@@ -604,7 +604,7 @@ export default function AddWatermarkTool() {
         fontSize,
       });
 
-      downloadBlob(new Blob([bytes], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_watermarked.pdf`);
+      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_watermarked.pdf`);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Failed to add watermark.");
     } finally {
@@ -617,7 +617,7 @@ export default function AddWatermarkTool() {
   return (
     <div className="space-y-4">
       {!pdf && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
           <div className="px-5 py-5">
             <div
@@ -628,7 +628,7 @@ export default function AddWatermarkTool() {
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
               onClick={() => inputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-white/10 hover:border-white/20"}`}
+              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-border hover:border-border-strong"}`}
             >
               <input
                 ref={inputRef}
@@ -642,62 +642,62 @@ export default function AddWatermarkTool() {
               />
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6c63ff]/10 text-3xl">🖋️</div>
               <p className="mt-3 text-sm font-semibold text-white">Drop your PDF here or <span className="text-[#6c63ff]">browse</span></p>
-              <p className="mt-1 text-xs text-[#57576f]">Add text or image watermarks, choose position, transparency, rotation, and preview instantly.</p>
+              <p className="mt-1 text-xs text-muted-2">Add text or image watermarks, choose position, transparency, rotation, and preview instantly.</p>
             </div>
           </div>
         </div>
       )}
 
       {pdf && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
           <div className="grid gap-6 px-5 py-5 lg:grid-cols-[420px_minmax(0,1fr)]">
             <div className="space-y-4">
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Selected file</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Selected file</p>
                 <h2 className="mt-2 break-all text-sm font-semibold text-white">{pdf.file.name}</h2>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-[#9b9bb3]">
-                  <div className="rounded-lg bg-white/5 px-3 py-2"><span className="block text-[#6c63ff]">Pages</span><span className="font-semibold text-white">{pdf.pageCount}</span></div>
-                  <div className="rounded-lg bg-white/5 px-3 py-2"><span className="block text-[#6c63ff]">Size</span><span className="font-semibold text-white">{formatBytes(pdf.file.size)}</span></div>
+                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-muted">
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2"><span className="block text-[#6c63ff]">Pages</span><span className="font-semibold text-white">{pdf.pageCount}</span></div>
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2"><span className="block text-[#6c63ff]">Size</span><span className="font-semibold text-white">{formatBytes(pdf.file.size)}</span></div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
                 <div className="grid grid-cols-2 gap-2 rounded-xl bg-black/20 p-1 text-sm font-semibold text-white">
-                  <button type="button" onClick={() => setMode("text")} className={`rounded-lg px-3 py-2 transition ${mode === "text" ? "bg-white text-[#111118]" : "text-[#9b9bb3] hover:text-white"}`}>Place text</button>
-                  <button type="button" onClick={() => setMode("image")} className={`rounded-lg px-3 py-2 transition ${mode === "image" ? "bg-white text-[#111118]" : "text-[#9b9bb3] hover:text-white"}`}>Place image</button>
+                  <button type="button" onClick={() => setMode("text")} className={`rounded-lg px-3 py-2 transition ${mode === "text" ? "bg-white text-[#111118]" : "text-muted hover:text-foreground"}`}>Place text</button>
+                  <button type="button" onClick={() => setMode("image")} className={`rounded-lg px-3 py-2 transition ${mode === "image" ? "bg-white text-[#111118]" : "text-muted hover:text-foreground"}`}>Place image</button>
                 </div>
 
                 {mode === "text" ? (
                   <div className="mt-4 space-y-4">
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Text</label>
-                      <input value={text} onChange={(event) => setText(event.target.value)} className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]" />
+                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Text</label>
+                      <input value={text} onChange={(event) => setText(event.target.value)} className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]" />
                     </div>
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Text format</label>
+                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Text format</label>
                       <div className="mt-2 grid grid-cols-3 gap-2">
-                        <select value={textFont} onChange={(event) => setTextFont(event.target.value as FontOption)} className="rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
+                        <select value={textFont} onChange={(event) => setTextFont(event.target.value as FontOption)} className="rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
                           {FONT_OPTIONS.map((font) => <option key={font} value={font}>{font}</option>)}
                         </select>
-                        <button type="button" onClick={() => setTextBold((value) => !value)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${textBold ? "border-[#38d9a9] bg-[#38d9a9]/10 text-white" : "border-white/10 bg-white/5 text-[#9b9bb3]"}`}>B</button>
-                        <button type="button" onClick={() => setTextItalic((value) => !value)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${textItalic ? "border-[#38d9a9] bg-[#38d9a9]/10 text-white" : "border-white/10 bg-white/5 text-[#9b9bb3]"}`}>I</button>
+                        <button type="button" onClick={() => setTextBold((value) => !value)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${textBold ? "border-[#38d9a9] bg-[#38d9a9]/10 text-white" : "border-border bg-surface-3/50 text-muted"}`}>B</button>
+                        <button type="button" onClick={() => setTextItalic((value) => !value)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition ${textItalic ? "border-[#38d9a9] bg-[#38d9a9]/10 text-white" : "border-border bg-surface-3/50 text-muted"}`}>I</button>
                       </div>
                     </div>
                     <div>
-                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Color</label>
-                      <input type="color" value={textColor} onChange={(event) => setTextColor(event.target.value)} className="mt-2 h-11 w-full rounded-lg border border-white/10 bg-[#111118] p-1" />
+                      <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Color</label>
+                      <input type="color" value={textColor} onChange={(event) => setTextColor(event.target.value)} className="mt-2 h-11 w-full rounded-lg border border-border bg-surface p-1" />
                     </div>
                   </div>
                 ) : (
                   <div className="mt-4 space-y-4">
-                    <button type="button" onClick={() => imageInputRef.current?.click()} className="flex w-full items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10">
+                    <button type="button" onClick={() => imageInputRef.current?.click()} className="flex w-full items-center gap-3 rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#e93b34] text-white">🖼️</span>
                       {imageFile ? `Selected: ${imageFile.name}` : "Add image"}
                     </button>
                     <input ref={imageInputRef} type="file" accept="image/*,.png,.jpg,.jpeg,.webp,.gif,.bmp,.svg" className="hidden" onChange={(event) => void addImageFile(event.target.files)} />
                     {imagePreview && (
-                      <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+                      <div className="rounded-xl border border-border bg-surface-3/50 p-3">
                         <div className="mx-auto flex max-w-[180px] items-center justify-center overflow-hidden rounded-lg bg-white p-2">
                           <Image src={imagePreview} alt="Watermark preview" width={240} height={120} unoptimized className="h-auto w-auto max-w-full max-h-24 object-contain" />
                         </div>
@@ -707,11 +707,11 @@ export default function AddWatermarkTool() {
                 )}
 
                 <div className="mt-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Position</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Position</p>
                   <div className="mt-3 grid max-w-[170px] grid-cols-3 gap-2">
                     {POSITION_ORDER.map((key) => (
-                      <button key={key} type="button" onClick={() => setPosition(key)} className={`flex aspect-square items-center justify-center rounded-lg border transition ${position === key ? "border-[#38d9a9] bg-[#38d9a9]/10" : "border-white/10 bg-white/5 hover:border-white/20"}`} title={POSITION_LABELS[key]} aria-label={POSITION_LABELS[key]}>
-                        <span className="grid h-7 w-7 grid-cols-3 grid-rows-3 gap-0.5 rounded-sm border border-white/15 p-1">
+                      <button key={key} type="button" onClick={() => setPosition(key)} className={`flex aspect-square items-center justify-center rounded-lg border transition ${position === key ? "border-[#38d9a9] bg-[#38d9a9]/10" : "border-border bg-surface-3/50 hover:border-border-strong"}`} title={POSITION_LABELS[key]} aria-label={POSITION_LABELS[key]}>
+                        <span className="grid h-7 w-7 grid-cols-3 grid-rows-3 gap-0.5 rounded-sm border border-border-strong p-1">
                           {Array.from({ length: 9 }).map((_, index) => {
                             const row = Math.floor(index / 3);
                             const col = index % 3;
@@ -726,8 +726,8 @@ export default function AddWatermarkTool() {
 
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Transparency</label>
-                    <select value={transparency} onChange={(event) => setTransparency(event.target.value as TransparencyPreset)} className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Transparency</label>
+                    <select value={transparency} onChange={(event) => setTransparency(event.target.value as TransparencyPreset)} className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
                       <option value="none">No transparency</option>
                       <option value="75">25%</option>
                       <option value="50">50%</option>
@@ -735,8 +735,8 @@ export default function AddWatermarkTool() {
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Rotation</label>
-                    <select value={rotation} onChange={(event) => setRotation(Number(event.target.value) as RotationPreset)} className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Rotation</label>
+                    <select value={rotation} onChange={(event) => setRotation(Number(event.target.value) as RotationPreset)} className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]">
                       <option value={0}>Do not rotate</option>
                       <option value={90}>90°</option>
                       <option value={180}>180°</option>
@@ -747,38 +747,38 @@ export default function AddWatermarkTool() {
 
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Pages</label>
-                    <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white">
-                      <span className="text-[#9b9bb3]">from page</span>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Pages</label>
+                    <div className="mt-2 grid grid-cols-[1fr_auto_1fr] items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white">
+                      <span className="text-muted">from page</span>
                       <input type="number" min={1} max={pdf.pageCount} value={fromPage} onChange={(event) => setFromPage(safeInt(Number(event.target.value), 1, pdf.pageCount))} className="w-14 bg-transparent text-center outline-none" />
-                      <span className="justify-self-end text-[#9b9bb3]">to <input type="number" min={1} max={pdf.pageCount} value={toPage} onChange={(event) => setToPage(safeInt(Number(event.target.value), 1, pdf.pageCount))} className="ml-2 w-14 bg-transparent text-center outline-none" /></span>
+                      <span className="justify-self-end text-muted">to <input type="number" min={1} max={pdf.pageCount} value={toPage} onChange={(event) => setToPage(safeInt(Number(event.target.value), 1, pdf.pageCount))} className="ml-2 w-14 bg-transparent text-center outline-none" /></span>
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Layer</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Layer</label>
                     <div className="mt-2 grid grid-cols-2 gap-2 rounded-xl bg-black/20 p-1">
-                      <button type="button" onClick={() => setLayer("over")} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${layer === "over" ? "bg-[#e93b34] text-white" : "text-[#9b9bb3] hover:text-white"}`}>Over the PDF content</button>
-                      <button type="button" onClick={() => setLayer("under")} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${layer === "under" ? "bg-[#e93b34] text-white" : "text-[#9b9bb3] hover:text-white"}`}>Below the PDF content</button>
+                      <button type="button" onClick={() => setLayer("over")} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${layer === "over" ? "bg-[#e93b34] text-white" : "text-muted hover:text-foreground"}`}>Over the PDF content</button>
+                      <button type="button" onClick={() => setLayer("under")} className={`rounded-lg px-3 py-3 text-sm font-semibold transition ${layer === "under" ? "bg-[#e93b34] text-white" : "text-muted hover:text-foreground"}`}>Below the PDF content</button>
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-4 flex gap-2">
                   <button type="button" onClick={handleDownload} disabled={processing} className="flex-1 rounded-xl bg-[#e93b34] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(233,59,52,.35)] transition hover:bg-[#d9322b] disabled:cursor-not-allowed disabled:opacity-60">{processing ? "Processing…" : "Add watermark"}</button>
-                  <button type="button" onClick={() => resetForm(true)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10">Reset</button>
+                  <button type="button" onClick={() => resetForm(true)} className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3">Reset</button>
                 </div>
               </div>
 
               {errorMessage && <div className="rounded-xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{errorMessage}</div>}
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+            <div className="rounded-2xl border border-border bg-surface-2 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Live preview</p>
-                  <p className="mt-1 text-sm text-[#9b9bb3]">Preview updates as you change settings. Showing pages {selectedRangeLabel}.</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Live preview</p>
+                  <p className="mt-1 text-sm text-muted">Preview updates as you change settings. Showing pages {selectedRangeLabel}.</p>
                 </div>
-                <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-[#c7c7d6]">{previewLoading ? "Refreshing…" : "Ready"}</span>
+                <span className="rounded-full bg-surface-3/50 px-3 py-1 text-xs font-semibold text-foreground/75">{previewLoading ? "Refreshing…" : "Ready"}</span>
               </div>
 
               <div className="mt-4 grid gap-4 md:grid-cols-2">

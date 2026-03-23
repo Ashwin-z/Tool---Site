@@ -254,7 +254,7 @@ export default function PdfMergerTool() {
   return (
     <div className="space-y-4">
       {!result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="px-5 py-5">
@@ -271,7 +271,7 @@ export default function PdfMergerTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : queue.length
                     ? "border-amber-500/40 bg-amber-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -292,18 +292,18 @@ export default function PdfMergerTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDFs here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Upload and merge up to {MAX_FILES} PDFs. Everything is merged locally in your browser.
               </p>
             </div>
           </div>
 
           {queue.length > 0 && (
-            <div className="border-t border-white/10">
+            <div className="border-t border-border">
               <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
                 <h3 className="font-display text-sm font-bold text-white">
                   {queue.length} PDF{queue.length > 1 ? "s" : ""} selected
-                  <span className="ml-2 text-xs font-normal text-[#57576f]">
+                  <span className="ml-2 text-xs font-normal text-muted-2">
                     ({totalPages} pages • {fmtSize(totalSize)})
                   </span>
                 </h3>
@@ -351,7 +351,7 @@ export default function PdfMergerTool() {
                           ? "border-[#6c63ff]/70 bg-[#6c63ff]/10 ring-2 ring-[#6c63ff]/25"
                           : draggedId === item.id
                             ? "border-[#6c63ff]/40 bg-[#6c63ff]/5 opacity-70"
-                            : "border-white/10 bg-[#17171f] hover:border-white/20"
+                            : "border-border bg-surface-2 hover:border-border-strong"
                       }`}
                     >
                       <div className="p-4">
@@ -396,20 +396,20 @@ export default function PdfMergerTool() {
                           <p className="truncate text-sm font-semibold text-white" title={item.file.name}>
                             {truncateName(item.file.name)}
                           </p>
-                          <p className="mt-1 text-[11px] text-[#9b9bb3]">
+                          <p className="mt-1 text-[11px] text-muted">
                             {item.pageCount} page{item.pageCount > 1 ? "s" : ""} • {fmtSize(item.file.size)}
                           </p>
                         </div>
 
                         <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                          <span className="rounded-lg border border-white/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#9b9bb3]">
+                          <span className="rounded-lg border border-border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
                             Drag to reorder
                           </span>
                           <button
                             type="button"
                             onClick={() => handleMove(index, index - 1)}
                             disabled={index === 0}
-                            className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             ↑ Up
                           </button>
@@ -417,7 +417,7 @@ export default function PdfMergerTool() {
                             type="button"
                             onClick={() => handleMove(index, index + 1)}
                             disabled={index === queue.length - 1}
-                            className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             ↓ Down
                           </button>
@@ -446,27 +446,27 @@ export default function PdfMergerTool() {
       )}
 
       {queue.length > 0 && !result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-b border-white/10 px-5 py-3">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-b border-border px-5 py-3">
             <h3 className="font-display text-sm font-bold text-white">Merge Setup</h3>
           </div>
 
           <div className="grid grid-cols-1 gap-4 px-5 py-5 md:grid-cols-3">
-            <div className="rounded-xl border border-white/10 bg-white/[.02] p-4">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-[#61617a]">Order</p>
+            <div className="rounded-xl border border-border bg-white/[.02] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-3">Order</p>
               <p className="mt-2 text-sm text-white">Drag document cards or use Up/Down to set the final merge order.</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/[.02] p-4">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-[#61617a]">Preview</p>
+            <div className="rounded-xl border border-border bg-white/[.02] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-3">Preview</p>
               <p className="mt-2 text-sm text-white">Each card shows a first-page document preview so ordering feels visual.</p>
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/[.02] p-4">
-              <p className="text-[10px] uppercase tracking-[0.16em] text-[#61617a]">Limit</p>
+            <div className="rounded-xl border border-border bg-white/[.02] p-4">
+              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-3">Limit</p>
               <p className="mt-2 text-sm text-white">Merge up to {MAX_FILES} PDFs at a time.</p>
             </div>
           </div>
 
-          <div className="border-t border-white/10 px-5 py-4 text-center">
+          <div className="border-t border-border px-5 py-4 text-center">
             <button
               onClick={handleMerge}
               disabled={queue.length < 2}
@@ -479,23 +479,23 @@ export default function PdfMergerTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#38d9a9]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#38d9a9]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
 
           <p className="text-sm font-semibold text-white">Merging your PDFs…</p>
-          <p className="text-xs text-[#9b9bb3]">Combining {queue.length} files in the exact order shown above.</p>
+          <p className="text-xs text-muted">Combining {queue.length} files in the exact order shown above.</p>
         </div>
       )}
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10 text-center">
@@ -523,15 +523,15 @@ export default function PdfMergerTool() {
               <div className="mt-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-emerald-300/80">Merged Output</p>
                 <p className="mt-1 text-3xl font-black text-emerald-400">{result.totalFiles} PDFs</p>
-                <p className="mt-1 text-xs text-[#9b9bb3]">
+                <p className="mt-1 text-xs text-muted">
                   {result.totalPages} total pages • {fmtSize(result.mergedSize)}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Merged Order</h3>
             </div>
 
@@ -543,7 +543,7 @@ export default function PdfMergerTool() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-white">{item.file.name}</p>
-                    <p className="mt-1 text-[10px] text-[#9b9bb3]">
+                    <p className="mt-1 text-[10px] text-muted">
                       {item.pageCount} page{item.pageCount > 1 ? "s" : ""} • {fmtSize(item.file.size)}
                     </p>
                   </div>
@@ -551,10 +551,10 @@ export default function PdfMergerTool() {
               ))}
             </div>
 
-            <div className="border-t border-white/10 px-5 py-4 text-center">
+            <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
               >
                 Merge More PDFs
               </button>

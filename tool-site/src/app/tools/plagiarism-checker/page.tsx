@@ -10,21 +10,21 @@ export const metadata: Metadata = {
 export default function PlagiarismCheckerPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-      <Link href="/" className="mb-5 inline-block text-sm text-[#9b9bb3] transition hover:text-white">
+      <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
         ← Back to home
       </Link>
 
       <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-white md:text-5xl">
         Plagiarism Checker
       </h1>
-      <p className="mt-3 max-w-xl text-sm leading-7 text-[#9b9bb3] md:text-base">
+      <p className="mt-3 max-w-xl text-sm leading-7 text-muted md:text-base">
         Detect duplicate content and check your text against billions of web pages.
       </p>
 
-      <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#111118] px-6 py-20 text-center shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="mt-10 flex flex-col items-center justify-center rounded-2xl border border-border bg-surface px-6 py-20 text-center shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="mb-4 text-6xl">🔍</div>
         <h2 className="font-display text-2xl font-bold text-white">Coming Soon</h2>
-        <p className="mt-3 max-w-md text-sm leading-7 text-[#9b9bb3]">
+        <p className="mt-3 max-w-md text-sm leading-7 text-muted">
           We&apos;re building a powerful plagiarism detection engine. This tool requires advanced
           web-crawling and text-matching infrastructure that we&apos;re currently setting up.
         </p>

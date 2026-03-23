@@ -193,7 +193,7 @@ export default function CropPdfToolLite() {
   return (
     <div className="space-y-4">
       {!pdf && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
           <div className="px-5 py-5">
             <div
@@ -204,41 +204,41 @@ export default function CropPdfToolLite() {
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
               onClick={() => inputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-white/10 hover:border-white/20"}`}
+              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-border hover:border-border-strong"}`}
             >
               <input ref={inputRef} type="file" accept=".pdf" className="hidden" onChange={(event) => { addFiles(event.target.files); if (inputRef.current) inputRef.current.value = ""; }} />
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6c63ff]/10 text-3xl">✂️</div>
               <p className="mt-3 text-sm font-semibold text-white">Drop your PDF here or <span className="text-[#6c63ff]">browse</span></p>
-              <p className="mt-1 text-xs text-[#57576f]">Crop by page area, switch between all pages or current page, and preview instantly.</p>
+              <p className="mt-1 text-xs text-muted-2">Crop by page area, switch between all pages or current page, and preview instantly.</p>
             </div>
           </div>
         </div>
       )}
 
       {pdf && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
           <div className="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div className="space-y-4">
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Selected file</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Selected file</p>
                     <h2 className="mt-2 break-all text-sm font-semibold text-white">{pdf.file.name}</h2>
                   </div>
-                  <div className="text-right text-xs text-[#9b9bb3]"><div>{pdf.pageCount} pages</div><div>{formatBytes(pdf.file.size)}</div></div>
+                  <div className="text-right text-xs text-muted"><div>{pdf.pageCount} pages</div><div>{formatBytes(pdf.file.size)}</div></div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#17171f] px-4 py-3 text-sm text-white">
-                <button type="button" onClick={() => setCurrentPage((value) => clamp(value - 1, 1, pdf.pageCount))} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 transition hover:border-white/20 hover:bg-white/10">‹</button>
-                <div className="flex items-center gap-2"><span className="text-[#9b9bb3]">Page</span><input type="number" min={1} max={pdf.pageCount} value={currentPage} onChange={(event) => setCurrentPage(clamp(Number(event.target.value) || 1, 1, pdf.pageCount))} className="w-16 rounded-lg border border-white/10 bg-[#111118] px-2 py-1 text-center text-white outline-none" /><span className="text-[#9b9bb3]">/ {pdf.pageCount}</span></div>
-                <button type="button" onClick={() => setCurrentPage((value) => clamp(value + 1, 1, pdf.pageCount))} className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 transition hover:border-white/20 hover:bg-white/10">›</button>
+              <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-white">
+                <button type="button" onClick={() => setCurrentPage((value) => clamp(value - 1, 1, pdf.pageCount))} className="rounded-lg border border-border bg-surface-3/50 px-3 py-2 transition hover:border-border-strong hover:bg-surface-3">‹</button>
+                <div className="flex items-center gap-2"><span className="text-muted">Page</span><input type="number" min={1} max={pdf.pageCount} value={currentPage} onChange={(event) => setCurrentPage(clamp(Number(event.target.value) || 1, 1, pdf.pageCount))} className="w-16 rounded-lg border border-border bg-surface px-2 py-1 text-center text-white outline-none" /><span className="text-muted">/ {pdf.pageCount}</span></div>
+                <button type="button" onClick={() => setCurrentPage((value) => clamp(value + 1, 1, pdf.pageCount))} className="rounded-lg border border-border bg-surface-3/50 px-3 py-2 transition hover:border-border-strong hover:bg-surface-3">›</button>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Crop preview</p>
-                <div className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-[#f8fafc] p-4 shadow-[0_12px_40px_rgba(15,23,42,.08)]">
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Crop preview</p>
+                <div className="mt-3 overflow-hidden rounded-2xl border border-border bg-[#f8fafc] p-4 shadow-[0_12px_40px_rgba(15,23,42,.08)]">
                   <div className="relative mx-auto w-full max-w-[560px] select-none" style={previewStyle}>
                     {previewUrl ? <Image src={previewUrl} alt={`Preview of page ${currentPage}`} fill unoptimized className="object-contain object-top" /> : <div className="flex h-full w-full items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white text-sm text-slate-500">{previewLoading ? "Rendering preview…" : "Preview unavailable"}</div>}
                     {previewUrl && (
@@ -248,35 +248,35 @@ export default function CropPdfToolLite() {
                     )}
                   </div>
                 </div>
-                <p className="mt-3 text-xs text-[#7f7f95]">Adjust the crop insets to define the visible area. The overlay updates live.</p>
+                <p className="mt-3 text-xs text-muted-2">Adjust the crop insets to define the visible area. The overlay updates live.</p>
               </div>
 
               {errorMessage && <div className="rounded-xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{errorMessage}</div>}
             </div>
 
             <div className="space-y-4">
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Pages</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Pages</p>
                 <div className="mt-3 flex items-center gap-6 text-sm text-white">
                   <label className="flex items-center gap-2"><input type="radio" checked={scope === "all"} onChange={() => setScope("all")} className="h-4 w-4 accent-[#38d9a9]" />All pages</label>
                   <label className="flex items-center gap-2"><input type="radio" checked={scope === "current"} onChange={() => setScope("current")} className="h-4 w-4 accent-[#38d9a9]" />Current page</label>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Crop insets</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Crop insets</p>
                 {(["left", "top", "right", "bottom"] as const).map((side) => (
-                  <label key={side} className="mt-3 block text-sm text-[#9b9bb3]">
+                  <label key={side} className="mt-3 block text-sm text-muted">
                     <span className="mb-2 block capitalize text-white">{side}</span>
                     <input type="range" min={0} max={45} value={insets[side]} onChange={(event) => setInsets((prev) => normalizeInsets({ ...prev, [side]: Number(event.target.value) }))} className="w-full accent-[#38d9a9]" />
                   </label>
                 ))}
-                <div className="mt-3 rounded-xl bg-[#111118] px-3 py-2 text-xs text-[#9b9bb3]">Left {insets.left}% · Top {insets.top}% · Right {insets.right}% · Bottom {insets.bottom}%</div>
+                <div className="mt-3 rounded-xl bg-surface px-3 py-2 text-xs text-muted">Left {insets.left}% · Top {insets.top}% · Right {insets.right}% · Bottom {insets.bottom}%</div>
               </div>
 
               <div className="flex gap-2">
                 <button type="button" onClick={handleDownload} disabled={processing} className="flex-1 rounded-xl bg-[#e93b34] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(233,59,52,.35)] transition hover:bg-[#d9322b] disabled:cursor-not-allowed disabled:opacity-60">{processing ? "Cropping…" : "Crop PDF"}</button>
-                <button type="button" onClick={reset} className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10">Reset all</button>
+                <button type="button" onClick={reset} className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3">Reset all</button>
               </div>
             </div>
           </div>

@@ -80,21 +80,21 @@ export default function BmiCalculatorTool() {
   return (
     <div className="space-y-4">
       {/* ── Input card ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <h2 className="font-display text-sm font-bold tracking-tight text-white">Enter Your Details</h2>
-          <div className="flex rounded-lg border border-white/10 bg-[#17171f] p-0.5 text-xs">
+          <div className="flex rounded-lg border border-border bg-surface-2 p-0.5 text-xs">
             <button
               onClick={() => setUnit("metric")}
-              className={`rounded-md px-3 py-1.5 font-semibold transition ${unit === "metric" ? "bg-[#6c63ff] text-white" : "text-[#9b9bb3] hover:text-white"}`}
+              className={`rounded-md px-3 py-1.5 font-semibold transition ${unit === "metric" ? "bg-[#6c63ff] text-white" : "text-muted hover:text-foreground"}`}
             >
               Metric
             </button>
             <button
               onClick={() => setUnit("imperial")}
-              className={`rounded-md px-3 py-1.5 font-semibold transition ${unit === "imperial" ? "bg-[#6c63ff] text-white" : "text-[#9b9bb3] hover:text-white"}`}
+              className={`rounded-md px-3 py-1.5 font-semibold transition ${unit === "imperial" ? "bg-[#6c63ff] text-white" : "text-muted hover:text-foreground"}`}
             >
               Imperial
             </button>
@@ -120,8 +120,8 @@ export default function BmiCalculatorTool() {
       {result && (
         <>
           {/* BMI Score */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="flex items-center gap-2 font-display text-sm font-bold text-white">
                 <span className="h-2 w-2 rounded-full bg-[#6c63ff]" />
                 Your BMI
@@ -154,7 +154,7 @@ export default function BmiCalculatorTool() {
                   style={{ left: `${scalePos}%` }}
                 />
               </div>
-              <div className="mt-2 flex justify-between text-[10px] text-[#57576f]">
+              <div className="mt-2 flex justify-between text-[10px] text-muted-2">
                 <span>10</span>
                 <span>18.5</span>
                 <span>25</span>
@@ -185,8 +185,8 @@ export default function BmiCalculatorTool() {
           </div>
 
           {/* Categories table */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">BMI Categories</h3>
             </div>
             <div className="divide-y divide-white/5">
@@ -194,14 +194,14 @@ export default function BmiCalculatorTool() {
                 <div
                   key={cat.label}
                   className={`flex items-center gap-3 px-5 py-2.5 text-sm ${
-                    result.category === cat.label ? "bg-white/5" : ""
+                    result.category === cat.label ? "bg-surface-3/50" : ""
                   }`}
                 >
                   <div className={`h-2.5 w-2.5 rounded-full ${cat.barColor}`} />
-                  <span className={`flex-1 ${result.category === cat.label ? "font-semibold text-white" : "text-[#9b9bb3]"}`}>
+                  <span className={`flex-1 ${result.category === cat.label ? "font-semibold text-white" : "text-muted"}`}>
                     {cat.label}
                   </span>
-                  <span className="text-xs text-[#57576f]">
+                  <span className="text-xs text-muted-2">
                     {cat.max === Infinity ? "≥ 40" : cat === BMI_CATEGORIES[0] ? "< 16" : `${BMI_CATEGORIES[BMI_CATEGORIES.indexOf(cat) - 1]?.max ?? 0} – ${cat.max}`}
                   </span>
                   {result.category === cat.label && <span className="text-xs text-[#6c63ff]">← You</span>}
@@ -218,14 +218,14 @@ export default function BmiCalculatorTool() {
 function InputField({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <div>
-      <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</label>
+      <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</label>
       <input
         type="number"
         inputMode="decimal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-32 rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        className="w-32 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       />
     </div>
   );
@@ -233,12 +233,12 @@ function InputField({ label, value, onChange, placeholder }: { label: string; va
 
 function InfoCard({ emoji, label, value, sub }: { emoji: string; label: string; value: string; sub?: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/5 text-lg">{emoji}</div>
+    <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-5 py-4">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-3/50 text-lg">{emoji}</div>
       <div>
-        <div className="text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+        <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
         <div className="font-display text-lg font-bold text-white">{value}</div>
-        {sub && <div className="text-[10px] text-[#9b9bb3]">{sub}</div>}
+        {sub && <div className="text-[10px] text-muted">{sub}</div>}
       </div>
     </div>
   );

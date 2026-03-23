@@ -695,17 +695,17 @@ export default function GrammarCheckerTool() {
   return (
     <div className="space-y-4">
       {/* ── Input card ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#6c63ff]" />
             <h2 className="font-display text-sm font-bold tracking-tight">
               Grammar Checker
             </h2>
             {checked && (
-              <span className="ml-2 rounded bg-white/5 px-2 py-0.5 text-[10px] text-[#9b9bb3]">
+              <span className="ml-2 rounded bg-surface-3/50 px-2 py-0.5 text-[10px] text-muted">
                 {issues.length === 0 ? "✓ No issues found" : `${issues.length} issue${issues.length > 1 ? "s" : ""}`}
               </span>
             )}
@@ -713,13 +713,13 @@ export default function GrammarCheckerTool() {
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={clearAll}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               Clear
             </button>
             <button
               onClick={copyText}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               {copied ? "Copied!" : "Copy"}
             </button>
@@ -744,7 +744,7 @@ export default function GrammarCheckerTool() {
               }
             }}
             placeholder={`Paste or type your text here…\n\nThen click "Check Grammar" to scan for:\n• Spelling mistakes\n• Capitalization errors\n• Repeated words\n• a/an usage\n• Confused words (their/there, your/you're…)\n• Missing punctuation\n• Run-on sentences\n• And more…`}
-            className="min-h-[320px] w-full resize-none border-r border-white/10 bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-[#515168]"
+            className="min-h-[320px] w-full resize-none border-r border-border bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-muted-3"
           />
 
           {/* Stats sidebar */}
@@ -755,7 +755,7 @@ export default function GrammarCheckerTool() {
             <Stat label="Read time" value={stats.readTime} color="text-[#ffa640]" />
             {checked && (
               <>
-                <div className="my-2 h-px bg-white/10" />
+                <div className="my-2 h-px bg-surface-3" />
                 <Stat label="Errors" value={String(errorCount)} color="text-red-400" />
                 <Stat label="Warnings" value={String(warningCount)} color="text-amber-400" />
                 <Stat label="Suggestions" value={String(infoCount)} color="text-blue-400" />
@@ -767,7 +767,7 @@ export default function GrammarCheckerTool() {
 
       {/* ── Score card ── */}
       {checked && (
-        <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
+        <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-surface px-5 py-4">
           <div className="flex items-center gap-3">
             <div
               className={`flex h-14 w-14 items-center justify-center rounded-full border-[3px] font-display text-xl font-bold ${
@@ -788,7 +788,7 @@ export default function GrammarCheckerTool() {
                   ? "Good — just a few things to polish."
                   : "Needs work — review the issues below."}
               </div>
-              <div className="text-xs text-[#9b9bb3]">
+              <div className="text-xs text-muted">
                 {issues.length} issue{issues.length !== 1 ? "s" : ""} detected across {stats.sentences} sentence{stats.sentences !== 1 ? "s" : ""}
               </div>
             </div>
@@ -807,8 +807,8 @@ export default function GrammarCheckerTool() {
 
       {/* ── Highlighted preview ── */}
       {highlightedPreview && highlightedPreview.length > 0 && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-b border-white/10 px-5 py-3">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-b border-border px-5 py-3">
             <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-tight text-white">
               <span className="h-2 w-2 rounded-full bg-[#ff6584]" />
               Highlighted Preview
@@ -855,13 +855,13 @@ export default function GrammarCheckerTool() {
                     <span className={`text-[10px] font-bold uppercase tracking-wider ${cfg.text}`}>
                       {cfg.label}
                     </span>
-                    <span className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-[#9b9bb3]">
+                    <span className="rounded bg-surface-3/50 px-1.5 py-0.5 font-mono text-[10px] text-muted">
                       {issue.rule}
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-[#cccce0]">{issue.message}</p>
                   {issue.fragment && (
-                    <p className="mt-1 text-xs text-[#9b9bb3]">
+                    <p className="mt-1 text-xs text-muted">
                       Found: <span className="font-mono text-white/70">&quot;{issue.fragment}&quot;</span>
                     </p>
                   )}
@@ -869,7 +869,7 @@ export default function GrammarCheckerTool() {
                 {issue.suggestion && (
                   <button
                     onClick={() => applySuggestion(issue)}
-                    className="shrink-0 rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-white/10"
+                    className="shrink-0 rounded-lg border border-border-strong bg-surface-3/50 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-surface-3"
                   >
                     Fix → <span className="text-[#6ee7b7]">{issue.suggestion}</span>
                   </button>
@@ -881,9 +881,9 @@ export default function GrammarCheckerTool() {
       )}
 
       {/* ── Rules reference ── */}
-      <div className="rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
+      <div className="rounded-2xl border border-border bg-surface px-5 py-4">
         <h3 className="font-display text-sm font-bold text-white">What we check for</h3>
-        <div className="mt-3 grid grid-cols-1 gap-2 text-xs text-[#9b9bb3] sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-3 grid grid-cols-1 gap-2 text-xs text-muted sm:grid-cols-2 lg:grid-cols-3">
           {[
             "Repeated / double words",
             "Capitalization after punctuation",
@@ -906,7 +906,7 @@ export default function GrammarCheckerTool() {
             </div>
           ))}
         </div>
-        <p className="mt-3 text-[10px] text-[#57576f]">
+        <p className="mt-3 text-[10px] text-muted-2">
           This is a rule-based grammar checker. For advanced grammar and style suggestions, consider using
           tools powered by AI language models.
         </p>
@@ -918,8 +918,8 @@ export default function GrammarCheckerTool() {
 /* ── helper component ── */
 function Stat({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-[#17171f] px-3 py-2.5">
-      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+    <div className="rounded-lg border border-border bg-surface-2 px-3 py-2.5">
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
       <div className={`font-display text-2xl font-bold leading-none ${color}`}>{value}</div>
     </div>
   );

@@ -95,14 +95,14 @@ export default function LoanEmiCalculatorTool() {
   return (
     <div className="space-y-4">
       {/* ── Inputs ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <h2 className="font-display text-sm font-bold tracking-tight text-white">Loan Details</h2>
           <select
             value={currency.code}
             onChange={(e) => setCurrency(CURRENCIES.find((c) => c.code === e.target.value) || CURRENCIES[0])}
-            className="rounded-lg border border-white/10 bg-[#17171f] px-3 py-1.5 text-xs font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
+            className="rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
           >
             {CURRENCIES.map((c) => (
               <option key={c.code} value={c.code}>{c.label}</option>
@@ -113,7 +113,7 @@ export default function LoanEmiCalculatorTool() {
         <div className="space-y-4 px-5 py-5">
           {/* Principal */}
           <div>
-            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
               Loan Amount ({currency.symbol})
             </label>
             <input
@@ -122,14 +122,14 @@ export default function LoanEmiCalculatorTool() {
               value={principal}
               onChange={(e) => handlePrincipal(e.target.value)}
               placeholder="1000000"
-              className="w-full max-w-xs rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168]"
+              className="w-full max-w-xs rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3"
             />
           </div>
 
           {/* Rate + Tenure row */}
           <div className="flex flex-wrap gap-4">
             <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                 Interest Rate (% p.a.)
               </label>
               <input
@@ -139,11 +139,11 @@ export default function LoanEmiCalculatorTool() {
                 value={rate}
                 onChange={(e) => setRate(e.target.value)}
                 placeholder="8.5"
-                className="w-36 rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-36 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
             <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                 Loan Tenure
               </label>
               <div className="flex items-center gap-2">
@@ -153,18 +153,18 @@ export default function LoanEmiCalculatorTool() {
                   value={tenureYears}
                   onChange={(e) => setTenureYears(e.target.value)}
                   placeholder="20"
-                  className="w-24 rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  className="w-24 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
-                <div className="flex rounded-lg border border-white/10 bg-[#17171f] p-0.5 text-xs">
+                <div className="flex rounded-lg border border-border bg-surface-2 p-0.5 text-xs">
                   <button
                     onClick={() => setTenureUnit("years")}
-                    className={`rounded-md px-2.5 py-1.5 font-semibold transition ${tenureUnit === "years" ? "bg-[#6c63ff] text-white" : "text-[#9b9bb3] hover:text-white"}`}
+                    className={`rounded-md px-2.5 py-1.5 font-semibold transition ${tenureUnit === "years" ? "bg-[#6c63ff] text-white" : "text-muted hover:text-foreground"}`}
                   >
                     Yr
                   </button>
                   <button
                     onClick={() => setTenureUnit("months")}
-                    className={`rounded-md px-2.5 py-1.5 font-semibold transition ${tenureUnit === "months" ? "bg-[#6c63ff] text-white" : "text-[#9b9bb3] hover:text-white"}`}
+                    className={`rounded-md px-2.5 py-1.5 font-semibold transition ${tenureUnit === "months" ? "bg-[#6c63ff] text-white" : "text-muted hover:text-foreground"}`}
                   >
                     Mo
                   </button>
@@ -185,8 +185,8 @@ export default function LoanEmiCalculatorTool() {
           </div>
 
           {/* ── Breakdown bar ── */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Payment Breakdown</h3>
             </div>
             <div className="px-5 py-5">
@@ -208,12 +208,12 @@ export default function LoanEmiCalculatorTool() {
               <div className="mt-3 flex flex-wrap gap-5 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-[#6c63ff]" />
-                  <span className="text-[#9b9bb3]">Principal:</span>
+                  <span className="text-muted">Principal:</span>
                   <span className="font-semibold text-white">{currency.symbol}{fmt(parseFloat(principal.replace(/,/g, "")) || 0)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-[#ff6584]" />
-                  <span className="text-[#9b9bb3]">Interest:</span>
+                  <span className="text-muted">Interest:</span>
                   <span className="font-semibold text-white">{currency.symbol}{fmt(result.totalInterest)}</span>
                 </div>
               </div>
@@ -221,15 +221,15 @@ export default function LoanEmiCalculatorTool() {
           </div>
 
           {/* ── Amortization Schedule ── */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="flex items-center justify-between border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Amortization Schedule</h3>
-              <span className="text-[10px] text-[#57576f]">{result.schedule.length} months</span>
+              <span className="text-[10px] text-muted-2">{result.schedule.length} months</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+                  <tr className="border-b border-border text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                     <th className="px-5 py-2.5">#</th>
                     <th className="px-5 py-2.5">Principal</th>
                     <th className="px-5 py-2.5">Interest</th>
@@ -238,8 +238,8 @@ export default function LoanEmiCalculatorTool() {
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {visibleSchedule.map((r) => (
-                    <tr key={r.month} className="text-[#d0d0e0]">
-                      <td className="px-5 py-2 text-[#57576f]">{r.month}</td>
+                    <tr key={r.month} className="text-foreground/85">
+                      <td className="px-5 py-2 text-muted-2">{r.month}</td>
                       <td className="px-5 py-2">{currency.symbol}{fmt(r.principal)}</td>
                       <td className="px-5 py-2">{currency.symbol}{fmt(r.interest)}</td>
                       <td className="px-5 py-2">{currency.symbol}{fmt(r.balance)}</td>
@@ -249,7 +249,7 @@ export default function LoanEmiCalculatorTool() {
               </table>
             </div>
             {result.schedule.length > 12 && (
-              <div className="border-t border-white/10 px-5 py-3 text-center">
+              <div className="border-t border-border px-5 py-3 text-center">
                 <button
                   onClick={() => setShowFull((f) => !f)}
                   className="text-xs font-semibold text-[#6c63ff] hover:text-[#8b84ff] transition"
@@ -261,12 +261,12 @@ export default function LoanEmiCalculatorTool() {
           </div>
 
           {/* ── Formula ── */}
-          <div className="rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
-            <h4 className="mb-2 font-display text-xs font-bold uppercase tracking-wider text-[#57576f]">EMI Formula</h4>
-            <div className="font-mono text-sm text-[#9b9bb3]">
+          <div className="rounded-2xl border border-border bg-surface px-5 py-4">
+            <h4 className="mb-2 font-display text-xs font-bold uppercase tracking-wider text-muted-2">EMI Formula</h4>
+            <div className="font-mono text-sm text-muted">
               EMI = P × R × (1 + R)<sup>N</sup> / ((1 + R)<sup>N</sup> − 1)
             </div>
-            <div className="mt-2 text-[10px] text-[#57576f]">
+            <div className="mt-2 text-[10px] text-muted-2">
               P = Principal · R = Monthly Rate (annual / 12 / 100) · N = Total Months
             </div>
           </div>
@@ -278,10 +278,10 @@ export default function LoanEmiCalculatorTool() {
 
 function ResultCard({ label, value, accent }: { label: string; value: string; accent: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
       <div className="h-[2px]" style={{ backgroundColor: accent }} />
       <div className="px-5 py-4 text-center">
-        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
         <div className="font-display text-2xl font-bold text-white">{value}</div>
       </div>
     </div>

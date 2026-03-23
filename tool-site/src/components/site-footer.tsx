@@ -7,11 +7,26 @@ const footerColumns = [
       { label: "PDF Compressor", href: "/tools/pdf-compressor" },
       { label: "PDF Merger", href: "/tools/pdf-merger" },
       { label: "PDF Splitter", href: "/tools/pdf-splitter" },
+      { label: "Protect PDF", href: "/tools/protect-pdf" },
+      { label: "Unlock PDF", href: "/tools/unlock-pdf" },
+      { label: "Redact PDF", href: "/tools/redact-pdf" },
+      { label: "Compare PDF", href: "/tools/compare-pdf" },
       { label: "Image to PDF", href: "/tools/image-to-pdf" },
       { label: "Word to PDF", href: "/tools/word-to-pdf" },
       { label: "PowerPoint to PDF", href: "/tools/powerpoint-to-pdf" },
       { label: "Excel to PDF", href: "/tools/excel-to-pdf" },
       { label: "HTML to PDF", href: "/tools/html-to-pdf" },
+      { label: "PDF to Text (OCR)", href: "/tools/pdf-to-text" },
+    ],
+  },
+  {
+    title: "Image Tools",
+    links: [
+      { label: "Image Compressor", href: "/tools/image-compressor" },
+      { label: "Image Resizer", href: "/tools/image-resizer" },
+      { label: "Image Converter", href: "/tools/image-converter" },
+      { label: "Image to Text", href: "/tools/image-to-text" },
+      { label: "PNG to JPG", href: "/tools/png-to-jpg" },
     ],
   },
   {
@@ -21,6 +36,9 @@ const footerColumns = [
       { label: "Age Calculator", href: "/tools/age-calculator" },
       { label: "BMI Calculator", href: "/tools/bmi-calculator" },
       { label: "EMI Calculator", href: "/tools/loan-emi-calculator" },
+      { label: "Profit Margin", href: "/tools/profit-margin-calculator" },
+      { label: "ROI Calculator", href: "/tools/roi-calculator" },
+      { label: "GST / Tax Calc", href: "/tools/gst-calculator" },
       { label: "Calorie Calc", href: "/tools/calorie-calculator" },
     ],
   },
@@ -48,6 +66,7 @@ const footerColumns = [
     title: "SEO Tools",
     links: [
       { label: "Meta Tag Gen", href: "/tools/meta-tag-generator" },
+      { label: "Meta Length Check", href: "/tools/meta-title-description-checker" },
       { label: "Sitemap Gen", href: "/tools/sitemap-generator" },
       { label: "Robots.txt", href: "/tools/robots-txt-generator" },
       { label: "Keyword Density", href: "/tools/keyword-density-checker" },
@@ -58,7 +77,7 @@ const footerColumns = [
 
 export default function SiteFooter() {
   return (
-    <footer className="mt-16 border-t border-white/10">
+    <footer className="mt-16" style={{ borderTop: "1px solid var(--border)" }}>
       <div className="mx-auto max-w-[1400px] px-6 pb-4 pt-10">
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr_1fr]">
           <div>
@@ -66,15 +85,15 @@ export default function SiteFooter() {
               <span className="grid h-8 w-8 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs">⚡</span>
               Tool<span className="text-[#6c63ff]">Craft</span>
             </Link>
-            <p className="max-w-xs text-sm leading-7 text-[#9b9bb3]">100% free online tools. No account needed. Built with ❤️ for the web.</p>
+            <p className="max-w-xs text-sm leading-7" style={{ color: "var(--muted)" }}>100% free online tools. No account needed. Built with ❤️ for the web.</p>
           </div>
 
           {footerColumns.map((column) => (
             <div key={column.title}>
-              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#61617a]">{column.title}</h4>
-              <div className="space-y-2 text-sm text-[#9b9bb3]">
+              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--muted-3)" }}>{column.title}</h4>
+              <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
                 {column.links.map((link) => (
-                  <Link key={link.label} href={link.href} className="block transition hover:text-white">
+                  <Link key={link.label} href={link.href} className="block transition" style={{ color: "var(--muted)" }}>
                     {link.label}
                   </Link>
                 ))}
@@ -83,19 +102,19 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 py-4 text-sm text-[#61617a]">
+        <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm" style={{ borderTop: "1px solid var(--border)", color: "var(--muted-3)" }}>
           <span>© 2026 ToolCraft — All tools are free, forever.</span>
           <div className="flex items-center gap-5">
-            <Link href="/privacy" className="transition hover:text-white">
+            <Link href="/privacy" className="transition hover:opacity-80">
               Privacy
             </Link>
-            <Link href="/terms" className="transition hover:text-white">
+            <Link href="/terms" className="transition hover:opacity-80">
               Terms
             </Link>
-            <Link href="/contact" className="transition hover:text-white">
+            <Link href="/contact" className="transition hover:opacity-80">
               Contact
             </Link>
-            <Link href="/site-map" className="transition hover:text-white">
+            <Link href="/site-map" className="transition hover:opacity-80">
               Sitemap
             </Link>
           </div>

@@ -158,16 +158,16 @@ export default function AgeCalculatorTool() {
   return (
     <div className="space-y-4">
       {/* ── Input card ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
-        <div className="border-b border-white/10 px-5 py-3">
+        <div className="border-b border-border px-5 py-3">
           <h2 className="font-display text-sm font-bold tracking-tight text-white">Enter Your Date of Birth</h2>
         </div>
 
         <div className="flex flex-wrap items-end gap-4 px-5 py-5">
           <div>
-            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
               Date of Birth
             </label>
             <input
@@ -175,18 +175,18 @@ export default function AgeCalculatorTool() {
               value={dob}
               onChange={(e) => setDob(e.target.value)}
               max={asOf}
-              className="rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 [color-scheme:dark]"
+              className="rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 [color-scheme:dark]"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
               Age as of
             </label>
             <input
               type="date"
               value={asOf}
               onChange={(e) => setAsOf(e.target.value)}
-              className="rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 [color-scheme:dark]"
+              className="rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 [color-scheme:dark]"
             />
           </div>
         </div>
@@ -196,8 +196,8 @@ export default function AgeCalculatorTool() {
       {result && (
         <>
           {/* Primary age card */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_40px_rgba(0,0,0,.45)]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_40px_rgba(0,0,0,.45)]">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-tight text-white">
                 <span className="h-2 w-2 rounded-full bg-[#6c63ff]" />
                 Your Age
@@ -209,21 +209,21 @@ export default function AgeCalculatorTool() {
               <AgeUnit value={result.days} label="Days" color="text-[#38d9a9]" />
             </div>
             {result.leapYearBaby && (
-              <div className="border-t border-white/10 px-5 py-2.5">
+              <div className="border-t border-border px-5 py-2.5">
                 <p className="text-xs text-amber-300">🎉 You&apos;re a leap year baby! Born on February 29.</p>
               </div>
             )}
           </div>
 
           {/* Alternate expressions */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-tight text-white">
                 <span className="h-2 w-2 rounded-full bg-[#ff6584]" />
                 Age in Different Units
               </h3>
             </div>
-            <div className="grid grid-cols-2 gap-px bg-white/5 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-px bg-surface-3/50 sm:grid-cols-4">
               <StatCell label="Total Months" value={`${result.years * 12 + result.months}`} />
               <StatCell label="Total Weeks" value={result.totalWeeks.toLocaleString()} />
               <StatCell label="Total Days" value={result.totalDays.toLocaleString()} />
@@ -242,8 +242,8 @@ export default function AgeCalculatorTool() {
           </div>
 
           {/* Fun facts */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-tight text-white">
                 <span className="h-2 w-2 rounded-full bg-[#38d9a9]" />
                 Fun Facts
@@ -287,8 +287,8 @@ export default function AgeCalculatorTool() {
           </div>
 
           {/* Age milestones */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="flex items-center gap-2 font-display text-sm font-bold tracking-tight text-white">
                 <span className="h-2 w-2 rounded-full bg-[#ffa640]" />
                 Milestones
@@ -319,17 +319,17 @@ export default function AgeCalculatorTool() {
                     className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 ${
                       isPast
                         ? "border-[#38d9a9]/30 bg-[#38d9a9]/5"
-                        : "border-white/10 bg-[#17171f]"
+                        : "border-border bg-surface-2"
                     }`}
                   >
-                    <span className={`text-sm ${isPast ? "text-[#38d9a9]" : "text-[#515168]"}`}>
+                    <span className={`text-sm ${isPast ? "text-[#38d9a9]" : "text-muted-3"}`}>
                       {isPast ? "✅" : "⏳"}
                     </span>
                     <div>
                       <div className={`text-xs font-semibold ${isPast ? "text-[#38d9a9]" : "text-white"}`}>
                         {ms.label}
                       </div>
-                      <div className="text-[10px] text-[#9b9bb3]">
+                      <div className="text-[10px] text-muted">
                         {milestoneDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                         {isPast ? " ✓" : ""}
                       </div>
@@ -351,15 +351,15 @@ function AgeUnit({ value, label, color }: { value: number; label: string; color:
   return (
     <div className="text-center">
       <div className={`font-display text-5xl font-bold leading-none ${color}`}>{value}</div>
-      <div className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+      <div className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-muted-2">{label}</div>
     </div>
   );
 }
 
 function StatCell({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#111118] px-4 py-3">
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+    <div className="bg-surface px-4 py-3">
+      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
       <div className="mt-1 font-display text-lg font-bold text-white">{value}</div>
     </div>
   );
@@ -367,14 +367,14 @@ function StatCell({ label, value }: { label: string; value: string }) {
 
 function FactCard({ emoji, label, value, sub }: { emoji: string; label: string; value: string; sub?: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#17171f] px-4 py-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/5 text-lg">
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-3/50 text-lg">
         {emoji}
       </div>
       <div>
-        <div className="text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+        <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
         <div className="font-display text-sm font-bold text-white">{value}</div>
-        {sub && <div className="text-[10px] text-[#9b9bb3]">{sub}</div>}
+        {sub && <div className="text-[10px] text-muted">{sub}</div>}
       </div>
     </div>
   );

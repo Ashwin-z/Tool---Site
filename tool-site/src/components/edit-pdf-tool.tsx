@@ -2086,7 +2086,7 @@ export default function EditPdfTool() {
         {toolMode === "select" && selectedOverlayId === layer.id ? (
           <>
             <div className="pointer-events-none absolute inset-0 rounded-lg border-2 border-[#ff4d6d] shadow-[0_0_0_1px_rgba(255,77,109,0.35)]" />
-            <div className="pointer-events-none absolute left-2 top-2 rounded-full bg-[#111118]/80 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
+            <div className="pointer-events-none absolute left-2 top-2 rounded-full bg-surface/80 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-white">
               {imageEditMode}
             </div>
             {showResizeHandles ? ([
@@ -2136,14 +2136,14 @@ export default function EditPdfTool() {
             setDragOver(true);
           }}
           onDragLeave={() => setDragOver(false)}
-          className={`rounded-[28px] border border-dashed p-8 transition md:p-12 ${dragOver ? "border-[#ff4d6d]/80 bg-[#201018]" : "border-white/15 bg-[#111118]"}`}
+          className={`rounded-[28px] border border-dashed p-8 transition md:p-12 ${dragOver ? "border-[#ff4d6d]/80 bg-[#201018]" : "border-border-strong bg-surface"}`}
         >
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#ffb8c6]">
+            <div className="rounded-full border border-border bg-surface-3/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-[#ffb8c6]">
               Edit PDF workspace
             </div>
             <h2 className="mt-6 text-3xl font-semibold text-white md:text-5xl">Upload a PDF to open the editor</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#9b9bb3] md:text-base">
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted md:text-base">
               This editor is designed like a lightweight iLovePDF-style workspace: thumbnail rail on the left, a large page canvas in the center, and a live layer panel on the right.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -2157,20 +2157,20 @@ export default function EditPdfTool() {
               <span className="text-sm text-[#7f8096]">or drag and drop it here</span>
             </div>
             <div className="mt-8 grid w-full gap-3 text-left text-sm text-[#bfc1d4] md:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">Left rail for all pages</div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">Center canvas for page editing</div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">Right panel for layers and styling</div>
+              <div className="rounded-2xl border border-border bg-surface/50 p-4">Left rail for all pages</div>
+              <div className="rounded-2xl border border-border bg-surface/50 p-4">Center canvas for page editing</div>
+              <div className="rounded-2xl border border-border bg-surface/50 p-4">Right panel for layers and styling</div>
             </div>
           </div>
         </section>
       ) : (
-        <section className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0f0f15] shadow-[0_30px_80px_rgba(0,0,0,0.32)]">
-          <div className="border-b border-white/10 bg-[#14141d] px-4 py-4 md:px-6">
+        <section className="overflow-hidden rounded-[30px] border border-border bg-background shadow-[0_30px_80px_rgba(0,0,0,0.32)]">
+          <div className="border-b border-border bg-surface px-4 py-4 md:px-6">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8c8ea6]">Edit PDF</div>
                 <h2 className="mt-1 text-2xl font-semibold text-white">Canvas editor with page thumbnails and layers</h2>
-                <p className="mt-2 text-sm text-[#9b9bb3]">
+                <p className="mt-2 text-sm text-muted">
                   {pdf.file.name} · {pdf.pageCount} pages · {formatBytes(pdf.file.size)}
                 </p>
               </div>
@@ -2179,7 +2179,7 @@ export default function EditPdfTool() {
                   type="button"
                   onClick={undoLastChange}
                   disabled={!undoStack.length}
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-full border border-border bg-surface-3/50 px-4 py-2 text-sm font-medium text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Undo
                 </button>
@@ -2187,21 +2187,21 @@ export default function EditPdfTool() {
                   type="button"
                   onClick={redoLastChange}
                   disabled={!redoStack.length}
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-full border border-border bg-surface-3/50 px-4 py-2 text-sm font-medium text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Redo
                 </button>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+                  className="rounded-full border border-border bg-surface-3/50 px-4 py-2 text-sm font-medium text-white transition hover:bg-surface-3"
                 >
                   Replace PDF
                 </button>
                 <button
                   type="button"
                   onClick={resetEditor}
-                  className="rounded-full border border-white/10 bg-transparent px-4 py-2 text-sm font-medium text-[#c5c6d6] transition hover:border-white/20 hover:text-white"
+                  className="rounded-full border border-border bg-transparent px-4 py-2 text-sm font-medium text-[#c5c6d6] transition hover:border-border-strong hover:text-foreground"
                 >
                   Reset changes
                 </button>
@@ -2217,10 +2217,10 @@ export default function EditPdfTool() {
             </div>
           </div>
 
-          <div className="border-b border-white/10 bg-[#111118] px-4 py-3 md:px-6">
+          <div className="border-b border-border bg-surface px-4 py-3 md:px-6">
             <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="rounded-full border border-white/10 bg-white/5 p-1">
+                <div className="rounded-full border border-border bg-surface-3/50 p-1">
                   <button type="button" className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#111118]">
                     Annotate
                   </button>
@@ -2238,14 +2238,14 @@ export default function EditPdfTool() {
                         stampInputRef.current?.click();
                       }
                     }}
-                    className={`rounded-2xl border px-3 py-2 text-sm transition ${toolMode === tool.id ? "border-[#ff4d6d]/70 bg-[#ff4d6d]/10 text-white" : "border-white/10 bg-white/[0.03] text-[#c4c5d7] hover:bg-white/[0.05]"}`}
+                    className={`rounded-2xl border px-3 py-2 text-sm transition ${toolMode === tool.id ? "border-[#ff4d6d]/70 bg-[#ff4d6d]/10 text-white" : "border-border bg-surface/50 text-foreground/75 hover:bg-surface/70"}`}
                   >
                     <span className="mr-2 inline-block w-4 text-center">{tool.icon}</span>
                     {tool.label}
                   </button>
                 ))}
                 {toolMode === "highlight" ? (
-                  <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-2 py-2">
+                  <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-surface/50 px-2 py-2">
                     {([
                       ["rect", "Rectangle", "▭"],
                       ["ellipse", "Circle", "◯"],
@@ -2255,7 +2255,7 @@ export default function EditPdfTool() {
                         key={value}
                         type="button"
                         onClick={() => setShapeKind(value)}
-                        className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${shapeKind === value ? "bg-[#ff4d6d] text-white" : "text-[#c4c5d7] hover:bg-white/[0.05]"}`}
+                        className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${shapeKind === value ? "bg-[#ff4d6d] text-white" : "text-foreground/75 hover:bg-surface/70"}`}
                       >
                         <span className="mr-2 inline-block w-4 text-center">{icon}</span>
                         {label}
@@ -2265,23 +2265,23 @@ export default function EditPdfTool() {
                 ) : null}
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-sm text-[#c4c5d7]">
-                <label className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2">
+              <div className="flex flex-wrap items-center gap-2 text-sm text-foreground/75">
+                <label className="flex items-center gap-2 rounded-2xl border border-border bg-surface/50 px-3 py-2">
                   <span>Accent</span>
                   <input type="color" value={toolColor} onChange={(event) => setToolColor(event.target.value)} className="h-7 w-9 cursor-pointer rounded border-0 bg-transparent" />
                 </label>
                 <button
                   type="button"
                   onClick={() => adjustZoom(-0.1, captureZoomAnchor())}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 transition hover:bg-white/[0.05]"
+                  className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70"
                 >
                   −
                 </button>
-                <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2">{formatZoom(zoom)}</div>
+                <div className="rounded-2xl border border-border bg-surface/50 px-3 py-2">{formatZoom(zoom)}</div>
                 <button
                   type="button"
                   onClick={() => adjustZoom(0.1, captureZoomAnchor())}
-                  className="rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 transition hover:bg-white/[0.05]"
+                  className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70"
                 >
                   +
                 </button>
@@ -2300,13 +2300,13 @@ export default function EditPdfTool() {
           </div>
 
           <div className="grid min-h-[820px] xl:grid-cols-[192px_minmax(0,1fr)_320px]">
-            <aside className="border-r border-white/10 bg-[#111118] px-3 py-4">
+            <aside className="border-r border-border bg-surface px-3 py-4">
               <div className="mb-3 flex items-center justify-between px-2">
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-[0.22em] text-[#8d8ea5]">Pages</div>
                   <div className="mt-1 text-sm text-white">{pdf.pageCount} thumbnails</div>
                 </div>
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-[#c4c5d7]">
+                <div className="rounded-full border border-border bg-surface/60 px-2 py-1 text-xs text-foreground/75">
                   {overlays.length} edits
                 </div>
               </div>
@@ -2324,7 +2324,7 @@ export default function EditPdfTool() {
                       key={pageNumber}
                       type="button"
                       onClick={() => setCurrentPage(pageNumber)}
-                      className={`w-full rounded-2xl border p-2 text-left transition ${isActive ? "border-[#ff4d6d]/70 bg-[#1b1015] shadow-[0_0_0_1px_rgba(255,77,109,0.25)]" : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"}`}
+                      className={`w-full rounded-2xl border p-2 text-left transition ${isActive ? "border-[#ff4d6d]/70 bg-[#1b1015] shadow-[0_0_0_1px_rgba(255,77,109,0.25)]" : "border-border bg-white/[0.02] hover:bg-surface/70"}`}
                     >
                       <div className="flex items-center justify-between px-1 pb-2 text-xs text-[#c6c7d7]">
                         <span>Page {pageNumber}</span>
@@ -2345,8 +2345,8 @@ export default function EditPdfTool() {
               </div>
             </aside>
 
-            <main className="flex min-w-0 flex-col bg-[#15151d]">
-              <div className="border-b border-white/10 px-4 py-3 text-sm text-[#bfc0d4] md:px-6">
+            <main className="flex min-w-0 flex-col bg-surface">
+              <div className="border-b border-border px-4 py-3 text-sm text-muted md:px-6">
                 Page {currentPage} of {pdf.pageCount} · {currentLayers.length} layer{currentLayers.length === 1 ? "" : "s"} on this page
               </div>
 
@@ -2446,7 +2446,7 @@ export default function EditPdfTool() {
               </div>
             </main>
 
-            <aside className="border-l border-white/10 bg-[#111118] p-4 md:p-5">
+            <aside className="border-l border-border bg-surface p-4 md:p-5">
               <div className="flex h-full flex-col">
                 <div>
                   <h3 className="text-2xl font-semibold text-white">Edit PDF</h3>
@@ -2455,7 +2455,7 @@ export default function EditPdfTool() {
                   </div>
                 </div>
 
-                <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="mt-5 rounded-2xl border border-border bg-surface/50 p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8c8ea6]">Current tool</div>
@@ -2464,7 +2464,7 @@ export default function EditPdfTool() {
                     <button
                       type="button"
                       onClick={() => stampInputRef.current?.click()}
-                      className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-semibold text-[#d9dae6] transition hover:bg-white/[0.08]"
+                      className="rounded-full border border-border bg-surface/60 px-3 py-2 text-xs font-semibold text-[#d9dae6] transition hover:bg-white/[0.08]"
                     >
                       Upload image
                     </button>
@@ -2483,7 +2483,7 @@ export default function EditPdfTool() {
                       <input type="range" min={0.12} max={0.65} step={0.01} value={highlightOpacity} onChange={(event) => setHighlightOpacity(Number(event.target.value))} />
                     </label>
                     {toolMode === "highlight" ? (
-                      <div className="grid gap-2 rounded-xl border border-white/10 bg-black/10 p-3">
+                      <div className="grid gap-2 rounded-xl border border-border bg-surface/30 p-3">
                         <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8c8ea6]">Shape style</span>
                         <div className="grid grid-cols-3 gap-2">
                           {([
@@ -2495,7 +2495,7 @@ export default function EditPdfTool() {
                               key={mode}
                               type="button"
                               onClick={() => setShapePaintMode(mode)}
-                              className={`rounded-xl px-2 py-2 text-[11px] font-semibold transition ${shapePaintMode === mode ? "bg-[#ff4d6d] text-white" : "border border-white/10 bg-white/[0.03] text-[#d6d7e4] hover:bg-white/[0.08]"}`}
+                              className={`rounded-xl px-2 py-2 text-[11px] font-semibold transition ${shapePaintMode === mode ? "bg-[#ff4d6d] text-white" : "border border-border bg-surface/50 text-[#d6d7e4] hover:bg-white/[0.08]"}`}
                             >
                               {label}
                             </button>
@@ -2504,24 +2504,24 @@ export default function EditPdfTool() {
                       </div>
                     ) : null}
                     {stampAsset ? (
-                      <div className="rounded-xl border border-white/10 bg-black/10 px-3 py-2 text-xs text-[#9ea0b5]">
+                      <div className="rounded-xl border border-border bg-surface/30 px-3 py-2 text-xs text-[#9ea0b5]">
                         Image ready: {stampAsset.name}
                       </div>
                     ) : (
-                      <div className="rounded-xl border border-dashed border-white/10 bg-black/10 px-3 py-2 text-xs text-[#80839a]">
+                      <div className="rounded-xl border border-dashed border-border bg-surface/30 px-3 py-2 text-xs text-[#80839a]">
                         Upload a PNG or JPG to place image stamps.
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="mt-5 min-h-0 flex-1 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="mt-5 min-h-0 flex-1 rounded-2xl border border-border bg-surface/50 p-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8c8ea6]">Layers</div>
                       <div className="mt-1 text-base font-medium text-white">Page {currentPage}</div>
                     </div>
-                    <div className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-xs text-[#c8c9d9]">
+                    <div className="rounded-full border border-border bg-surface/60 px-2 py-1 text-xs text-foreground/75">
                       {currentLayers.length}
                     </div>
                   </div>
@@ -2531,7 +2531,7 @@ export default function EditPdfTool() {
                       [...currentLayers].reverse().map((layer) => (
                         <div
                           key={layer.id}
-                          className={`rounded-2xl border p-3 transition ${selectedOverlayId === layer.id ? "border-[#ff4d6d]/70 bg-[#1b1015]" : "border-white/10 bg-black/10 hover:border-white/20"}`}
+                          className={`rounded-2xl border p-3 transition ${selectedOverlayId === layer.id ? "border-[#ff4d6d]/70 bg-[#1b1015]" : "border-border bg-surface/30 hover:border-border-strong"}`}
                         >
                           <button
                             type="button"
@@ -2550,14 +2550,14 @@ export default function EditPdfTool() {
                             <button
                               type="button"
                               onClick={() => moveOverlayLayer(layer.id, "back")}
-                              className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#c9cada] transition hover:bg-white/[0.06]"
+                              className="rounded-full border border-border px-3 py-1 text-xs text-[#c9cada] transition hover:bg-white/[0.06]"
                             >
                               Send back
                             </button>
                             <button
                               type="button"
                               onClick={() => moveOverlayLayer(layer.id, "front")}
-                              className="rounded-full border border-white/10 px-3 py-1 text-xs text-[#c9cada] transition hover:bg-white/[0.06]"
+                              className="rounded-full border border-border px-3 py-1 text-xs text-[#c9cada] transition hover:bg-white/[0.06]"
                             >
                               Bring front
                             </button>
@@ -2572,13 +2572,13 @@ export default function EditPdfTool() {
                         </div>
                       ))
                     ) : (
-                      <div className="rounded-2xl border border-dashed border-white/10 px-4 py-5 text-sm leading-6 text-[#8f90a6]">
+                      <div className="rounded-2xl border border-dashed border-border px-4 py-5 text-sm leading-6 text-muted">
                         No layers yet. Choose a tool, then click or drag on the large page canvas.
                       </div>
                     )}
                   </div>
 
-                  <div className="mt-5 border-t border-white/10 pt-5">
+                  <div className="mt-5 border-t border-border pt-5">
                     <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8c8ea6]">Selected item</div>
                     {selectedOverlay ? (
                       <div className="mt-4 space-y-4 text-sm text-[#c5c6d8]">
@@ -2590,13 +2590,13 @@ export default function EditPdfTool() {
                                 value={selectedOverlay.text}
                                 onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "text" ? { ...item, text: event.target.value } : item)}
                                 rows={4}
-                                className="rounded-2xl border border-white/10 bg-black/10 px-3 py-2 text-white outline-none transition focus:border-[#ff4d6d]/60"
+                                className="rounded-2xl border border-border bg-surface/30 px-3 py-2 text-white outline-none transition focus:border-[#ff4d6d]/60"
                               />
                             </label>
                             <div className="grid grid-cols-2 gap-3">
                               <label className="grid gap-2">
                                 <span>Color</span>
-                                <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "text" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-white/10 bg-black/10" />
+                                <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "text" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-border bg-surface/30" />
                               </label>
                               <label className="grid gap-2">
                                 <span>Size</span>
@@ -2616,7 +2616,7 @@ export default function EditPdfTool() {
                               <div className="grid grid-cols-2 gap-3">
                                 <label className="grid gap-2">
                                   <span>Fill color</span>
-                                  <input type="color" value={selectedOverlay.backgroundColor ?? "#ffffff"} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "text" ? { ...item, backgroundColor: event.target.value } : item)} className="h-11 w-full rounded-xl border border-white/10 bg-black/10" />
+                                  <input type="color" value={selectedOverlay.backgroundColor ?? "#ffffff"} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "text" ? { ...item, backgroundColor: event.target.value } : item)} className="h-11 w-full rounded-xl border border-border bg-surface/30" />
                                 </label>
                                 <label className="grid gap-2">
                                   <span>Fill opacity</span>
@@ -2635,7 +2635,7 @@ export default function EditPdfTool() {
                           <div className="grid gap-3">
                             <label className="grid gap-2">
                               <span>Stroke color</span>
-                              <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "draw" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-white/10 bg-black/10" />
+                              <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "draw" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-border bg-surface/30" />
                             </label>
                             <label className="grid gap-2">
                               <span>Stroke thickness</span>
@@ -2646,7 +2646,7 @@ export default function EditPdfTool() {
 
                         {selectedOverlay.type === "highlight" ? (
                           <div className="grid gap-3">
-                            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/10 p-2">
+                            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface/30 p-2">
                               {([
                                 ["rect", "Rectangle"],
                                 ["ellipse", "Circle"],
@@ -2674,7 +2674,7 @@ export default function EditPdfTool() {
                                       paintMode: kind === "line" ? "stroke" : item.paintMode,
                                     };
                                   })}
-                                  className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${selectedOverlay.shapeKind === kind ? "bg-[#ff4d6d] text-white" : "border border-white/10 bg-white/[0.03] text-[#d6d7e4] hover:bg-white/[0.08]"}`}
+                                  className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${selectedOverlay.shapeKind === kind ? "bg-[#ff4d6d] text-white" : "border border-border bg-surface/50 text-[#d6d7e4] hover:bg-white/[0.08]"}`}
                                 >
                                   {label}
                                 </button>
@@ -2693,9 +2693,9 @@ export default function EditPdfTool() {
                             ) : null}
                             <label className="grid gap-2">
                               <span>Shape color</span>
-                              <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "highlight" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-white/10 bg-black/10" />
+                              <input type="color" value={selectedOverlay.color} onChange={(event) => updateOverlay(selectedOverlay.id, (item) => item.type === "highlight" ? { ...item, color: event.target.value } : item)} className="h-11 w-full rounded-xl border border-border bg-surface/30" />
                             </label>
-                            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-white/10 bg-black/10 p-2">
+                            <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-surface/30 p-2">
                               {([
                                 ["fill", "Fill only"],
                                 ["stroke", "Border only"],
@@ -2705,7 +2705,7 @@ export default function EditPdfTool() {
                                   key={mode}
                                   type="button"
                                   onClick={() => updateOverlay(selectedOverlay.id, (item) => item.type === "highlight" ? { ...item, paintMode: mode } : item)}
-                                  className={`rounded-xl px-2 py-2 text-[11px] font-semibold transition ${selectedOverlay.paintMode === mode ? "bg-[#ff4d6d] text-white" : "border border-white/10 bg-white/[0.03] text-[#d6d7e4] hover:bg-white/[0.08]"}`}
+                                  className={`rounded-xl px-2 py-2 text-[11px] font-semibold transition ${selectedOverlay.paintMode === mode ? "bg-[#ff4d6d] text-white" : "border border-border bg-surface/50 text-[#d6d7e4] hover:bg-white/[0.08]"}`}
                                 >
                                   {label}
                                 </button>
@@ -2724,10 +2724,10 @@ export default function EditPdfTool() {
 
                         {selectedOverlay.type === "image" ? (
                           <div className="grid gap-3">
-                            <div className="rounded-2xl border border-white/10 bg-black/10 p-3 text-xs text-[#9fa1b7]">
+                            <div className="rounded-2xl border border-border bg-surface/30 p-3 text-xs text-[#9fa1b7]">
                               {selectedOverlay.name}
                             </div>
-                            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-white/10 bg-black/10 p-2">
+                            <div className="grid grid-cols-2 gap-2 rounded-2xl border border-border bg-surface/30 p-2">
                               {([
                                 ["move", "Move"],
                                 ["resize", "Resize"],
@@ -2738,13 +2738,13 @@ export default function EditPdfTool() {
                                   key={mode}
                                   type="button"
                                   onClick={() => setImageEditMode(mode)}
-                                  className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${imageEditMode === mode ? "bg-[#ff4d6d] text-white" : "border border-white/10 bg-white/[0.03] text-[#d6d7e4] hover:bg-white/[0.08]"}`}
+                                  className={`rounded-xl px-3 py-2 text-xs font-semibold transition ${imageEditMode === mode ? "bg-[#ff4d6d] text-white" : "border border-border bg-surface/50 text-[#d6d7e4] hover:bg-white/[0.08]"}`}
                                 >
                                   {label}
                                 </button>
                               ))}
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-black/10 p-4 text-sm leading-6 text-[#bfc1d5]">
+                            <div className="rounded-2xl border border-border bg-surface/30 p-4 text-sm leading-6 text-[#bfc1d5]">
                               {imageEditMode === "move"
                                 ? "Move mode: drag the image box anywhere on the page."
                                 : imageEditMode === "resize"
@@ -2757,7 +2757,7 @@ export default function EditPdfTool() {
                               <button
                                 type="button"
                                 onClick={() => updateOverlay(selectedOverlay.id, (item) => item.type === "image" ? { ...item, cropLeft: 0, cropTop: 0, cropRight: 0, cropBottom: 0 } : item)}
-                                className="rounded-full border border-white/10 px-3 py-2 text-xs font-medium text-[#d6d7e4] transition hover:bg-white/[0.06]"
+                                className="rounded-full border border-border px-3 py-2 text-xs font-medium text-[#d6d7e4] transition hover:bg-white/[0.06]"
                               >
                                 Reset crop
                               </button>
@@ -2773,7 +2773,7 @@ export default function EditPdfTool() {
                         ) : null}
                       </div>
                     ) : (
-                      <div className="mt-4 rounded-2xl border border-dashed border-white/10 px-4 py-5 text-sm leading-6 text-[#8f90a6]">
+                      <div className="mt-4 rounded-2xl border border-dashed border-border px-4 py-5 text-sm leading-6 text-muted">
                         Select a layer from the page or the list to edit its properties.
                       </div>
                     )}

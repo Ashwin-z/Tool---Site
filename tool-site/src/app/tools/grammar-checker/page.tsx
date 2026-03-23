@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function GrammarCheckerPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-      <Link href="/" className="mb-5 inline-block text-sm text-[#9b9bb3] transition hover:text-white">
+      <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
         ← Back to home
       </Link>
 
@@ -29,7 +29,7 @@ export default function GrammarCheckerPage() {
         </div>
       </div>
 
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[#9b9bb3] md:text-base">
+      <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
         Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,
         capitalization errors, repeated words, confused words, and more. Fix issues one by one or
         apply all suggestions at once.

@@ -274,7 +274,7 @@ function PageSelectionCard({
       className={`group relative rounded-[26px] border p-1 text-left transition ${
         selected
           ? "border-emerald-400/70 bg-emerald-500/10 shadow-[0_0_0_2px_rgba(52,211,153,.18)]"
-          : "border-white/10 bg-[#17171f] hover:border-white/25"
+          : "border-border bg-surface-2 hover:border-white/25"
       }`}
     >
       {selected && (
@@ -647,7 +647,7 @@ export default function PdfSplitterTool() {
   return (
     <div className="space-y-4">
       {!result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="px-5 py-5">
@@ -664,7 +664,7 @@ export default function PdfSplitterTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : uploaded
                     ? "border-amber-500/40 bg-amber-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -684,21 +684,21 @@ export default function PdfSplitterTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDF here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Split one PDF by ranges or selected pages, entirely in your browser.
               </p>
             </div>
           </div>
 
           {uploaded && (
-            <div className="border-t border-white/10 px-5 py-4">
-              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.02] px-4 py-4">
+            <div className="border-t border-border px-5 py-4">
+              <div className="flex items-center gap-3 rounded-2xl border border-border bg-white/[.02] px-4 py-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#6c63ff]/10 text-xl text-[#a39cff]">
                   📄
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-white">{uploaded.file.name}</p>
-                  <p className="mt-1 text-[11px] text-[#9b9bb3]">
+                  <p className="mt-1 text-[11px] text-muted">
                     {uploaded.pageCount} pages • {fmtSize(uploaded.file.size)}
                   </p>
                 </div>
@@ -724,8 +724,8 @@ export default function PdfSplitterTool() {
       )}
 
       {uploaded && !result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-b border-white/10 px-5 py-4">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-b border-border px-5 py-4">
             <div className="flex flex-wrap items-center gap-3">
               {([
                 ["range", "Range"],
@@ -741,7 +741,7 @@ export default function PdfSplitterTool() {
                   className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
                     tab === value
                       ? "bg-[#6c63ff] text-white shadow-[0_4px_20px_rgba(108,99,255,.35)]"
-                      : "bg-white/5 text-[#9b9bb3] hover:bg-white/10 hover:text-white"
+                      : "bg-surface-3/50 text-muted hover:bg-surface-3 hover:text-foreground"
                   }`}
                 >
                   {label}
@@ -756,7 +756,7 @@ export default function PdfSplitterTool() {
           {tab === "range" ? (
             <div className="space-y-5 px-5 py-5">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-[#61617a]">Range mode:</span>
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-3">Range mode:</span>
                 {([
                   ["custom", "Custom"],
                   ["fixed", "Fixed"],
@@ -770,7 +770,7 @@ export default function PdfSplitterTool() {
                     className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
                       rangeMode === value
                         ? "bg-[#6c63ff] text-white"
-                        : "bg-white/5 text-[#9b9bb3] hover:bg-white/10 hover:text-white"
+                        : "bg-surface-3/50 text-muted hover:bg-surface-3 hover:text-foreground"
                     }`}
                   >
                     {label}
@@ -781,7 +781,7 @@ export default function PdfSplitterTool() {
               {rangeMode === "custom" ? (
                 <div className="space-y-4">
                   {ranges.map((range, index) => (
-                    <div key={range.id} className="rounded-2xl border border-white/10 bg-white/[.02] p-4">
+                    <div key={range.id} className="rounded-2xl border border-border bg-white/[.02] p-4">
                       <div className="flex flex-wrap items-center justify-between gap-3">
                         <p className="text-sm font-semibold text-white">Range {index + 1}</p>
                         {ranges.length > 1 && (
@@ -796,28 +796,28 @@ export default function PdfSplitterTool() {
 
                       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto_1fr] md:items-end">
                         <label className="space-y-2 text-sm text-[#c7c7d8]">
-                          <span className="block text-xs uppercase tracking-[0.16em] text-[#61617a]">From page</span>
+                          <span className="block text-xs uppercase tracking-[0.16em] text-muted-3">From page</span>
                           <input
                             type="number"
                             min={1}
                             max={uploaded.pageCount}
                             value={range.from}
                             onChange={(e) => updateRange(range.id, "from", Number(e.target.value))}
-                            className="w-full rounded-xl border border-white/10 bg-[#17171f] px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
+                            className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
                           />
                         </label>
 
                         <div className="mb-3 text-center text-sm text-[#7c7c95]">to</div>
 
                         <label className="space-y-2 text-sm text-[#c7c7d8]">
-                          <span className="block text-xs uppercase tracking-[0.16em] text-[#61617a]">To page</span>
+                          <span className="block text-xs uppercase tracking-[0.16em] text-muted-3">To page</span>
                           <input
                             type="number"
                             min={1}
                             max={uploaded.pageCount}
                             value={range.to}
                             onChange={(e) => updateRange(range.id, "to", Number(e.target.value))}
-                            className="w-full rounded-xl border border-white/10 bg-[#17171f] px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
+                            className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
                           />
                         </label>
                       </div>
@@ -827,7 +827,7 @@ export default function PdfSplitterTool() {
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <button
                       onClick={addRange}
-                      className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                      className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:bg-surface-3"
                     >
                       Add Range
                     </button>
@@ -837,7 +837,7 @@ export default function PdfSplitterTool() {
                         type="checkbox"
                         checked={mergeAllRanges}
                         onChange={(e) => setMergeAllRanges(e.target.checked)}
-                        className="h-4 w-4 rounded border-white/20 bg-[#17171f] text-[#6c63ff]"
+                        className="h-4 w-4 rounded border-white/20 bg-surface-2 text-[#6c63ff]"
                       />
                       Merge all ranges in one PDF file.
                     </label>
@@ -849,7 +849,7 @@ export default function PdfSplitterTool() {
                   </p>
 
                   {customRangePreviewCards.length > 0 && (
-                    <div className="space-y-4 rounded-2xl border border-dashed border-white/15 bg-[#0d0d12] p-5">
+                    <div className="space-y-4 rounded-2xl border border-dashed border-border-strong bg-[#0d0d12] p-5">
                       <div className="flex items-center justify-between gap-3">
                         <p className="text-sm font-semibold text-white">Live range preview</p>
                         <span className="text-[11px] text-[#8b8ba3]">
@@ -859,7 +859,7 @@ export default function PdfSplitterTool() {
 
                       <div className="space-y-6">
                         {customRangePreviewCards.map((card, index) => (
-                          <div key={card.id} className="rounded-2xl border border-white/10 bg-[#17171f] p-5">
+                          <div key={card.id} className="rounded-2xl border border-border bg-surface-2 p-5">
                             <p className="text-center text-lg font-medium text-white">Range {index + 1}</p>
 
                             <div className="mt-5 grid items-center gap-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
@@ -870,7 +870,7 @@ export default function PdfSplitterTool() {
                               <PreviewDocument imageUrl={pagePreviewCache[card.to] ?? null} pageNumber={card.to} />
                             </div>
 
-                            <p className="mt-4 text-center text-sm text-[#9b9bb3]">
+                            <p className="mt-4 text-center text-sm text-muted">
                               {card.merged
                                 ? `This range will be merged with the other selected ranges in one output PDF.`
                                 : `This output will include pages ${card.from} to ${card.to}.`}
@@ -883,9 +883,9 @@ export default function PdfSplitterTool() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-white/10 bg-white/[.02] p-4">
+                  <div className="rounded-2xl border border-border bg-white/[.02] p-4">
                     <label className="space-y-2 text-sm text-[#c7c7d8]">
-                      <span className="block text-xs uppercase tracking-[0.16em] text-[#61617a]">Split every N pages</span>
+                      <span className="block text-xs uppercase tracking-[0.16em] text-muted-3">Split every N pages</span>
                       <input
                         type="number"
                         min={1}
@@ -895,18 +895,18 @@ export default function PdfSplitterTool() {
                           setFixedChunkSize(clamp(Number(e.target.value) || 1, 1, uploaded.pageCount));
                           setResult(null);
                         }}
-                        className="w-full rounded-xl border border-white/10 bg-[#17171f] px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
+                        className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
                       />
                     </label>
                   </div>
 
-                  <div className="rounded-2xl border border-white/10 bg-white/[.02] p-4">
-                    <p className="text-xs uppercase tracking-[0.16em] text-[#61617a]">Preview ranges</p>
+                  <div className="rounded-2xl border border-border bg-white/[.02] p-4">
+                    <p className="text-xs uppercase tracking-[0.16em] text-muted-3">Preview ranges</p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {fixedRangesPreview.map((range, index) => (
                         <span
                           key={`${range.from}-${range.to}`}
-                          className="rounded-full border border-white/10 bg-[#17171f] px-3 py-1.5 text-xs text-[#c7c7d8]"
+                          className="rounded-full border border-border bg-surface-2 px-3 py-1.5 text-xs text-[#c7c7d8]"
                         >
                           Part {index + 1}: {range.from}-{range.to}
                         </span>
@@ -915,7 +915,7 @@ export default function PdfSplitterTool() {
                   </div>
 
                   {fixedRangePreviewCards.length > 0 && (
-                    <div className="space-y-4 rounded-2xl border border-dashed border-white/15 bg-[#0d0d12] p-5">
+                    <div className="space-y-4 rounded-2xl border border-dashed border-border-strong bg-[#0d0d12] p-5">
                       <div className="flex items-center justify-between gap-3">
                         <p className="text-sm font-semibold text-white">Live fixed-range preview</p>
                         <span className="text-[11px] text-[#8b8ba3]">
@@ -925,7 +925,7 @@ export default function PdfSplitterTool() {
 
                       <div className="grid gap-4 xl:grid-cols-2">
                         {fixedRangePreviewCards.slice(0, 4).map((card, index) => (
-                          <div key={card.id} className="rounded-2xl border border-white/10 bg-[#17171f] p-5">
+                          <div key={card.id} className="rounded-2xl border border-border bg-surface-2 p-5">
                             <p className="text-center text-base font-medium text-white">Part {index + 1}</p>
 
                             <div className="mt-5 grid items-center gap-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
@@ -934,7 +934,7 @@ export default function PdfSplitterTool() {
                               <PreviewDocument imageUrl={pagePreviewCache[card.to] ?? null} pageNumber={card.to} />
                             </div>
 
-                            <p className="mt-4 text-center text-sm text-[#9b9bb3]">
+                            <p className="mt-4 text-center text-sm text-muted">
                               This part will include pages {card.from} to {card.to}.
                             </p>
                           </div>
@@ -951,7 +951,7 @@ export default function PdfSplitterTool() {
                 </div>
               )}
 
-              <div className="border-t border-white/10 pt-4 text-center">
+              <div className="border-t border-border pt-4 text-center">
                 <button
                   onClick={handleSplit}
                   className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -962,9 +962,9 @@ export default function PdfSplitterTool() {
             </div>
           ) : (
             <div className="space-y-5 px-5 py-5">
-              <div className="rounded-2xl border border-white/10 bg-white/[.02] p-4">
+              <div className="rounded-2xl border border-border bg-white/[.02] p-4">
                 <label className="space-y-2 text-sm text-[#c7c7d8]">
-                  <span className="block text-xs uppercase tracking-[0.16em] text-[#61617a]">Pages</span>
+                  <span className="block text-xs uppercase tracking-[0.16em] text-muted-3">Pages</span>
                   <input
                     type="text"
                     value={pageSelection}
@@ -973,13 +973,13 @@ export default function PdfSplitterTool() {
                       setResult(null);
                     }}
                     placeholder="Example: 1,3,5-8"
-                    className="w-full rounded-xl border border-white/10 bg-[#17171f] px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
+                    className="w-full rounded-xl border border-border bg-surface-2 px-4 py-3 text-white outline-none transition focus:border-[#6c63ff]/60"
                   />
                 </label>
                 <p className="mt-2 text-xs text-[#7c7c95]">Use commas and ranges like 1, 4, 8-12.</p>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[.02] p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-white/[.02] p-4">
                 <div>
                   <p className="text-sm font-semibold text-white">Click pages to include or exclude them</p>
                   <p className="mt-1 text-xs text-[#7c7c95]">
@@ -991,21 +991,21 @@ export default function PdfSplitterTool() {
                   <button
                     type="button"
                     onClick={selectAllPages}
-                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+                    className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
                   >
                     Select all
                   </button>
                   <button
                     type="button"
                     onClick={clearSelectedPages}
-                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+                    className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
                   >
                     Clear selection
                   </button>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-dashed border-white/15 bg-[#0d0d12] p-5">
+              <div className="rounded-2xl border border-dashed border-border-strong bg-[#0d0d12] p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-white">All pages</p>
@@ -1039,13 +1039,13 @@ export default function PdfSplitterTool() {
                   type="checkbox"
                   checked={mergeSelectedPages}
                   onChange={(e) => setMergeSelectedPages(e.target.checked)}
-                  className="h-4 w-4 rounded border-white/20 bg-[#17171f] text-[#6c63ff]"
+                  className="h-4 w-4 rounded border-white/20 bg-surface-2 text-[#6c63ff]"
                 />
                 Merge all selected pages in one PDF file.
               </label>
 
               {pageSelection.trim() && (
-                <div className="space-y-4 rounded-2xl border border-dashed border-white/15 bg-[#0d0d12] p-5">
+                <div className="space-y-4 rounded-2xl border border-dashed border-border-strong bg-[#0d0d12] p-5">
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-sm font-semibold text-white">Live pages preview</p>
                     <span className="text-[11px] text-[#8b8ba3]">
@@ -1056,7 +1056,7 @@ export default function PdfSplitterTool() {
                   {pagesPreviewCards.length > 0 ? (
                     <div className="grid gap-4 xl:grid-cols-2">
                       {pagesPreviewCards.slice(0, mergeSelectedPages ? 1 : 6).map((card) => (
-                        <div key={card.id} className="rounded-2xl border border-white/10 bg-[#17171f] p-5">
+                        <div key={card.id} className="rounded-2xl border border-border bg-surface-2 p-5">
                           <p className="text-center text-base font-medium text-white">{card.title}</p>
 
                           <div className="mt-5 grid items-center gap-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
@@ -1067,7 +1067,7 @@ export default function PdfSplitterTool() {
                             <PreviewDocument imageUrl={pagePreviewCache[card.to] ?? null} pageNumber={card.to} />
                           </div>
 
-                          <p className="mt-4 text-center text-sm text-[#9b9bb3]">
+                          <p className="mt-4 text-center text-sm text-muted">
                             {card.merged
                               ? describePageSelection(parsedSelectedPages)
                               : `This output contains page ${card.from} only.`}
@@ -1087,7 +1087,7 @@ export default function PdfSplitterTool() {
                 </div>
               )}
 
-              <div className="border-t border-white/10 pt-4 text-center">
+              <div className="border-t border-border pt-4 text-center">
                 <button
                   onClick={handleSplit}
                   className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -1101,23 +1101,23 @@ export default function PdfSplitterTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#38d9a9]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#38d9a9]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
 
           <p className="text-sm font-semibold text-white">Splitting your PDF…</p>
-          <p className="text-xs text-[#9b9bb3]">Preparing downloadable PDF parts in your browser.</p>
+          <p className="text-xs text-muted">Preparing downloadable PDF parts in your browser.</p>
         </div>
       )}
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10">
@@ -1147,13 +1147,13 @@ export default function PdfSplitterTool() {
               <div className="mt-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-emerald-300/80">Split Result</p>
                 <p className="mt-1 text-3xl font-black text-emerald-400">{result.files.length}</p>
-                <p className="mt-1 text-xs text-[#9b9bb3]">Generated PDF file{result.files.length > 1 ? "s" : ""}</p>
+                <p className="mt-1 text-xs text-muted">Generated PDF file{result.files.length > 1 ? "s" : ""}</p>
               </div>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Output Files</h3>
             </div>
 
@@ -1163,13 +1163,13 @@ export default function PdfSplitterTool() {
                   <span className="text-base">📄</span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-white">{file.fileName}</p>
-                    <p className="mt-1 text-[10px] text-[#9b9bb3]">
+                    <p className="mt-1 text-[10px] text-muted">
                       {file.pageCount} page{file.pageCount > 1 ? "s" : ""} • {fmtSize(file.blob.size)}
                     </p>
                   </div>
                   <button
                     onClick={() => handleDownloadSingle(file)}
-                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+                    className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
                   >
                     Download
                   </button>
@@ -1177,10 +1177,10 @@ export default function PdfSplitterTool() {
               ))}
             </div>
 
-            <div className="border-t border-white/10 px-5 py-4 text-center">
+            <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
               >
                 Split Another PDF
               </button>

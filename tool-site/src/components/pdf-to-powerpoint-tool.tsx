@@ -212,7 +212,7 @@ export default function PdfToPowerpointTool() {
     <div className="space-y-4">
       {/* ── Upload area ── */}
       {!resultBlob && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ffb347] to-[#38d9a9]" />
 
           <div className="px-5 py-5">
@@ -229,7 +229,7 @@ export default function PdfToPowerpointTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : file
                     ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -250,7 +250,7 @@ export default function PdfToPowerpointTool() {
               {file ? (
                 <>
                   <p className="mt-3 text-sm font-semibold text-white">{file.name}</p>
-                  <p className="mt-1 text-xs text-[#57576f]">
+                  <p className="mt-1 text-xs text-muted-2">
                     {formatBytes(file.size)} · {pageCount} page{pageCount !== 1 ? "s" : ""}
                   </p>
                   <p className="mt-2 text-xs text-[#6c63ff]">Click or drop to change file</p>
@@ -260,7 +260,7 @@ export default function PdfToPowerpointTool() {
                   <p className="mt-3 text-sm font-semibold text-white">
                     Drop your PDF file here or <span className="text-[#6c63ff]">browse</span>
                   </p>
-                  <p className="mt-1 text-xs text-[#57576f]">
+                  <p className="mt-1 text-xs text-muted-2">
                     Convert every page of your PDF into a PowerPoint slide. Runs entirely in your browser.
                   </p>
                 </>
@@ -279,8 +279,8 @@ export default function PdfToPowerpointTool() {
 
       {/* ── Convert button ── */}
       {file && !resultBlob && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-t border-white/10 px-5 py-4 text-center">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-t border-border px-5 py-4 text-center">
             <button
               onClick={handleConvert}
               className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -293,18 +293,18 @@ export default function PdfToPowerpointTool() {
 
       {/* ── Processing ── */}
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#ffb347]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#ffb347]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
           <p className="text-sm font-semibold text-white">
             Rendering page {progress.done} of {progress.total}…
           </p>
-          <div className="h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
+          <div className="h-1.5 w-48 overflow-hidden rounded-full bg-surface-3">
             <div
               className="h-full rounded-full bg-[#6c63ff] transition-all duration-300"
               style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }}
@@ -316,7 +316,7 @@ export default function PdfToPowerpointTool() {
       {/* ── Result ── */}
       {resultBlob && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
             <div className="flex flex-col items-center px-5 py-10 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-3xl text-emerald-400">
@@ -331,17 +331,17 @@ export default function PdfToPowerpointTool() {
               >
                 ⬇ Download PPTX
               </button>
-              <p className="mt-4 text-sm text-[#9b9bb3]">
+              <p className="mt-4 text-sm text-muted">
                 {slideCount} slide{slideCount !== 1 ? "s" : ""} created · {formatBytes(resultBlob.size)}
               </p>
             </div>
           </div>
 
           {/* Reset */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-4 text-center">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface px-5 py-4 text-center">
             <button
               onClick={handleReset}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
             >
               Convert Another PDF
             </button>

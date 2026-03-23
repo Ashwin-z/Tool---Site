@@ -186,7 +186,7 @@ export default function WordToPdfTool() {
   return (
     <div className="space-y-4">
       {!result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ff6584]" />
 
           <div className="px-5 py-5">
@@ -203,7 +203,7 @@ export default function WordToPdfTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : queue.length
                     ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -224,18 +224,18 @@ export default function WordToPdfTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your Word files here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Convert up to {MAX_FILES} `.doc` or `.docx` files into PDF documents with Word-preserved formatting on Windows.
               </p>
             </div>
           </div>
 
           {queue.length > 0 && (
-            <div className="border-t border-white/10">
+            <div className="border-t border-border">
               <div className="flex items-center justify-between px-5 py-3">
                 <h3 className="font-display text-sm font-bold text-white">
                   {queue.length} Word file{queue.length > 1 ? "s" : ""} selected
-                  <span className="ml-2 text-xs font-normal text-[#57576f]">({fmtSize(totalSize)} total)</span>
+                  <span className="ml-2 text-xs font-normal text-muted-2">({fmtSize(totalSize)} total)</span>
                 </h3>
                 <button
                   onClick={(e) => {
@@ -254,7 +254,7 @@ export default function WordToPdfTool() {
                     <span className="text-base">📄</span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-white">{item.file.name}</p>
-                      <p className="text-[10px] text-[#57576f]">{fmtSize(item.file.size)}</p>
+                      <p className="text-[10px] text-muted-2">{fmtSize(item.file.size)}</p>
                     </div>
                     <button
                       onClick={() => removeFile(item.id)}
@@ -277,8 +277,8 @@ export default function WordToPdfTool() {
       )}
 
       {queue.length > 0 && !result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-t border-white/10 px-5 py-4 text-center">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-t border-border px-5 py-4 text-center">
             <button
               onClick={handleConvert}
               className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -290,25 +290,25 @@ export default function WordToPdfTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#38d9a9]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#38d9a9]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
 
           <p className="text-sm font-semibold text-white">Converting your Word files…</p>
           {progress.total > 0 && (
-            <p className="text-xs text-[#9b9bb3]">Converting file {progress.current} of {progress.total}</p>
+            <p className="text-xs text-muted">Converting file {progress.current} of {progress.total}</p>
           )}
         </div>
       )}
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
             <div className="flex flex-col items-center px-5 py-10 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-3xl text-emerald-400">✓</div>
@@ -324,8 +324,8 @@ export default function WordToPdfTool() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Converted Files</h3>
             </div>
             <div className="divide-y divide-white/5">
@@ -334,21 +334,21 @@ export default function WordToPdfTool() {
                   <span className="text-base">📄</span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-white">{file.fileName}</p>
-                    <p className="mt-1 text-[10px] text-[#9b9bb3]">{fmtSize(file.blob.size)}</p>
+                    <p className="mt-1 text-[10px] text-muted">{fmtSize(file.blob.size)}</p>
                   </div>
                   <button
                     onClick={() => handleDownloadSingle(file)}
-                    className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+                    className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
                   >
                     Download
                   </button>
                 </div>
               ))}
             </div>
-            <div className="border-t border-white/10 px-5 py-4 text-center">
+            <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
               >
                 Convert More Files
               </button>

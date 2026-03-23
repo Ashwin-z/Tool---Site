@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useNavShell } from "@/components/nav-shell-context";
+import { useTheme } from "@/components/theme-context";
 import { useEffect } from "react";
 
 export default function SiteHeader() {
   const { navOpen, toggleNav } = useNavShell();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -19,28 +21,44 @@ export default function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#08080e]/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b backdrop-blur" style={{ borderColor: "var(--border)", background: theme === "dark" ? "rgba(8,8,14,0.95)" : "rgba(248,249,251,0.95)" }}>
       <div className="mx-auto flex h-14 w-full max-w-[1400px] items-center gap-4 px-4">
         {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight">
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs">⚡</span>
+        <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight" style={{ color: "var(--foreground)" }}>
+          <span className="grid h-7 w-7 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs text-white">⚡</span>
           Tool<span className="text-[#6c63ff]">Craft</span>
         </Link>
 
         {/* Search */}
-        <div className="mx-auto hidden w-full max-w-xl items-center gap-2 rounded-lg border border-white/15 bg-[#17171f] px-3 py-2 md:flex focus-within:border-[#6c63ff]">
-          <span className="text-xs text-[#5b5b70]">🔍</span>
+        <div className="mx-auto hidden w-full max-w-xl items-center gap-2 rounded-lg border px-3 py-2 md:flex" style={{ borderColor: "var(--border-strong)", background: "var(--surface-2)" }}>
+          <span className="text-xs" style={{ color: "var(--muted-2)" }}>🔍</span>
           <input
             id="main-search"
             placeholder="Search tools... Ctrl+K"
-            className="w-full bg-transparent text-sm text-[#d5d5e5] outline-none placeholder:text-[#4b4b61]"
+            className="w-full bg-transparent text-sm outline-none" style={{ color: "var(--foreground)" }}
           />
         </div>
+
+        {/* Theme toggle slider */}
+        <button
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          className="relative flex h-7 w-12 shrink-0 items-center rounded-full border transition-colors duration-200"
+          style={{ borderColor: "var(--border-strong)", background: theme === "dark" ? "var(--surface-2)" : "var(--surface-3)" }}
+        >
+          <span
+            className="absolute flex h-5 w-5 items-center justify-center rounded-full bg-[#6c63ff] text-[10px] text-white shadow transition-transform duration-200"
+            style={{ transform: theme === "dark" ? "translateX(2px)" : "translateX(26px)" }}
+          >
+            {theme === "dark" ? "🌙" : "☀️"}
+          </span>
+        </button>
 
         {/* Toggle nav */}
         <button
           onClick={toggleNav}
-          className="ml-auto flex shrink-0 items-center gap-1.5 rounded-md border border-white/15 px-3 py-1.5 text-xs font-medium text-[#9b9bb3] transition hover:bg-white/5 hover:text-white"
+          className="flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition"
+          style={{ borderColor: "var(--border-strong)", color: "var(--muted)" }}
         >
           {navOpen ? (
             <>

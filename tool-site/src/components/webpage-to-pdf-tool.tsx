@@ -129,16 +129,16 @@ export default function WebpageToPdfTool() {
       {!result && !processing && (
         <form
           onSubmit={handleSubmit}
-          className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]"
+          className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]"
         >
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#f59e0b] to-[#38d9a9]" />
 
           <div className="px-5 py-6">
-            <div className="rounded-xl border border-white/10 bg-white/[.02] px-4 py-4">
+            <div className="rounded-xl border border-border bg-white/[.02] px-4 py-4">
               <label htmlFor="webpage-url" className="text-sm font-semibold text-white">
                 Enter a webpage URL
               </label>
-              <p className="mt-1 text-xs text-[#9b9bb3]">
+              <p className="mt-1 text-xs text-muted">
                 Paste a public http:// or https:// page. We&apos;ll fetch the page and convert it to PDF.
               </p>
 
@@ -154,7 +154,7 @@ export default function WebpageToPdfTool() {
                   placeholder="https://example.com"
                   value={urlInput}
                   onChange={(event) => setUrlInput(event.target.value)}
-                  className="min-w-0 flex-1 rounded-xl border border-white/10 bg-[#0c0c12] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#57576f] focus:border-[#6c63ff]/60 focus:ring-2 focus:ring-[#6c63ff]/20"
+                  className="min-w-0 flex-1 rounded-xl border border-border bg-[#0c0c12] px-4 py-3 text-sm text-white outline-none transition placeholder:text-muted-2 focus:border-[#6c63ff]/60 focus:ring-2 focus:ring-[#6c63ff]/20"
                 />
                 <button
                   type="submit"
@@ -175,22 +175,22 @@ export default function WebpageToPdfTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#f59e0b]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#f59e0b]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
           <p className="text-sm font-semibold text-white">Fetching and converting the webpage…</p>
-          <p className="text-xs text-[#9b9bb3]">This can take a moment on large pages.</p>
+          <p className="text-xs text-muted">This can take a moment on large pages.</p>
         </div>
       )}
 
       {result && !processing && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10 text-center">
@@ -198,7 +198,7 @@ export default function WebpageToPdfTool() {
                 ✓
               </div>
               <h3 className="mt-4 font-display text-xl font-bold text-white">Your PDF is ready!</h3>
-              <p className="mt-2 max-w-2xl text-xs text-[#9b9bb3]">{result.sourceUrl}</p>
+              <p className="mt-2 max-w-2xl text-xs text-muted">{result.sourceUrl}</p>
               <button
                 onClick={handleDownload}
                 className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -208,19 +208,19 @@ export default function WebpageToPdfTool() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Converted Page</h3>
             </div>
 
-            <div className="px-5 py-4 text-sm text-[#9b9bb3]">
+            <div className="px-5 py-4 text-sm text-muted">
               Saved from <span className="text-white">{result.sourceUrl}</span>
             </div>
 
-            <div className="border-t border-white/10 px-5 py-4 text-center">
+            <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
               >
                 Convert Another URL
               </button>

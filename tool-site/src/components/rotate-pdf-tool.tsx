@@ -196,7 +196,7 @@ export default function RotatePdfTool() {
   return (
     <div className="space-y-4">
       {!pdf && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="px-5 py-5">
@@ -211,7 +211,7 @@ export default function RotatePdfTool() {
               className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${
                 dragOver
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
-                  : "border-white/10 hover:border-white/20"
+                  : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -231,7 +231,7 @@ export default function RotatePdfTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDF here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Rotate left, rotate right, and reset with an instant live preview. Everything runs locally in your browser.
               </p>
             </div>
@@ -240,29 +240,29 @@ export default function RotatePdfTool() {
       )}
 
       {pdf && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="grid gap-6 px-5 py-5 lg:grid-cols-[360px_minmax(0,1fr)]">
             <div className="space-y-4">
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Selected file</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Selected file</p>
                 <h2 className="mt-2 break-all text-sm font-semibold text-white">{pdf.file.name}</h2>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-[#9b9bb3]">
-                  <div className="rounded-lg bg-white/5 px-3 py-2">
+                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-muted">
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2">
                     <span className="block text-[#6c63ff]">Pages</span>
                     <span className="font-semibold text-white">{pdf.pageCount}</span>
                   </div>
-                  <div className="rounded-lg bg-white/5 px-3 py-2">
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2">
                     <span className="block text-[#6c63ff]">Size</span>
                     <span className="font-semibold text-white">{formatBytes(pdf.file.size)}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Rotate controls</p>
-                <p className="mt-2 text-sm text-[#9b9bb3]">
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Rotate controls</p>
+                <p className="mt-2 text-sm text-muted">
                   Current rotation: <span className="font-semibold text-white">{rotationLabel}</span>
                 </p>
 
@@ -270,14 +270,14 @@ export default function RotatePdfTool() {
                   <button
                     type="button"
                     onClick={handleRotateLeft}
-                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#6c63ff]/40 hover:bg-[#6c63ff]/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#6c63ff]/40 hover:bg-[#6c63ff]/10"
                   >
                     Rotate left
                   </button>
                   <button
                     type="button"
                     onClick={handleRotateRight}
-                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#6c63ff]/40 hover:bg-[#6c63ff]/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#6c63ff]/40 hover:bg-[#6c63ff]/10"
                   >
                     Rotate right
                   </button>
@@ -285,7 +285,7 @@ export default function RotatePdfTool() {
                     type="button"
                     onClick={handleReset}
                     disabled={rotation === 0}
-                    className="rounded-xl border border-white/10 bg-white/5 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#ffb347]/40 hover:bg-[#ffb347]/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-xl border border-border bg-surface-3/50 px-3 py-3 text-sm font-semibold text-white transition hover:border-[#ffb347]/40 hover:bg-[#ffb347]/10 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Reset
                   </button>
@@ -303,7 +303,7 @@ export default function RotatePdfTool() {
                   <button
                     type="button"
                     onClick={handleResetAll}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     Clear
                   </button>
@@ -317,15 +317,15 @@ export default function RotatePdfTool() {
               )}
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+            <div className="rounded-2xl border border-border bg-surface-2 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Live preview</p>
-                  <p className="mt-1 text-sm text-[#9b9bb3]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Live preview</p>
+                  <p className="mt-1 text-sm text-muted">
                     Showing page 1 at {rotationLabel}. The same rotation is applied to every page on download.
                   </p>
                 </div>
-                <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-[#c7c7d6]">
+                <span className="rounded-full bg-surface-3/50 px-3 py-1 text-xs font-semibold text-foreground/75">
                   {previewLoading ? "Refreshing…" : "Ready"}
                 </span>
               </div>

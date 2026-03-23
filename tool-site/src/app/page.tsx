@@ -16,7 +16,7 @@ export default function Home() {
           need, <span className="bg-gradient-to-r from-[#7c6fff] via-[#ff6584] to-[#ffa640] bg-clip-text text-transparent">all in one place.</span>
         </h1>
 
-        <p className="mt-4 max-w-xl text-base leading-8 text-[#9b9bb3]">
+        <p className="mt-4 max-w-xl text-base leading-8 text-muted">
           Free tools for writers, developers, designers & students. No installs, no sign-up.
         </p>
 

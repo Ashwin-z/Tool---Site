@@ -236,7 +236,9 @@ async function renderPdfPageNumbers(
   }
 
   const output = await pdf.save();
-  return output.buffer.slice(output.byteOffset, output.byteOffset + output.byteLength);
+  const arrayBuffer = new ArrayBuffer(output.byteLength);
+  new Uint8Array(arrayBuffer).set(output);
+  return arrayBuffer;
 }
 
 function getPreviewPages(startPage: number, endPage: number, pageCount: number): number[] {
@@ -420,7 +422,7 @@ export default function AddPageNumbersTool() {
   return (
     <div className="space-y-4">
       {!pdf && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="px-5 py-5">
@@ -435,7 +437,7 @@ export default function AddPageNumbersTool() {
               className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${
                 dragOver
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
-                  : "border-white/10 hover:border-white/20"
+                  : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -455,7 +457,7 @@ export default function AddPageNumbersTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDF here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Add page numbers, choose position, margin, facing pages, and preview the result instantly.
               </p>
             </div>
@@ -464,28 +466,28 @@ export default function AddPageNumbersTool() {
       )}
 
       {pdf && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="grid gap-6 px-5 py-5 lg:grid-cols-[420px_minmax(0,1fr)]">
             <div className="space-y-4">
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Selected file</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Selected file</p>
                 <h2 className="mt-2 break-all text-sm font-semibold text-white">{pdf.file.name}</h2>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-[#9b9bb3]">
-                  <div className="rounded-lg bg-white/5 px-3 py-2">
+                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-muted">
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2">
                     <span className="block text-[#6c63ff]">Pages</span>
                     <span className="font-semibold text-white">{pdf.pageCount}</span>
                   </div>
-                  <div className="rounded-lg bg-white/5 px-3 py-2">
+                  <div className="rounded-lg bg-surface-3/50 px-3 py-2">
                     <span className="block text-[#6c63ff]">Size</span>
                     <span className="font-semibold text-white">{formatBytes(pdf.file.size)}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Page mode</p>
+              <div className="rounded-xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Page mode</p>
                 <div className="mt-3 flex items-center gap-6 text-sm text-white">
                   <label className="flex items-center gap-2">
                     <input
@@ -508,7 +510,7 @@ export default function AddPageNumbersTool() {
                 </div>
 
                 <div className="mt-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Position</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Position</p>
                   <div className="mt-3 grid grid-cols-3 gap-2 max-w-[170px]">
                     {POSITION_ORDER.map((key) => (
                       <button
@@ -518,12 +520,12 @@ export default function AddPageNumbersTool() {
                         className={`flex aspect-square items-center justify-center rounded-lg border transition ${
                           position === key
                             ? "border-[#38d9a9] bg-[#38d9a9]/10 text-white"
-                            : "border-white/10 bg-white/5 text-[#9b9bb3] hover:border-white/20 hover:text-white"
+                            : "border-border bg-surface-3/50 text-muted hover:border-border-strong hover:text-foreground"
                         }`}
                         aria-label={POSITION_LABELS[key]}
                         title={POSITION_LABELS[key]}
                       >
-                        <span className="grid h-7 w-7 grid-cols-3 grid-rows-3 gap-0.5 rounded-sm border border-white/15 p-1">
+                        <span className="grid h-7 w-7 grid-cols-3 grid-rows-3 gap-0.5 rounded-sm border border-border-strong p-1">
                           {Array.from({ length: 9 }).map((_, index) => {
                             const row = Math.floor(index / 3);
                             const col = index % 3;
@@ -540,16 +542,16 @@ export default function AddPageNumbersTool() {
                       </button>
                     ))}
                   </div>
-                  <p className="mt-2 text-xs text-[#7f7f95]">Choose where the number appears on each page.</p>
+                  <p className="mt-2 text-xs text-muted-2">Choose where the number appears on each page.</p>
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Margin</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Margin</label>
                     <select
                       value={margin}
                       onChange={(event) => setMargin(event.target.value as MarginPreset)}
-                      className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
                     >
                       <option value="small">Small</option>
                       <option value="recommended">Recommended</option>
@@ -558,53 +560,53 @@ export default function AddPageNumbersTool() {
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">First number</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">First number</label>
                     <input
                       type="number"
                       min={1}
                       value={firstNumber}
                       onChange={(event) => setFirstNumber(safePageNumber(Number(event.target.value), 1, 999999))}
-                      className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
                     />
                   </div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">From page</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">From page</label>
                     <input
                       type="number"
                       min={1}
                       max={pdf.pageCount}
                       value={startPage}
                       onChange={(event) => setStartPage(safePageNumber(Number(event.target.value), 1, pdf.pageCount))}
-                      className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">To page</label>
+                    <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">To page</label>
                     <input
                       type="number"
                       min={1}
                       max={pdf.pageCount}
                       value={endPage}
                       onChange={(event) => setEndPage(safePageNumber(Number(event.target.value), 1, pdf.pageCount))}
-                      className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
+                      className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
                     />
                   </div>
                 </div>
 
                 <div className="mt-4">
-                  <label className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Text</label>
+                  <label className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Text</label>
                   <input
                     type="text"
                     value={textTemplate}
                     onChange={(event) => setTextTemplate(event.target.value)}
                     placeholder="Page {n}"
-                    className="mt-2 w-full rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
+                    className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-white outline-none transition focus:border-[#38d9a9]"
                   />
-                  <p className="mt-2 text-xs text-[#7f7f95]">Use {"{n}"} for the page number, {"{p}"} for the current page, and {"{t}"} for the selected page count.</p>
+                  <p className="mt-2 text-xs text-muted-2">Use {"{n}"} for the page number, {"{p}"} for the current page, and {"{t}"} for the selected page count.</p>
                 </div>
 
                 <div className="mt-4 flex gap-2">
@@ -619,7 +621,7 @@ export default function AddPageNumbersTool() {
                   <button
                     type="button"
                     onClick={handleResetAll}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     Reset
                   </button>
@@ -633,15 +635,15 @@ export default function AddPageNumbersTool() {
               )}
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+            <div className="rounded-2xl border border-border bg-surface-2 p-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Live preview</p>
-                  <p className="mt-1 text-sm text-[#9b9bb3]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Live preview</p>
+                  <p className="mt-1 text-sm text-muted">
                     Preview updates as you change settings. Showing pages {selectedRangeLabel}.
                   </p>
                 </div>
-                <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold text-[#c7c7d6]">
+                <span className="rounded-full bg-surface-3/50 px-3 py-1 text-xs font-semibold text-foreground/75">
                   {previewLoading ? "Refreshing…" : "Ready"}
                 </span>
               </div>

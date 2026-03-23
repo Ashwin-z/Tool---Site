@@ -11,14 +11,14 @@ export const metadata: Metadata = {
 export default function EditPdfPage() {
   return (
     <main className="mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 md:px-6 md:py-10">
-      <Link href="/" className="mb-5 inline-block text-sm text-[#9b9bb3] transition hover:text-white">
+      <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
         ← Back to home
       </Link>
 
       <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-white md:text-5xl">
         Edit PDF
       </h1>
-      <p className="mt-3 max-w-4xl text-sm leading-7 text-[#9b9bb3] md:text-base">
+      <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
         Open your PDF in a full editor workspace with page thumbnails, a large canvas, and a live layer panel inspired by modern online PDF tools.
       </p>
 

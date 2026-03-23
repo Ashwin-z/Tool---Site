@@ -264,12 +264,12 @@ const BUTTONS_ROW: CalcBtn[][] = [
 /* ──────────── styles ──────────── */
 
 const btnStyle: Record<BtnType | "accent", string> = {
-  num: "bg-[#1c1c28] hover:bg-[#252535] text-white border-white/10",
-  op: "bg-[#1a1a2e] hover:bg-[#252540] text-[#ff6584] border-white/10 font-bold",
-  fn: "bg-[#131320] hover:bg-[#1a1a2e] text-[#a39cff] border-white/10 text-xs",
-  action: "bg-[#191925] hover:bg-[#252530] text-[#9b9bb3] border-white/10",
-  mem: "bg-[#111118] hover:bg-[#1a1a25] text-[#38d9a9] border-white/10 text-xs",
-  const: "bg-[#131320] hover:bg-[#1a1a2e] text-[#ffa640] border-white/10",
+  num: "bg-[#1c1c28] hover:bg-[#252535] text-white border-border",
+  op: "bg-[#1a1a2e] hover:bg-[#252540] text-[#ff6584] border-border font-bold",
+  fn: "bg-[#131320] hover:bg-[#1a1a2e] text-[#a39cff] border-border text-xs",
+  action: "bg-[#191925] hover:bg-[#252530] text-muted border-border",
+  mem: "bg-surface hover:bg-[#1a1a25] text-[#38d9a9] border-border text-xs",
+  const: "bg-[#131320] hover:bg-[#1a1a2e] text-[#ffa640] border-border",
   equal: "bg-[#6c63ff] hover:bg-[#5b53ee] text-white border-[#6c63ff]/50 font-bold",
   accent: "", // unused standalone
 };
@@ -430,11 +430,11 @@ export default function ScientificCalculatorTool() {
 
   return (
     <div className="mx-auto max-w-lg" onKeyDown={handleKeyDown} tabIndex={0}>
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
         {/* ── Display ── */}
-        <div className="border-b border-white/10 px-5 py-4">
+        <div className="border-b border-border px-5 py-4">
           {/* Mode indicators */}
           <div className="mb-2 flex items-center gap-2 text-[10px]">
             <span
@@ -453,7 +453,7 @@ export default function ScientificCalculatorTool() {
             )}
             <button
               onClick={() => setShowHistory(!showHistory)}
-              className="ml-auto rounded px-1.5 py-0.5 text-[#9b9bb3] transition hover:bg-white/5 hover:text-white"
+              className="ml-auto rounded px-1.5 py-0.5 text-muted transition hover:bg-surface-3 hover:text-foreground"
             >
               {showHistory ? "Calculator" : "History"}
             </button>
@@ -462,7 +462,7 @@ export default function ScientificCalculatorTool() {
           {showHistory ? (
             <div className="space-y-1.5 max-h-[120px] overflow-y-auto">
               {history.length === 0 ? (
-                <p className="text-xs text-[#515168]">No history yet</p>
+                <p className="text-xs text-muted-3">No history yet</p>
               ) : (
                 history.map((h, i) => (
                   <button
@@ -473,9 +473,9 @@ export default function ScientificCalculatorTool() {
                       setShowHistory(false);
                       setJustEvaluated(true);
                     }}
-                    className="block w-full rounded-lg bg-white/5 px-3 py-1.5 text-left transition hover:bg-white/10"
+                    className="block w-full rounded-lg bg-surface-3/50 px-3 py-1.5 text-left transition hover:bg-surface-3"
                   >
-                    <div className="text-[10px] text-[#9b9bb3] truncate">{h.expr}</div>
+                    <div className="text-[10px] text-muted truncate">{h.expr}</div>
                     <div className="font-display text-sm font-bold text-[#6c63ff]">= {h.result}</div>
                   </button>
                 ))
@@ -484,7 +484,7 @@ export default function ScientificCalculatorTool() {
           ) : (
             <div ref={displayRef}>
               {/* Expression line */}
-              <div className="min-h-[20px] text-right text-xs text-[#9b9bb3] truncate">
+              <div className="min-h-[20px] text-right text-xs text-muted truncate">
                 {expression || "\u00A0"}
               </div>
               {/* Main display */}
@@ -534,9 +534,9 @@ export default function ScientificCalculatorTool() {
       </div>
 
       {/* ── Quick reference ── */}
-      <div className="mt-4 rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
+      <div className="mt-4 rounded-2xl border border-border bg-surface px-5 py-4">
         <h3 className="font-display text-sm font-bold text-white">Keyboard Shortcuts</h3>
-        <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-[#9b9bb3] sm:grid-cols-3">
+        <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted sm:grid-cols-3">
           {[
             ["0–9, .", "Numbers"],
             ["+ − * /", "Operators"],
@@ -547,7 +547,7 @@ export default function ScientificCalculatorTool() {
             ["Esc", "Clear all"],
           ].map(([key, desc]) => (
             <div key={key} className="flex items-center gap-2">
-              <kbd className="rounded border border-white/15 bg-[#17171f] px-1.5 py-0.5 font-mono text-[10px] text-white">
+              <kbd className="rounded border border-border-strong bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-white">
                 {key}
               </kbd>
               <span>{desc}</span>
@@ -557,9 +557,9 @@ export default function ScientificCalculatorTool() {
       </div>
 
       {/* ── Functions reference ── */}
-      <div className="mt-4 rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
+      <div className="mt-4 rounded-2xl border border-border bg-surface px-5 py-4">
         <h3 className="font-display text-sm font-bold text-white">Available Functions</h3>
-        <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-[#9b9bb3] sm:grid-cols-3">
+        <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted sm:grid-cols-3">
           {[
             ["sin / cos / tan", "Trigonometric"],
             ["sin⁻¹ / cos⁻¹ / tan⁻¹", "Inverse trig"],
@@ -576,7 +576,7 @@ export default function ScientificCalculatorTool() {
           ].map(([fn, desc]) => (
             <div key={fn} className="flex items-start gap-2 py-0.5">
               <span className="font-mono text-[11px] text-[#a39cff] shrink-0">{fn}</span>
-              <span className="text-[#57576f]">— {desc}</span>
+              <span className="text-muted-2">— {desc}</span>
             </div>
           ))}
         </div>

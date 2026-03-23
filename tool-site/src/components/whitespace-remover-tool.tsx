@@ -103,10 +103,10 @@ export default function WhitespaceRemoverTool() {
   return (
     <div className="space-y-4">
       {/* ── Input card ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#38d9a9]" />
             <h2 className="font-display text-sm font-bold tracking-tight">Whitespace Remover</h2>
@@ -114,13 +114,13 @@ export default function WhitespaceRemoverTool() {
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={clearAll}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               Clear
             </button>
             <button
               onClick={copyOriginal}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               {copied ? "Copied!" : "Copy"}
             </button>
@@ -139,7 +139,7 @@ export default function WhitespaceRemoverTool() {
               }
             }}
             placeholder="Paste or type your text here…\n\nSelect cleanup options below to remove unwanted whitespace."
-            className="min-h-[300px] w-full resize-none border-r border-white/10 bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-[#515168]"
+            className="min-h-[300px] w-full resize-none border-r border-border bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-muted-3"
           />
 
           {/* Stats sidebar */}
@@ -162,7 +162,7 @@ export default function WhitespaceRemoverTool() {
             className={`rounded-lg border px-4 py-2.5 text-left transition ${
               activeModes.has(mode.value)
                 ? "border-[#38d9a9]/50 bg-[#38d9a9]/15 text-[#6ee7b7]"
-                : "border-white/10 bg-[#111118] text-[#9b9bb3] hover:border-white/20 hover:text-white"
+                : "border-border bg-surface text-muted hover:border-border-strong hover:text-foreground"
             }`}
           >
             <div className="text-xs font-semibold">{mode.label}</div>
@@ -173,8 +173,8 @@ export default function WhitespaceRemoverTool() {
 
       {/* ── Cleaned output ── */}
       {cleanedText && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_40px_rgba(0,0,0,.45)]">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_40px_rgba(0,0,0,.45)]">
+          <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[#38d9a9]" />
               <h3 className="font-display text-sm font-bold tracking-tight text-white">
@@ -188,7 +188,7 @@ export default function WhitespaceRemoverTool() {
             </div>
             <button
               onClick={copyCleaned}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-xs text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-xs text-muted transition hover:text-foreground"
             >
               {cleanedCopied ? "Copied!" : "Copy Cleaned"}
             </button>
@@ -206,8 +206,8 @@ export default function WhitespaceRemoverTool() {
 
 function StatBox({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-[#17171f] px-3 py-2.5">
-      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+    <div className="rounded-lg border border-border bg-surface-2 px-3 py-2.5">
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
       <div className={`font-display text-2xl font-bold leading-none ${color}`}>{value}</div>
     </div>
   );

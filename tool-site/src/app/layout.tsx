@@ -6,6 +6,7 @@ import SiteHeader from "@/components/site-header";
 import SiteNav from "@/components/site-nav";
 import PopularTools from "@/components/popular-tools";
 import { NavShellProvider } from "@/components/nav-shell-context";
+import { ThemeProvider } from "@/components/theme-context";
 
 const syne = Syne({
   variable: "--font-syne",
@@ -33,8 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
+        <ThemeProvider>
         <NavShellProvider>
-          <div className="min-h-screen bg-[#08080e] text-[#eeeef5]">
+          <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
             <SiteHeader />
             <SiteNav />
             {children}
@@ -42,6 +44,7 @@ export default function RootLayout({
             <SiteFooter />
           </div>
         </NavShellProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

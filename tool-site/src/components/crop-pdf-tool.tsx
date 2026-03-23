@@ -397,7 +397,7 @@ export default function CropPdfTool() {
   return (
     <div className="space-y-4">
       {!pdf && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
           <div className="px-5 py-5">
             <div
@@ -408,7 +408,7 @@ export default function CropPdfTool() {
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
               onClick={() => inputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-white/10 hover:border-white/20"}`}
+              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/5" : "border-border hover:border-border-strong"}`}
             >
               <input
                 ref={inputRef}
@@ -424,7 +424,7 @@ export default function CropPdfTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDF here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 max-w-2xl text-center text-xs text-[#57576f]">
+              <p className="mt-1 max-w-2xl text-center text-xs text-muted-2">
                 Open every page in a gallery workspace, edit one page at a time in a larger canvas, and keep different crop sizes on different pages.
               </p>
             </div>
@@ -433,30 +433,30 @@ export default function CropPdfTool() {
       )}
 
       {pdf && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="grid gap-6 px-5 py-5 xl:grid-cols-[320px_minmax(0,1fr)]">
             <aside className="space-y-4 xl:sticky xl:top-4 xl:self-start">
-              <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Selected file</p>
+              <div className="rounded-2xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Selected file</p>
                 <h2 className="mt-2 break-all text-sm font-semibold text-white">{pdf.file.name}</h2>
-                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-[#9b9bb3]">
-                  <div className="rounded-xl bg-[#111118] px-3 py-3">
+                <div className="mt-3 grid grid-cols-2 gap-3 text-xs text-muted">
+                  <div className="rounded-xl bg-surface px-3 py-3">
                     <div className="text-[11px] uppercase tracking-[0.16em] text-[#70708a]">Pages</div>
                     <div className="mt-1 text-sm font-semibold text-white">{pdf.pageCount}</div>
                   </div>
-                  <div className="rounded-xl bg-[#111118] px-3 py-3">
+                  <div className="rounded-xl bg-surface px-3 py-3">
                     <div className="text-[11px] uppercase tracking-[0.16em] text-[#70708a]">File size</div>
                     <div className="mt-1 text-sm font-semibold text-white">{formatBytes(pdf.file.size)}</div>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+              <div className="rounded-2xl border border-border bg-surface-2 p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Active page</p>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-semibold text-white">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Active page</p>
+                  <span className="rounded-full border border-border bg-surface-3/50 px-2.5 py-1 text-[11px] font-semibold text-white">
                     {currentPage} / {pdf.pageCount}
                   </span>
                 </div>
@@ -465,7 +465,7 @@ export default function CropPdfTool() {
                   <button
                     type="button"
                     onClick={goToPreviousPage}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-lg border border-border bg-surface-3/50 px-3 py-2 text-sm text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     ‹
                   </button>
@@ -475,18 +475,18 @@ export default function CropPdfTool() {
                     max={pdf.pageCount}
                     value={currentPage}
                     onChange={(event) => setCurrentPage(clamp(Number(event.target.value) || 1, 1, pdf.pageCount))}
-                    className="flex-1 rounded-lg border border-white/10 bg-[#111118] px-3 py-2 text-center text-sm text-white outline-none"
+                    className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-center text-sm text-white outline-none"
                   />
                   <button
                     type="button"
                     onClick={goToNextPage}
-                    className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-lg border border-border bg-surface-3/50 px-3 py-2 text-sm text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     ›
                   </button>
                 </div>
 
-                <div className="mt-4 rounded-xl bg-[#111118] p-3 text-xs text-[#9b9bb3]">
+                <div className="mt-4 rounded-xl bg-surface p-3 text-xs text-muted">
                   <p className="font-semibold text-white">{isCustomizedRect(currentCrop) ? "Custom crop saved" : "Full page kept"}</p>
                   <p className="mt-1">{formatCropSummary(currentCrop)}</p>
                 </div>
@@ -495,7 +495,7 @@ export default function CropPdfTool() {
                   <button
                     type="button"
                     onClick={resetCurrentCrop}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     Reset this page
                   </button>
@@ -509,21 +509,21 @@ export default function CropPdfTool() {
                   <button
                     type="button"
                     onClick={resetAllCrops}
-                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
+                    className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3"
                   >
                     Reset every page crop
                   </button>
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Document crop status</p>
+              <div className="rounded-2xl border border-border bg-surface-2 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Document crop status</p>
                 <div className="mt-4 grid gap-3 text-sm">
-                  <div className="rounded-xl bg-[#111118] px-3 py-3 text-[#9b9bb3]">
+                  <div className="rounded-xl bg-surface px-3 py-3 text-muted">
                     <div className="text-[11px] uppercase tracking-[0.16em] text-[#70708a]">Pages with custom crop</div>
                     <div className="mt-1 text-lg font-semibold text-white">{changedPagesCount}</div>
                   </div>
-                  <div className="rounded-xl bg-[#111118] px-3 py-3 text-[#9b9bb3]">
+                  <div className="rounded-xl bg-surface px-3 py-3 text-muted">
                     <div className="text-[11px] uppercase tracking-[0.16em] text-[#70708a]">Editing workflow</div>
                     <div className="mt-1 leading-6">
                       Pick a page from the gallery, resize its crop box in the large editor, then move to another page for a different size.
@@ -550,7 +550,7 @@ export default function CropPdfTool() {
                 <button
                   type="button"
                   onClick={resetAll}
-                  className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/10"
+                  className="rounded-xl border border-border bg-surface-3/50 px-4 py-3 text-sm font-semibold text-white transition hover:border-border-strong hover:bg-surface-3"
                 >
                   Remove file
                 </button>
@@ -558,18 +558,18 @@ export default function CropPdfTool() {
             </aside>
 
             <div className="space-y-5">
-              <section className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+              <section className="rounded-2xl border border-border bg-surface-2 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Large page editor</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Large page editor</p>
                     <h3 className="mt-1 text-sm font-semibold text-white">Page {currentPage}</h3>
                   </div>
-                  <div className="rounded-full border border-white/10 bg-[#111118] px-3 py-1.5 text-xs text-[#9b9bb3]">
+                  <div className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
                     {isCustomizedRect(currentCrop) ? "Custom crop applied" : "No crop yet"}
                   </div>
                 </div>
 
-                <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#f8fafc] p-4 shadow-[0_12px_40px_rgba(15,23,42,.08)]">
+                <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-[#f8fafc] p-4 shadow-[0_12px_40px_rgba(15,23,42,.08)]">
                   <div ref={previewRef} className="relative mx-auto w-full max-w-[980px] select-none touch-none" style={getPreviewStyle(currentBox)}>
                     {activePreviewUrl ? (
                       <Image src={activePreviewUrl} alt={`Preview of page ${currentPage}`} fill unoptimized className="object-contain object-top" />
@@ -616,20 +616,20 @@ export default function CropPdfTool() {
                 </div>
 
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm">
-                  <p className="text-[#9b9bb3]">Drag the blue box to reposition it, or pull the corners to give this page its own custom crop size.</p>
-                  <div className="rounded-full border border-white/10 bg-[#111118] px-3 py-1.5 text-xs text-[#c6d2ff]">
+                  <p className="text-muted">Drag the blue box to reposition it, or pull the corners to give this page its own custom crop size.</p>
+                  <div className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-[#c6d2ff]">
                     {formatCropSummary(currentCrop)}
                   </div>
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-white/10 bg-[#17171f] p-4">
+              <section className="rounded-2xl border border-border bg-surface-2 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">All pages gallery</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">All pages gallery</p>
                     <h3 className="mt-1 text-sm font-semibold text-white">Pick any page and give it a different crop</h3>
                   </div>
-                  <div className="rounded-full border border-white/10 bg-[#111118] px-3 py-1.5 text-xs text-[#9b9bb3]">
+                  <div className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
                     {pdf.pageCount} page thumbnails
                   </div>
                 </div>
@@ -648,12 +648,12 @@ export default function CropPdfTool() {
                         key={pageNumber}
                         type="button"
                         onClick={() => setCurrentPage(pageNumber)}
-                        className={`overflow-hidden rounded-2xl border text-left transition ${isActive ? "border-[#2ea8ff] bg-[#151f2d] shadow-[0_18px_40px_rgba(46,168,255,.18)]" : "border-white/10 bg-[#111118] hover:border-white/20 hover:bg-[#14141c]"}`}
+                        className={`overflow-hidden rounded-2xl border text-left transition ${isActive ? "border-[#2ea8ff] bg-[#151f2d] shadow-[0_18px_40px_rgba(46,168,255,.18)]" : "border-border bg-surface hover:border-border-strong hover:bg-surface"}`}
                       >
-                        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                        <div className="flex items-center justify-between border-b border-border px-4 py-3">
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8f8fa8]">Page {pageNumber}</p>
-                            <p className="mt-1 text-xs text-[#9b9bb3]">{customized ? "Custom crop" : "Full page"}</p>
+                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-2">Page {pageNumber}</p>
+                            <p className="mt-1 text-xs text-muted">{customized ? "Custom crop" : "Full page"}</p>
                           </div>
                           {isActive && (
                             <span className="rounded-full bg-[#2ea8ff] px-2.5 py-1 text-[11px] font-semibold text-white">Editing</span>
@@ -661,7 +661,7 @@ export default function CropPdfTool() {
                         </div>
 
                         <div className="p-4">
-                          <div className="overflow-hidden rounded-xl border border-white/10 bg-[#f8fafc] p-3">
+                          <div className="overflow-hidden rounded-xl border border-border bg-[#f8fafc] p-3">
                             <div className="relative mx-auto w-full" style={getPreviewStyle(pageBox)}>
                               {previewUrl ? (
                                 <Image src={previewUrl} alt={`Thumbnail of page ${pageNumber}`} fill unoptimized className="object-contain object-top" />
@@ -686,10 +686,10 @@ export default function CropPdfTool() {
                           </div>
 
                           <div className="mt-3 flex items-center justify-between gap-3 text-xs">
-                            <span className={`rounded-full px-2.5 py-1 font-semibold ${customized ? "bg-[#38d9a9]/10 text-[#aef5df]" : "bg-white/5 text-[#9b9bb3]"}`}>
+                            <span className={`rounded-full px-2.5 py-1 font-semibold ${customized ? "bg-[#38d9a9]/10 text-[#aef5df]" : "bg-surface-3/50 text-muted"}`}>
                               {customized ? "Unique crop" : "Unchanged"}
                             </span>
-                            <span className="text-[#9b9bb3]">{formatCropSummary(pageCrop)}</span>
+                            <span className="text-muted">{formatCropSummary(pageCrop)}</span>
                           </div>
                         </div>
                       </button>

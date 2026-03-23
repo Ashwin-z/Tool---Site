@@ -68,7 +68,7 @@ export default function CompoundInterestCalculatorTool() {
   const [time, setTime] = useState("5");
   const [frequency, setFrequency] = useState<Frequency>(12);
   const [showFull, setShowFull] = useState(false);
-  const [currency, setCurrency] = useState(CURRENCIES[0]);
+  const [currency, setCurrency] = useState<(typeof CURRENCIES)[number]>(CURRENCIES[0]);
 
   const result = useMemo(() => {
     const P = parseFloat(principal.replace(/,/g, "")) || 0;
@@ -97,14 +97,14 @@ export default function CompoundInterestCalculatorTool() {
   return (
     <div className="space-y-4">
       {/* ── Inputs ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
-        <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <h2 className="font-display text-sm font-bold tracking-tight text-white">Investment Details</h2>
           <select
             value={currency.code}
             onChange={(e) => setCurrency(CURRENCIES.find((c) => c.code === e.target.value) || CURRENCIES[0])}
-            className="rounded-lg border border-white/10 bg-[#17171f] px-3 py-1.5 text-xs font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
+            className="rounded-lg border border-border bg-surface-2 px-3 py-1.5 text-xs font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
           >
             {CURRENCIES.map((c) => (
               <option key={c.code} value={c.code}>{c.label}</option>
@@ -115,7 +115,7 @@ export default function CompoundInterestCalculatorTool() {
         <div className="space-y-4 px-5 py-5">
           {/* Principal */}
           <div>
-            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+            <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
               Principal Amount ({currency.symbol})
             </label>
             <input
@@ -124,14 +124,14 @@ export default function CompoundInterestCalculatorTool() {
               value={principal}
               onChange={(e) => setPrincipal(e.target.value.replace(/[^0-9.]/g, ""))}
               placeholder="100000"
-              className="w-full max-w-xs rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168]"
+              className="w-full max-w-xs rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3"
             />
           </div>
 
           <div className="flex flex-wrap gap-4">
             {/* Rate */}
             <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                 Annual Rate (%)
               </label>
               <input
@@ -141,12 +141,12 @@ export default function CompoundInterestCalculatorTool() {
                 value={rate}
                 onChange={(e) => setRate(e.target.value)}
                 placeholder="12"
-                className="w-32 rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-32 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
             {/* Time */}
             <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                 Time Period (years)
               </label>
               <input
@@ -155,18 +155,18 @@ export default function CompoundInterestCalculatorTool() {
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 placeholder="5"
-                className="w-28 rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                className="w-28 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
             {/* Frequency */}
             <div>
-              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                 Compounding Frequency
               </label>
               <select
                 value={frequency}
                 onChange={(e) => setFrequency(Number(e.target.value) as Frequency)}
-                className="rounded-lg border border-white/15 bg-[#17171f] px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
+                className="rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
               >
                 {FREQ_OPTIONS.map((f) => (
                   <option key={f.value} value={f.value}>
@@ -194,8 +194,8 @@ export default function CompoundInterestCalculatorTool() {
           </div>
 
           {/* ── Breakdown bar ── */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Value Breakdown</h3>
             </div>
             <div className="px-5 py-5">
@@ -216,12 +216,12 @@ export default function CompoundInterestCalculatorTool() {
               <div className="mt-3 flex flex-wrap gap-5 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-[#6c63ff]" />
-                  <span className="text-[#9b9bb3]">Principal:</span>
+                  <span className="text-muted">Principal:</span>
                   <span className="font-semibold text-white">{currency.symbol}{fmt(P_num)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2.5 w-2.5 rounded-full bg-[#38d9a9]" />
-                  <span className="text-[#9b9bb3]">Interest:</span>
+                  <span className="text-muted">Interest:</span>
                   <span className="font-semibold text-white">{currency.symbol}{fmt(result.interest)}</span>
                 </div>
               </div>
@@ -229,8 +229,8 @@ export default function CompoundInterestCalculatorTool() {
           </div>
 
           {/* ── Growth visual ── */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Year-by-Year Growth</h3>
             </div>
             <div className="space-y-2 px-5 py-5">
@@ -239,8 +239,8 @@ export default function CompoundInterestCalculatorTool() {
                 const pctInterest = maxClose > 0 ? ((row.closeBal - P_num) / maxClose) * 100 : 0;
                 return (
                   <div key={row.year} className="flex items-center gap-3 text-xs">
-                    <span className="w-10 text-right text-[#57576f]">Y{row.year}</span>
-                    <div className="flex h-4 flex-1 overflow-hidden rounded-full bg-white/5">
+                    <span className="w-10 text-right text-muted-2">Y{row.year}</span>
+                    <div className="flex h-4 flex-1 overflow-hidden rounded-full bg-surface-3/50">
                       <div
                         className="h-full transition-all"
                         style={{ width: `${pctPrincipal}%`, backgroundColor: "#6c63ff" }}
@@ -250,7 +250,7 @@ export default function CompoundInterestCalculatorTool() {
                         style={{ width: `${pctInterest}%`, backgroundColor: "#38d9a9" }}
                       />
                     </div>
-                    <span className="w-28 text-right font-semibold text-[#d0d0e0]">{currency.symbol}{fmt(row.closeBal)}</span>
+                    <span className="w-28 text-right font-semibold text-foreground/85">{currency.symbol}{fmt(row.closeBal)}</span>
                   </div>
                 );
               })}
@@ -258,15 +258,15 @@ export default function CompoundInterestCalculatorTool() {
           </div>
 
           {/* ── Yearly Schedule Table ── */}
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="flex items-center justify-between border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Yearly Schedule</h3>
-              <span className="text-[10px] text-[#57576f]">{result.schedule.length} years</span>
+              <span className="text-[10px] text-muted-2">{result.schedule.length} years</span>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">
+                  <tr className="border-b border-border text-[10px] font-semibold uppercase tracking-wider text-muted-2">
                     <th className="px-5 py-2.5">Year</th>
                     <th className="px-5 py-2.5">Opening Balance</th>
                     <th className="px-5 py-2.5">Interest Earned</th>
@@ -275,8 +275,8 @@ export default function CompoundInterestCalculatorTool() {
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {visibleSchedule.map((r) => (
-                    <tr key={r.year} className="text-[#d0d0e0]">
-                      <td className="px-5 py-2 text-[#57576f]">{r.year}</td>
+                    <tr key={r.year} className="text-foreground/85">
+                      <td className="px-5 py-2 text-muted-2">{r.year}</td>
                       <td className="px-5 py-2">{currency.symbol}{fmt(r.openBal)}</td>
                       <td className="px-5 py-2 text-[#38d9a9]">{currency.symbol}{fmt(r.interestEarned)}</td>
                       <td className="px-5 py-2 font-semibold">{currency.symbol}{fmt(r.closeBal)}</td>
@@ -286,7 +286,7 @@ export default function CompoundInterestCalculatorTool() {
               </table>
             </div>
             {result.schedule.length > 10 && (
-              <div className="border-t border-white/10 px-5 py-3 text-center">
+              <div className="border-t border-border px-5 py-3 text-center">
                 <button
                   onClick={() => setShowFull((f) => !f)}
                   className="text-xs font-semibold text-[#6c63ff] hover:text-[#8b84ff] transition"
@@ -298,12 +298,12 @@ export default function CompoundInterestCalculatorTool() {
           </div>
 
           {/* ── Formula ── */}
-          <div className="rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
-            <h4 className="mb-2 font-display text-xs font-bold uppercase tracking-wider text-[#57576f]">Compound Interest Formula</h4>
-            <div className="font-mono text-sm text-[#9b9bb3]">
+          <div className="rounded-2xl border border-border bg-surface px-5 py-4">
+            <h4 className="mb-2 font-display text-xs font-bold uppercase tracking-wider text-muted-2">Compound Interest Formula</h4>
+            <div className="font-mono text-sm text-muted">
               A = P × (1 + r/n)<sup>n×t</sup>
             </div>
-            <div className="mt-2 space-y-0.5 text-[10px] text-[#57576f]">
+            <div className="mt-2 space-y-0.5 text-[10px] text-muted-2">
               <div>P = Principal · r = Annual Rate (decimal) · n = Compounding Frequency · t = Time (years)</div>
               <div>CI = A − P</div>
             </div>
@@ -316,12 +316,12 @@ export default function CompoundInterestCalculatorTool() {
 
 function ResultCard({ label, value, accent, sub }: { label: string; value: string; accent: string; sub?: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface">
       <div className="h-[2px]" style={{ backgroundColor: accent }} />
       <div className="px-5 py-4 text-center">
-        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+        <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
         <div className="font-display text-2xl font-bold text-white">{value}</div>
-        {sub && <div className="mt-0.5 text-[10px] text-[#9b9bb3]">{sub}</div>}
+        {sub && <div className="mt-0.5 text-[10px] text-muted">{sub}</div>}
       </div>
     </div>
   );

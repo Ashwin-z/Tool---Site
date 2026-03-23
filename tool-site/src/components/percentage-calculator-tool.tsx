@@ -29,11 +29,11 @@ function BasicPercentage() {
       subtitle="What is X% of Y?"
     >
       <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span className="text-[#9b9bb3]">What is</span>
+        <span className="text-muted">What is</span>
         <NumInput value={pct} onChange={setPct} placeholder="X" />
-        <span className="text-[#9b9bb3]">% of</span>
+        <span className="text-muted">% of</span>
         <NumInput value={of} onChange={setOf} placeholder="Y" />
-        <span className="text-[#9b9bb3]">?</span>
+        <span className="text-muted">?</span>
         <CalcButton onClick={calculate} />
       </div>
       {result !== null && <Result label={`${pct}% of ${of}`} value={result} />}
@@ -67,11 +67,11 @@ function CommonPhrases() {
       <div className="space-y-4">
         {/* 2a */}
         <div className="flex flex-wrap items-center gap-3 text-sm">
-          <span className="text-[#9b9bb3]">What is</span>
+          <span className="text-muted">What is</span>
           <NumInput value={a1} onChange={setA1} placeholder="%" />
-          <span className="text-[#9b9bb3]">% of</span>
+          <span className="text-muted">% of</span>
           <NumInput value={a2} onChange={setA2} placeholder="Y" />
-          <span className="text-[#9b9bb3]">?</span>
+          <span className="text-muted">?</span>
           <CalcButton
             onClick={() => {
               const p = parseFloat(a1);
@@ -82,14 +82,14 @@ function CommonPhrases() {
         </div>
         {r1 !== null && <Result label={`${a1}% of ${a2}`} value={r1} />}
 
-        <div className="h-px bg-white/5" />
+        <div className="h-px bg-surface-3/50" />
 
         {/* 2b */}
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <NumInput value={b1} onChange={setB1} placeholder="X" />
-          <span className="text-[#9b9bb3]">is what % of</span>
+          <span className="text-muted">is what % of</span>
           <NumInput value={b2} onChange={setB2} placeholder="Y" />
-          <span className="text-[#9b9bb3]">?</span>
+          <span className="text-muted">?</span>
           <CalcButton
             onClick={() => {
               const x = parseFloat(b1);
@@ -100,14 +100,14 @@ function CommonPhrases() {
         </div>
         {r2 !== null && <Result label={`${b1} is what % of ${b2}`} value={r2} />}
 
-        <div className="h-px bg-white/5" />
+        <div className="h-px bg-surface-3/50" />
 
         {/* 2c */}
         <div className="flex flex-wrap items-center gap-3 text-sm">
           <NumInput value={c1} onChange={setC1} placeholder="X" />
-          <span className="text-[#9b9bb3]">is</span>
+          <span className="text-muted">is</span>
           <NumInput value={c2} onChange={setC2} placeholder="%" />
-          <span className="text-[#9b9bb3]">% of what?</span>
+          <span className="text-muted">% of what?</span>
           <CalcButton
             onClick={() => {
               const x = parseFloat(c1);
@@ -148,9 +148,9 @@ function PercentageDifference() {
       subtitle="Find the percentage difference between two values"
     >
       <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span className="text-[#9b9bb3]">Value 1</span>
+        <span className="text-muted">Value 1</span>
         <NumInput value={v1} onChange={setV1} placeholder="V1" />
-        <span className="text-[#9b9bb3]">Value 2</span>
+        <span className="text-muted">Value 2</span>
         <NumInput value={v2} onChange={setV2} placeholder="V2" />
         <CalcButton onClick={calculate} />
       </div>
@@ -185,14 +185,14 @@ function PercentageChange() {
       subtitle="Find the percentage increase or decrease between two values"
     >
       <div className="flex flex-wrap items-center gap-3 text-sm">
-        <span className="text-[#9b9bb3]">From</span>
+        <span className="text-muted">From</span>
         <NumInput value={from} onChange={setFrom} placeholder="Original" />
-        <span className="text-[#9b9bb3]">→ To</span>
+        <span className="text-muted">→ To</span>
         <NumInput value={to} onChange={setTo} placeholder="New" />
         <CalcButton onClick={calculate} />
       </div>
       {result !== null && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-[#17171f] px-4 py-3">
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
           <div
             className={`flex h-9 w-9 items-center justify-center rounded-lg text-lg ${
               result.direction === "increase"
@@ -203,7 +203,7 @@ function PercentageChange() {
             {result.direction === "increase" ? "↑" : "↓"}
           </div>
           <div>
-            <div className="text-xs text-[#9b9bb3]">
+            <div className="text-xs text-muted">
               {result.direction === "increase" ? "Increase" : "Decrease"} from {from} to {to}
             </div>
             <div
@@ -212,6 +212,157 @@ function PercentageChange() {
               }`}
             >
               {result.value} {result.direction}
+            </div>
+          </div>
+        </div>
+      )}
+    </CalcCard>
+  );
+}
+
+/* ──────────── Section 5: Percentage Increase ─────── */
+
+function PercentageIncrease() {
+  const [value, setValue] = useState("");
+  const [pct, setPct] = useState("");
+  const [result, setResult] = useState<{ increased: string; amount: string } | null>(null);
+
+  const calculate = useCallback(() => {
+    const v = parseFloat(value);
+    const p = parseFloat(pct);
+    if (Number.isNaN(v) || Number.isNaN(p)) return;
+    const amount = (p / 100) * v;
+    setResult({ increased: fmt(v + amount), amount: fmt(amount) });
+  }, [value, pct]);
+
+  return (
+    <CalcCard
+      title="Percentage Increase Calculator"
+      subtitle="Increase a value by a given percentage"
+    >
+      <div className="flex flex-wrap items-center gap-3 text-sm">
+        <span className="text-muted">Increase</span>
+        <NumInput value={value} onChange={setValue} placeholder="Value" />
+        <span className="text-muted">by</span>
+        <NumInput value={pct} onChange={setPct} placeholder="%" />
+        <span className="text-muted">%</span>
+        <CalcButton onClick={calculate} />
+      </div>
+      {result !== null && (
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-400/15 text-lg text-emerald-300">
+            ↑
+          </div>
+          <div>
+            <div className="text-xs text-muted">
+              {value} + {pct}% (= {result.amount})
+            </div>
+            <div className="font-display text-xl font-bold text-emerald-300">
+              {result.increased}
+            </div>
+          </div>
+        </div>
+      )}
+    </CalcCard>
+  );
+}
+
+/* ──────────── Section 6: Percentage Decrease ─────── */
+
+function PercentageDecrease() {
+  const [value, setValue] = useState("");
+  const [pct, setPct] = useState("");
+  const [result, setResult] = useState<{ decreased: string; amount: string } | null>(null);
+
+  const calculate = useCallback(() => {
+    const v = parseFloat(value);
+    const p = parseFloat(pct);
+    if (Number.isNaN(v) || Number.isNaN(p)) return;
+    const amount = (p / 100) * v;
+    setResult({ decreased: fmt(v - amount), amount: fmt(amount) });
+  }, [value, pct]);
+
+  return (
+    <CalcCard
+      title="Percentage Decrease Calculator"
+      subtitle="Decrease a value by a given percentage"
+    >
+      <div className="flex flex-wrap items-center gap-3 text-sm">
+        <span className="text-muted">Decrease</span>
+        <NumInput value={value} onChange={setValue} placeholder="Value" />
+        <span className="text-muted">by</span>
+        <NumInput value={pct} onChange={setPct} placeholder="%" />
+        <span className="text-muted">%</span>
+        <CalcButton onClick={calculate} />
+      </div>
+      {result !== null && (
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-400/15 text-lg text-rose-300">
+            ↓
+          </div>
+          <div>
+            <div className="text-xs text-muted">
+              {value} − {pct}% (= {result.amount})
+            </div>
+            <div className="font-display text-xl font-bold text-rose-300">
+              {result.decreased}
+            </div>
+          </div>
+        </div>
+      )}
+    </CalcCard>
+  );
+}
+
+/* ──────────── Section 7: Reverse Percentage ─────── */
+
+function ReversePercentage() {
+  const [finalVal, setFinalVal] = useState("");
+  const [pct, setPct] = useState("");
+  const [direction, setDirection] = useState<"increase" | "decrease">("increase");
+  const [result, setResult] = useState<string | null>(null);
+
+  const calculate = useCallback(() => {
+    const f = parseFloat(finalVal);
+    const p = parseFloat(pct);
+    if (Number.isNaN(f) || Number.isNaN(p)) return;
+    const multiplier = direction === "increase" ? 1 + p / 100 : 1 - p / 100;
+    if (multiplier === 0) return;
+    setResult(fmt(f / multiplier));
+  }, [finalVal, pct, direction]);
+
+  return (
+    <CalcCard
+      title="Reverse Percentage Calculator"
+      subtitle="Find the original value before a percentage was applied"
+    >
+      <div className="flex flex-wrap items-center gap-3 text-sm">
+        <span className="text-muted">Final value is</span>
+        <NumInput value={finalVal} onChange={setFinalVal} placeholder="Final" />
+        <span className="text-muted">after a</span>
+        <NumInput value={pct} onChange={setPct} placeholder="%" />
+        <span className="text-muted">%</span>
+        <select
+          value={direction}
+          onChange={(e) => setDirection(e.target.value as "increase" | "decrease")}
+          className="rounded-lg border border-border-strong bg-surface-2 px-3 py-2 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
+        >
+          <option value="increase">increase</option>
+          <option value="decrease">decrease</option>
+        </select>
+        <CalcButton onClick={calculate} />
+      </div>
+      {result !== null && (
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-400/15 text-lg text-amber-300">
+            ↩
+          </div>
+          <div>
+            <div className="text-xs text-muted">
+              Original value before {pct}% {direction}
+            </div>
+            <div className="font-display text-xl font-bold text-amber-300">
+              {result}
             </div>
           </div>
         </div>
@@ -232,11 +383,11 @@ function CalcCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+    <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
       <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
-      <div className="border-b border-white/10 px-5 py-3">
+      <div className="border-b border-border px-5 py-3">
         <h2 className="font-display text-sm font-bold tracking-tight text-white">{title}</h2>
-        <p className="mt-0.5 text-[11px] text-[#9b9bb3]">{subtitle}</p>
+        <p className="mt-0.5 text-[11px] text-muted">{subtitle}</p>
       </div>
       <div className="px-5 py-5">{children}</div>
     </div>
@@ -259,7 +410,7 @@ function NumInput({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-28 rounded-lg border border-white/15 bg-[#17171f] px-3 py-2 text-center text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-[#515168] [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+      className="w-28 rounded-lg border border-border-strong bg-surface-2 px-3 py-2 text-center text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60 placeholder:text-muted-3 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
     />
   );
 }
@@ -277,12 +428,12 @@ function CalcButton({ onClick }: { onClick: () => void }) {
 
 function Result({ label, value }: { label: string; value: string }) {
   return (
-    <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-[#17171f] px-4 py-3">
+    <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-surface-2 px-4 py-3">
       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#6c63ff]/15 text-lg text-[#a39cff]">
         =
       </div>
       <div>
-        <div className="text-xs text-[#9b9bb3]">{label}</div>
+        <div className="text-xs text-muted">{label}</div>
         <div className="font-display text-xl font-bold text-[#6c63ff]">{value}</div>
       </div>
     </div>
@@ -296,13 +447,16 @@ export default function PercentageCalculatorTool() {
     <div className="space-y-6">
       <BasicPercentage />
       <CommonPhrases />
+      <PercentageIncrease />
+      <PercentageDecrease />
       <PercentageDifference />
       <PercentageChange />
+      <ReversePercentage />
 
       {/* ── Formula reference ── */}
-      <div className="rounded-2xl border border-white/10 bg-[#111118] px-5 py-4">
+      <div className="rounded-2xl border border-border bg-surface px-5 py-4">
         <h3 className="font-display text-sm font-bold text-white">Percentage Formulas</h3>
-        <div className="mt-3 grid grid-cols-1 gap-3 text-xs text-[#9b9bb3] sm:grid-cols-2">
+        <div className="mt-3 grid grid-cols-1 gap-3 text-xs text-muted sm:grid-cols-2">
           <FormulaItem
             label="X% of Y"
             formula="(X ÷ 100) × Y"
@@ -314,6 +468,16 @@ export default function PercentageCalculatorTool() {
             example="50 is 25% of 200"
           />
           <FormulaItem
+            label="Percentage increase"
+            formula="Value × (1 + X ÷ 100)"
+            example="200 + 15% = 230"
+          />
+          <FormulaItem
+            label="Percentage decrease"
+            formula="Value × (1 − X ÷ 100)"
+            example="200 − 15% = 170"
+          />
+          <FormulaItem
             label="Percentage difference"
             formula="|V1 − V2| ÷ ((|V1| + |V2|) ÷ 2) × 100"
             example="Diff between 10 & 6 = 50%"
@@ -323,6 +487,11 @@ export default function PercentageCalculatorTool() {
             formula="(New − Old) ÷ |Old| × 100"
             example="From 50 to 75 = 50% increase"
           />
+          <FormulaItem
+            label="Reverse percentage"
+            formula="Final ÷ (1 ± X ÷ 100)"
+            example="$120 after 20% increase → $100"
+          />
         </div>
       </div>
     </div>
@@ -331,10 +500,10 @@ export default function PercentageCalculatorTool() {
 
 function FormulaItem({ label, formula, example }: { label: string; formula: string; example: string }) {
   return (
-    <div className="rounded-lg border border-white/5 bg-[#17171f] px-3 py-2.5">
+    <div className="rounded-lg border border-border bg-surface-2 px-3 py-2.5">
       <div className="text-xs font-semibold text-white">{label}</div>
       <div className="mt-1 font-mono text-[11px] text-[#6c63ff]">{formula}</div>
-      <div className="mt-1 text-[10px] text-[#57576f]">e.g. {example}</div>
+      <div className="mt-1 text-[10px] text-muted-2">e.g. {example}</div>
     </div>
   );
 }

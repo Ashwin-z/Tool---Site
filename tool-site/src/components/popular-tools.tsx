@@ -36,13 +36,17 @@ export default function PopularTools() {
           <Link
             key={item.name}
             href={item.href}
-            className="rounded-xl border border-white/10 bg-[#111118] p-4 transition hover:-translate-y-1 hover:border-[#6c63ff]/40 hover:bg-[#17171f]"
+            className="rounded-xl p-4 transition hover:-translate-y-1"
+            style={{
+              border: "1px solid var(--border)",
+              background: "var(--surface-1)",
+            }}
           >
             <div className="mb-2 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-[#6c63ff]/15 text-lg text-[#a39cff]">
               {item.icon}
             </div>
             <h3 className="font-display text-base font-bold">{item.name}</h3>
-            <p className="mt-1 text-sm text-[#8f8fa8]">{item.desc}</p>
+            <p className="mt-1 text-sm" style={{ color: "var(--muted-2)" }}>{item.desc}</p>
             <span
               className={`mt-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold ${
                 item.tag === "Hot"

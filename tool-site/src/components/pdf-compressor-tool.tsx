@@ -253,7 +253,7 @@ export default function PdfCompressorTool() {
   return (
     <div className="space-y-4">
       {!result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
           <div className="px-5 py-5">
@@ -270,7 +270,7 @@ export default function PdfCompressorTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : queue.length
                     ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -291,18 +291,18 @@ export default function PdfCompressorTool() {
               <p className="mt-3 text-sm font-semibold text-white">
                 Drop your PDFs here or <span className="text-[#6c63ff]">browse</span>
               </p>
-              <p className="mt-1 text-xs text-[#57576f]">
+              <p className="mt-1 text-xs text-muted-2">
                 Upload one or multiple .pdf files for native server-side compression
               </p>
             </div>
           </div>
 
           {queue.length > 0 && (
-            <div className="border-t border-white/10">
+            <div className="border-t border-border">
               <div className="flex items-center justify-between px-5 py-3">
                 <h3 className="font-display text-sm font-bold text-white">
                   {queue.length} file{queue.length > 1 ? "s" : ""} selected
-                  <span className="ml-2 text-xs font-normal text-[#57576f]">
+                  <span className="ml-2 text-xs font-normal text-muted-2">
                     ({fmtSize(queue.reduce((sum, item) => sum + item.file.size, 0))} total)
                   </span>
                 </h3>
@@ -323,14 +323,14 @@ export default function PdfCompressorTool() {
                     <span className="text-base">📄</span>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-white">{item.file.name}</p>
-                      <p className="text-[10px] text-[#57576f]">{fmtSize(item.file.size)}</p>
+                      <p className="text-[10px] text-muted-2">{fmtSize(item.file.size)}</p>
                     </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         removeFile(item.id);
                       }}
-                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[#57576f] transition hover:bg-[#ff6584]/10 hover:text-[#ff6584]"
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-muted-2 transition hover:bg-[#ff6584]/10 hover:text-[#ff6584]"
                       title="Remove file"
                     >
                       <svg
@@ -362,8 +362,8 @@ export default function PdfCompressorTool() {
       )}
 
       {queue.length > 0 && !result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-b border-white/10 px-5 py-3">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-b border-border px-5 py-3">
             <h3 className="font-display text-sm font-bold text-white">Compression Level</h3>
           </div>
 
@@ -375,7 +375,7 @@ export default function PdfCompressorTool() {
                 className={`flex flex-col items-center rounded-xl border px-4 py-5 text-center transition ${
                   level === option.id
                     ? `ring-2 ${option.activeRing} ${option.activeBg} border-transparent`
-                    : "border-white/10 hover:border-white/20 hover:bg-white/[.02]"
+                    : "border-border hover:border-border-strong hover:bg-white/[.02]"
                 }`}
               >
                 <span className="text-2xl">{option.icon}</span>
@@ -386,12 +386,12 @@ export default function PdfCompressorTool() {
                 >
                   {option.label}
                 </span>
-                <span className="mt-1 text-[10px] text-[#57576f]">{option.sub}</span>
+                <span className="mt-1 text-[10px] text-muted-2">{option.sub}</span>
               </button>
             ))}
           </div>
 
-          <div className="border-t border-white/10 px-5 py-4 text-center">
+          <div className="border-t border-border px-5 py-4 text-center">
             <button
               onClick={handleCompress}
               className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -403,11 +403,11 @@ export default function PdfCompressorTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#ff6584]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#ff6584]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
@@ -416,10 +416,10 @@ export default function PdfCompressorTool() {
 
           {fileProgress.total > 0 && (
             <>
-              <p className="text-xs text-[#9b9bb3]">
+              <p className="text-xs text-muted">
                 Compressing file {fileProgress.current} of {fileProgress.total}
               </p>
-              <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-white/5">
+              <div className="h-2 w-full max-w-xs overflow-hidden rounded-full bg-surface-3/50">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-[#6c63ff] to-[#38d9a9] transition-all duration-500"
                   style={{ width: `${(fileProgress.current / fileProgress.total) * 100}%` }}
@@ -428,7 +428,7 @@ export default function PdfCompressorTool() {
             </>
           )}
 
-          <p className="text-[10px] text-[#57576f]">
+          <p className="text-[10px] text-muted-2">
             Running native server-side PDF compression with Ghostscript…
           </p>
         </div>
@@ -436,7 +436,7 @@ export default function PdfCompressorTool() {
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10">
@@ -468,15 +468,15 @@ export default function PdfCompressorTool() {
               <div className="mt-5 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-5 py-4 text-center">
                 <p className="text-xs uppercase tracking-[0.2em] text-emerald-300/80">Total Savings</p>
                 <p className="mt-1 text-3xl font-black text-emerald-400">{totalSavedPct}%</p>
-                <p className="mt-1 text-xs text-[#9b9bb3]">
+                <p className="mt-1 text-xs text-muted">
                   {fmtSize(result.totalOriginal)} → {fmtSize(result.totalCompressed)}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-            <div className="border-b border-white/10 px-5 py-3">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-5 py-3">
               <h3 className="font-display text-sm font-bold text-white">Compressed Files</h3>
             </div>
 
@@ -496,14 +496,14 @@ export default function PdfCompressorTool() {
 
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-white">{cf.fileName}</p>
-                      <p className="mt-1 text-[10px] text-[#9b9bb3]">
+                      <p className="mt-1 text-[10px] text-muted">
                         {fmtSize(cf.originalSize)} → {fmtSize(cf.compressedSize)} • Saved {savedPct}%
                       </p>
                     </div>
 
                     <button
                       onClick={() => handleDownloadSingle(cf)}
-                      className="rounded-lg bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+                      className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
                     >
                       Download
                     </button>
@@ -512,10 +512,10 @@ export default function PdfCompressorTool() {
               })}
             </div>
 
-            <div className="border-t border-white/10 px-5 py-4 text-center">
+            <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
               >
                 Compress More PDFs
               </button>

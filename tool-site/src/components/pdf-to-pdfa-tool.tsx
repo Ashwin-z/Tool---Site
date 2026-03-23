@@ -159,7 +159,7 @@ export default function PdfToPdfaTool() {
     <div className="space-y-4">
       {/* ── Upload area ── */}
       {results.length === 0 && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
           <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ffb347]" />
 
           <div className="px-5 py-5">
@@ -176,7 +176,7 @@ export default function PdfToPdfaTool() {
                   ? "border-[#6c63ff] bg-[#6c63ff]/5"
                   : files.length > 0
                     ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-white/10 hover:border-white/20"
+                    : "border-border hover:border-border-strong"
               }`}
             >
               <input
@@ -207,7 +207,7 @@ export default function PdfToPdfaTool() {
                   <p className="mt-3 text-sm font-semibold text-white">
                     Drop PDF files here or <span className="text-[#6c63ff]">browse</span>
                   </p>
-                  <p className="mt-1 text-xs text-[#57576f]">
+                  <p className="mt-1 text-xs text-muted-2">
                     Convert PDFs to PDF/A format for long-term archiving. Up to {MAX_FILES} files, {MAX_SIZE_MB}MB each.
                   </p>
                 </>
@@ -217,7 +217,7 @@ export default function PdfToPdfaTool() {
 
           {/* ── File list ── */}
           {files.length > 0 && (
-            <div className="border-t border-white/10 px-5 py-4">
+            <div className="border-t border-border px-5 py-4">
               <div className="space-y-2">
                 {files.map((f) => (
                   <div
@@ -226,14 +226,14 @@ export default function PdfToPdfaTool() {
                   >
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm text-white">{f.name}</p>
-                      <p className="text-xs text-[#57576f]">{formatBytes(f.size)}</p>
+                      <p className="text-xs text-muted-2">{formatBytes(f.size)}</p>
                     </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         removeFile(f.name);
                       }}
-                      className="ml-3 rounded-lg px-2 py-1 text-xs text-[#57576f] hover:bg-white/5 hover:text-red-300"
+                      className="ml-3 rounded-lg px-2 py-1 text-xs text-muted-2 hover:bg-surface-3 hover:text-red-300"
                     >
                       ✕
                     </button>
@@ -245,8 +245,8 @@ export default function PdfToPdfaTool() {
 
           {/* ── Conformance picker ── */}
           {files.length > 0 && (
-            <div className="border-t border-white/10 px-5 py-4">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#55556d]">
+            <div className="border-t border-border px-5 py-4">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-3">
                 PDF/A Conformance Level
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -257,14 +257,14 @@ export default function PdfToPdfaTool() {
                     className={`rounded-lg px-4 py-2 text-xs font-semibold transition ${
                       conformance === lvl
                         ? "bg-[#6c63ff] text-white shadow-[0_4px_12px_rgba(108,99,255,.35)]"
-                        : "bg-white/5 text-[#9b9bb3] hover:bg-white/10 hover:text-white"
+                        : "bg-surface-3/50 text-muted hover:bg-surface-3 hover:text-foreground"
                     }`}
                   >
                     PDF/A-{lvl}b
                   </button>
                 ))}
               </div>
-              <p className="mt-2 text-xs text-[#57576f]">{conformanceDesc[conformance]}</p>
+              <p className="mt-2 text-xs text-muted-2">{conformanceDesc[conformance]}</p>
             </div>
           )}
         </div>
@@ -283,8 +283,8 @@ export default function PdfToPdfaTool() {
 
       {/* ── Convert button ── */}
       {files.length > 0 && results.length === 0 && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118]">
-          <div className="border-t border-white/10 px-5 py-4 text-center">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
+          <div className="border-t border-border px-5 py-4 text-center">
             <button
               onClick={handleConvert}
               className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
@@ -297,18 +297,18 @@ export default function PdfToPdfaTool() {
 
       {/* ── Processing ── */}
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-12">
+        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-white/10 border-t-[#6c63ff]" />
+            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-white/5 border-b-[#38d9a9]"
+              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#38d9a9]"
               style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
             />
           </div>
           <p className="text-sm font-semibold text-white">
             Converting file {progress.done} of {progress.total}…
           </p>
-          <div className="h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
+          <div className="h-1.5 w-48 overflow-hidden rounded-full bg-surface-3">
             <div
               className="h-full rounded-full bg-[#6c63ff] transition-all duration-300"
               style={{ width: `${progress.total ? (progress.done / progress.total) * 100 : 0}%` }}
@@ -320,7 +320,7 @@ export default function PdfToPdfaTool() {
       {/* ── Results ── */}
       {results.length > 0 && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
             <div className="flex flex-col items-center px-5 py-10 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-3xl text-emerald-400">
@@ -340,7 +340,7 @@ export default function PdfToPdfaTool() {
               )}
             </div>
 
-            <div className="border-t border-white/10 px-5 py-4">
+            <div className="border-t border-border px-5 py-4">
               <div className="space-y-2">
                 {results.map((r) => (
                   <div
@@ -349,7 +349,7 @@ export default function PdfToPdfaTool() {
                   >
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm text-white">{r.name}</p>
-                      <p className="text-xs text-[#57576f]">
+                      <p className="text-xs text-muted-2">
                         {formatBytes(r.originalSize)} → {formatBytes(r.blob.size)}
                       </p>
                     </div>
@@ -365,10 +365,10 @@ export default function PdfToPdfaTool() {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] px-5 py-4 text-center">
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface px-5 py-4 text-center">
             <button
               onClick={handleReset}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
             >
               Convert More Files
             </button>

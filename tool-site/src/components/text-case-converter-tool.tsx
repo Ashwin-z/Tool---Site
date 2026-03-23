@@ -118,10 +118,10 @@ export default function TextCaseConverterTool() {
   return (
     <div className="space-y-4">
       {/* ── Input card ── */}
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
         <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#6c63ff]" />
             <h2 className="font-display text-sm font-bold tracking-tight">Text Case Converter</h2>
@@ -129,13 +129,13 @@ export default function TextCaseConverterTool() {
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={clearAll}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               Clear
             </button>
             <button
               onClick={copyOriginal}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-muted transition hover:text-foreground"
             >
               {copied ? "Copied!" : "Copy"}
             </button>
@@ -154,7 +154,7 @@ export default function TextCaseConverterTool() {
               }
             }}
             placeholder="Paste or type your text here…\n\nSelect a case style below to convert instantly."
-            className="min-h-[300px] w-full resize-none border-r border-white/10 bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-[#515168]"
+            className="min-h-[300px] w-full resize-none border-r border-border bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-muted-3"
           />
 
           {/* Stats sidebar */}
@@ -176,7 +176,7 @@ export default function TextCaseConverterTool() {
             className={`group relative rounded-lg border px-4 py-2.5 text-xs font-semibold transition ${
               caseMode === mode.value
                 ? "border-[#6c63ff]/50 bg-[#6c63ff]/15 text-[#c2bdff]"
-                : "border-white/10 bg-[#111118] text-[#9b9bb3] hover:border-white/20 hover:text-white"
+                : "border-border bg-surface text-muted hover:border-border-strong hover:text-foreground"
             }`}
           >
             {mode.label}
@@ -189,8 +189,8 @@ export default function TextCaseConverterTool() {
 
       {/* ── Converted output ── */}
       {convertedText && (
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#111118] shadow-[0_20px_40px_rgba(0,0,0,.45)]">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_40px_rgba(0,0,0,.45)]">
+          <div className="flex items-center justify-between border-b border-border px-5 py-3">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[#38d9a9]" />
               <h3 className="font-display text-sm font-bold tracking-tight text-white">
@@ -199,7 +199,7 @@ export default function TextCaseConverterTool() {
             </div>
             <button
               onClick={copyConverted}
-              className="rounded-md border border-white/15 px-3 py-1.5 text-xs text-[#9b9bb3] transition hover:text-white"
+              className="rounded-md border border-border-strong px-3 py-1.5 text-xs text-muted transition hover:text-foreground"
             >
               {convertedCopied ? "Copied!" : "Copy Converted"}
             </button>
@@ -217,8 +217,8 @@ export default function TextCaseConverterTool() {
 
 function StatBox({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-[#17171f] px-3 py-2.5">
-      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-[#57576f]">{label}</div>
+    <div className="rounded-lg border border-border bg-surface-2 px-3 py-2.5">
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-2">{label}</div>
       <div className={`font-display text-2xl font-bold leading-none ${color}`}>{value}</div>
     </div>
   );
