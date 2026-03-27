@@ -8,6 +8,20 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["puppeteer-core", "@napi-rs/canvas", "exceljs"],
   turbopack: {
     root: path.resolve(__dirname),
+    resolveAlias: {
+      fs: { browser: "./src/lib/empty.js" },
+      "node:fs": { browser: "./src/lib/empty.js" },
+    },
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // pptxgenjs imports node:fs but doesn't need it in the browser
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+    return config;
   },
 };
 

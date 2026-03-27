@@ -97,6 +97,9 @@ try {
   # Open PDF — Word reflows it into an editable document
   $document = $word.Documents.Open([string]$inputPath, [bool]$false, [bool]$true)
 
+  # Brief pause to let Word finish internal PDF reflow
+  Start-Sleep -Seconds 1
+
   # SaveAs2  → wdFormatDocumentDefault (16) = .docx
   $document.SaveAs2([string]$outputPath, [int]16)
 }
@@ -126,7 +129,7 @@ finally {
   await writeFile(scriptPath, script, "utf8");
 
   await new Promise<void>((resolve, reject) => {
-    const TIMEOUT_MS = 120_000; // 2 minutes max
+    const TIMEOUT_MS = 180_000; // 3 minutes max
 
     const proc = spawn(
       powershellPath,
@@ -136,7 +139,7 @@ finally {
 
     const timer = setTimeout(() => {
       proc.kill("SIGKILL");
-      reject(new Error("PDF-to-Word conversion timed out after 2 minutes. The file may be too large or complex."));
+      reject(new Error("PDF-to-Word conversion timed out after 3 minutes. The file may be too large or complex."));
     }, TIMEOUT_MS);
 
     let stderr = "";

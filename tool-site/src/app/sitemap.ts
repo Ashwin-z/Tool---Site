@@ -30,6 +30,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/pdf-to-pdfa",
     "/tools/word-counter",
     "/tools/json-formatter",
+    "/tools/code-snippet",
+    "/tools/python-code-editor",
     "/tools/base64-encoder-decoder",
     "/tools/url-encoder-decoder",
     "/tools/password-generator",

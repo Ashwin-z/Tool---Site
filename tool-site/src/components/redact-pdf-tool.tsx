@@ -227,7 +227,7 @@ async function renderPagePreview(pdfDoc: PdfJsDocument, pageNumber: number, scal
   canvas.height = Math.ceil(viewport.height);
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -598,7 +598,7 @@ export default function RedactPdfTool() {
         canvas.height = Math.ceil(viewport.height);
         context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
-        await page.render({ canvasContext: context, viewport }).promise;
+        await page.render({ canvasContext: context, viewport, canvas } as never).promise;
 
         const pageMarks = redactions.filter((mark) => mark.pageNumber === pageNumber);
         context.fillStyle = "#000000";

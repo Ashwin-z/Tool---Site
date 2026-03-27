@@ -170,7 +170,7 @@ export default function RotatePdfTool() {
     try {
       const rotatedBytes = await rotatePdfBytes(pdf.bytes, rotation);
       downloadBlob(
-        new Blob([rotatedBytes], { type: "application/pdf" }),
+        new Blob([new Uint8Array(rotatedBytes)], { type: "application/pdf" }),
         `${sanitizeBaseName(pdf.file.name)}_rotated.pdf`,
       );
     } catch (error) {

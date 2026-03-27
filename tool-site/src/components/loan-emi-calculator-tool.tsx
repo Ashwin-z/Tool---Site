@@ -70,7 +70,7 @@ export default function LoanEmiCalculatorTool() {
   const [tenureYears, setTenureYears] = useState("20");
   const [tenureUnit, setTenureUnit] = useState<"years" | "months">("years");
   const [showFull, setShowFull] = useState(false);
-  const [currency, setCurrency] = useState(CURRENCIES[0]);
+  const [currency, setCurrency] = useState<(typeof CURRENCIES)[number]>(CURRENCIES[0]);
 
   const tenureMonths = useMemo(
     () => (tenureUnit === "years" ? (parseFloat(tenureYears) || 0) * 12 : parseFloat(tenureYears) || 0),

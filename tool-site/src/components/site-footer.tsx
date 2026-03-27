@@ -56,6 +56,8 @@ const footerColumns = [
     title: "Dev Tools",
     links: [
       { label: "JSON Formatter", href: "/tools/json-formatter" },
+      { label: "Code Snippet", href: "/tools/code-snippet" },
+      { label: "Python Editor", href: "/tools/python-code-editor" },
       { label: "Base64 Encoder", href: "/tools/base64-encoder-decoder" },
       { label: "Password Gen", href: "/tools/password-generator" },
       { label: "URL Encoder", href: "/tools/url-encoder-decoder" },

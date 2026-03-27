@@ -90,6 +90,8 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
     icon: "💻",
     tools: [
       ["JSON Formatter", "/tools/json-formatter"],
+      ["Code Snippet Playground", "/tools/code-snippet"],
+      ["Python Code Editor", "/tools/python-code-editor"],
       ["Base64 Encoder/Decoder", "/tools/base64-encoder-decoder"],
       ["URL Encoder/Decoder", "/tools/url-encoder-decoder"],
       ["Password Generator", "/tools/password-generator"],

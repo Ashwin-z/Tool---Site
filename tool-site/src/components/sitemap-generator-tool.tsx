@@ -157,7 +157,7 @@ export default function SitemapGeneratorTool() {
     return () => window.clearInterval(interval);
   }, [isCrawling]);
 
-  const analysis = useMemo(() => {
+  const analysis = useMemo<GeneratedSitemapState>(() => {
     const normalizedBase = normalizeBaseUrl(baseUrl);
 
     const lines = urlsInput
@@ -204,7 +204,7 @@ export default function SitemapGeneratorTool() {
     };
   }, [baseUrl, urlsInput, includeHomePage, lastmod, changefreq, priority]);
 
-  const activeSitemap = generated ?? analysis;
+  const activeSitemap: GeneratedSitemapState = generated ?? analysis;
 
   function generateSitemap() {
     setGenerated({

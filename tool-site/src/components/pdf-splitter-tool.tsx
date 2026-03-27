@@ -87,7 +87,7 @@ async function renderPdfPagePreview(bytes: ArrayBuffer, pageNumber: number): Pro
   canvas.width = Math.ceil(viewport.width);
   canvas.height = Math.ceil(viewport.height);
 
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -589,7 +589,7 @@ export default function PdfSplitterTool() {
           files = [
             {
               fileName: `${baseName}_selected_ranges.pdf`,
-              blob: new Blob([mergedBytes], { type: "application/pdf" }),
+              blob: new Blob([new Uint8Array(mergedBytes)], { type: "application/pdf" }),
               pageCount: mergedPages.length,
             },
           ];
@@ -602,7 +602,7 @@ export default function PdfSplitterTool() {
               const bytes = await createPdfFromPages(sourceBytes, pages);
               return {
                 fileName: `${baseName}_range_${index + 1}_${from}-${to}.pdf`,
-                blob: new Blob([bytes], { type: "application/pdf" }),
+                blob: new Blob([new Uint8Array(bytes)], { type: "application/pdf" }),
                 pageCount: pages.length,
               };
             }),
@@ -616,7 +616,7 @@ export default function PdfSplitterTool() {
           files = [
             {
               fileName: `${baseName}_selected_pages.pdf`,
-              blob: new Blob([bytes], { type: "application/pdf" }),
+              blob: new Blob([new Uint8Array(bytes)], { type: "application/pdf" }),
               pageCount: selectedPages.length,
             },
           ];
@@ -626,7 +626,7 @@ export default function PdfSplitterTool() {
               const bytes = await createPdfFromPages(sourceBytes, [page]);
               return {
                 fileName: `${baseName}_page_${page}.pdf`,
-                blob: new Blob([bytes], { type: "application/pdf" }),
+                blob: new Blob([new Uint8Array(bytes)], { type: "application/pdf" }),
                 pageCount: 1,
               };
             }),

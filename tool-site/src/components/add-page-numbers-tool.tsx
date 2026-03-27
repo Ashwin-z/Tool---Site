@@ -391,7 +391,7 @@ export default function AddPageNumbersTool() {
       });
 
       downloadBlob(
-        new Blob([numberedBytes], { type: "application/pdf" }),
+        new Blob([new Uint8Array(numberedBytes)], { type: "application/pdf" }),
         `${sanitizeBaseName(pdf.file.name)}_numbered.pdf`,
       );
     } catch (error) {

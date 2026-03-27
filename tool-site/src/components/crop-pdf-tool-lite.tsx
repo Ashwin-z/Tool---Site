@@ -180,7 +180,7 @@ export default function CropPdfToolLite() {
 
     try {
       const bytes = await cropPdf(pdf.bytes, { scope, currentPage, insets });
-      downloadBlob(new Blob([bytes], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_cropped.pdf`);
+      downloadBlob(new Blob([new Uint8Array(bytes)], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_cropped.pdf`);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Failed to crop the PDF.");
     } finally {

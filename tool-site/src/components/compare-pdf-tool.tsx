@@ -149,7 +149,7 @@ async function renderPagePreview(pdfDoc: PdfJsDocument, pageNumber: number, scal
   canvas.height = Math.ceil(viewport.height);
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  await page.render({ canvasContext: context, viewport }).promise;
+    await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -167,7 +167,7 @@ async function renderPageCanvas(pdfDoc: PdfJsDocument, pageNumber: number, scale
   canvas.height = Math.ceil(viewport.height);
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas;
 }
 

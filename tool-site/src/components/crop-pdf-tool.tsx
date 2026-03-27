@@ -151,7 +151,7 @@ async function renderPagePreview(bytes: ArrayBuffer, pageNumber: number): Promis
   canvas.height = Math.ceil(viewport.height);
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -378,7 +378,7 @@ export default function CropPdfTool() {
         pageRects: pageCropRects,
       });
 
-      downloadBlob(new Blob([croppedBytes], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_cropped.pdf`);
+      downloadBlob(new Blob([new Uint8Array(croppedBytes)], { type: "application/pdf" }), `${sanitizeBaseName(pdf.file.name)}_cropped.pdf`);
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Failed to crop the PDF.");
     } finally {

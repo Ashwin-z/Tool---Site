@@ -5,7 +5,7 @@ import PdfToWordTool from "@/components/pdf-to-word-tool";
 export const metadata: Metadata = {
   title: "PDF to Word — Free Online PDF to DOCX Converter | ToolCraft",
   description:
-    "Free online PDF to Word converter. Upload PDF files and convert them into editable Word documents using Microsoft Word on Windows.",
+    "Free online PDF to Word converter. Upload PDF files and convert them into editable Word documents entirely in your browser — no upload needed.",
 };
 
 export default function PdfToWordPage() {
@@ -19,7 +19,7 @@ export default function PdfToWordPage() {
         PDF to Word
       </h1>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-        Convert PDF files into editable Word documents. Powered by Microsoft Word&apos;s native PDF import — preserves text, tables, images, and formatting.
+        Convert PDF files into editable Word documents entirely in your browser. Preserves text, formatting, headings, and layout — no server upload needed.
       </p>
 
       <div className="mt-8">

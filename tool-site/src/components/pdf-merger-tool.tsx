@@ -68,7 +68,7 @@ async function renderPdfPreview(bytes: ArrayBuffer): Promise<string | null> {
   canvas.width = Math.ceil(viewport.width);
   canvas.height = Math.ceil(viewport.height);
 
-  await page.render({ canvasContext: context, viewport }).promise;
+  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -212,7 +212,7 @@ export default function PdfMergerTool() {
       }
 
       const mergedBytes = await mergedPdf.save();
-      const blob = new Blob([mergedBytes], { type: "application/pdf" });
+      const blob = new Blob([new Uint8Array(mergedBytes)], { type: "application/pdf" });
       const totalPages = queue.reduce((sum, item) => sum + item.pageCount, 0);
 
       setResult({
