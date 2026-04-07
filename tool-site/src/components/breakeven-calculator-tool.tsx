@@ -194,6 +194,25 @@ function InputField({ label, value, onChange, placeholder }: { label: string; va
   );
 }
 
+function CurrencySelector({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">Currency</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-44 rounded-lg border border-border-strong bg-surface-2 px-4 py-2.5 text-sm font-semibold text-white outline-none transition focus:border-[#6c63ff]/60"
+      >
+        {CURRENCIES.map((currency) => (
+          <option key={currency.code} value={currency.code}>
+            {currency.code} - {currency.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 function MetricCard({ label, value, color }: { label: string; value: string; color: string }) {
   return (
     <div className="rounded-2xl border border-border bg-surface px-5 py-4">

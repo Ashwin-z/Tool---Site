@@ -15,6 +15,8 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api/")) {
     const origin = request.headers.get("origin") ?? "";
     const allowedOrigins = [
+      "https://toolmint.com",
+      "https://www.toolmint.com",
       "https://toolmint.tools",
       "https://www.toolmint.tools",
     ];
