@@ -3,7 +3,7 @@ import path from "node:path";
 
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://toolmint.com";
+const BASE_URL = "https://toolmint.tools";
 
 const STATIC_ROUTES = [
   "",
