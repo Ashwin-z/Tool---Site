@@ -3,6 +3,8 @@ import net from "node:net";
 
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -135,7 +137,7 @@ async function fetchHtml(url: string): Promise<{ finalUrl: string; html: string 
       signal: controller.signal,
       headers: {
         Accept: "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
-        "User-Agent": "ToolCraft Sitemap Generator",
+        "User-Agent": "ToolMint Sitemap Generator",
       },
       cache: "no-store",
     });
@@ -225,6 +227,11 @@ async function crawlWebsite(
 }
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`sitemap-gen:${getClientIp(request)}`, { maxRequests: 5, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   let body: {
     url?: string;
     lastmod?: string;
@@ -284,8 +291,9 @@ export async function POST(request: Request) {
       maxPages,
     });
   } catch (error) {
+    console.error("[sitemap-generator]", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to generate sitemap." },
+      { error: "Failed to generate sitemap." },
       { status: 500 },
     );
   }

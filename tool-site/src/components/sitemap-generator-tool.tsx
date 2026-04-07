@@ -118,7 +118,7 @@ function buildSitemapXml(entries: SitemapEntry[]) {
 }
 
 export default function SitemapGeneratorTool() {
-  const [baseUrl, setBaseUrl] = useState("https://toolcraft.site");
+  const [baseUrl, setBaseUrl] = useState("https://toolmint.tools");
   const [urlsInput, setUrlsInput] = useState(
     "/\n/tools\n/tools/meta-title-description-checker\n/tools/sitemap-generator\n/contact"
   );

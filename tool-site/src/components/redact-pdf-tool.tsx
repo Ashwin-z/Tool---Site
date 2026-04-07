@@ -13,6 +13,8 @@ import {
 import { PDFDocument } from "pdf-lib";
 import { downloadBlob, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type PageBox = { width: number; height: number };
 type Point = { x: number; y: number };
 type InteractionMode = "search" | "manual";
@@ -448,6 +450,10 @@ export default function RedactPdfTool() {
 
   const loadPdfFile = useCallback(async (file: File | null) => {
     if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       setErrorMessage("Please choose a PDF file.");
       return;

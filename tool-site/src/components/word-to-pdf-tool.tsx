@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
 
 const MAX_FILES = 25;
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
 type QueuedDoc = {
   id: string;
@@ -90,20 +91,27 @@ export default function WordToPdfTool() {
       return;
     }
 
+    const oversized = docs.filter((f) => f.size > MAX_FILE_SIZE);
+    const validDocs = docs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+    if (oversized.length) {
+      setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+    }
+
+    if (!validDocs.length) return;
+
     const remainingSlots = MAX_FILES - queue.length;
     if (remainingSlots <= 0) {
       setErrorMessage(`You can convert a maximum of ${MAX_FILES} Word files at a time.`);
       return;
     }
 
-    const limitedDocs = docs.slice(0, remainingSlots);
+    const limitedDocs = validDocs.slice(0, remainingSlots);
     setQueue((prev) => [...prev, ...limitedDocs.map((file) => ({ id: uid(), file }))]);
     setResult(null);
-    setErrorMessage(
-      docs.length > remainingSlots
-        ? `Only the first ${remainingSlots} Word file${remainingSlots > 1 ? "s were" : " was"} added.`
-        : null,
-    );
+    if (validDocs.length > remainingSlots) {
+      setErrorMessage(`Only the first ${remainingSlots} Word file${remainingSlots > 1 ? "s were" : " was"} added.`);
+    }
   }, [queue.length]);
 
   const removeFile = useCallback((id: string) => {
@@ -271,7 +279,7 @@ export default function WordToPdfTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}

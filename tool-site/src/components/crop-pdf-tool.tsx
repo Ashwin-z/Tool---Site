@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type LoadedPdf = {
   file: File;
   bytes: ArrayBuffer;
@@ -241,6 +243,10 @@ export default function CropPdfTool() {
 
   const loadFile = useCallback(async (incoming: File) => {
     setErrorMessage(null);
+    if (incoming.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     setPreviewUrls({});
     setPreviewLoadingPages({});
     setCurrentPage(1);

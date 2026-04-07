@@ -5,10 +5,27 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type PageBox = { x: number; y: number; width: number; height: number };
 type LoadedPdf = { file: File; bytes: ArrayBuffer; pageCount: number; pageBoxes: PageBox[] };
 type PageScope = "all" | "current";
 type CropInsets = { left: number; top: number; right: number; bottom: number };
+
+type PdfJsModule = {
+  GlobalWorkerOptions: { workerSrc: string };
+  getDocument: (options: { data: ArrayBuffer }) => {
+    promise: Promise<{
+      getPage: (pageNumber: number) => Promise<{
+        getViewport: (options: { scale: number }) => { width: number; height: number };
+        render: (options: unknown) => { promise: Promise<void> };
+      }>;
+      destroy?: () => void;
+    }>;
+  };
+};
+
+let pdfjsPromise: Promise<PdfJsModule> | null = null;
 
 const DEFAULT_INSETS: CropInsets = { left: 10, top: 10, right: 10, bottom: 10 };
 
@@ -35,12 +52,19 @@ async function loadPdf(file: File): Promise<LoadedPdf> {
   return { file, bytes, pageCount: pdf.getPageCount(), pageBoxes };
 }
 
-async function getPdfjs() {
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+async function getPdfjs(): Promise<PdfJsModule> {
+  if (!pdfjsPromise) {
+    const importPdfjs = new Function("moduleUrl", "return import(moduleUrl);") as (moduleUrl: string) => Promise<PdfJsModule>;
+    pdfjsPromise = importPdfjs("/vendor/pdfjs/pdf.mjs").then((pdfjs) => {
+      if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+        pdfjs.GlobalWorkerOptions.workerSrc = "/vendor/pdfjs/pdf.worker.min.mjs";
+      }
+
+      return pdfjs;
+    });
   }
-  return pdfjs;
+
+  return pdfjsPromise;
 }
 
 async function renderPreview(bytes: ArrayBuffer, pageNumber: number): Promise<string> {
@@ -58,6 +82,7 @@ async function renderPreview(bytes: ArrayBuffer, pageNumber: number): Promise<st
   context.fillStyle = "#ffffff";
   context.fillRect(0, 0, canvas.width, canvas.height);
   await page.render({ canvasContext: context, viewport, canvas } as never).promise;
+  pdf.destroy?.();
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -119,6 +144,10 @@ export default function CropPdfToolLite() {
 
   const loadFile = useCallback(async (file: File) => {
     setErrorMessage(null);
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     setPreviewUrl(null);
 
     if (!file.name.toLowerCase().endsWith(".pdf")) {

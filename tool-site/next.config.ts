@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   serverExternalPackages: ["puppeteer-core", "@napi-rs/canvas", "exceljs"],
+  poweredByHeader: false,
   turbopack: {
     root: path.resolve(__dirname),
     resolveAlias: {

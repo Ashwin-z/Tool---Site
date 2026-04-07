@@ -54,7 +54,7 @@ export default function MetaTitleDescriptionCheckerTool() {
   const [description, setDescription] = useState(
     "Check whether your SEO title tag and meta description are too short, too long, or just right for better search result visibility.",
   );
-  const [url, setUrl] = useState("https://toolcraft.site/tools/meta-title-description-checker");
+  const [url, setUrl] = useState("https://toolmint.tools/tools/meta-title-description-checker");
   const [keyword, setKeyword] = useState("meta title checker");
   const [copiedField, setCopiedField] = useState<string | null>(null);
 

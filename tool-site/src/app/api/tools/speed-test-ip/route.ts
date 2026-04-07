@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const rl = checkRateLimit(`speed-test:${getClientIp(request)}`, { maxRequests: 30, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const url = new URL(request.url);
 
   // Download test: return a blob of random bytes
@@ -37,6 +44,11 @@ export async function GET(request: Request) {
 
 // POST handler for upload speed measurement — consume and discard the body
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`speed-test-upload:${getClientIp(request)}`, { maxRequests: 30, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   try {
     const body = await request.arrayBuffer();
     return NextResponse.json({ received: body.byteLength });

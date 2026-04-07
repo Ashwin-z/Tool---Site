@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 type CrawlRequest = {
   url?: string;
   includeHomePage?: boolean;
@@ -164,6 +166,11 @@ async function tryDiscoverSeedUrls(origin: string) {
 }
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`sitemap-crawl:${getClientIp(request)}`, { maxRequests: 5, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   try {
     const body = (await request.json()) as CrawlRequest;
     if (!body?.url) {
@@ -257,8 +264,9 @@ export async function POST(request: Request) {
       errors: errors.slice(0, 10),
     });
   } catch (error) {
+    console.error("[sitemap-crawl]", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Failed to generate sitemap." },
+      { error: "Failed to generate sitemap." },
       { status: 500 },
     );
   }

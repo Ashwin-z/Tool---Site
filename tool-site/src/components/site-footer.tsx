@@ -85,7 +85,7 @@ export default function SiteFooter() {
           <div>
             <Link href="/" className="mb-3 inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight">
               <span className="grid h-8 w-8 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs">⚡</span>
-              Tool<span className="text-[#6c63ff]">Craft</span>
+              Tool<span className="text-[#6c63ff]">Mint</span>
             </Link>
             <p className="max-w-xs text-sm leading-7" style={{ color: "var(--muted)" }}>100% free online tools. No account needed. Built with ❤️ for the web.</p>
           </div>
@@ -105,13 +105,22 @@ export default function SiteFooter() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm" style={{ borderTop: "1px solid var(--border)", color: "var(--muted-3)" }}>
-          <span>© 2026 ToolCraft — All tools are free, forever.</span>
+          <span>© {new Date().getFullYear()} ToolMint. All rights reserved.</span>
           <div className="flex items-center gap-5">
             <Link href="/privacy" className="transition hover:opacity-80">
               Privacy
             </Link>
             <Link href="/terms" className="transition hover:opacity-80">
               Terms
+            </Link>
+            <Link href="/cookie-policy" className="transition hover:opacity-80">
+              Cookies
+            </Link>
+            <Link href="/disclaimer" className="transition hover:opacity-80">
+              Disclaimer
+            </Link>
+            <Link href="/about" className="transition hover:opacity-80">
+              About
             </Link>
             <Link href="/contact" className="transition hover:opacity-80">
               Contact

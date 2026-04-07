@@ -6,21 +6,29 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 
 import { resolvePdfcpuPath, runPdfcpu, sanitizePdfFileName } from "@/lib/server-pdfcpu";
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
+
 const ALLOWED_PERMISSIONS = new Set(["none", "print", "all"]);
 
 export async function POST(request: Request) {
-  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolcraft-protect-pdf-"));
+  const rl = checkRateLimit(`protect-pdf:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolmint-protect-pdf-"));
 
   try {
     const pdfcpuPath = await resolvePdfcpuPath();
     if (!pdfcpuPath) {
       return NextResponse.json(
-        { error: "pdfcpu is not installed. Add the bundled binary or set PDFCPU_PATH." },
-        { status: 500 },
+        { error: "PDF protection is temporarily unavailable. Please try again later." },
+        { status: 503 },
       );
     }
 
@@ -36,6 +44,10 @@ export async function POST(request: Request) {
 
     if (!file.name.toLowerCase().endsWith(".pdf")) {
       return NextResponse.json({ error: "Only PDF files are supported." }, { status: 400 });
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json({ error: "File size exceeds the 100 MB limit." }, { status: 400 });
     }
 
     if (!userPassword || userPassword.length < 4) {
@@ -81,8 +93,8 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to protect PDF.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[protect-pdf]", error);
+    return NextResponse.json({ error: "Failed to protect PDF." }, { status: 500 });
   } finally {
     await rm(tempDir, { recursive: true, force: true }).catch(() => undefined);
   }

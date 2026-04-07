@@ -2,6 +2,8 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type PdfSecurityMode = "protect" | "unlock";
 type PermissionMode = "none" | "print" | "all";
 
@@ -52,6 +54,10 @@ export default function PdfSecurityTool({ mode }: Props) {
 
   const setSelectedFile = useCallback((nextFile: File | null) => {
     if (!nextFile) return;
+    if (nextFile.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     if (!nextFile.name.toLowerCase().endsWith(".pdf")) {
       setErrorMessage("Please choose a PDF file.");
       return;

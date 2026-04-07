@@ -2,6 +2,8 @@
 
 import { useMemo, useRef, useState } from "react";
 
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
 type IndentMode = "2" | "3" | "4" | "tab";
 type OutputMode = "json" | "xml" | "csv" | "yaml";
 
@@ -329,6 +331,10 @@ export default function JsonFormatterTool() {
   const handleFilePick = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit.`);
+      return;
+    }
     const text = await file.text();
     setInput(text);
     setStatusMessage(`Loaded ${file.name}.`);

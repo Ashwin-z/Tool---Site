@@ -7,6 +7,8 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 import puppeteer, { type Browser } from "puppeteer-core";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -240,6 +242,11 @@ async function renderPdf(browserPath: string, targetUrl: string): Promise<Buffer
 /* ------------------------------------------------------------------ */
 
 export async function GET(request: Request) {
+  const rl = checkRateLimit(`html-to-pdf-render:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const requestUrl = new URL(request.url);
   const targetUrl = requestUrl.searchParams.get("url") ?? "";
 
@@ -260,8 +267,8 @@ export async function GET(request: Request) {
   const browserPath = await resolveBrowserPath();
   if (!browserPath) {
     return NextResponse.json(
-      { error: "Could not find Chrome or Edge on this machine." },
-      { status: 500 },
+      { error: "PDF rendering is temporarily unavailable. Please try again later." },
+      { status: 503 },
     );
   }
 

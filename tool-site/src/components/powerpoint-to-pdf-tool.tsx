@@ -9,6 +9,8 @@ import {
   sanitizeBaseName,
 } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
+
 type QueuedDeck = {
   id: string;
   file: File;
@@ -88,20 +90,27 @@ export default function PowerPointToPdfTool() {
       return;
     }
 
+    const oversized = decks.filter((f) => f.size > MAX_FILE_SIZE);
+    const validDecks = decks.filter((f) => f.size <= MAX_FILE_SIZE);
+
+    if (oversized.length) {
+      setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+    }
+
+    if (!validDecks.length) return;
+
     const remainingSlots = MAX_CONVERSION_FILES - queue.length;
     if (remainingSlots <= 0) {
       setErrorMessage(`You can convert a maximum of ${MAX_CONVERSION_FILES} PowerPoint files at a time.`);
       return;
     }
 
-    const limitedFiles = decks.slice(0, remainingSlots);
+    const limitedFiles = validDecks.slice(0, remainingSlots);
     setQueue((prev) => [...prev, ...limitedFiles.map((file) => ({ id: uid(), file }))]);
     setResult(null);
-    setErrorMessage(
-      decks.length > remainingSlots
-        ? `Only the first ${remainingSlots} PowerPoint file${remainingSlots > 1 ? "s were" : " was"} added.`
-        : null,
-    );
+    if (validDecks.length > remainingSlots) {
+      setErrorMessage(`Only the first ${remainingSlots} PowerPoint file${remainingSlots > 1 ? "s were" : " was"} added.`);
+    }
   }, [queue.length]);
 
   const removeFile = useCallback((id: string) => {
@@ -259,7 +268,7 @@ export default function PowerPointToPdfTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}

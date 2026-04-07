@@ -9,11 +9,28 @@ import {
   sanitizeBaseName,
 } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type LoadedPdf = {
   file: File;
   bytes: ArrayBuffer;
   pageCount: number;
 };
+
+type PdfJsModule = {
+  GlobalWorkerOptions: { workerSrc: string };
+  getDocument: (options: { data: ArrayBuffer }) => {
+    promise: Promise<{
+      getPage: (pageNumber: number) => Promise<{
+        getViewport: (options: { scale: number; rotation?: number }) => { width: number; height: number };
+        render: (options: unknown) => { promise: Promise<void> };
+      }>;
+      destroy?: () => void;
+    }>;
+  };
+};
+
+let pdfjsPromise: Promise<PdfJsModule> | null = null;
 
 function normalizeRotation(value: number): number {
   return ((value % 360) + 360) % 360;
@@ -30,14 +47,19 @@ async function loadPdf(file: File): Promise<LoadedPdf> {
   };
 }
 
-async function getPdfjs() {
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
+async function getPdfjs(): Promise<PdfJsModule> {
+  if (!pdfjsPromise) {
+    const importPdfjs = new Function("moduleUrl", "return import(moduleUrl);") as (moduleUrl: string) => Promise<PdfJsModule>;
+    pdfjsPromise = importPdfjs("/vendor/pdfjs/pdf.mjs").then((pdfjs) => {
+      if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+        pdfjs.GlobalWorkerOptions.workerSrc = "/vendor/pdfjs/pdf.worker.min.mjs";
+      }
 
-  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+      return pdfjs;
+    });
   }
 
-  return pdfjs;
+  return pdfjsPromise;
 }
 
 async function renderPreview(bytes: ArrayBuffer, rotation: number): Promise<string> {
@@ -58,6 +80,7 @@ async function renderPreview(bytes: ArrayBuffer, rotation: number): Promise<stri
   context.fillRect(0, 0, canvas.width, canvas.height);
 
   await page.render({ canvasContext: context, viewport, canvas } as never).promise;
+  pdf.destroy?.();
   return canvas.toDataURL("image/png", 0.92);
 }
 
@@ -85,6 +108,10 @@ export default function RotatePdfTool() {
 
   const loadFile = useCallback(async (incoming: File) => {
     setErrorMessage(null);
+    if (incoming.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     setPreviewUrl(null);
     setRotation(0);
 
@@ -134,6 +161,7 @@ export default function RotatePdfTool() {
       .then((url) => {
         if (renderTokenRef.current === renderToken) {
           setPreviewUrl(url);
+          setErrorMessage(null);
         }
       })
       .catch(() => {

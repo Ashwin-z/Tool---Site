@@ -2,18 +2,21 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sitemap | ToolCraft",
-  description: "Browse all key pages and tools on ToolCraft.",
+  title: "Sitemap | ToolMint",
+  description: "Browse all key pages and tools on ToolMint.",
 };
 
 const links = [
   { label: "Home", href: "/" },
   { label: "All Tools", href: "/tools" },
+  { label: "About", href: "/about" },
   { label: "Word Counter", href: "/tools/word-counter" },
   { label: "Privacy Policy", href: "/privacy" },
   { label: "Terms of Service", href: "/terms" },
+  { label: "Cookie Policy", href: "/cookie-policy" },
   { label: "Contact", href: "/contact" },
   { label: "XML Sitemap", href: "/sitemap.xml" },
+  { label: "Disclaimer", href: "/disclaimer" },
 ];
 
 export default function SiteMapPage() {
@@ -24,7 +27,7 @@ export default function SiteMapPage() {
       </Link>
 
       <h1 className="font-display mt-4 text-4xl font-bold leading-[1.1] tracking-[-0.02em]">Sitemap</h1>
-      <p className="mt-3 text-sm leading-7 text-muted">Quick links to important pages on ToolCraft.</p>
+      <p className="mt-3 text-sm leading-7 text-muted">Quick links to important pages on ToolMint.</p>
 
       <ul className="mt-8 space-y-2">
         {links.map((link) => (

@@ -17,8 +17,8 @@ type ConvertedFile = {
   blob: Blob;
 };
 
-const MAX_FILES = 10;
-const MAX_SIZE_MB = 50;
+const MAX_FILES = 25;
+const MAX_SIZE_MB = 100;
 
 /* ── Component ─────────────────────────────────────────── */
 
@@ -37,16 +37,31 @@ export default function PdfToPdfaTool() {
   const addFiles = useCallback(
     (fileList: FileList | null) => {
       if (!fileList) return;
-      const incoming = Array.from(fileList).filter(
-        (f) => f.name.toLowerCase().endsWith(".pdf") && f.size <= MAX_SIZE_MB * 1024 * 1024,
+      const allPdfs = Array.from(fileList).filter(
+        (f) => f.name.toLowerCase().endsWith(".pdf"),
       );
+      const oversized = allPdfs.filter((f) => f.size > MAX_SIZE_MB * 1024 * 1024);
+      const incoming = allPdfs.filter((f) => f.size <= MAX_SIZE_MB * 1024 * 1024);
+
+      if (oversized.length) {
+        setErrors([`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_SIZE_MB}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`]);
+      }
+
       setFiles((prev) => {
+        const remaining = MAX_FILES - prev.length;
+        if (remaining <= 0) {
+          setErrors((e) => [...e, `You can upload a maximum of ${MAX_FILES} PDFs at a time.`]);
+          return prev;
+        }
         const names = new Set(prev.map((f) => f.name));
         const unique = incoming.filter((f) => !names.has(f.name));
-        return [...prev, ...unique].slice(0, MAX_FILES);
+        const limited = unique.slice(0, remaining);
+        if (unique.length > remaining) {
+          setErrors((e) => [...e, `Only the first ${remaining} file${remaining > 1 ? "s were" : " was"} added. Maximum ${MAX_FILES} files allowed.`]);
+        }
+        return [...prev, ...limited];
       });
       setResults([]);
-      setErrors([]);
     },
     [],
   );
@@ -272,7 +287,7 @@ export default function PdfToPdfaTool() {
 
       {/* ── Errors ── */}
       {errors.length > 0 && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           <ul className="list-disc pl-4 space-y-1">
             {errors.map((e, i) => (
               <li key={i}>{e}</li>

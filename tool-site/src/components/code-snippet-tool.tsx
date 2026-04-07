@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 const SAMPLE_HTML = `<div class="card">
-  <h2>Hello, ToolCraft 👋</h2>
+  <h2>Hello, ToolMint 👋</h2>
   <p>Edit HTML, CSS, and JS to see live preview.</p>
   <button id="actionBtn">Click me</button>
   <p id="output"></p>

@@ -2,10 +2,29 @@
 
 import { useState, useMemo } from "react";
 
+const CURRENCIES = [
+  { code: "USD", symbol: "$", name: "US Dollar" },
+  { code: "EUR", symbol: "€", name: "Euro" },
+  { code: "GBP", symbol: "£", name: "British Pound" },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+  { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+  { code: "INR", symbol: "₹", name: "Indian Rupee" },
+  { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
+  { code: "SEK", symbol: "kr", name: "Swedish Krona" },
+  { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" },
+  { code: "MXN", symbol: "Mex$", name: "Mexican Peso" },
+  { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+  { code: "HKD", symbol: "HK$", name: "Hong Kong Dollar" },
+  { code: "NOK", symbol: "kr", name: "Norwegian Krone" },
+];
+
 export default function BreakevenCalculatorTool() {
   const [fixedCosts, setFixedCosts] = useState("");
   const [variableCost, setVariableCost] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
+  const [currency, setCurrency] = useState("USD");
 
   const result = useMemo(() => {
     const fc = parseFloat(fixedCosts) || 0;
@@ -33,6 +52,8 @@ export default function BreakevenCalculatorTool() {
     return { breakEvenUnits, breakEvenRevenue, contributionMargin, contributionRatio, table };
   }, [fixedCosts, variableCost, sellingPrice]);
 
+  const currencySymbol = CURRENCIES.find((c) => c.code === currency)?.symbol || "$";
+
   return (
     <div className="space-y-4">
       {/* Input card */}
@@ -44,9 +65,10 @@ export default function BreakevenCalculatorTool() {
         </div>
 
         <div className="flex flex-wrap items-end gap-4 px-5 py-5">
-          <InputField label="Fixed Costs ($)" value={fixedCosts} onChange={setFixedCosts} placeholder="10000" />
-          <InputField label="Variable Cost per Unit ($)" value={variableCost} onChange={setVariableCost} placeholder="25" />
-          <InputField label="Selling Price per Unit ($)" value={sellingPrice} onChange={setSellingPrice} placeholder="50" />
+          <InputField label={`Fixed Costs (${currencySymbol})`} value={fixedCosts} onChange={setFixedCosts} placeholder="10000" />
+          <InputField label={`Variable Cost per Unit (${currencySymbol})`} value={variableCost} onChange={setVariableCost} placeholder="25" />
+          <InputField label={`Selling Price per Unit (${currencySymbol})`} value={sellingPrice} onChange={setSellingPrice} placeholder="50" />
+          <CurrencySelector value={currency} onChange={setCurrency} />
         </div>
       </div>
 
@@ -62,12 +84,12 @@ export default function BreakevenCalculatorTool() {
             />
             <MetricCard
               label="Break-even Revenue"
-              value={`$${result.breakEvenRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              value={`${currencySymbol}${result.breakEvenRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               color="text-[#38d9a9]"
             />
             <MetricCard
               label="Contribution Margin"
-              value={`$${result.contributionMargin.toFixed(2)}`}
+              value={`${currencySymbol}${result.contributionMargin.toFixed(2)}`}
               color="text-[#ff6584]"
             />
             <MetricCard
@@ -130,13 +152,13 @@ export default function BreakevenCalculatorTool() {
                         )}
                       </td>
                       <td className="px-5 py-2.5 text-right text-muted">
-                        ${row.revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {currencySymbol}{row.revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                       <td className="px-5 py-2.5 text-right text-muted">
-                        ${row.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {currencySymbol}{row.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                       <td className={`px-5 py-2.5 text-right font-semibold ${row.profit >= 0 ? "text-[#38d9a9]" : "text-[#ff6584]"}`}>
-                        {row.profit >= 0 ? "+" : ""}${row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {row.profit >= 0 ? "+" : ""}{currencySymbol}{row.profit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))}

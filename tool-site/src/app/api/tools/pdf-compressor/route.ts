@@ -6,8 +6,12 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB for PDFs
 
 type CompressionLevel = "extreme" | "recommended" | "less";
 
@@ -284,14 +288,19 @@ async function compressWithProfileCandidates(
 }
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`pdf-compress:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const ghostscriptPath = await resolveGhostscriptPath();
   if (!ghostscriptPath) {
     return NextResponse.json(
       {
         error:
-          "Ghostscript is not installed. Run `npm run setup:pdf-compressor` in the project root to install the local server-side PDF compressor.",
+          "PDF compression is temporarily unavailable. Please try again later.",
       },
-      { status: 500 },
+      { status: 503 },
     );
   }
 
@@ -301,6 +310,10 @@ export async function POST(request: Request) {
 
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "Missing PDF file upload." }, { status: 400 });
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: "File size exceeds the 100 MB limit." }, { status: 400 });
   }
 
   const level: CompressionLevel =
@@ -366,8 +379,8 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "PDF compression failed.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[pdf-compressor]", error);
+    return NextResponse.json({ error: "PDF compression failed." }, { status: 500 });
   } finally {
     await rm(workDir, { recursive: true, force: true });
   }

@@ -240,6 +240,7 @@ function InvoiceCalculator() {
 function ReverseTax() {
   const [preTax, setPreTax] = useState("");
   const [postTax, setPostTax] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{
     taxAmount: string;
     taxRate: string;
@@ -248,9 +249,28 @@ function ReverseTax() {
   const calculate = useCallback(() => {
     const pre = parseFloat(preTax);
     const post = parseFloat(postTax);
-    if (Number.isNaN(pre) || Number.isNaN(post) || pre <= 0 || post < pre) return;
+
+    setResult(null);
+    setError(null);
+
+    if (Number.isNaN(pre) || Number.isNaN(post)) {
+      setError("Enter both the pre-tax and post-tax amounts.");
+      return;
+    }
+
+    if (pre <= 0) {
+      setError("Pre-tax price must be greater than 0.");
+      return;
+    }
+
+    if (post < pre) {
+      setError("Post-tax price must be equal to or greater than the pre-tax price.");
+      return;
+    }
+
     const tax = post - pre;
     const rate = (tax / pre) * 100;
+
     setResult({
       taxAmount: fmt(tax),
       taxRate: fmt(rate),
@@ -269,6 +289,14 @@ function ReverseTax() {
         <NumInput value={postTax} onChange={setPostTax} placeholder="After tax" />
         <CalcButton onClick={calculate} />
       </div>
+      <p className="mt-3 text-xs text-muted-2">
+        Example: if the price changed from 100 to 118 after tax, the applied tax rate is 18%.
+      </p>
+      {error && (
+        <div className="mt-4 rounded-xl border border-rose-500/25 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+          {error}
+        </div>
+      )}
       {result && (
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <MiniResult label="Tax Amount" value={result.taxAmount} color="#ff6584" />

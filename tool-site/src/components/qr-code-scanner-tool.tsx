@@ -1,26 +1,115 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import jsQR from "jsqr";
+
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
+const CAMERA_SCAN_WIDTH = 1280;
+const UPLOAD_SCAN_LARGE = 2200;
+const UPLOAD_SCAN_SMALL = 1100;
 
 type Mode = "camera" | "upload";
 
-/**
- * Minimal QR decoder using the BarcodeDetector API (Chrome/Edge/Android).
- * Falls back to a canvas-based manual approach if BarcodeDetector is unavailable.
- */
-async function decodeQR(source: ImageBitmap | HTMLVideoElement): Promise<string | null> {
-  // Try native BarcodeDetector first
-  if ("BarcodeDetector" in window) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const detector = new (window as any).BarcodeDetector({ formats: ["qr_code"] });
-      const results = await detector.detect(source);
-      if (results.length > 0) return results[0].rawValue;
-    } catch {
-      /* fall through */
-    }
+type DetectorResult = { rawValue?: string };
+type BarcodeDetectorInstance = {
+  detect: (source: ImageBitmapSource) => Promise<DetectorResult[]>;
+};
+type BarcodeDetectorCtor = new (options?: { formats?: string[] }) => BarcodeDetectorInstance;
+
+function getBarcodeDetectorCtor(): BarcodeDetectorCtor | null {
+  const detector = (window as { BarcodeDetector?: BarcodeDetectorCtor }).BarcodeDetector;
+  return typeof detector === "function" ? detector : null;
+}
+
+async function detectWithBarcodeDetector(source: ImageBitmapSource): Promise<string | null> {
+  const Detector = getBarcodeDetectorCtor();
+  if (!Detector) return null;
+
+  try {
+    const detector = new Detector({ formats: ["qr_code"] });
+    const results = await detector.detect(source);
+    const match = results.find((item) => typeof item.rawValue === "string" && item.rawValue.trim().length > 0);
+    return match?.rawValue?.trim() ?? null;
+  } catch {
+    return null;
   }
-  return null;
+}
+
+function drawSourceToCanvas(
+  source: CanvasImageSource,
+  canvas: HTMLCanvasElement,
+  maxDimension: number
+): CanvasRenderingContext2D | null {
+  const sourceAny = source as { videoWidth?: number; videoHeight?: number; naturalWidth?: number; naturalHeight?: number; width?: number; height?: number };
+  const sourceWidth = sourceAny.videoWidth || sourceAny.naturalWidth || sourceAny.width || 0;
+  const sourceHeight = sourceAny.videoHeight || sourceAny.naturalHeight || sourceAny.height || 0;
+
+  if (!sourceWidth || !sourceHeight) return null;
+
+  const scale = Math.min(1, maxDimension / Math.max(sourceWidth, sourceHeight));
+  const targetWidth = Math.max(1, Math.round(sourceWidth * scale));
+  const targetHeight = Math.max(1, Math.round(sourceHeight * scale));
+
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return null;
+
+  ctx.clearRect(0, 0, targetWidth, targetHeight);
+  ctx.drawImage(source, 0, 0, targetWidth, targetHeight);
+  return ctx;
+}
+
+function decodeWithJsQR(canvas: HTMLCanvasElement): string | null {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  if (!ctx || canvas.width === 0 || canvas.height === 0) return null;
+
+  try {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const decoded = jsQR(imageData.data, imageData.width, imageData.height, {
+      inversionAttempts: "attemptBoth",
+    });
+    return decoded?.data?.trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+async function decodeFromVideoFrame(video: HTMLVideoElement, canvas: HTMLCanvasElement): Promise<string | null> {
+  const nativeResult = await detectWithBarcodeDetector(video);
+  if (nativeResult) return nativeResult;
+
+  const ctx = drawSourceToCanvas(video, canvas, CAMERA_SCAN_WIDTH);
+  if (!ctx) return null;
+
+  const detectorCanvasResult = await detectWithBarcodeDetector(canvas);
+  if (detectorCanvasResult) return detectorCanvasResult;
+
+  return decodeWithJsQR(canvas);
+}
+
+async function decodeFromImageFile(file: File, canvas: HTMLCanvasElement): Promise<string | null> {
+  const bitmap = await createImageBitmap(file);
+  try {
+    const nativeResult = await detectWithBarcodeDetector(bitmap);
+    if (nativeResult) return nativeResult;
+
+    for (const size of [UPLOAD_SCAN_LARGE, UPLOAD_SCAN_SMALL]) {
+      const ctx = drawSourceToCanvas(bitmap, canvas, size);
+      if (!ctx) continue;
+
+      const detectorCanvasResult = await detectWithBarcodeDetector(canvas);
+      if (detectorCanvasResult) return detectorCanvasResult;
+
+      const jsqrResult = decodeWithJsQR(canvas);
+      if (jsqrResult) return jsqrResult;
+    }
+
+    return null;
+  } finally {
+    bitmap.close();
+  }
 }
 
 export default function QrCodeScannerTool() {
@@ -29,24 +118,31 @@ export default function QrCodeScannerTool() {
   const [error, setError] = useState("");
   const [scanning, setScanning] = useState(false);
   const [cameraSupported, setCameraSupported] = useState(true);
-  const [barcodeSupported, setBarcodeSupported] = useState(true);
+  const [decoderHint, setDecoderHint] = useState("Using built-in scanner.");
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number>(0);
 
-  // Check for BarcodeDetector support
   useEffect(() => {
-    if (!("BarcodeDetector" in window)) {
-      setBarcodeSupported(false);
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraSupported(false);
+    }
+
+    if (getBarcodeDetectorCtor()) {
+      setDecoderHint("Using built-in scanner with fallback.");
+    } else {
+      setDecoderHint("Using compatibility scanner fallback.");
     }
   }, []);
 
   const stopCamera = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach((t) => t.stop());
+      for (const track of streamRef.current.getTracks()) {
+        track.stop();
+      }
       streamRef.current = null;
     }
     setScanning(false);
@@ -62,139 +158,115 @@ export default function QrCodeScannerTool() {
       return;
     }
 
-    if (!barcodeSupported) {
-      setError("QR scanning is not supported in this browser. Please use Chrome, Edge, or Opera, or upload an image instead.");
+    if (!window.isSecureContext && !/^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+      setError("Camera requires HTTPS (or localhost). Open this page over a secure connection.");
       return;
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
+        audio: false,
       });
-      streamRef.current = stream;
 
       const video = videoRef.current;
-      if (!video) return;
+      if (!video) {
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
+
+      streamRef.current = stream;
       video.srcObject = stream;
       await video.play();
       setScanning(true);
 
+      let busy = false;
       const tick = async () => {
-        if (!video || video.readyState < 2) {
+        if (!videoRef.current || !canvasRef.current) {
           rafRef.current = requestAnimationFrame(tick);
           return;
         }
-        try {
-          const text = await decodeQR(video);
+
+        if (!busy && video.readyState >= 2) {
+          busy = true;
+          const text = await decodeFromVideoFrame(videoRef.current, canvasRef.current);
+          busy = false;
+
           if (text) {
             setResult(text);
             stopCamera();
             return;
           }
-        } catch {
-          /* keep scanning */
         }
+
         rafRef.current = requestAnimationFrame(tick);
       };
+
       rafRef.current = requestAnimationFrame(tick);
     } catch (err) {
       if (err instanceof DOMException && err.name === "NotAllowedError") {
         setError("Camera permission denied. Please allow camera access and try again.");
+      } else if (err instanceof DOMException && err.name === "NotFoundError") {
+        setError("No camera was found on this device.");
       } else {
         setError("Could not access camera. Make sure no other app is using it.");
       }
     }
-  }, [stopCamera, barcodeSupported]);
+  }, [stopCamera]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => stopCamera();
   }, [stopCamera]);
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload an image file (PNG, JPG, WEBP, etc.).");
+      event.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError("Image is too large. Please upload an image under 25MB.");
+      event.target.value = "";
+      return;
+    }
+
     setResult(null);
     setError("");
 
     try {
-      if (!("BarcodeDetector" in window)) {
-        setError("QR scanning requires Chrome, Edge, or Opera. BarcodeDetector API is not available in this browser.");
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        setError("Scanner is not ready yet. Please try again.");
         return;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const detector = new (window as any).BarcodeDetector({ formats: ["qr_code"] });
-
-      // Attempt 1: detect directly from the File (Blob)
-      try {
-        const r = await detector.detect(file);
-        if (r.length > 0) { setResult(r[0].rawValue); return; }
-      } catch { /* try next */ }
-
-      // Attempt 2: detect from ImageBitmap created from File
-      try {
-        const bmp = await createImageBitmap(file);
-        const r = await detector.detect(bmp);
-        if (r.length > 0) { setResult(r[0].rawValue); return; }
-      } catch { /* try next */ }
-
-      // Attempt 3: load into an HTMLImageElement and detect that
-      try {
-        const img = new Image();
-        const objectUrl = URL.createObjectURL(file);
-        await new Promise<void>((resolve, reject) => {
-          img.onload = () => resolve();
-          img.onerror = () => reject(new Error("load failed"));
-          img.src = objectUrl;
-        });
-        // wait for full decode
-        if (img.decode) await img.decode();
-        const r = await detector.detect(img);
-        URL.revokeObjectURL(objectUrl);
-        if (r.length > 0) { setResult(r[0].rawValue); return; }
-      } catch { /* try next */ }
-
-      // Attempt 4: draw to canvas at original size and detect
-      try {
-        const bmp = await createImageBitmap(file);
-        const canvas = document.createElement("canvas");
-        canvas.width = bmp.width;
-        canvas.height = bmp.height;
-        const ctx = canvas.getContext("2d")!;
-        ctx.drawImage(bmp, 0, 0);
-        const r = await detector.detect(canvas);
-        if (r.length > 0) { setResult(r[0].rawValue); return; }
-
-        // Attempt 5: try scaled down for very large images
-        if (bmp.width > 1024 || bmp.height > 1024) {
-          const scale = 1024 / Math.max(bmp.width, bmp.height);
-          const sCanvas = document.createElement("canvas");
-          sCanvas.width = Math.round(bmp.width * scale);
-          sCanvas.height = Math.round(bmp.height * scale);
-          const sCtx = sCanvas.getContext("2d")!;
-          sCtx.drawImage(bmp, 0, 0, sCanvas.width, sCanvas.height);
-          const r2 = await detector.detect(sCanvas);
-          if (r2.length > 0) { setResult(r2[0].rawValue); return; }
-        }
-      } catch { /* exhausted */ }
-
-      setError("No QR code detected in the image. Make sure the QR code is clear and well-lit.");
+      const text = await decodeFromImageFile(file, canvas);
+      if (text) {
+        setResult(text);
+      } else {
+        setError("No QR code detected in the image. Try a clearer or higher-contrast image.");
+      }
     } catch {
       setError("Failed to read the image file.");
+    } finally {
+      event.target.value = "";
     }
-  };
+  }, []);
 
-  const isUrl = result && /^https?:\/\//i.test(result);
+  const isUrl = !!result && /^https?:\/\//i.test(result);
 
-  const copyResult = async () => {
+  const copyResult = useCallback(async () => {
     if (!result) return;
     try {
       await navigator.clipboard.writeText(result);
     } catch {
-      /* */
+      setError("Could not copy automatically. Please copy the text manually.");
     }
-  };
+  }, [result]);
 
   return (
     <div className="space-y-4">
@@ -206,7 +278,6 @@ export default function QrCodeScannerTool() {
           <p className="mt-1 text-xs text-muted">Scan QR codes with your camera or upload an image.</p>
         </div>
 
-        {/* Mode tabs */}
         <div className="flex border-b border-border">
           <button
             onClick={() => {
@@ -216,12 +287,10 @@ export default function QrCodeScannerTool() {
               setError("");
             }}
             className={`flex-1 px-4 py-3 text-sm font-semibold transition ${
-              mode === "camera"
-                ? "border-b-2 border-[#6c63ff] text-[#6c63ff]"
-                : "text-muted hover:text-foreground"
+              mode === "camera" ? "border-b-2 border-[#6c63ff] text-[#6c63ff]" : "text-muted hover:text-foreground"
             }`}
           >
-            📷 Camera
+            Camera
           </button>
           <button
             onClick={() => {
@@ -231,26 +300,20 @@ export default function QrCodeScannerTool() {
               setError("");
             }}
             className={`flex-1 px-4 py-3 text-sm font-semibold transition ${
-              mode === "upload"
-                ? "border-b-2 border-[#6c63ff] text-[#6c63ff]"
-                : "text-muted hover:text-foreground"
+              mode === "upload" ? "border-b-2 border-[#6c63ff] text-[#6c63ff]" : "text-muted hover:text-foreground"
             }`}
           >
-            📁 Upload Image
+            Upload Image
           </button>
         </div>
 
         <div className="px-5 py-6">
-          {/* Camera mode */}
+          <p className="mb-3 text-[11px] text-muted-2">{decoderHint}</p>
+
           {mode === "camera" && (
             <div className="flex flex-col items-center gap-4">
               <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-border bg-black">
-                <video
-                  ref={videoRef}
-                  className="aspect-video w-full object-cover"
-                  playsInline
-                  muted
-                />
+                <video ref={videoRef} className="aspect-video w-full object-cover" playsInline muted />
                 {scanning && (
                   <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <div className="h-48 w-48 rounded-2xl border-2 border-[#1ce4b5]/60 shadow-[0_0_30px_rgba(28,228,181,.15)]">
@@ -269,7 +332,7 @@ export default function QrCodeScannerTool() {
                 <button
                   onClick={startCamera}
                   disabled={!cameraSupported}
-                  className="rounded-xl border border-[#6c63ff]/40 bg-[#6c63ff]/10 px-8 py-3 text-sm font-semibold text-[#6c63ff] transition hover:bg-[#6c63ff]/20 disabled:opacity-50"
+                  className="rounded-xl border border-[#6c63ff]/40 bg-[#6c63ff]/10 px-8 py-3 text-sm font-semibold text-[#6c63ff] transition hover:bg-[#6c63ff]/20 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Start Scanning
                 </button>
@@ -286,41 +349,30 @@ export default function QrCodeScannerTool() {
             </div>
           )}
 
-          {/* Upload mode */}
           {mode === "upload" && (
             <div className="flex flex-col items-center gap-4">
               <label className="flex w-full max-w-md cursor-pointer flex-col items-center gap-3 rounded-xl border-2 border-dashed border-border bg-surface-2 px-6 py-10 transition hover:border-[#6c63ff]/40">
-                <span className="text-3xl">📷</span>
+                <span className="text-3xl">Scan</span>
                 <span className="text-sm font-semibold text-white">Drop or click to upload a QR code image</span>
-                <span className="text-xs text-muted">PNG, JPG, WEBP supported</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
+                <span className="text-xs text-muted">PNG, JPG, WEBP, GIF supported</span>
+                <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
               </label>
             </div>
           )}
 
-          {/* Hidden canvas for image processing */}
           <canvas ref={canvasRef} className="hidden" />
 
-          {/* Error */}
           {error && (
             <div className="mt-4 rounded-lg border border-red-400/20 bg-red-400/5 px-4 py-3 text-center text-sm text-red-400">
               {error}
             </div>
           )}
 
-          {/* Result */}
           {result && (
             <div className="mt-6 rounded-xl border border-[#1ce4b5]/20 bg-[#1ce4b5]/5 p-5">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-[#1ce4b5]">
-                ✓ QR Code Detected
-              </div>
+              <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-[#1ce4b5]">QR Code Detected</div>
               <div className="break-all font-mono text-sm text-white">{result}</div>
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   onClick={copyResult}
                   className="rounded-lg border border-border bg-surface-2 px-4 py-2 text-xs font-semibold text-white transition hover:border-border-strong"
@@ -334,7 +386,7 @@ export default function QrCodeScannerTool() {
                     rel="noopener noreferrer"
                     className="rounded-lg border border-[#6c63ff]/40 bg-[#6c63ff]/10 px-4 py-2 text-xs font-semibold text-[#6c63ff] transition hover:bg-[#6c63ff]/20"
                   >
-                    Open Link ↗
+                    Open Link
                   </a>
                 )}
                 <button
@@ -352,7 +404,6 @@ export default function QrCodeScannerTool() {
         </div>
       </div>
 
-      {/* Scan line animation */}
       <style jsx>{`
         @keyframes scan {
           0% { transform: translateY(0); }
@@ -365,9 +416,9 @@ export default function QrCodeScannerTool() {
       `}</style>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-        <InfoCard icon="📷" title="Camera Scan" desc="Point your camera at any QR code for instant detection." />
-        <InfoCard icon="📁" title="Upload Image" desc="Upload a screenshot or photo containing a QR code." />
-        <InfoCard icon="🔒" title="100% Private" desc="All scanning happens locally in your browser." />
+        <InfoCard icon="Camera" title="Camera Scan" desc="Point your camera at any QR code for instant detection." />
+        <InfoCard icon="Upload" title="Upload Image" desc="Upload a screenshot or photo containing a QR code." />
+        <InfoCard icon="Private" title="100% Private" desc="All scanning happens locally in your browser." />
       </div>
     </div>
   );

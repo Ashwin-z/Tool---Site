@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "All Tools | ToolCraft",
-  description: "Browse all available and upcoming tools on ToolCraft.",
+  title: "All Tools | ToolMint",
+  description: "Browse all available and upcoming tools on ToolMint.",
 };
 
 type ToolEntry = readonly [string, string];
@@ -83,6 +83,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
       ["GPA Calculator", "/tools/gpa-calculator"],
       ["Work Hours Calculator", "/tools/work-hours-calculator"],
       ["Calorie Calculator", "/tools/calorie-calculator"],
+      ["Tip Calculator", "/tools/tip-calculator"],
     ],
   },
   {
@@ -149,6 +150,8 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
       ["YouTube Thumbnail Downloader", "/tools/youtube-thumbnail-downloader"],
       ["QR Code Scanner", "/tools/qr-code-scanner"],
       ["QR Code Generator", "/tools/qr-code-generator"],
+      ["Tic Tac Toe", "/tools/tic-tac-toe"],
+      ["Rock Paper Scissors", "/tools/rock-paper-scissors"],
     ],
   },
 ];

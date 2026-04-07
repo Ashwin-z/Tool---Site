@@ -38,6 +38,9 @@ function friendlyFormat(mime: string): string {
 
 const ACCEPTED = "image/jpeg,image/webp,image/bmp,image/gif,image/avif,image/tiff,image/svg+xml,image/png";
 
+const MAX_FILES = 25;
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
 function convertToPngFromDataUrl(
   dataUrl: string,
   name: string,
@@ -84,11 +87,38 @@ export default function JpgToPngTool() {
   const [dragOver, setDragOver] = useState(false);
   const [zipping, setZipping] = useState(false);
   const [previewIdx, setPreviewIdx] = useState<number | null>(null);
+  const [limitWarning, setLimitWarning] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const imagesRef = useRef<ConvertedImage[]>([]);
+  imagesRef.current = images;
 
   const handleFiles = useCallback(async (files: FileList | File[]) => {
-    const imgs = Array.from(files).filter((f) => f.type.startsWith("image/"));
-    if (imgs.length === 0) return;
+    const allImgs = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (allImgs.length === 0) return;
+
+    const oversized = allImgs.filter((f) => f.size > MAX_FILE_SIZE);
+    const validImgs = allImgs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+    if (oversized.length) {
+      setLimitWarning(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+      setTimeout(() => setLimitWarning(null), 5000);
+    }
+
+    if (!validImgs.length) return;
+
+    const remaining = MAX_FILES - imagesRef.current.length;
+    if (remaining <= 0) {
+      setLimitWarning(`Maximum ${MAX_FILES} images allowed. Please remove some images first.`);
+      setTimeout(() => setLimitWarning(null), 5000);
+      return;
+    }
+
+    const imgs = validImgs.slice(0, remaining);
+    if (validImgs.length > remaining) {
+      setLimitWarning(`Only the first ${remaining} of ${validImgs.length} images were added (max ${MAX_FILES}).`);
+      setTimeout(() => setLimitWarning(null), 5000);
+    }
+
     setProcessing(true);
     try {
       const results = await Promise.all(
@@ -163,20 +193,43 @@ export default function JpgToPngTool() {
         </div>
       </div>
 
+      {/* ── Limit warning ── */}
+      {limitWarning && (
+        <div className="rounded-xl border border-yellow-300 bg-yellow-50 px-4 py-3 text-sm text-yellow-800 dark:border-yellow-600/50 dark:bg-yellow-500/10 dark:text-yellow-300">
+          ⚠️ {limitWarning}
+        </div>
+      )}
+
       {/* ── Drop zone ── */}
       <div
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
         onClick={() => inputRef.current?.click()}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-16 text-center transition ${
-          dragOver ? "border-[#6c63ff] bg-[#6c63ff]/10" : "border-border bg-surface hover:border-border-strong"
+          dragOver
+            ? "border-[#6c63ff] bg-[#6c63ff]/10"
+            : "border-border bg-surface hover:border-border-strong"
         }`}
       >
-        <input ref={inputRef} type="file" accept={ACCEPTED} multiple className="hidden" onChange={(e) => e.target.files && handleFiles(e.target.files)} />
-        <span className="text-4xl">🔄</span>
-        <p className="mt-3 text-sm font-semibold text-white">{processing ? "Converting…" : "Drop images here or click to browse"}</p>
-        <p className="mt-1 text-xs text-muted-2">JPG, WebP, BMP, GIF, AVIF, TIFF, SVG → PNG</p>
+        <input
+          ref={inputRef}
+          type="file"
+          accept={ACCEPTED}
+          multiple
+          className="hidden"
+          onChange={(e) => e.target.files && handleFiles(e.target.files)}
+        />
+        <span className="text-4xl">🖼️</span>
+        <p className="mt-3 text-sm font-semibold text-white">
+          {processing ? "Converting…" : "Drop images here or click to browse"}
+        </p>
+        <p className="mt-1 text-xs text-muted-2">
+          JPG, WebP, BMP, GIF, AVIF, TIFF, SVG, PNG → PNG • Max {MAX_FILES} images
+        </p>
       </div>
 
       {/* ── Before / After preview ── */}

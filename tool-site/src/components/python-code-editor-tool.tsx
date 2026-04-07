@@ -17,13 +17,13 @@ declare global {
 
 const PYODIDE_VERSION = "0.27.7";
 const PYODIDE_INDEX_URL = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
-const STORAGE_CODE_KEY = "toolcraft-python-editor-code";
-const STORAGE_INPUT_KEY = "toolcraft-python-editor-stdin";
+const STORAGE_CODE_KEY = "toolmint-python-editor-code";
+const STORAGE_INPUT_KEY = "toolmint-python-editor-stdin";
 
 const SAMPLE_SNIPPETS = {
   hello: {
     label: "Hello World",
-    code: `print("Hello from ToolCraft Python")\nfor index in range(1, 4):\n    print(f"Line {index}")`,
+    code: `print("Hello from ToolMint Python")\nfor index in range(1, 4):\n    print(f"Line {index}")`,
     stdin: "",
   },
   sum: {

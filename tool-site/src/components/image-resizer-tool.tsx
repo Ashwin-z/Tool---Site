@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 /* ── preset sizes ── */
 interface Preset {
   label: string;
@@ -142,6 +144,10 @@ export default function ImageResizerTool() {
     async (files: FileList | File[]) => {
       const file = Array.from(files).find((f) => f.type.startsWith("image/"));
       if (!file) return;
+      if (file.size > MAX_FILE_SIZE) {
+        alert(`File exceeds the 1GB size limit.`);
+        return;
+      }
       setSrcFile(file);
       setProcessing(true);
       try {

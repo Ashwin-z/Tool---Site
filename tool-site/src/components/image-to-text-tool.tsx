@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /* ═══════════════════════════════════════════════════════
    IMAGE TO TEXT (OCR) TOOL
@@ -33,12 +33,91 @@ const LANGUAGES = [
   { code: "ben", label: "Bengali" },
 ] as const;
 
-const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
 
 function fmtSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+async function loadImageElement(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error("Could not read the uploaded image."));
+    image.src = src;
+  });
+}
+
+async function canvasToBlob(canvas: HTMLCanvasElement, type: string): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        reject(new Error("Could not prepare the image for OCR."));
+        return;
+      }
+      resolve(blob);
+    }, type);
+  });
+}
+
+async function preprocessImageForOcr(file: File): Promise<Blob> {
+  const sourceUrl = URL.createObjectURL(file);
+
+  try {
+    const image = await loadImageElement(sourceUrl);
+    const longestEdge = Math.max(image.naturalWidth, image.naturalHeight, 1);
+    const scale = Math.min(3, Math.max(1.8, 2200 / longestEdge));
+    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    if (!context) {
+      throw new Error("Could not prepare the image for OCR.");
+    }
+
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, width, height);
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+    context.drawImage(image, 0, 0, width, height);
+
+    const imageData = context.getImageData(0, 0, width, height);
+    const pixels = imageData.data;
+
+    let minLuma = 255;
+    let maxLuma = 0;
+    for (let index = 0; index < pixels.length; index += 4) {
+      const luma = pixels[index] * 0.299 + pixels[index + 1] * 0.587 + pixels[index + 2] * 0.114;
+      if (luma < minLuma) minLuma = luma;
+      if (luma > maxLuma) maxLuma = luma;
+    }
+
+    const lumaRange = Math.max(1, maxLuma - minLuma);
+    const contrast = 42;
+    const contrastFactor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+    for (let index = 0; index < pixels.length; index += 4) {
+      const luma = pixels[index] * 0.299 + pixels[index + 1] * 0.587 + pixels[index + 2] * 0.114;
+      const normalized = ((luma - minLuma) / lumaRange) * 255;
+      const contrasted = contrastFactor * (normalized - 128) + 128;
+      const clamped = Math.max(0, Math.min(255, contrasted));
+      pixels[index] = clamped;
+      pixels[index + 1] = clamped;
+      pixels[index + 2] = clamped;
+      pixels[index + 3] = 255;
+    }
+
+    context.putImageData(imageData, 0, 0);
+    return await canvasToBlob(canvas, "image/png");
+  } finally {
+    URL.revokeObjectURL(sourceUrl);
+  }
 }
 
 export default function ImageToTextTool() {
@@ -56,6 +135,16 @@ export default function ImageToTextTool() {
   const [confidence, setConfidence] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const workerRef = useRef<import("tesseract.js").Worker | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (imageUrl) {
+        URL.revokeObjectURL(imageUrl);
+      }
+      void workerRef.current?.terminate();
+      workerRef.current = null;
+    };
+  }, [imageUrl]);
 
   /* ── load image ── */
   const loadImage = useCallback((file: File) => {
@@ -93,6 +182,8 @@ export default function ImageToTextTool() {
 
     try {
       const Tesseract = await import("tesseract.js");
+      const preparedImage = await preprocessImageForOcr(imageFile);
+      let useDirectRecognizeFallback = false;
 
       // Terminate previous worker if any
       if (workerRef.current) {
@@ -100,20 +191,35 @@ export default function ImageToTextTool() {
         workerRef.current = null;
       }
 
-      const worker = await Tesseract.createWorker(language, undefined, {
-        logger: (m: { status: string; progress: number }) => {
-          if (m.status === "recognizing text") {
-            setStatus("recognizing");
-            setProgress(Math.round(m.progress * 100));
-          } else if (m.status === "loading language traineddata") {
-            setStatus("loading");
-            setProgress(Math.round(m.progress * 100));
-          }
-        },
-      });
-      workerRef.current = worker;
+      const logger = (message: { status: string; progress: number }) => {
+        if (message.status === "recognizing text") {
+          setStatus("recognizing");
+          setProgress(Math.round(message.progress * 100));
+        } else {
+          setStatus("loading");
+          setProgress(Math.round(message.progress * 100));
+        }
+      };
 
-      const { data } = await worker.recognize(imageFile);
+      let worker: Awaited<ReturnType<typeof Tesseract.createWorker>> | null = null;
+      try {
+        worker = await Tesseract.createWorker(language, undefined, { logger });
+        workerRef.current = worker;
+        await worker.setParameters({
+          preserve_interword_spaces: "1",
+          tessedit_pageseg_mode: Tesseract.PSM.SPARSE_TEXT,
+          user_defined_dpi: "300",
+        });
+      } catch {
+        useDirectRecognizeFallback = true;
+      }
+
+      const { data } = useDirectRecognizeFallback
+        ? await Tesseract.recognize(preparedImage, language, {
+            logger,
+          })
+        : await worker!.recognize(preparedImage);
+
       setExtractedText(data.text);
       setConfidence(Math.round(data.confidence));
 
@@ -122,8 +228,10 @@ export default function ImageToTextTool() {
       setCharCount(text.length);
       setStatus("done");
 
-      await worker.terminate();
-      workerRef.current = null;
+      if (worker) {
+        await worker.terminate();
+        workerRef.current = null;
+      }
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "OCR extraction failed.");
       setStatus("error");

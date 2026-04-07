@@ -7,6 +7,8 @@ import {
   sanitizeBaseName,
 } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 /* ── Types ─────────────────────────────────────────────── */
 
 type EditableTextBlock = {
@@ -817,6 +819,10 @@ export default function PdfToPowerpointTool() {
 
   const loadFile = useCallback(async (incoming: File) => {
     setErrorMessage(null);
+    if (incoming.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     setResultBlob(null);
     setSlideCount(0);
 
@@ -976,7 +982,7 @@ export default function PdfToPowerpointTool() {
 
       {/* ── Error message ── */}
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}
@@ -1052,6 +1058,12 @@ export default function PdfToPowerpointTool() {
           </div>
         </>
       )}
+
+      <div className="rounded-xl border border-amber-500/10 bg-amber-500/5 px-4 py-3 text-center">
+        <p className="text-[11px] leading-relaxed text-amber-200/70">
+          ⚠️ This tool is under active development. Some complex layouts, custom fonts, layered graphics, or advanced formatting may not convert perfectly.
+        </p>
+      </div>
     </div>
   );
 }

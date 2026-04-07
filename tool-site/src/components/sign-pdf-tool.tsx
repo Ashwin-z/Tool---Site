@@ -11,6 +11,8 @@ import type { PointerEvent as ReactPointerEvent } from "react";
 import { PDFDocument, rgb } from "pdf-lib";
 import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 /* ─────────────── types ─────────────── */
 
 type PageBox = { width: number; height: number };
@@ -438,6 +440,7 @@ export default function SignPdfTool() {
   /* ════════ PDF loading ════════ */
 
   const handleFile = useCallback(async (file: File) => {
+    if (file.size > MAX_FILE_SIZE) { setErrorMsg(`File exceeds the 1GB size limit.`); return; }
     if (file.type !== "application/pdf") { setErrorMsg("Please upload a PDF file."); return; }
     try {
       setErrorMsg(null);

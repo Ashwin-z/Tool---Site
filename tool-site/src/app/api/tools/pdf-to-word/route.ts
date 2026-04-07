@@ -6,8 +6,12 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 /* ── Helpers ─────────────────────────────────────────────── */
 
@@ -100,6 +104,45 @@ try {
   # Brief pause to let Word finish internal PDF reflow
   Start-Sleep -Seconds 1
 
+  # ── Fix alignment: comprehensive grid & spacing overrides ──
+  $document.SnapToGrid = $false
+  $document.GridOriginFromMargin = $false
+  try { $document.AutoHyphenation = $false } catch {}
+
+  # Apply paragraph formatting fixes to entire document at once via Range
+  $rng = $document.Content
+  try { $rng.ParagraphFormat.SnapToGrid = $false } catch {}
+  try { $rng.ParagraphFormat.SpaceBeforeAuto = $false } catch {}
+  try { $rng.ParagraphFormat.SpaceAfterAuto = $false } catch {}
+  try { $rng.ParagraphFormat.AutoAdjustRightIndent = $false } catch {}
+  try { $rng.ParagraphFormat.DisableLineHeightGrid = $true } catch {}
+  try { $rng.ParagraphFormat.WidowControl = $false } catch {}
+  try { $rng.ParagraphFormat.KeepWithNext = $false } catch {}
+  try { $rng.ParagraphFormat.KeepTogether = $false } catch {}
+  try { $rng.ParagraphFormat.PageBreakBefore = $false } catch {}
+  try { $rng.Font.Kerning = 0 } catch {}
+
+  # Disable CJK grid layout mode per section
+  try {
+    foreach ($s in $document.Sections) {
+      $s.PageSetup.LayoutMode = 1  # wdLayoutModeDefault
+    }
+  } catch {}
+
+  # Lock shape / text-box anchoring to preserve positions
+  try {
+    foreach ($shape in $document.Shapes) {
+      $shape.LockAnchor = $true
+    }
+  } catch {}
+
+  # Also fix inline shapes and text frames
+  try {
+    foreach ($frame in $document.Frames) {
+      $frame.LockAnchor = $true
+    }
+  } catch {}
+
   # SaveAs2  → wdFormatDocumentDefault (16) = .docx
   $document.SaveAs2([string]$outputPath, [int]16)
 }
@@ -174,9 +217,14 @@ finally {
 /* ── Route handler ───────────────────────────────────────── */
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`pdf-to-word:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   if (process.platform !== "win32") {
     return NextResponse.json(
-      { error: "Native PDF-to-Word conversion is only available on Windows with Microsoft Word installed." },
+      { error: "This conversion is not available on this server." },
       { status: 501 },
     );
   }
@@ -188,6 +236,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please upload a PDF file." }, { status: 400 });
   }
 
+  if (input.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: "File size exceeds the 50 MB limit." }, { status: 400 });
+  }
+
   if (!/\.pdf$/i.test(input.name)) {
     return NextResponse.json(
       { error: "Only .pdf files are supported." },
@@ -195,7 +247,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolcraft-pdf2word-"));
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolmint-pdf2word-"));
   const safeName = sanitizeFileName(input.name) || "document.pdf";
   const inputPath = path.join(tempDir, safeName);
   const outputPath = path.join(tempDir, buildOutputFileName(safeName));
@@ -226,8 +278,8 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to convert PDF to Word.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[pdf-to-word]", error);
+    return NextResponse.json({ error: "Failed to convert PDF to Word." }, { status: 500 });
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }

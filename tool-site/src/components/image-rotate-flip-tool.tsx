@@ -27,6 +27,7 @@ function fmtSize(bytes: number): string {
 }
 
 const MAX_FILES = 25;
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 const ACCEPTED = "image/jpeg,image/png,image/webp,image/bmp,image/gif,image/avif,image/tiff";
 
@@ -114,17 +115,28 @@ export default function ImageRotateFlipTool() {
     async (files: FileList | File[]) => {
       const allImgs = Array.from(files).filter((f) => f.type.startsWith("image/"));
       if (allImgs.length === 0) return;
+
+      const oversized = allImgs.filter((f) => f.size > MAX_FILE_SIZE);
+      const validImgs = allImgs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+      if (oversized.length) {
+        setLimitWarning(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+        setTimeout(() => setLimitWarning(null), 5000);
+      }
+
+      if (!validImgs.length) return;
+
       const remaining = MAX_FILES - imagesRef.current.length;
       if (remaining <= 0) {
         setLimitWarning(`Maximum ${MAX_FILES} images allowed. Please remove some images first.`);
         setTimeout(() => setLimitWarning(null), 4000);
         return;
       }
-      if (allImgs.length > remaining) {
-        setLimitWarning(`Only the first ${remaining} of ${allImgs.length} images were added (max ${MAX_FILES}).`);
+      if (validImgs.length > remaining) {
+        setLimitWarning(`Only the first ${remaining} of ${validImgs.length} images were added (max ${MAX_FILES}).`);
         setTimeout(() => setLimitWarning(null), 4000);
       }
-      const imgs = allImgs.slice(0, remaining);
+      const imgs = validImgs.slice(0, remaining);
       setProcessing(true);
       try {
         const results = await Promise.all(
@@ -377,7 +389,7 @@ export default function ImageRotateFlipTool() {
       </div>
 
       {limitWarning && (
-        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-200">
           ⚠️ {limitWarning}
         </div>
       )}

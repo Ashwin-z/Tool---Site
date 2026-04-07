@@ -3,6 +3,8 @@ import net from "node:net";
 
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -159,7 +161,7 @@ async function fetchTextWithTimeout(url: string, timeoutMs: number): Promise<Res
       signal: controller.signal,
       headers: {
         Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "User-Agent": "ToolCraft HTML to PDF",
+        "User-Agent": "ToolMint HTML to PDF",
       },
       cache: "no-store",
     });
@@ -203,6 +205,11 @@ async function fetchStylesheets(html: string, pageUrl: string): Promise<{ href: 
 }
 
 export async function GET(request: Request) {
+  const rl = checkRateLimit(`html-to-pdf-fetch:${getClientIp(request)}`, { maxRequests: 15, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const requestUrl = new URL(request.url);
   const targetUrl = requestUrl.searchParams.get("url") ?? "";
 

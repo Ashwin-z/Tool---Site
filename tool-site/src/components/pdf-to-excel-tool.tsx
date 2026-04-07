@@ -11,6 +11,7 @@ import {
 /* ── Constants ─────────────────────────────────────────── */
 
 const MAX_FILES = 25;
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -100,20 +101,27 @@ export default function PdfToExcelTool() {
         return;
       }
 
+      const oversized = pdfs.filter((f) => f.size > MAX_FILE_SIZE);
+      const validPdfs = pdfs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+      if (oversized.length) {
+        setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+      }
+
+      if (!validPdfs.length) return;
+
       const remainingSlots = MAX_FILES - queue.length;
       if (remainingSlots <= 0) {
         setErrorMessage(`You can convert a maximum of ${MAX_FILES} PDF files at a time.`);
         return;
       }
 
-      const limited = pdfs.slice(0, remainingSlots);
+      const limited = validPdfs.slice(0, remainingSlots);
       setQueue((prev) => [...prev, ...limited.map((file) => ({ id: uid(), file }))]);
       setResult(null);
-      setErrorMessage(
-        pdfs.length > remainingSlots
-          ? `Only the first ${remainingSlots} file${remainingSlots > 1 ? "s were" : " was"} added.`
-          : null,
-      );
+      if (validPdfs.length > remainingSlots) {
+        setErrorMessage(`Only the first ${remainingSlots} file${remainingSlots > 1 ? "s were" : " was"} added.`);
+      }
     },
     [queue.length],
   );
@@ -285,7 +293,7 @@ export default function PdfToExcelTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}
@@ -388,6 +396,12 @@ export default function PdfToExcelTool() {
           </div>
         </>
       )}
+
+      <div className="rounded-xl border border-amber-500/10 bg-amber-500/5 px-4 py-3 text-center">
+        <p className="text-[11px] leading-relaxed text-amber-200/70">
+          ⚠️ This tool is under active development. Some complex tables, merged cells, scanned PDFs, or advanced layouts may not convert perfectly.
+        </p>
+      </div>
     </div>
   );
 }

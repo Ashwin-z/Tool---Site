@@ -73,6 +73,9 @@ function uid(): string {
   return `f_${++idCounter}_${Date.now()}`;
 }
 
+const MAX_FILES = 25;
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
+
 async function compressOnePdfOnServer(
   file: File,
   level: CompressionLevel,
@@ -171,12 +174,31 @@ export default function PdfCompressorTool() {
 
   const addFiles = useCallback((fileList: FileList | null) => {
     if (!fileList) return;
-    const pdfs = Array.from(fileList).filter((file) => file.type === "application/pdf");
+    const allPdfs = Array.from(fileList).filter((file) => file.type === "application/pdf");
+    if (!allPdfs.length) return;
+
+    const oversized = allPdfs.filter((f) => f.size > MAX_FILE_SIZE);
+    const pdfs = allPdfs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+    if (oversized.length) {
+      setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+    }
+
     if (!pdfs.length) return;
 
-    setQueue((prev) => [...prev, ...pdfs.map((file) => ({ id: uid(), file }))]);
+    setQueue((prev) => {
+      const remainingSlots = MAX_FILES - prev.length;
+      if (remainingSlots <= 0) {
+        setErrorMessage(`You can upload a maximum of ${MAX_FILES} PDFs at a time.`);
+        return prev;
+      }
+      const limited = pdfs.slice(0, remainingSlots);
+      if (pdfs.length > remainingSlots) {
+        setErrorMessage(`Only the first ${remainingSlots} PDF${remainingSlots > 1 ? "s were" : " was"} added. Maximum ${MAX_FILES} files allowed.`);
+      }
+      return [...prev, ...limited.map((file) => ({ id: uid(), file }))];
+    });
     setResult(null);
-    setErrorMessage(null);
   }, []);
 
   const removeFile = useCallback((id: string) => {
@@ -356,7 +378,7 @@ export default function PdfCompressorTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}

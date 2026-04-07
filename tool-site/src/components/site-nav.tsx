@@ -20,6 +20,25 @@ type Category = {
   sections?: ToolSection[];
 };
 
+function ChevronDownIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 7.5 10 12.5 15 7.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const categories: Category[] = [
   {
     id: "pdf",
@@ -143,8 +162,8 @@ const categories: Category[] = [
     id: "cal",
     icon: "🔢",
     name: "Calculators",
-    subtitle: "15 free calculators for math, health and finance",
-    count: 15,
+    subtitle: "16 free calculators for math, health and finance",
+    count: 16,
     color: "bg-amber-400/15 text-amber-300",
     tools: [
       { name: "Scientific Calculator", desc: "Full scientific calc", href: "/tools/scientific-calculator", badge: "New" },
@@ -159,6 +178,7 @@ const categories: Category[] = [
       { name: "Break-even Calculator", desc: "Units & revenue to break even", href: "/tools/breakeven-calculator", badge: "New" },
       { name: "GPA Calculator", desc: "GPA with custom grading scales", href: "/tools/gpa-calculator", badge: "New" },
       { name: "Work Hours Calculator", desc: "Track weekly hours & pay", href: "/tools/work-hours-calculator", badge: "New" },
+      { name: "Tip Calculator", desc: "Split bills & calculate tips", href: "/tools/tip-calculator", badge: "New" },
     ],
   },
   {
@@ -235,7 +255,7 @@ const categories: Category[] = [
     icon: "✨",
     name: "More Tools",
     subtitle: "Handy utilities for daily tasks",
-    count: 10,
+    count: 12,
     color: "bg-fuchsia-400/15 text-fuchsia-300",
     tools: [
       { name: "Calorie Calculator", desc: "TDEE, BMR, macros", href: "/tools/calorie-calculator", badge: "New" },
@@ -246,6 +266,8 @@ const categories: Category[] = [
       { name: "YouTube Thumbnail Downloader", desc: "Grab video thumbnails", href: "/tools/youtube-thumbnail-downloader", badge: "New" },
       { name: "QR Code Scanner", desc: "Scan QR codes via camera or image", href: "/tools/qr-code-scanner", badge: "New" },
       { name: "QR Code Generator", desc: "Create QR codes from text or URL", href: "/tools/qr-code-generator", badge: "New" },
+      { name: "Tic Tac Toe", desc: "Play vs AI or 2 player", href: "/tools/tic-tac-toe", badge: "New" },
+      { name: "Rock Paper Scissors", desc: "Play vs computer", href: "/tools/rock-paper-scissors", badge: "New" },
     ],
   },
 ];
@@ -289,6 +311,17 @@ export default function SiteNav() {
   const resolvedActiveCat = activeCategoryFromPath ?? activeCat;
   const activeCategory = categories.find((cat) => cat.id === resolvedActiveCat) ?? categories[0];
 
+  const toggleCategory = useCallback(
+    (categoryId: string) => {
+      setActiveCat(categoryId);
+      setOpenSubmenus((prev) => ({
+        ...prev,
+        [categoryId]: !(prev[categoryId] ?? (activeCategoryFromPath === categoryId)),
+      }));
+    },
+    [activeCategoryFromPath],
+  );
+
   return (
     <section
       className={`grid overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,.25)] transition-all duration-300 ${
@@ -306,11 +339,11 @@ export default function SiteNav() {
         <div className="space-y-1">
           {categories.map((cat) => {
             const isActive = resolvedActiveCat === cat.id;
-            const isOpen = openSubmenus[cat.id] || activeCategoryFromPath === cat.id;
+            const isOpen = openSubmenus[cat.id] ?? (activeCategoryFromPath === cat.id);
             return (
               <div key={cat.id}>
                 <button
-                  onClick={() => setActiveCat(cat.id)}
+                  onClick={() => toggleCategory(cat.id)}
                   className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm transition ${
                     isActive
                       ? "border-l-2 border-[#6c63ff]"
@@ -329,16 +362,10 @@ export default function SiteNav() {
                     {cat.count}
                   </span>
                   <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenSubmenus((prev) => ({ ...prev, [cat.id]: !prev[cat.id] }));
-                    }}
-                    className={`rounded p-1 text-xs transition ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
+                    className="rounded p-1"
                     style={{ color: isOpen ? "var(--accent)" : "var(--muted-3)" }}
                   >
-                    ⌄
+                    <ChevronDownIcon open={isOpen} />
                   </span>
                 </button>
 
@@ -417,7 +444,50 @@ export default function SiteNav() {
             .filter((cat) => cat.id === resolvedActiveCat)
             .map((cat) => (
               <div key={cat.id} className="mb-5">
-                {cat.sections ? (
+                {cat.id === "pdf" && cat.sections ? (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    {cat.sections.map((section) => (
+                      <div
+                        key={section.heading}
+                        className="rounded-xl border p-3"
+                        style={{
+                          borderColor: "var(--border)",
+                          background: "var(--surface-2)",
+                        }}
+                      >
+                        <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--accent)" }}>
+                          {section.heading}
+                        </h4>
+                        <div className="space-y-2">
+                          {section.items.map((tool) => (
+                            <Link
+                              key={tool.name}
+                              href={tool.href}
+                              className="flex items-center gap-3 rounded-lg border px-3 py-2 transition hover:-translate-y-0.5"
+                              style={{
+                                borderColor: pathname === tool.href ? "rgba(108,99,255,0.4)" : "transparent",
+                                background: pathname === tool.href ? "var(--surface-3)" : "transparent",
+                              }}
+                            >
+                              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-md ${cat.color}`}>
+                                {cat.icon}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
+                                <div className="text-xs" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
+                              </div>
+                              {tool.badge && (
+                                <span className={`ml-auto rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
+                                  {tool.badge}
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : cat.sections ? (
                   <>
                     {(() => {
                       const sectionHrefs = new Set(cat.sections.flatMap((s) => s.items.map((t) => t.href)));

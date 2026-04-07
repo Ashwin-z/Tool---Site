@@ -21,9 +21,32 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ToolCraft — Free Online Tools",
+  metadataBase: new URL("https://toolmint.com"),
+  title: {
+    template: "%s | ToolMint",
+    default: "ToolMint — Free Online PDF Tools, Converters & Calculators",
+  },
   description:
-    "ToolCraft offers free online tools like Word Counter, calculators, JSON formatter, encoders, and more.",
+    "ToolMint offers 80+ free online tools — compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
+  keywords: [
+    "free online tools",
+    "pdf tools online",
+    "pdf compressor",
+    "pdf merger",
+    "image converter",
+    "online calculator",
+    "file converter",
+    "toolmint",
+  ],
+  openGraph: {
+    siteName: "ToolMint",
+    type: "website",
+    locale: "en_US",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

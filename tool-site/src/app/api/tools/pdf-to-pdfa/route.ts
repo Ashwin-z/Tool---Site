@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, readFile, unlink, mkdir, writeFile as writeFileAsync } from "fs/promises";
-import { join } from "path";
+import { access, writeFile, readFile, unlink, mkdir } from "fs/promises";
+import { constants as fsConstants } from "fs";
+import path, { join } from "path";
 import { randomUUID } from "crypto";
 import { spawn } from "child_process";
 import { tmpdir } from "os";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const maxDuration = 120; // 2 min max runtime
 
-/** Path to Ghostscript console binary (Windows) */
-const GS_BIN = join(process.cwd(), "bin", "ghostscript", "gs", "bin", "gswin64c.exe");
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
 /** Path to the ICC profile directory */
 const ICC_DIR = join(process.cwd(), "bin", "ghostscript", "gs", "iccprofiles");
@@ -16,7 +18,84 @@ const ICC_DIR = join(process.cwd(), "bin", "ghostscript", "gs", "iccprofiles");
 /** Path to Ghostscript lib (contains PDFA_def.ps etc.) */
 const GS_LIB = join(process.cwd(), "bin", "ghostscript", "gs", "lib");
 
+async function pathExists(targetPath: string): Promise<boolean> {
+  try {
+    await access(targetPath, fsConstants.F_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveGhostscriptPath(): Promise<string | null> {
+  const candidates = [
+    process.env.GHOSTSCRIPT_PATH,
+    path.join(process.cwd(), "bin", "ghostscript", "gs", "bin", "gswin64c.exe"),
+    path.join(process.cwd(), "bin", "ghostscript", "gs", "bin", "gswin32c.exe"),
+    "gswin64c.exe",
+    "gswin32c.exe",
+    "gs",
+  ].filter(Boolean) as string[];
+
+  for (const candidate of candidates) {
+    if (candidate.includes(path.sep)) {
+      if (await pathExists(candidate)) return candidate;
+      continue;
+    }
+
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const proc = spawn(candidate, ["-version"], { stdio: "ignore", windowsHide: true });
+        proc.once("error", reject);
+        proc.once("exit", (code) => {
+          if (code === 0) resolve();
+          else reject(new Error(`Exit code ${code}`));
+        });
+      });
+      return candidate;
+    } catch {
+      // Try next candidate.
+    }
+  }
+
+  return null;
+}
+
+function escapePostScriptString(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+}
+
+async function buildPdfaDefinition(title: string, iccPath: string): Promise<string> {
+  const templatePath = join(GS_LIB, "PDFA_def.ps");
+  const template = await readFile(templatePath, "utf-8");
+
+  return template
+    .replace("/Title (Title)", `/Title (${escapePostScriptString(title)})`)
+    .replace("/ICCProfile (srgb.icc)", `/ICCProfile (${escapePostScriptString(iccPath)})`)
+    .replace("/OutputConditionIdentifier (sRGB)", "/OutputConditionIdentifier (sRGB IEC61966-2.1)");
+}
+
+function formatGhostscriptError(stderr: string, code: number): string {
+  const normalized = stderr
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const relevant = normalized.find((line) => /error|unable|invalid|undefined|icc|pdfa/i.test(line))
+    ?? normalized.at(-1);
+
+  if (!relevant) {
+    return `Ghostscript exited with code ${code}. The PDF may be malformed or unsupported.`;
+  }
+
+  return `Ghostscript exited with code ${code}: ${relevant}`;
+}
+
 export async function POST(request: NextRequest) {
+  const rl = checkRateLimit(`pdf-to-pdfa:${getClientIp(request)}`, { maxRequests: 8, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const contentType = request.headers.get("content-type") ?? "";
   if (!contentType.includes("multipart/form-data")) {
     return NextResponse.json({ error: "Expected multipart/form-data" }, { status: 400 });
@@ -30,9 +109,21 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Please upload a valid PDF file." }, { status: 400 });
   }
 
+  if (file.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: "File size exceeds the 100 MB limit." }, { status: 400 });
+  }
+
   // Validate conformance level
   const validLevels = ["1", "2", "3"];
   const level = validLevels.includes(conformance) ? conformance : "2";
+  const ghostscriptPath = await resolveGhostscriptPath();
+
+  if (!ghostscriptPath) {
+    return NextResponse.json(
+      { error: "PDF/A conversion is temporarily unavailable. Please try again later." },
+      { status: 503 },
+    );
+  }
 
   const sessionDir = join(tmpdir(), `pdfa-${randomUUID()}`);
   await mkdir(sessionDir, { recursive: true });
@@ -46,56 +137,37 @@ export async function POST(request: NextRequest) {
     const arrayBuf = await file.arrayBuffer();
     await writeFile(inputPath, Buffer.from(arrayBuf));
 
-    // Create a custom PDFA_def.ps that points to our ICC profile
     const iccPath = join(ICC_DIR, "srgb.icc").replace(/\\/g, "/");
-    const pdfaDef = `
-% Custom PDFA_def.ps for PDF/A-${level}b conversion
-systemdict /ProcessColorModel known {
-} {
-  /ProcessColorModel /DeviceRGB def
-} ifelse
+    const pdfaDef = await buildPdfaDefinition(file.name, iccPath);
+    await writeFile(pdfaDefPath, pdfaDef, "utf-8");
 
-[{
-  /ICCProfile (${iccPath}) def
-  /OutputCondition (sRGB)
-  /OutputConditionIdentifier (Custom)
-  /RegistryName (http://www.color.org)
-  /Info (sRGB IEC61966-2.1)
-  /OutputConditionIdentifier (sRGB IEC61966-2.1)
-} /PUT pdfmark
-
-[{
-  /Title (${file.name.replace(/'/g, "\\'")})
-  /DOCINFO pdfmark
-`;
-    await writeFileAsync(pdfaDefPath, pdfaDef, "utf-8");
-
-    // Build Ghostscript arguments
     const gsArgs = [
       "-dPDFA=" + level,
       "-dBATCH",
       "-dNOPAUSE",
       "-dNOOUTERSAVE",
+      "-dSAFER",
+      "-dQUIET",
       "-sProcessColorModel=DeviceRGB",
       "-sColorConversionStrategy=RGB",
       "-sDEVICE=pdfwrite",
       "-dPDFACompatibilityPolicy=1",
+      `--permit-file-read=${iccPath}`,
       `-sOutputFile=${outputPath}`,
       `-I${GS_LIB}`,
       pdfaDefPath,
       inputPath,
     ];
 
-    // Run Ghostscript
-    const result = await new Promise<{ code: number; stderr: string }>((resolve, reject) => {
-      const proc = spawn(GS_BIN, gsArgs, { cwd: sessionDir, windowsHide: true });
+    const result = await new Promise<{ code: number; output: string }>((resolve, reject) => {
+      const proc = spawn(ghostscriptPath, gsArgs, { cwd: sessionDir, windowsHide: true });
 
-      let stderr = "";
+      let output = "";
       proc.stderr.on("data", (chunk: Buffer) => {
-        stderr += chunk.toString();
+        output += chunk.toString();
       });
-      proc.stdout.on("data", () => {
-        /* discard stdout */
+      proc.stdout.on("data", (chunk: Buffer) => {
+        output += chunk.toString();
       });
 
       const timeout = setTimeout(() => {
@@ -105,7 +177,7 @@ systemdict /ProcessColorModel known {
 
       proc.on("close", (code) => {
         clearTimeout(timeout);
-        resolve({ code: code ?? 1, stderr });
+        resolve({ code: code ?? 1, output });
       });
 
       proc.on("error", (err) => {
@@ -115,9 +187,9 @@ systemdict /ProcessColorModel known {
     });
 
     if (result.code !== 0) {
-      console.error("[pdf-to-pdfa] GS stderr:", result.stderr);
+      console.error("[pdf-to-pdfa] GS output:", result.output);
       return NextResponse.json(
-        { error: `Ghostscript exited with code ${result.code}. The PDF may be malformed or unsupported.` },
+        { error: formatGhostscriptError(result.output, result.code) },
         { status: 500 },
       );
     }
@@ -137,7 +209,7 @@ systemdict /ProcessColorModel known {
   } catch (err) {
     console.error("[pdf-to-pdfa] error:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "PDF/A conversion failed." },
+      { error: "PDF/A conversion failed." },
       { status: 500 },
     );
   } finally {

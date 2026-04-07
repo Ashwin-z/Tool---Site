@@ -26,7 +26,7 @@ export default function SiteHeader() {
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight" style={{ color: "var(--foreground)" }}>
           <span className="grid h-7 w-7 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs text-white">⚡</span>
-          Tool<span className="text-[#6c63ff]">Craft</span>
+          Tool<span className="text-[#6c63ff]">Mint</span>
         </Link>
 
         {/* Search */}

@@ -73,12 +73,62 @@ function esc(str: string): string {
 
 export default function OgTagGeneratorTool() {
   const [fields, setFields] = useState<OgFields>(DEFAULTS);
+  const [importUrl, setImportUrl] = useState("");
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState("");
+  const [importSuccess, setImportSuccess] = useState("");
 
   const update = (key: keyof OgFields, value: string) => {
     setFields((prev) => ({ ...prev, [key]: value }));
   };
 
   const output = useMemo(() => generateTags(fields), [fields]);
+
+  const importFromUrl = async () => {
+    const target = importUrl.trim();
+    if (!target) {
+      setImportError("Enter a URL to import metadata from.");
+      setImportSuccess("");
+      return;
+    }
+
+    setImporting(true);
+    setImportError("");
+    setImportSuccess("");
+
+    try {
+      const response = await fetch("/api/tools/meta-tag-generator/fetch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: target }),
+      });
+
+      const payload = (await response.json()) as {
+        imported?: Partial<OgFields> & { sourceUrl?: string };
+        error?: string;
+      };
+
+      if (!response.ok || payload.error || !payload.imported) {
+        setImportError(payload.error || "Could not import metadata from that URL.");
+        return;
+      }
+
+      const imported = payload.imported;
+      setFields((prev) => ({
+        ...prev,
+        ...imported,
+        type: imported.type || prev.type,
+        twitterCard: imported.twitterCard || prev.twitterCard,
+        locale: imported.locale || prev.locale,
+      }));
+
+      setImportSuccess(`Imported metadata from ${imported.sourceUrl || target}`);
+    } catch {
+      setImportError("Network error while importing metadata.");
+    } finally {
+      setImporting(false);
+    }
+  };
 
   const copy = async () => {
     try {
@@ -99,6 +149,39 @@ export default function OgTagGeneratorTool() {
         <div className="border-b border-border px-5 py-3">
           <h2 className="font-display text-sm font-bold tracking-tight text-white">OG Tag Generator</h2>
           <p className="mt-1 text-xs text-muted">Generate Open Graph & Twitter Card meta tags for your pages.</p>
+        </div>
+
+        <div className="border-b border-border px-5 py-4">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+            <div>
+              <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-2">
+                Import Existing Tags From URL
+              </label>
+              <input
+                value={importUrl}
+                onChange={(e) => setImportUrl(e.target.value)}
+                placeholder="https://example.com/page"
+                className="w-full rounded-lg border border-border bg-surface-2 px-4 py-2.5 font-mono text-sm text-white outline-none placeholder:text-white/20 focus:border-[#6c63ff]/50"
+              />
+            </div>
+            <button
+              onClick={importFromUrl}
+              disabled={importing}
+              className="rounded-lg border border-[#6c63ff]/40 bg-[#6c63ff]/10 px-4 py-2.5 text-sm font-semibold text-[#6c63ff] transition hover:bg-[#6c63ff]/20 disabled:opacity-50"
+            >
+              {importing ? "Importing..." : "Import"}
+            </button>
+          </div>
+          {importError && (
+            <div className="mt-2 rounded-lg border border-red-400/20 bg-red-400/5 px-3 py-2 text-xs text-red-400">
+              {importError}
+            </div>
+          )}
+          {importSuccess && (
+            <div className="mt-2 rounded-lg border border-[#38d9a9]/20 bg-[#38d9a9]/5 px-3 py-2 text-xs text-[#38d9a9]">
+              {importSuccess}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-6 px-5 py-5 lg:grid-cols-2">

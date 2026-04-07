@@ -5,7 +5,8 @@ import { useCallback, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 
 const MAX_FILES = 25;
-const DRAG_TYPE = "application/x-toolcraft-pdf-id";
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
+const DRAG_TYPE = "application/x-toolmint-pdf-id";
 
 type QueuedPdf = {
   id: string;
@@ -109,26 +110,35 @@ export default function PdfMergerTool() {
         return;
       }
 
+      const oversized = pdfs.filter((f) => f.size > MAX_FILE_SIZE);
+      const validPdfs = pdfs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+      if (oversized.length) {
+        setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+      }
+
+      if (!validPdfs.length) return;
+
       const remainingSlots = MAX_FILES - queue.length;
       if (remainingSlots <= 0) {
         setErrorMessage(`You can upload a maximum of ${MAX_FILES} PDFs at a time.`);
         return;
       }
 
-      const limitedPdfs = pdfs.slice(0, remainingSlots);
+      const limitedPdfs = validPdfs.slice(0, remainingSlots);
 
       try {
         const nextItems = await Promise.all(limitedPdfs.map((file) => readQueuedPdf(file)));
         setQueue((prev) => [...prev, ...nextItems]);
         setResult(null);
 
-        if (pdfs.length > remainingSlots) {
+        if (validPdfs.length > remainingSlots) {
           setErrorMessage(
             `Only the first ${remainingSlots} PDF${remainingSlots > 1 ? "s were" : " was"} added. Maximum ${MAX_FILES} PDFs allowed.`,
           );
-        } else if (selected.length !== pdfs.length) {
+        } else if (!oversized.length && selected.length !== pdfs.length) {
           setErrorMessage("Some non-PDF files were skipped.");
-        } else {
+        } else if (!oversized.length) {
           setErrorMessage(null);
         }
       } catch {
@@ -402,14 +412,14 @@ export default function PdfMergerTool() {
                         </div>
 
                         <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                          <span className="rounded-lg border border-border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">
+                          <span className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600 dark:border-border dark:bg-transparent dark:text-muted">
                             Drag to reorder
                           </span>
                           <button
                             type="button"
                             onClick={() => handleMove(index, index - 1)}
                             disabled={index === 0}
-                            className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
                           >
                             ↑ Up
                           </button>
@@ -417,14 +427,14 @@ export default function PdfMergerTool() {
                             type="button"
                             onClick={() => handleMove(index, index + 1)}
                             disabled={index === queue.length - 1}
-                            className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
                           >
                             ↓ Down
                           </button>
                           <button
                             type="button"
                             onClick={() => handleRemove(item.id)}
-                            className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/20"
+                            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition hover:border-red-300 hover:bg-red-100 dark:border-transparent dark:bg-red-500/10 dark:text-red-200 dark:hover:bg-red-500/20"
                           >
                             Remove
                           </button>

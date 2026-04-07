@@ -3,41 +3,133 @@ import Link from "next/link";
 import GrammarCheckerTool from "@/components/grammar-checker-tool";
 
 export const metadata: Metadata = {
-  title: "Grammar Checker — Free Online Spelling & Grammar Tool",
+  title: "Grammar Checker Online Free — Fix Spelling & Grammar Instantly",
   description:
-    "Free online Grammar Checker. Instantly find and fix spelling mistakes, capitalization errors, repeated words, confused words, run-on sentences, and more — no sign-up required.",
+    "Check grammar and spelling online for free with ToolMint. Find and fix spelling mistakes, capitalization errors, repeated words, confused words, and run-on sentences. No signup required.",
+  keywords: [
+    "grammar checker",
+    "grammar checker online free",
+    "spell check online",
+    "fix grammar online",
+    "free grammar checker",
+    "spelling and grammar tool",
+    "online proofreader",
+    "grammar correction tool",
+  ],
+  alternates: { canonical: "/tools/grammar-checker" },
+  openGraph: {
+    title: "Grammar Checker Online Free | ToolMint",
+    description:
+      "Find and fix spelling, capitalization, and grammar errors instantly. Rule-based checks — no signup needed.",
+    url: "/tools/grammar-checker",
+  },
 };
 
+const steps = [
+  { title: "Paste your text", desc: "Type or paste the text you want to proofread." },
+  { title: "Click Check Grammar", desc: "The tool scans for spelling, capitalization, repeated-word, and grammar issues." },
+  { title: "Review suggestions", desc: "Each issue is highlighted with a suggestion you can accept or skip." },
+  { title: "Apply fixes", desc: "Fix issues one by one or apply all suggestions at once, then copy the corrected text." },
+];
+
+const faqs = [
+  {
+    q: "What types of errors does it detect?",
+    a: "Spelling mistakes, capitalization errors, repeated words, commonly confused words (e.g. their/there), and run-on sentences.",
+  },
+  {
+    q: "Is this AI-powered?",
+    a: "The current version uses rule-based checks. An advanced AI-powered grammar analysis mode is under development.",
+  },
+  {
+    q: "Does it work with non-English text?",
+    a: "The rule-based engine currently focuses on English. Support for additional languages is planned.",
+  },
+  {
+    q: "Can I apply all fixes at once?",
+    a: "Yes. Click the 'Apply All' button to accept every suggestion in one step, or review them individually.",
+  },
+  {
+    q: "Is my text sent to a server?",
+    a: "No. All grammar and spelling checks run locally in your browser. Your text is never transmitted.",
+  },
+];
+
 export default function GrammarCheckerPage() {
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
   return (
-    <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-      <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-        ← Back to home
-      </Link>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <main className="text-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
+        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
+          ← Back to home
+        </Link>
 
-      <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-white md:text-5xl">
-        Grammar Checker
-      </h1>
+        <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
+          Grammar Checker — Free Online
+        </h1>
 
-      <div className="mt-4 flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
-        <span className="text-lg">🚧</span>
-        <div>
-          <p className="text-sm font-semibold text-amber-300">Under Construction</p>
-          <p className="text-xs text-amber-300/70">
-            This tool uses rule-based checks. Advanced AI-powered grammar analysis is coming soon.
-          </p>
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+          <span className="text-lg">🚧</span>
+          <div>
+            <p className="text-sm font-semibold text-amber-300">Under Construction</p>
+            <p className="text-xs text-amber-300/70">
+              This tool uses rule-based checks. Advanced AI-powered grammar analysis is coming soon.
+            </p>
+          </div>
         </div>
-      </div>
 
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-        Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,
-        capitalization errors, repeated words, confused words, and more. Fix issues one by one or
-        apply all suggestions at once.
-      </p>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
+          Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,
+          capitalization errors, repeated words, confused words, and more. Fix issues one by one or
+          apply all suggestions at once with ToolMint.
+        </p>
 
-      <div className="mt-8">
-        <GrammarCheckerTool />
-      </div>
-    </main>
+        <div className="mt-8">
+          <GrammarCheckerTool />
+        </div>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How to Check Grammar Online
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map((s, i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
+                <h3 className="mt-2 font-semibold text-foreground">{s.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            Frequently Asked Questions
+          </h2>
+          <dl className="mt-6 space-y-6">
+            {faqs.map((f, i) => (
+              <div key={i}>
+                <dt className="font-semibold text-foreground">{f.q}</dt>
+                <dd className="mt-1 text-sm leading-6 text-muted">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      </main>
+    </>
   );
 }

@@ -1,100 +1,41 @@
+import { readdir } from "node:fs/promises";
+import path from "node:path";
+
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://toolcraft.site";
+const BASE_URL = "https://toolmint.com";
 
-  const urls = [
-    "",
-    "/tools",
-    "/tools/pdf-compressor",
-    "/tools/pdf-merger",
-    "/tools/pdf-splitter",
-    "/tools/rotate-pdf",
-    "/tools/edit-pdf",
-    "/tools/protect-pdf",
-    "/tools/unlock-pdf",
-    "/tools/redact-pdf",
-    "/tools/compare-pdf",
-    "/tools/add-page-numbers",
-    "/tools/add-watermark",
-    "/tools/crop-pdf",
-    "/tools/image-to-pdf",
-    "/tools/word-to-pdf",
-    "/tools/powerpoint-to-pdf",
-    "/tools/excel-to-pdf",
-    "/tools/html-to-pdf",
-    "/tools/pdf-to-jpg",
-    "/tools/pdf-to-word",
-    "/tools/pdf-to-powerpoint",
-    "/tools/pdf-to-excel",
-    "/tools/pdf-to-pdfa",
-    "/tools/word-counter",
-    "/tools/json-formatter",
-    "/tools/code-snippet",
-    "/tools/python-code-editor",
-    "/tools/base64-encoder-decoder",
-    "/tools/url-encoder-decoder",
-    "/tools/password-generator",
-    "/tools/random-number-generator",
-    "/tools/length-converter",
-    "/tools/weight-converter",
-    "/tools/temperature-converter",
-    "/tools/image-compressor",
-    "/tools/image-resizer",
-    "/tools/image-cropper",
-    "/tools/png-to-jpg",
-    "/tools/jpg-to-png",
-    "/tools/image-rotate-flip",
-    "/tools/image-converter",
-    "/tools/image-to-text",
-    "/tools/pdf-to-text",
-    "/tools/scientific-calculator",
-    "/tools/percentage-calculator",
-    "/tools/age-calculator",
-    "/tools/bmi-calculator",
-    "/tools/loan-emi-calculator",
-    "/tools/compound-interest-calculator",
-    "/tools/profit-margin-calculator",
-    "/tools/roi-calculator",
-    "/tools/gst-calculator",
-    "/tools/text-case-converter",
-    "/tools/text-reverser",
-    "/tools/whitespace-remover",
-    "/tools/grammar-checker",
-    "/tools/calorie-calculator",
-    "/tools/random-number-generator",
-    "/tools/meta-tag-generator",
-    "/tools/meta-title-description-checker",
-    "/tools/sitemap-generator",
-    "/tools/robots-txt-generator",
-    "/tools/stopwatch",
-    "/tools/date-difference",
-    "/tools/color-converter",
-    "/tools/wifi-speed-checker",
-    "/tools/youtube-thumbnail-downloader",
-    "/tools/qr-code-scanner",
-    "/tools/qr-code-generator",
-    "/tools/keyword-density",
-    "/tools/og-tag-generator",
-    "/tools/work-hours-calculator",
-    "/tools/text-compare",
-    "/tools/random-name-picker",
-    "/tools/number-to-words",
-    "/tools/breakeven-calculator",
-    "/tools/gpa-calculator",
-    "/tools/file-size-converter",
-    "/tools/invoice-generator",
-    "/tools/quotation-generator",
-    "/privacy",
-    "/terms",
-    "/contact",
-    "/site-map",
-  ];
+const STATIC_ROUTES = [
+  "",
+  "/tools",
+  "/privacy",
+  "/terms",
+  "/cookie-policy",
+  "/contact",
+  "/about",
+  "/site-map",
+  "/disclaimer",
+];
 
-  return urls.map((path) => ({
-    url: `${base}${path}`,
+async function getToolRoutes(): Promise<string[]> {
+  const toolsDir = path.join(process.cwd(), "src", "app", "tools");
+  const entries = await readdir(toolsDir, { withFileTypes: true });
+
+  return entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .filter((name) => !name.startsWith("[") && !name.startsWith("("))
+    .map((name) => `/tools/${name}`)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const routes = [...new Set([...STATIC_ROUTES, ...(await getToolRoutes())])];
+
+  return routes.map((route) => ({
+    url: `${BASE_URL}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
-    priority: path === "" ? 1 : 0.7,
+    priority: route === "" ? 1 : route === "/tools" ? 0.9 : 0.7,
   }));
 }

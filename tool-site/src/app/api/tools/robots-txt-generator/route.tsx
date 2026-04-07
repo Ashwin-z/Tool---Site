@@ -66,7 +66,7 @@ async function safeFetchText(url: string) {
   try {
     const response = await fetch(url, {
       headers: {
-        "user-agent": "Mozilla/5.0 ToolCraft Robots Generator",
+        "user-agent": "Mozilla/5.0 ToolMint Robots Generator",
         accept: "text/html,application/xml,text/plain,*/*",
       },
       redirect: "follow",

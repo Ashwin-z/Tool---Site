@@ -5,6 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
 import { PDFDocument } from "pdf-lib";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type SplitTab = "range" | "pages";
 type RangeMode = "custom" | "fixed";
 
@@ -393,7 +395,7 @@ export default function PdfSplitterTool() {
 
   useEffect(() => {
     if (!uploaded) {
-      setPagePreviewCache({});
+      setPagePreviewCache((prev) => (Object.keys(prev).length ? {} : prev));
       setPreviewLoading(false);
       return;
     }
@@ -435,6 +437,11 @@ export default function PdfSplitterTool() {
 
     if (!file) {
       setErrorMessage("Please upload a PDF file.");
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
       return;
     }
 
@@ -718,7 +725,7 @@ export default function PdfSplitterTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}
@@ -1169,7 +1176,7 @@ export default function PdfSplitterTool() {
                   </div>
                   <button
                     onClick={() => handleDownloadSingle(file)}
-                    className="rounded-lg bg-surface-3/50 px-3 py-2 text-xs font-semibold text-white transition hover:bg-surface-3"
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3"
                   >
                     Download
                   </button>
@@ -1180,7 +1187,7 @@ export default function PdfSplitterTool() {
             <div className="border-t border-border px-5 py-4 text-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 dark:border-border dark:bg-transparent dark:text-white dark:hover:bg-white/[.03]"
               >
                 Split Another PDF
               </button>

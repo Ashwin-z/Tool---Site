@@ -11,6 +11,7 @@ import {
 /* ── Constants ─────────────────────────────────────────── */
 
 const MAX_FILES = 25;
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 const CANVAS_SCALE = 2; // render scale for image extraction (144 DPI)
 
 /* ── pdfjs types ───────────────────────────────────────── */
@@ -1168,19 +1169,28 @@ export default function PdfToWordTool() {
         return;
       }
 
+      const oversized = pdfs.filter((f) => f.size > MAX_FILE_SIZE);
+      const validPdfs = pdfs.filter((f) => f.size <= MAX_FILE_SIZE);
+
+      if (oversized.length) {
+        setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
+      }
+
+      if (!validPdfs.length) return;
+
       const remainingSlots = MAX_FILES - queue.length;
       if (remainingSlots <= 0) {
         setErrorMessage(`You can convert a maximum of ${MAX_FILES} PDF files at a time.`);
         return;
       }
 
-      const limited = pdfs.slice(0, remainingSlots);
+      const limited = validPdfs.slice(0, remainingSlots);
       setQueue((prev) => [...prev, ...limited.map((file) => ({ id: uid(), file }))]);
       setResult(null);
       setErrorMessage(
-        pdfs.length > remainingSlots
+        validPdfs.length > remainingSlots
           ? `Only the first ${remainingSlots} file${remainingSlots > 1 ? "s were" : " was"} added.`
-          : null,
+          : oversized.length ? null : null,
       );
     },
     [queue.length],
@@ -1355,7 +1365,7 @@ export default function PdfToWordTool() {
 
       {/* ── Error ── */}
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}

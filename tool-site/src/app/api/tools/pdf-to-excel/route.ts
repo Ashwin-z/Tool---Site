@@ -5,8 +5,12 @@ import { pathToFileURL } from "node:url";
 import { createCanvas } from "@napi-rs/canvas";
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 type PdfPageProxy = any;
 type PdfDocumentProxy = any;
@@ -34,6 +38,8 @@ type Glyph = {
   fontFamily: string;
   bold: boolean;
   italic: boolean;
+  color: string; // hex like 'FF000000' (ARGB)
+  underline: boolean;
 };
 
 type RenderedPage = {
@@ -60,8 +66,10 @@ type CellData = {
   text: string;
   bold: boolean;
   italic: boolean;
+  underline: boolean;
   fontSize: number;
   fontFamily: string;
+  fontColor: string; // ARGB hex
   fillArgb?: string;
   hAlign?: "left" | "center" | "right";
   vAlign?: "top" | "middle" | "bottom";
@@ -429,7 +437,162 @@ async function extractPageImages(page: PdfPageProxy, rendered: RenderedPage, OPS
   return regions;
 }
 
-async function extractGlyphs(page: PdfPageProxy): Promise<Glyph[]> {
+/**
+ * Extract per-glyph fill colours from the PDF operator list.
+ * Returns a map of approximate y→x→ARGB colour so we can assign to glyphs.
+ */
+function extractTextColors(
+  opList: { fnArray: number[]; argsArray: any[][] },
+  OPS: Record<string, number>,
+): { colors: Array<{ y: number; color: string }>; underlines: Array<{ x: number; y: number; w: number }> } {
+  const { fnArray, argsArray } = opList;
+  const colors: Array<{ y: number; color: string }> = [];
+  const underlines: Array<{ x: number; y: number; w: number }> = [];
+  let currentColor = "FF000000"; // default black
+  const ctmStack: number[][] = [];
+  let ctm = [1, 0, 0, 1, 0, 0];
+
+  function safeNum(v: unknown): number {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function multiplyCtm(a: number[], b: number[]): number[] {
+    return [
+      a[0] * b[0] + a[2] * b[1],
+      a[1] * b[0] + a[3] * b[1],
+      a[0] * b[2] + a[2] * b[3],
+      a[1] * b[2] + a[3] * b[3],
+      a[0] * b[4] + a[2] * b[5] + a[4],
+      a[1] * b[4] + a[3] * b[5] + a[5],
+    ];
+  }
+
+  for (let i = 0; i < fnArray.length; i++) {
+    const fn = fnArray[i];
+    const args = argsArray[i];
+
+    if (fn === OPS.save) {
+      ctmStack.push([...ctm]);
+    } else if (fn === OPS.restore) {
+      ctm = ctmStack.pop() ?? [1, 0, 0, 1, 0, 0];
+    } else if (fn === OPS.transform) {
+      if (Array.isArray(args) && args.length >= 6) {
+        const vals = args.map(safeNum);
+        if (vals.every(Number.isFinite)) {
+          ctm = multiplyCtm(ctm, vals);
+        }
+      }
+    } else if (fn === OPS.setFillRGBColor) {
+      const r = safeNum(args?.[0]) * 255;
+      const g = safeNum(args?.[1]) * 255;
+      const b = safeNum(args?.[2]) * 255;
+      currentColor = rgbToArgb(r, g, b);
+    } else if (fn === OPS.setFillGray) {
+      const v = safeNum(args?.[0]) * 255;
+      currentColor = rgbToArgb(v, v, v);
+    } else if (fn === OPS.setFillCMYKColor) {
+      const c = safeNum(args?.[0]);
+      const m = safeNum(args?.[1]);
+      const y = safeNum(args?.[2]);
+      const k = safeNum(args?.[3]);
+      const r = 255 * (1 - c) * (1 - k);
+      const g = 255 * (1 - m) * (1 - k);
+      const b = 255 * (1 - y) * (1 - k);
+      currentColor = rgbToArgb(r, g, b);
+    } else if (fn === OPS.setFillColor || fn === OPS.setFillColorN) {
+      if (Array.isArray(args) && args.length >= 3) {
+        const vals = args.map(safeNum);
+        if (vals[0] <= 1 && vals[1] <= 1 && vals[2] <= 1) {
+          currentColor = rgbToArgb(vals[0] * 255, vals[1] * 255, vals[2] * 255);
+        }
+      }
+    } else if (fn === OPS.showText || fn === OPS.showSpacedText) {
+      // Associate current color with the current text position
+      colors.push({ y: ctm[5], color: currentColor });
+    } else if (fn === OPS.constructPath) {
+      // Detect underlines: thin horizontal rectangles
+      try {
+        const ops = args?.[0];
+        const coords = args?.[1];
+        if (ops && coords && Array.isArray(coords)) {
+          // Look for rectangle ops (op code 4 = rect)
+          const opsArr = Array.isArray(ops) ? ops : Array.from(ops as Iterable<number>);
+          let ci = 0;
+          for (const op of opsArr) {
+            if (op === 4 && ci + 3 < coords.length) {
+              const rx = safeNum(coords[ci]);
+              const ry = safeNum(coords[ci + 1]);
+              const rw = safeNum(coords[ci + 2]);
+              const rh = safeNum(coords[ci + 3]);
+              // Thin horizontal line = underline
+              if (Math.abs(rh) <= 3 && Math.abs(rw) > 10) {
+                underlines.push({ x: rx, y: ry, w: rw });
+              }
+              ci += 4;
+            } else if (op === 1) {
+              ci += 2; // moveTo
+            } else if (op === 2) {
+              ci += 2; // lineTo
+            } else if (op === 3) {
+              ci += 6; // bezierCurveTo
+            } else {
+              ci += 0;
+            }
+          }
+        }
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  return { colors, underlines };
+}
+
+/**
+ * Assign extracted colours to glyphs by matching Y positions proportionally.
+ */
+function assignColorsToGlyphs(
+  glyphs: Glyph[],
+  colorEntries: Array<{ y: number; color: string }>,
+  underlineEntries: Array<{ x: number; y: number; w: number }>,
+): void {
+  if (!colorEntries.length && !underlineEntries.length) return;
+
+  // Sort colors by y position descending (same as glyph order)
+  const sorted = [...colorEntries].sort((a, b) => b.y - a.y);
+
+  for (const glyph of glyphs) {
+    // Find closest color entry by Y
+    let bestDist = Infinity;
+    let bestColor = "FF000000";
+    for (const entry of sorted) {
+      const dist = Math.abs(entry.y - glyph.y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestColor = entry.color;
+      }
+      // Early exit once we're too far past
+      if (entry.y < glyph.y - 50) break;
+    }
+    if (bestDist < 20) {
+      glyph.color = bestColor;
+    }
+
+    // Check for underlines near this glyph
+    for (const ul of underlineEntries) {
+      const yDist = Math.abs(ul.y - (glyph.y - glyph.height * 0.15));
+      const xOverlap = glyph.x < ul.x + ul.w && glyph.x + glyph.width > ul.x;
+      if (yDist < 8 && xOverlap) {
+        glyph.underline = true;
+        break;
+      }
+    }
+  }
+}
+
+async function extractGlyphs(page: PdfPageProxy, OPS?: Record<string, number>): Promise<Glyph[]> {
   const textContent = await page.getTextContent();
   const styles: Record<string, TextStyle> = textContent.styles ?? {};
 
@@ -455,9 +618,22 @@ async function extractGlyphs(page: PdfPageProxy): Promise<Glyph[]> {
         fontFamily,
         bold: isBoldFont(fontFamily),
         italic: isItalicFont(fontFamily),
+        color: "FF000000",
+        underline: false,
       };
     })
     .filter((item) => item.text.length > 0 && Number.isFinite(item.x) && Number.isFinite(item.y));
+
+  // Extract colours and underlines from operator list
+  if (OPS && OPS.save != null) {
+    try {
+      const opList = await page.getOperatorList();
+      const { colors, underlines } = extractTextColors(opList, OPS);
+      assignColorsToGlyphs(glyphs, colors, underlines);
+    } catch {
+      // Colour extraction is best-effort
+    }
+  }
 
   return glyphs.sort((a, b) => b.y - a.y || a.x - b.x);
 }
@@ -587,10 +763,12 @@ function buildGridModel(glyphs: Glyph[], rendered: RenderedPage): GridModel {
       text: "",
       bold: false,
       italic: false,
+      underline: false,
       fontSize: 11,
       fontFamily: "Calibri",
-      hAlign: "center",
-      vAlign: "middle",
+      fontColor: "FF000000",
+      hAlign: "left" as const,
+      vAlign: "middle" as const,
     })),
   );
 
@@ -632,27 +810,53 @@ function buildGridModel(glyphs: Glyph[], rendered: RenderedPage): GridModel {
       const fontFamily = glyphBucket[0]?.fontFamily || "Calibri";
       const bold = glyphBucket.some((g) => g.bold) || lineTexts.some((t) => looksLikeSectionHeader(t));
       const italic = glyphBucket.some((g) => g.italic);
+      const underline = glyphBucket.some((g) => g.underline);
 
-      // Detect horizontal alignment based on content type and position
+      // Determine dominant font color (most common non-black, or most common overall)
+      const colorCounts = new Map<string, number>();
+      for (const g of glyphBucket) {
+        colorCounts.set(g.color, (colorCounts.get(g.color) ?? 0) + 1);
+      }
+      let dominantColor = "FF000000";
+      let maxCount = 0;
+      for (const [color, count] of colorCounts) {
+        if (count > maxCount) {
+          maxCount = count;
+          dominantColor = color;
+        }
+      }
+
+      // Detect horizontal alignment based on actual text position in cell
       const cellText = normalizeMultilineValue(lineTexts.join("\n"));
       const colLeft = colsAsc[c];
       const colRight = colsAsc[c + 1] ?? colLeft + 60;
       const colWidth = colRight - colLeft;
-      const avgTextX = glyphBucket.reduce((s, g) => s + g.x, 0) / glyphBucket.length;
-      const relPos = colWidth > 10 ? (avgTextX - colLeft) / colWidth : 0.5;
 
-      // Smart alignment based on content type and position
+      // Calculate actual text bounds within the cell
+      const textMinX = Math.min(...glyphBucket.map((g) => g.x));
+      const textMaxX = Math.max(...glyphBucket.map((g) => g.x + g.width));
+      const textWidth = textMaxX - textMinX;
+
+      // Determine alignment from actual position
       let hAlign: "left" | "center" | "right" = "left";
+      if (colWidth > 10 && textWidth > 0) {
+        const leftGap = textMinX - colLeft;
+        const rightGap = colRight - textMaxX;
+        const gapRatio = colWidth > 0 ? Math.min(leftGap, rightGap) / colWidth : 0;
+
+        if (Math.abs(leftGap - rightGap) < colWidth * 0.15 && gapRatio > 0.05) {
+          // Text is roughly centered — both gaps similar
+          hAlign = "center";
+        } else if (rightGap < leftGap * 0.5 && leftGap > colWidth * 0.2) {
+          // Much more gap on left → right-aligned
+          hAlign = "right";
+        } else {
+          // Default = left
+          hAlign = "left";
+        }
+      }
+      // Override for specific content types
       if (isWeekday(cellText) || looksLikeDate(cellText) || looksLikeTiming(cellText)) {
-        hAlign = "center";
-      } else if (looksLikeSectionHeader(cellText) || isMostlyUppercase(cellText)) {
-        hAlign = "center";
-      } else if (cellText.length <= 10) {
-        hAlign = "center";
-      } else if (c === 0 && cellText.length <= 20) {
-        // First column (days/dates) should generally be centered
-        hAlign = "center";
-      } else if (relPos > 0.25 && relPos < 0.55 && cellText.length < 25) {
         hAlign = "center";
       }
 
@@ -660,8 +864,10 @@ function buildGridModel(glyphs: Glyph[], rendered: RenderedPage): GridModel {
         text: cellText,
         bold,
         italic,
-        fontSize: clamp(fontSize, 8, 14),
+        underline,
+        fontSize: clamp(fontSize, 8, 18),
         fontFamily,
+        fontColor: dominantColor,
         hAlign,
         vAlign: "middle",
       };
@@ -864,42 +1070,64 @@ function applyWorksheetStyles(
 
     for (let c = 0; c < colCount; c++) {
       const cd = grid.cells[r][c];
+      if (!cd) continue;
       const cell = excelRow.getCell(c + 1);
 
-      cell.value = cd.text || "";
+      try {
+        cell.value = cd.text || "";
 
-      // Dynamic font colour based on background brightness
-      const fontArgb = needsLightFont(cd.fillArgb) ? "FFFFFFFF" : "FF111111";
+        // Validate ARGB: must be exactly 8 hex chars
+        const validArgb = (v: string | undefined): string | undefined =>
+          v && /^[0-9A-Fa-f]{8}$/.test(v) ? v : undefined;
 
-      cell.font = {
-        name: /times/i.test(cd.fontFamily) ? "Times New Roman" : "Calibri",
-        size: clamp(Math.round(cd.fontSize), 9, 13),
-        bold: cd.bold,
-        italic: cd.italic,
-        color: { argb: fontArgb },
-      };
+        // Use extracted font colour; override with white if background is very dark
+        const rawFontArgb = needsLightFont(cd.fillArgb) ? "FFFFFFFF" : cd.fontColor;
+        const fontArgb = validArgb(rawFontArgb) ?? "FF111111";
 
-      cell.alignment = {
-        horizontal: cd.hAlign ?? "left",
-        vertical: "middle",
-        wrapText: true,
-      };
+        const fontName = /times/i.test(cd.fontFamily) ? "Times New Roman"
+            : /arial/i.test(cd.fontFamily) ? "Arial"
+            : /georgia/i.test(cd.fontFamily) ? "Georgia"
+            : /courier|mono/i.test(cd.fontFamily) ? "Courier New"
+            : /verdana/i.test(cd.fontFamily) ? "Verdana"
+            : /tahoma/i.test(cd.fontFamily) ? "Tahoma"
+            : /helvetica/i.test(cd.fontFamily) ? "Arial"
+            : "Calibri";
 
-      // Use darker borders for coloured cells, lighter for plain
-      const borderArgb = cd.fillArgb ? "FF909090" : "FFDCDCDC";
-      cell.border = {
-        top: { style: "thin", color: { argb: borderArgb } },
-        left: { style: "thin", color: { argb: borderArgb } },
-        bottom: { style: "thin", color: { argb: borderArgb } },
-        right: { style: "thin", color: { argb: borderArgb } },
-      };
-
-      if (cd.fillArgb) {
-        cell.fill = {
-          type: "pattern",
-          pattern: "solid",
-          fgColor: { argb: cd.fillArgb },
+        const fontObj: Record<string, unknown> = {
+          name: fontName,
+          size: clamp(Math.round(cd.fontSize), 8, 18),
+          bold: cd.bold || undefined,
+          italic: cd.italic || undefined,
+          color: { argb: fontArgb },
         };
+        if (cd.underline) fontObj.underline = true;
+        cell.font = fontObj as any;
+
+        cell.alignment = {
+          horizontal: cd.hAlign ?? "left",
+          vertical: "middle",
+          wrapText: true,
+        };
+
+        // Use darker borders for coloured cells, lighter for plain
+        const borderArgb = cd.fillArgb ? "FF909090" : "FFDCDCDC";
+        cell.border = {
+          top: { style: "thin", color: { argb: borderArgb } },
+          left: { style: "thin", color: { argb: borderArgb } },
+          bottom: { style: "thin", color: { argb: borderArgb } },
+          right: { style: "thin", color: { argb: borderArgb } },
+        };
+
+        const safeFill = validArgb(cd.fillArgb);
+        if (safeFill) {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: safeFill },
+          };
+        }
+      } catch {
+        // Skip styling for problematic cells — content is still set
       }
     }
   }
@@ -1025,16 +1253,16 @@ async function convertPdfToExcelBuffer(pdfBytes: Uint8Array): Promise<Buffer> {
 
   try {
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = "Tool Craft";
+    workbook.creator = "ToolMint";
     workbook.created = new Date();
     workbook.modified = new Date();
 
-    const OPS = (pdfjs as any).OPS as Record<string, number>;
+    const OPS = (pdfjs as any).OPS ?? (pdfjs as any).default?.OPS ?? {} as Record<string, number>;
 
     for (let pageNumber = 1; pageNumber <= pdfDocument.numPages; pageNumber++) {
       const page = await pdfDocument.getPage(pageNumber);
       const rendered = await renderPage(page, 2);
-      const glyphs = await extractGlyphs(page);
+      const glyphs = await extractGlyphs(page, OPS);
       const grid = buildGridModel(glyphs, rendered);
 
       // Extract embedded images (logos, graphics) from the PDF page
@@ -1057,11 +1285,20 @@ async function convertPdfToExcelBuffer(pdfBytes: Uint8Array): Promise<Buffer> {
 }
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`pdf-to-excel:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   const formData = await request.formData();
   const input = formData.get("file");
 
   if (!(input instanceof File)) {
     return NextResponse.json({ error: "Please upload a PDF file." }, { status: 400 });
+  }
+
+  if (input.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: "File size exceeds the 50 MB limit." }, { status: 400 });
   }
 
   if (!/\.pdf$/i.test(input.name)) {
@@ -1089,7 +1326,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to convert PDF to Excel.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[pdf-to-excel]", error);
+    return NextResponse.json({ error: "Failed to convert PDF to Excel." }, { status: 500 });
   }
 }

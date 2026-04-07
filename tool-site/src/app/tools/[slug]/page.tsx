@@ -14,8 +14,8 @@ const titleFromSlug = (slug: string) =>
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   return {
-    title: `${titleFromSlug(slug)} | ToolCraft`,
-    description: `${titleFromSlug(slug)} is coming soon on ToolCraft.`,
+    title: `${titleFromSlug(slug)} | ToolMint`,
+    description: `${titleFromSlug(slug)} is coming soon on ToolMint.`,
   };
 }
 

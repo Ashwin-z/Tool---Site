@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Read from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("toolcraft-theme") as Theme | null;
+    const stored = localStorage.getItem("toolmint-theme") as Theme | null;
     if (stored === "light" || stored === "dark") {
       setThemeState(stored);
       document.documentElement.setAttribute("data-theme", stored);
@@ -26,7 +26,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
-    localStorage.setItem("toolcraft-theme", t);
+    localStorage.setItem("toolmint-theme", t);
     document.documentElement.setAttribute("data-theme", t);
   }, []);
 

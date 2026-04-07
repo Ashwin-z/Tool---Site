@@ -14,6 +14,8 @@ import {
 import { PDFDocument, PDFImage, StandardFonts, rgb, type PDFFont } from "pdf-lib";
 import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type PageBox = { width: number; height: number };
 type ShapeKind = "rect" | "square" | "ellipse" | "circle" | "line" | "arrow" | "arc" | "polygon" | "cloud" | "polyline";
 type ShapePaintMode = "fill" | "stroke" | "both";
@@ -2231,6 +2233,10 @@ export default function EditPdfTool() {
 
   const loadFile = useCallback(async (incoming: File) => {
     setErrorMessage(null);
+    if (incoming.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     setSelectedOverlayId(null);
     setOverlays([]);
     setThumbnailUrls({});

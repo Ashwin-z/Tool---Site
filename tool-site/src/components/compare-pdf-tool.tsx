@@ -11,6 +11,8 @@ import {
 } from "react";
 import { downloadBlob, sanitizeBaseName } from "@/lib/client-pdf-utils";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 type CompareMode = "semantic" | "overlay";
 type PageBox = { width: number; height: number };
 type TextFragment = { id: string; pageNumber: number; text: string; x: number; y: number; width: number; height: number };
@@ -60,6 +62,8 @@ type PdfJsModule = {
 
 const BASE_VIEWER_WIDTH = 560;
 const MAX_REPORT_ITEMS = 200;
+const MIN_ZOOM = 0.6;
+const MAX_ZOOM = 2.5;
 
 let pdfjsPromise: Promise<PdfJsModule> | null = null;
 
@@ -285,7 +289,7 @@ async function buildOverlayDiff(leftDoc: PdfJsDocument, rightDoc: PdfJsDocument,
 }
 
 function formatReport(diffEntries: DiffEntry[], leftName: string, rightName: string): string {
-  const header = [`ToolCraft Compare PDF Report`, `Left: ${leftName}`, `Right: ${rightName}`, ``];
+  const header = [`ToolMint Compare PDF Report`, `Left: ${leftName}`, `Right: ${rightName}`, ``];
   const body = diffEntries.map((entry) => `[Page ${entry.pageNumber}] ${entry.type.toUpperCase()}: ${entry.text}`);
   return [...header, ...body].join("\n");
 }
@@ -350,6 +354,18 @@ export default function ComparePdfTool() {
     }, {});
   }, [filteredDiffEntries]);
 
+  const handleZoomOut = useCallback(() => {
+    setZoom((current) => clamp(Number((current - 0.1).toFixed(2)), MIN_ZOOM, MAX_ZOOM));
+  }, []);
+
+  const handleZoomIn = useCallback(() => {
+    setZoom((current) => clamp(Number((current + 0.1).toFixed(2)), MIN_ZOOM, MAX_ZOOM));
+  }, []);
+
+  const handleZoomReset = useCallback(() => {
+    setZoom(1);
+  }, []);
+
   useEffect(() => {
     return () => {
       leftDocRef.current?.destroy?.();
@@ -359,6 +375,10 @@ export default function ComparePdfTool() {
 
   const loadPdfIntoSlot = useCallback(async (slot: PdfSlot, file: File | null) => {
     if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage(`File exceeds the 1GB size limit.`);
+      return;
+    }
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       setErrorMessage("Please choose PDF files for comparison.");
       return;
@@ -584,9 +604,9 @@ export default function ComparePdfTool() {
                 <div className="max-w-full truncate rounded-full border border-border bg-surface/50 px-4 py-2 text-sm text-foreground/75 sm:max-w-[280px]">{rightFileName}</div>
               </div>
               <div className="flex flex-wrap items-center gap-2 text-sm text-foreground/75">
-                <button type="button" onClick={() => setZoom((current) => clamp(Number((current - 0.1).toFixed(2)), 0.6, 2.5))} className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70">−</button>
+                <button type="button" onClick={handleZoomOut} className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70">−</button>
                 <div className="rounded-2xl border border-border bg-surface/50 px-3 py-2">{formatZoom(zoom)}</div>
-                <button type="button" onClick={() => setZoom((current) => clamp(Number((current + 0.1).toFixed(2)), 0.6, 2.5))} className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70">+</button>
+                <button type="button" onClick={handleZoomIn} className="rounded-2xl border border-border bg-surface/50 px-3 py-2 transition hover:bg-surface/70">+</button>
                 <button type="button" onClick={downloadReport} disabled={!filteredDiffEntries.length} className="rounded-full bg-[#ff4d6d] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#ff365a] disabled:cursor-not-allowed disabled:bg-[#8f4151]">Download report</button>
                 <button type="button" onClick={resetWorkspace} className="rounded-full border border-border px-4 py-2 font-medium transition hover:bg-surface/60">Reset</button>
               </div>
@@ -597,7 +617,16 @@ export default function ComparePdfTool() {
             <div className="min-w-0 2xl:border-r 2xl:border-border">
               <div className="grid min-w-0 xl:grid-cols-2">
                 <section className="min-w-0 border-b border-border bg-surface xl:border-b-0 xl:border-r xl:border-border">
-                  <div className="border-b border-border px-4 py-3 text-sm text-muted md:px-6">Left PDF · Page {currentPage} of {leftPageCount}</div>
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 text-sm text-muted md:px-6">
+                    <div>Left PDF · Page {currentPage} of {leftPageCount}</div>
+                    <div className="flex items-center gap-2 text-sm text-foreground/75">
+                      <span className="text-xs uppercase tracking-[0.16em] text-muted-2">Zoom</span>
+                      <button type="button" onClick={handleZoomOut} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">−</button>
+                      <div className="rounded-xl border border-border bg-surface/50 px-3 py-1.5">{formatZoom(zoom)}</div>
+                      <button type="button" onClick={handleZoomIn} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">+</button>
+                      <button type="button" onClick={handleZoomReset} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">Reset</button>
+                    </div>
+                  </div>
                   <div className="overflow-auto bg-[#d8d6de] px-4 py-6 md:px-8">
                     <div className="mx-auto flex min-w-max items-start justify-center" style={{ minWidth: `${viewerWidth + 48}px` }}>
                       <div className="relative overflow-hidden rounded-[24px] border border-black/10 bg-white shadow-[0_24px_60px_rgba(0,0,0,0.2)]" style={{ width: `${viewerWidth}px`, height: `${leftHeight}px` }}>
@@ -608,7 +637,16 @@ export default function ComparePdfTool() {
                 </section>
 
                 <section className="min-w-0 bg-surface xl:border-border">
-                  <div className="border-b border-border px-4 py-3 text-sm text-muted md:px-6">Right PDF · Page {currentPage} of {rightPageCount}</div>
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 text-sm text-muted md:px-6">
+                    <div>Right PDF · Page {currentPage} of {rightPageCount}</div>
+                    <div className="flex items-center gap-2 text-sm text-foreground/75">
+                      <span className="text-xs uppercase tracking-[0.16em] text-muted-2">Zoom</span>
+                      <button type="button" onClick={handleZoomOut} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">−</button>
+                      <div className="rounded-xl border border-border bg-surface/50 px-3 py-1.5">{formatZoom(zoom)}</div>
+                      <button type="button" onClick={handleZoomIn} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">+</button>
+                      <button type="button" onClick={handleZoomReset} className="rounded-xl border border-border bg-surface/50 px-3 py-1.5 transition hover:bg-surface/70">Reset</button>
+                    </div>
+                  </div>
                   <div className="overflow-auto bg-[#d8d6de] px-4 py-6 md:px-8">
                     <div className="mx-auto flex min-w-max items-start justify-center" style={{ minWidth: `${viewerWidth + 48}px` }}>
                       <div className="relative overflow-hidden rounded-[24px] border border-black/10 bg-white shadow-[0_24px_60px_rgba(0,0,0,0.2)]" style={{ width: `${viewerWidth}px`, height: `${rightHeight}px` }}>

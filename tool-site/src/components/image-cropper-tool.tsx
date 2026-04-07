@@ -3,6 +3,8 @@
 import { useCallback, useRef, useState } from "react";
 import JSZip from "jszip";
 
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+
 /* ── aspect ratio presets ── */
 interface AspectPreset { label: string; ratio: number | null; }
 
@@ -123,6 +125,10 @@ export default function ImageCropperTool() {
 
   /* load image */
   const loadImage = useCallback((file: File) => {
+    if (file.size > MAX_FILE_SIZE) {
+      alert(`File exceeds the 1GB size limit.`);
+      return;
+    }
     const url = URL.createObjectURL(file);
     setSrcFile(file);
     setSrcUrl(url);

@@ -29,11 +29,11 @@
   --surface: #ffffff;
   --surface-2: #f0f1f5;
   --surface-3: #e8e9ee;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.15);
-  --muted: #64648a;
-  --muted-2: #8888a4;
-  --muted-3: #a0a0b8;
+  --border: rgba(15, 23, 42, 0.12);
+  --border-strong: rgba(15, 23, 42, 0.2);
+  --muted: #50506f;
+  --muted-2: #666684;
+  --muted-3: #7b7b97;
   --accent: #6c63ff;
   --accent-light: #4a3fd4;
   --card: #ffffff;
@@ -119,3 +119,909 @@ h6,
 .theme-muted-2 { color: var(--muted-2); }
 .theme-border { border-color: var(--border); }
 .theme-border-strong { border-color: var(--border-strong); }
+
+/* ── Light theme normalization for image tool pages ── */
+[data-theme="light"] .image-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .image-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .image-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .image-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .image-tool-page [class*="hover:bg-white/[0.06]"]:hover,
+[data-theme="light"] .image-tool-page [class*="hover:bg-white/[0.08]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="bg-surface"],
+[data-theme="light"] .image-tool-page [class*="bg-surface/"] {
+  box-shadow: inset 0 0 0 1px rgba(14, 18, 33, 0.02);
+}
+
+[data-theme="light"] .image-tool-page :is(input, textarea, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .image-tool-page :is(input, textarea, select)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .image-tool-page :is(input, textarea, select)[class*="bg-surface/30"][class*="text-white"],
+[data-theme="light"] .image-tool-page :is(input, textarea, select)[class*="bg-surface/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"],
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"]:hover,
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"]:hover,
+[data-theme="light"] .image-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="border-white/20"] {
+  border-color: var(--border-strong) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .image-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .image-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="bg-[#6c63ff]/10"],
+[data-theme="light"] .image-tool-page [class*="bg-[#6c63ff]/15"],
+[data-theme="light"] .image-tool-page [class*="bg-[#6c63ff]/20"] {
+  background: rgba(108, 99, 255, 0.12) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="bg-[#38d9a9]/10"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="text-[#a39cff]"],
+[data-theme="light"] .image-tool-page [class*="text-[#b7b2ff]"],
+[data-theme="light"] .image-tool-page [class*="text-[#cfe8ff]"],
+[data-theme="light"] .image-tool-page [class*="text-[#6c63ff]"] {
+  color: #4b4fc9 !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="text-[#38d9a9]"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .image-tool-page [class*="text-[#ff6584]"],
+[data-theme="light"] .image-tool-page [class*="text-[#ff8da6]"] {
+  color: #c43b63 !important;
+}
+
+/* ── Light theme normalization for text tool pages ── */
+[data-theme="light"] .text-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .text-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .text-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .text-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .text-tool-page [class*="hover:bg-white/[0.06]"]:hover,
+[data-theme="light"] .text-tool-page [class*="hover:bg-white/[0.08]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-surface"],
+[data-theme="light"] .text-tool-page [class*="bg-surface/"] {
+  box-shadow: inset 0 0 0 1px rgba(14, 18, 33, 0.02);
+}
+
+[data-theme="light"] .text-tool-page :is(textarea, input, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface"][class*="text-white"],
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface"][class*="text-muted"],
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface"][class*="text-white"]:hover,
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface"][class*="text-muted"]:hover,
+[data-theme="light"] .text-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .text-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .text-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-[#6f6f88]"] {
+  color: var(--muted-2) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-[#252530]"] {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-[#6c63ff]/10"],
+[data-theme="light"] .text-tool-page [class*="bg-[#6c63ff]/15"] {
+  background: rgba(108, 99, 255, 0.12) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-[#38d9a9]/5"],
+[data-theme="light"] .text-tool-page [class*="bg-[#38d9a9]/15"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-[#6c63ff]"] {
+  color: #4b4fc9 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-[#38d9a9]"],
+[data-theme="light"] .text-tool-page [class*="text-[#6ee7b7]"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-[#ff6584]"],
+[data-theme="light"] .text-tool-page [class*="text-[#ffb3c4]"] {
+  color: #c43b63 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-[#ffa640]"] {
+  color: #b96707 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-cyan-300"] {
+  color: #0f6d83 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-violet-300"] {
+  color: #6f43c0 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="text-amber-300"],
+[data-theme="light"] .text-tool-page [class*="text-amber-300/70"] {
+  color: #9a6700 !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="border-cyan-500/30"] {
+  border-color: rgba(15, 109, 131, 0.25) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="border-violet-500/30"] {
+  border-color: rgba(111, 67, 192, 0.25) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="border-amber-500/30"] {
+  border-color: rgba(154, 103, 0, 0.25) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-cyan-500/10"] {
+  background: rgba(15, 109, 131, 0.1) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-violet-500/10"] {
+  background: rgba(111, 67, 192, 0.1) !important;
+}
+
+[data-theme="light"] .text-tool-page [class*="bg-amber-500/10"] {
+  background: rgba(154, 103, 0, 0.1) !important;
+}
+
+/* ── Light theme normalization for calculator tool pages ── */
+[data-theme="light"] .calc-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .calc-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-orange"]):not([class*="bg-amber"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-white/"] {
+  color: color-mix(in srgb, var(--foreground) 74%, white 26%) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .calc-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .calc-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .calc-tool-page [class*="hover:bg-white/[0.06]"]:hover,
+[data-theme="light"] .calc-tool-page [class*="hover:bg-white/[0.08]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-surface"],
+[data-theme="light"] .calc-tool-page [class*="bg-surface/"] {
+  box-shadow: inset 0 0 0 1px rgba(14, 18, 33, 0.02);
+}
+
+[data-theme="light"] .calc-tool-page :is(input, textarea, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .calc-tool-page [class*="[color-scheme:dark]"] {
+  color-scheme: light !important;
+}
+
+[data-theme="light"] .calc-tool-page :is(input, textarea, select)[class*="bg-surface"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .calc-tool-page :is(input, textarea)[class*="placeholder:text-white/20"]::placeholder {
+  color: var(--muted-3) !important;
+}
+
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface"][class*="text-white"],
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface"][class*="text-muted"],
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .calc-tool-page kbd[class*="bg-surface-2"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface"][class*="text-white"]:hover,
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface"][class*="text-muted"]:hover,
+[data-theme="light"] .calc-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .calc-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .calc-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-[#1c1c28]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#1a1a2e]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#131320]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#191925]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#0a0a12]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#252530]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#252535]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#252540]"] {
+  background: var(--surface-2) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-[#6c63ff]/20"] {
+  background: rgba(108, 99, 255, 0.14) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-[#38d9a9]/5"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#38d9a9]/20"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-[#1ce4b5]/5"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-[#6f6f88]"] {
+  color: var(--muted-2) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-[#252530]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#252535]"],
+[data-theme="light"] .calc-tool-page [class*="bg-[#252540]"] {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-[#6c63ff]"],
+[data-theme="light"] .calc-tool-page [class*="text-[#a39cff]"] {
+  color: #4b4fc9 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-[#38d9a9]"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-[#ff6584]"] {
+  color: #c43b63 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-[#ffa640]"] {
+  color: #b96707 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-amber-300"] {
+  color: #9a6700 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-amber-400"] {
+  color: #9a6700 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-violet-300"] {
+  color: #6f43c0 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="text-cyan-300"] {
+  color: #0f6d83 !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="border-amber-500/30"] {
+  border-color: rgba(154, 103, 0, 0.25) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="border-[#1ce4b5]/20"] {
+  border-color: rgba(28, 145, 102, 0.2) !important;
+}
+
+[data-theme="light"] .calc-tool-page [class*="bg-amber-500/10"] {
+  background: rgba(154, 103, 0, 0.1) !important;
+}
+
+/* ── Light theme normalization for developer tool pages ── */
+[data-theme="light"] .dev-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .dev-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .dev-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .dev-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .dev-tool-page [class*="hover:bg-white/[0.06]"]:hover,
+[data-theme="light"] .dev-tool-page [class*="hover:bg-white/[0.08]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-surface"],
+[data-theme="light"] .dev-tool-page [class*="bg-surface/"] {
+  box-shadow: inset 0 0 0 1px rgba(14, 18, 33, 0.02);
+}
+
+[data-theme="light"] .dev-tool-page :is(input, textarea, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .dev-tool-page :is(input, textarea, select)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .dev-tool-page :is(input, textarea, select)[class*="bg-surface/30"][class*="text-white"],
+[data-theme="light"] .dev-tool-page :is(input, textarea, select)[class*="bg-surface/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"],
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"]:hover,
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"]:hover,
+[data-theme="light"] .dev-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="border-white/20"] {
+  border-color: var(--border-strong) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .dev-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .dev-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-[#6c63ff]/10"],
+[data-theme="light"] .dev-tool-page [class*="bg-[#6c63ff]/15"],
+[data-theme="light"] .dev-tool-page [class*="bg-[#6c63ff]/20"] {
+  background: rgba(108, 99, 255, 0.12) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-[#38d9a9]/10"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="text-[#a39cff]"],
+[data-theme="light"] .dev-tool-page [class*="text-[#b7b2ff]"],
+[data-theme="light"] .dev-tool-page [class*="text-[#cfe8ff]"],
+[data-theme="light"] .dev-tool-page [class*="text-[#6c63ff]"] {
+  color: #4b4fc9 !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="text-[#38d9a9]"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="text-[#ff6584]"],
+[data-theme="light"] .dev-tool-page [class*="text-[#ff8da6]"] {
+  color: #c43b63 !important;
+}
+
+[data-theme="light"] .dev-tool-page :is(textarea, input)[class*="bg-[#0f1117]"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="text-[#ecedf6]"],
+[data-theme="light"] .dev-tool-page [class*="text-[#c5fff9]"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .dev-tool-page :is(textarea, input)[class*="placeholder:text-[#596073]"]::placeholder {
+  color: var(--muted-3) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-[#21c7b9]/10"] {
+  background: rgba(28, 217, 169, 0.12) !important;
+}
+
+[data-theme="light"] .dev-tool-page [class*="bg-[#21c7b9]/20"] {
+  background: rgba(28, 217, 169, 0.15) !important;
+}
+
+[data-theme="light"] .dev-tool-page select[class*="bg-[#0f1117]"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .dev-tool-page select[class*="bg-[#0f1117]"] option {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+}
+
+/* ── Light theme normalization for SEO tool pages ── */
+[data-theme="light"] .seo-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .seo-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="border-white/10"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .seo-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .seo-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .seo-tool-page [class*="hover:bg-white/[0.06]"]:hover,
+[data-theme="light"] .seo-tool-page [class*="hover:bg-white/[0.08]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-surface"],
+[data-theme="light"] .seo-tool-page [class*="bg-surface/"] {
+  box-shadow: inset 0 0 0 1px rgba(14, 18, 33, 0.02);
+}
+
+[data-theme="light"] .seo-tool-page :is(input, textarea, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .seo-tool-page :is(input, textarea, select)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .seo-tool-page :is(input, textarea, select)[class*="bg-surface/30"][class*="text-white"],
+[data-theme="light"] .seo-tool-page :is(input, textarea, select)[class*="bg-surface/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"],
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface-2"][class*="text-white"]:hover,
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface/50"][class*="text-white"]:hover,
+[data-theme="light"] .seo-tool-page :is(button, a)[class*="bg-surface-3/50"][class*="text-white"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="border-white/20"] {
+  border-color: var(--border-strong) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .seo-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .seo-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-[#6c63ff]/10"],
+[data-theme="light"] .seo-tool-page [class*="bg-[#6c63ff]/15"],
+[data-theme="light"] .seo-tool-page [class*="bg-[#6c63ff]/20"] {
+  background: rgba(108, 99, 255, 0.12) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-[#38d9a9]/10"] {
+  background: rgba(28, 145, 102, 0.12) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-[#a39cff]"],
+[data-theme="light"] .seo-tool-page [class*="text-[#b7b2ff]"],
+[data-theme="light"] .seo-tool-page [class*="text-[#cfe8ff]"],
+[data-theme="light"] .seo-tool-page [class*="text-[#6c63ff]"] {
+  color: #4b4fc9 !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-[#38d9a9]"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-[#ff6584]"],
+[data-theme="light"] .seo-tool-page [class*="text-[#ff8da6]"] {
+  color: #c43b63 !important;
+}
+
+[data-theme="light"] .seo-tool-page :is(textarea, input)[class*="bg-[#0f1117]"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-[#ecedf6]"],
+[data-theme="light"] .seo-tool-page [class*="text-[#c5fff9]"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .seo-tool-page :is(textarea, input)[class*="placeholder:text-[#596073]"]::placeholder {
+  color: var(--muted-3) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-[#21c7b9]/10"] {
+  background: rgba(28, 217, 169, 0.12) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-[#21c7b9]/20"] {
+  background: rgba(28, 217, 169, 0.15) !important;
+}
+
+[data-theme="light"] .seo-tool-page select[class*="bg-[#0f1117]"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .seo-tool-page select[class*="bg-[#0f1117]"] option {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="text-emerald-300"],
+[data-theme="light"] .seo-tool-page [class*="text-emerald-100"] {
+  color: #1c9166 !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="border-emerald-400/20"] {
+  border-color: rgba(28, 217, 169, 0.2) !important;
+}
+
+[data-theme="light"] .seo-tool-page [class*="bg-emerald-400/5"] {
+  background: rgba(28, 217, 169, 0.1) !important;
+}
+
+/* ── Light theme normalization for implemented PDF tool pages ── */
+[data-theme="light"] .pdf-tool-page :is(h1, h2, h3, h4, h5, h6, p, label).text-white {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(div, span).text-white:not([class*="bg-[#"]):not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-cyan"]):not([class*="bg-violet"]):not([class*="bg-rose"]):not([class*="bg-white"]):not([class*="bg-black"]) {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(input, textarea, select).text-white {
+  color: var(--foreground) !important;
+  caret-color: var(--foreground);
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a).text-white[class*="border-border"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="hover:text-white"]:hover {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="bg-white/[.02]"],
+[data-theme="light"] .pdf-tool-page [class*="bg-white/[.03]"] {
+  background: rgba(108, 99, 255, 0.05) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="hover:bg-white/[.03]"]:hover,
+[data-theme="light"] .pdf-tool-page [class*="hover:bg-white/[0.05]"]:hover,
+[data-theme="light"] .pdf-tool-page [class*="hover:bg-white/[0.06]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="bg-[#0c0c12]"] {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="bg-[#1b1015]"] {
+  background: rgba(108, 99, 255, 0.1) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-[#cfe8ff]"] {
+  color: #0f4c81 !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="bg-surface-3/50"] {
+  background: var(--surface-3) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="hover:bg-surface-3"]:hover {
+  background: color-mix(in srgb, var(--surface-3) 78%, var(--accent) 22%) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="border-border"][class*="text-white"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="border-border"][class*="px-"] {
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="hover:bg-white/[.03]"]:hover {
+  background: rgba(108, 99, 255, 0.08) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="light"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface/50"][class*="text-white"],
+[data-theme="light"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface/30"][class*="text-white"] {
+  background: var(--surface-2) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(h1, h2, h3, h4, h5, h6, p, span, div)[class*="text-white"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-foreground/75"],
+[data-theme="light"] .pdf-tool-page [class*="text-foreground/70"],
+[data-theme="light"] .pdf-tool-page [class*="text-foreground/60"] {
+  color: color-mix(in srgb, var(--foreground) 78%, white 22%) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-black/60"],
+[data-theme="light"] .pdf-tool-page [class*="text-black/50"] {
+  color: color-mix(in srgb, var(--foreground) 72%, white 28%) !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-[#8c8ea6]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#8d8ea5]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#9b9db2]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#9ea0b5]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#7f8096]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#696b82]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#66697c]"] {
+  color: #50556d !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-[#bfc1d4]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c3c4d6]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c5c6d6]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c6c7d7]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c7c8d8]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c8cad8]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#c9cada]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#d2d4e2]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#d3d5e3]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#d6d7e4]"],
+[data-theme="light"] .pdf-tool-page [class*="text-[#d9dae6]"] {
+  color: #5d6279 !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class~="bg-red-50"] {
+  background: #fee2e2 !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class~="hover:bg-red-100"]:hover {
+  background: #fecaca !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class~="border-red-200"] {
+  border-color: #fca5a5 !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class~="hover:border-red-300"]:hover,
+[data-theme="light"] .pdf-tool-page [class~="border-red-300"] {
+  border-color: #f87171 !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class~="text-red-700"] {
+  color: #b91c1c !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="bg-amber-500/5"] {
+  background: #fffbeb !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="border-amber-500/10"] {
+  border-color: #fcd34d !important;
+}
+
+[data-theme="light"] .pdf-tool-page [class*="text-amber-200/70"],
+[data-theme="light"] .pdf-tool-page [class*="text-amber-200/60"],
+[data-theme="light"] .pdf-tool-page [class*="text-amber-200/50"],
+[data-theme="light"] .pdf-tool-page [class*="text-amber-200"] {
+  color: #92400e !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="bg-red-500/10"] {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border-color: #fca5a5 !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="hover:bg-red-500/20"]:hover {
+  background: #fecaca !important;
+  color: #991b1b !important;
+}
+
+[data-theme="light"] .pdf-tool-page :is(button, a)[class*="text-red-200"] {
+  color: #b91c1c !important;
+}
+
+/* ── Dark theme normalization for recent PDF tool contrast fixes ── */
+[data-theme="dark"] .pdf-tool-page [class~="text-slate-900"],
+[data-theme="dark"] .pdf-tool-page [class~="text-slate-700"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="text-slate-600"] {
+  color: var(--muted) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="bg-slate-50"],
+[data-theme="dark"] .pdf-tool-page [class~="bg-slate-100"] {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="bg-surface-3/50"] {
+  background: color-mix(in srgb, var(--surface-3) 80%, transparent) !important;
+  color: var(--foreground) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="hover:bg-surface-3"]:hover {
+  background: var(--surface-3) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="border-border"][class*="text-white"] {
+  color: var(--foreground) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface-2"][class*="text-white"],
+[data-theme="dark"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface/50"][class*="text-white"],
+[data-theme="dark"] .pdf-tool-page :is(input, textarea, select)[class*="bg-surface/30"][class*="text-white"] {
+  background: color-mix(in srgb, var(--surface) 78%, transparent) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="border-slate-200"],
+[data-theme="dark"] .pdf-tool-page [class~="border-slate-300"] {
+  border-color: transparent !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="disabled:text-slate-400"]:disabled {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="disabled:bg-slate-100"]:disabled {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="disabled:border-slate-200"]:disabled {
+  border-color: transparent !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="bg-red-50"] {
+  background: rgba(239, 68, 68, 0.1) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="border-red-200"],
+[data-theme="dark"] .pdf-tool-page [class~="border-red-300"] {
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="text-red-700"] {
+  color: #fecaca !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="bg-red-500/10"] {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #fecaca !important;
+  border-color: transparent !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="hover:bg-red-500/20"]:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page :is(button, a)[class*="text-red-200"] {
+  color: #fecaca !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="bg-yellow-50"],
+[data-theme="dark"] .pdf-tool-page [class~="bg-amber-50"] {
+  background: rgba(245, 158, 11, 0.1) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="border-yellow-300"],
+[data-theme="dark"] .pdf-tool-page [class~="border-amber-300"] {
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+[data-theme="dark"] .pdf-tool-page [class~="text-yellow-800"],
+[data-theme="dark"] .pdf-tool-page [class~="text-amber-800"] {
+  color: #fde68a !important;
+}

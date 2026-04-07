@@ -6,8 +6,12 @@ import path from "node:path";
 
 import { NextResponse } from "next/server";
 
+import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
 async function pathExists(targetPath: string): Promise<boolean> {
   try {
@@ -128,9 +132,14 @@ finally {
 }
 
 export async function POST(request: Request) {
+  const rl = checkRateLimit(`ppt-to-pdf:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
+  }
+
   if (process.platform !== "win32") {
     return NextResponse.json(
-      { error: "Native PowerPoint export is only available on Windows." },
+      { error: "This conversion is not available on this server." },
       { status: 501 },
     );
   }
@@ -142,6 +151,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please upload a PowerPoint file." }, { status: 400 });
   }
 
+  if (input.size > MAX_FILE_SIZE) {
+    return NextResponse.json({ error: "File size exceeds the 50 MB limit." }, { status: 400 });
+  }
+
   if (!/\.(pptx|ppt)$/i.test(input.name)) {
     return NextResponse.json(
       { error: "Only .pptx and .ppt files are supported." },
@@ -149,7 +162,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolcraft-ppt-"));
+  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolmint-ppt-"));
   const safeName = sanitizeFileName(input.name) || "presentation.pptx";
   const inputPath = path.join(tempDir, safeName);
   const outputPath = path.join(tempDir, buildOutputFileName(safeName));
@@ -180,8 +193,8 @@ export async function POST(request: Request) {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to export PowerPoint to PDF.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[powerpoint-to-pdf]", error);
+    return NextResponse.json({ error: "Failed to export PowerPoint to PDF." }, { status: 500 });
   } finally {
     await rm(tempDir, { recursive: true, force: true });
   }
