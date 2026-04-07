@@ -42,6 +42,26 @@ export const metadata: Metadata = {
     siteName: "ToolMint",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/branding/toolmint-logo-512.png",
+        width: 512,
+        height: 512,
+        alt: "ToolMint logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    images: ["/branding/toolmint-logo-512.png"],
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/branding/toolmint-logo-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/branding/toolmint-logo-512.png", sizes: "512x512" }],
+    shortcut: ["/icon.svg"],
   },
   robots: {
     index: true,

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandMark from "@/components/brand-mark";
 
 const footerColumns = [
   {
@@ -84,7 +85,7 @@ export default function SiteFooter() {
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="mb-3 inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight">
-              <span className="grid h-8 w-8 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs">⚡</span>
+              <BrandMark size={32} className="shrink-0" />
               Tool<span className="text-[#6c63ff]">Mint</span>
             </Link>
             <p className="max-w-xs text-sm leading-7" style={{ color: "var(--muted)" }}>100% free online tools. No account needed. Built with ❤️ for the web.</p>

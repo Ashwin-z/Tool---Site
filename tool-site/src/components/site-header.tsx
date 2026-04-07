@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useNavShell } from "@/components/nav-shell-context";
 import { useTheme } from "@/components/theme-context";
 import { useEffect } from "react";
+import BrandMark from "@/components/brand-mark";
 
 export default function SiteHeader() {
   const { navOpen, toggleNav } = useNavShell();
@@ -25,7 +26,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-14 w-full max-w-[1400px] items-center gap-4 px-4">
         {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight" style={{ color: "var(--foreground)" }}>
-          <span className="grid h-7 w-7 place-items-center rounded-md bg-linear-to-br from-[#6c63ff] to-[#a78bff] text-xs text-white">⚡</span>
+          <BrandMark size={28} className="shrink-0" />
           Tool<span className="text-[#6c63ff]">Mint</span>
         </Link>
 
