@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { DM_Sans, Syne } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
@@ -43,26 +42,6 @@ export const metadata: Metadata = {
     siteName: "ToolMint",
     type: "website",
     locale: "en_US",
-    images: [
-      {
-        url: "/branding/toolmint-logo-512.png",
-        width: 512,
-        height: 512,
-        alt: "ToolMint logo",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary",
-    images: ["/branding/toolmint-logo-512.png"],
-  },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/branding/toolmint-logo-512.png", type: "image/png", sizes: "512x512" },
-    ],
-    apple: [{ url: "/branding/toolmint-logo-512.png", sizes: "512x512" }],
-    shortcut: ["/icon.svg"],
   },
   robots: {
     index: true,
@@ -77,14 +56,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6047516956320980"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
-      </head>
       <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
         <ThemeProvider>
         <NavShellProvider>
