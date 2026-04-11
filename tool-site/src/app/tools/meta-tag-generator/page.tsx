@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import OgTagGeneratorTool from "@/components/og-tag-generator-tool";
 
 export const metadata: Metadata = {
@@ -41,6 +42,8 @@ export default function MetaTagGeneratorPage() {
       <div className="mt-8">
         <OgTagGeneratorTool />
       </div>
+
+      <RelatedTools slug="meta-tag-generator" />
     </main>
   );
 }

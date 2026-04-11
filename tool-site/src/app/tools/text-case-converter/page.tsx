@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import TextCaseConverterTool from "@/components/text-case-converter-tool";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function TextCaseConverterPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="text-case-converter" />
       </main>
     </>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import ImageCompressorTool from "@/components/image-compressor-tool";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function ImageCompressorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="image-compressor" />
       </main>
     </>
   );

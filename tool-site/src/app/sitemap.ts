@@ -34,6 +34,17 @@ const EXCLUDE_TOOLS = new Set([
   "tax-invoice-generator",
 ]);
 
+/** Category landing pages — higher sitemap priority */
+const CATEGORY_PAGES = new Set([
+  "pdf-tools",
+  "image-tools",
+  "text-tools",
+  "calculators",
+  "developer-tools",
+  "seo-tools",
+  "converters",
+]);
+
 async function getToolRoutes(): Promise<string[]> {
   const toolsDir = path.join(process.cwd(), "src", "app", "tools");
   const entries = await readdir(toolsDir, { withFileTypes: true });
@@ -54,6 +65,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${BASE_URL}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
-    priority: route === "" ? 1 : route === "/tools" ? 0.9 : 0.7,
+    priority: route === "" ? 1 : route === "/tools" ? 0.9 : CATEGORY_PAGES.has(route.replace("/tools/", "")) ? 0.85 : 0.7,
   }));
 }

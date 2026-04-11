@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PasswordGeneratorTool from "@/components/password-generator-tool";
 
 export const metadata: Metadata = {
@@ -143,6 +144,8 @@ export default function PasswordGeneratorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="password-generator" />
       </main>
     </>
   );

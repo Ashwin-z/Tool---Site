@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PdfMergerTool from "@/components/pdf-merger-tool";
 
 export const metadata: Metadata = {
@@ -120,6 +121,8 @@ export default function PdfMergerPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="pdf-merger" />
       </main>
     </>
   );

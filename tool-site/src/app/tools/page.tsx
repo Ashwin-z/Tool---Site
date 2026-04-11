@@ -26,10 +26,11 @@ export const metadata: Metadata = {
 
 type ToolEntry = readonly [string, string];
 
-const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = [
+const categorizedTools: { title: string; icon: string; path?: string; tools: ToolEntry[] }[] = [
   {
     title: "PDF Tools",
     icon: "📄",
+    path: "/tools/pdf-tools",
     tools: [
       ["PDF Compressor", "/tools/pdf-compressor"],
       ["PDF Merger", "/tools/pdf-merger"],
@@ -60,6 +61,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "Image Tools",
     icon: "🖼️",
+    path: "/tools/image-tools",
     tools: [
       ["Image Compressor", "/tools/image-compressor"],
       ["Image Resizer", "/tools/image-resizer"],
@@ -74,6 +76,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "Text Tools",
     icon: "📝",
+    path: "/tools/text-tools",
     tools: [
       ["Word Counter", "/tools/word-counter"],
       ["Text Case Converter", "/tools/text-case-converter"],
@@ -87,6 +90,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "Calculators",
     icon: "🔢",
+    path: "/tools/calculators",
     tools: [
       ["Scientific Calculator", "/tools/scientific-calculator"],
       ["Percentage Calculator", "/tools/percentage-calculator"],
@@ -107,6 +111,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "Developer Tools",
     icon: "💻",
+    path: "/tools/developer-tools",
     tools: [
       ["JSON Formatter", "/tools/json-formatter"],
       ["Code Snippet Playground", "/tools/code-snippet"],
@@ -119,6 +124,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "SEO Tools",
     icon: "📊",
+    path: "/tools/seo-tools",
     tools: [
       ["Meta Tag Generator", "/tools/meta-tag-generator"],
       ["Meta Title & Description Checker", "/tools/meta-title-description-checker"],
@@ -131,6 +137,7 @@ const categorizedTools: { title: string; icon: string; tools: ToolEntry[] }[] = 
   {
     title: "Converters",
     icon: "🔄",
+    path: "/tools/converters",
     tools: [
       ["Length Converter", "/tools/length-converter"],
       ["Weight Converter", "/tools/weight-converter"],
@@ -197,6 +204,11 @@ export default function ToolsPage() {
                 <h2 className="font-display text-xl font-bold">{category.title}</h2>
                 <span className="text-xs" style={{ color: "var(--muted-2)" }}>{category.tools.length} tools</span>
               </div>
+              {category.path && (
+                <Link href={category.path} className="ml-auto text-xs font-medium text-[#6c63ff] transition hover:underline">
+                  View all →
+                </Link>
+              )}
             </div>
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {category.tools.map(([name, href]) => (

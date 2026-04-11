@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import AgeCalculatorTool from "@/components/age-calculator-tool";
 
 export const metadata: Metadata = {
@@ -139,6 +140,8 @@ export default function AgeCalculatorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="age-calculator" />
       </main>
     </>
   );

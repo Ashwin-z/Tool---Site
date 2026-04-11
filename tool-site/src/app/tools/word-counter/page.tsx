@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import WordCounterTool from "@/components/word-counter-tool";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function WordCounterPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="word-counter" />
       </main>
     </>
   );

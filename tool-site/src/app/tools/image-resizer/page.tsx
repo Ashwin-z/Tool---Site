@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import ImageResizerTool from "@/components/image-resizer-tool";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function ImageResizerPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="image-resizer" />
       </main>
     </>
   );

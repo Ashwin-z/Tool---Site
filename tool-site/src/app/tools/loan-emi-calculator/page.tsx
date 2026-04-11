@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import LoanEmiCalculatorTool from "@/components/loan-emi-calculator-tool";
 
 export const metadata: Metadata = {
@@ -139,6 +140,8 @@ export default function LoanEmiCalculatorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="loan-emi-calculator" />
       </main>
     </>
   );

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import JsonFormatterTool from "../../../components/json-formatter-tool";
 
 export const metadata: Metadata = {
@@ -147,6 +148,8 @@ export default function JsonFormatterPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="json-formatter" />
       </main>
     </>
   );

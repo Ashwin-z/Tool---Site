@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PdfCompressorTool from "@/components/pdf-compressor-tool";
 
 export const metadata: Metadata = {
@@ -121,6 +122,8 @@ export default function PdfCompressorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="pdf-compressor" />
       </main>
     </>
   );

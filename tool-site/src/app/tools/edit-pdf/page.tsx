@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import EditPdfTool from "@/components/edit-pdf-tool-loader";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function EditPdfPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="edit-pdf" />
       </main>
     </>
   );

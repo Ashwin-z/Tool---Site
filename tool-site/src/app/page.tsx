@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-
-const WordCounterTool = dynamic(() => import("@/components/word-counter-tool"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-64 items-center justify-center rounded-xl border border-white/10 bg-white/[.02]">
-      <p className="text-sm text-muted">Loading Word Counter…</p>
-    </div>
-  ),
-});
+import HomeWordCounter from "@/components/home-word-counter";
 
 export const metadata: Metadata = {
   title: "ToolMint — Free Online PDF Tools, Converters & Calculators",
@@ -72,7 +63,7 @@ export default function Home() {
         </p>
 
         <div className="mt-8">
-          <WordCounterTool />
+          <HomeWordCounter />
         </div>
 
         <section className="mt-16">

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PdfSplitterTool from "@/components/pdf-splitter-tool";
 
 export const metadata: Metadata = {
@@ -120,6 +121,8 @@ export default function PdfSplitterPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="pdf-splitter" />
       </main>
     </>
   );

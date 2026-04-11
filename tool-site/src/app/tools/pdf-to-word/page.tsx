@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PdfToWordTool from "@/components/pdf-to-word-tool";
 
 export const metadata: Metadata = {
@@ -118,6 +119,8 @@ export default function PdfToWordPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="pdf-to-word" />
       </main>
     </>
   );
