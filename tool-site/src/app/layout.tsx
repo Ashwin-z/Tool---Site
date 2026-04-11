@@ -21,7 +21,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://toolmint.tools"),
+  metadataBase: new URL("https://toolmint.com"),
   title: {
     template: "%s | ToolMint",
     default: "ToolMint — Free Online PDF Tools, Converters & Calculators",
@@ -43,6 +43,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
+      { url: "/branding/toolmint-logo.svg", type: "image/svg+xml" },
+    ],
+    shortcut: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "512x512", type: "image/png" }],
+  },
+  manifest: "/manifest.webmanifest",
   robots: {
     index: true,
     follow: true,
