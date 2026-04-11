@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Quotation Generator Online Free — Create Business Quotes | ToolMint",
   description:
     "Create professional business quotations online for free with ToolMint. Add client details, line items, taxes, pricing, terms, and printable PDF export. Coming soon.",

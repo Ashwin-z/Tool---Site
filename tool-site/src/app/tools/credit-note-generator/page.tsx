@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Credit Note Generator Online Free — Refund & Credit Memo | ToolMint",
   description: "Create credit notes online with ToolMint for refunds, returns, and invoice adjustments. Add customer details, original invoice references, and PDF export. Coming soon.",
   keywords: ["credit note generator","credit memo generator","refund note generator","sales return credit note","invoice adjustment note","credit note template","credit note pdf","toolmint credit note"],

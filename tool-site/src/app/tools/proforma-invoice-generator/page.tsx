@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Proforma Invoice Generator Online Free — Pre-Shipment Invoices | ToolMint",
   description:
     "Create proforma invoices online for free with ToolMint. Add seller and buyer details, pre-shipment pricing, taxes, and terms with printable PDF output. Coming soon.",

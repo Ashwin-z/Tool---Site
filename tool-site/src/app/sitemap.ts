@@ -3,7 +3,7 @@ import path from "node:path";
 
 import type { MetadataRoute } from "next";
 
-const BASE_URL = "https://toolmint.com";
+const BASE_URL = "https://toolmint.tools";
 
 const STATIC_ROUTES = [
   "",
@@ -17,6 +17,23 @@ const STATIC_ROUTES = [
   "/disclaimer",
 ];
 
+/** Tools that are placeholders / coming-soon — keep out of sitemap until live */
+const EXCLUDE_TOOLS = new Set([
+  "ai-content-detector",
+  "cash-receipt-generator",
+  "credit-note-generator",
+  "delivery-note-generator",
+  "estimate-generator",
+  "invoice-generator",
+  "plagiarism-checker",
+  "proforma-invoice-generator",
+  "purchase-order-generator",
+  "quotation-generator",
+  "receipt-generator",
+  "sales-receipt-generator",
+  "tax-invoice-generator",
+]);
+
 async function getToolRoutes(): Promise<string[]> {
   const toolsDir = path.join(process.cwd(), "src", "app", "tools");
   const entries = await readdir(toolsDir, { withFileTypes: true });
@@ -25,6 +42,7 @@ async function getToolRoutes(): Promise<string[]> {
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
     .filter((name) => !name.startsWith("[") && !name.startsWith("("))
+    .filter((name) => !EXCLUDE_TOOLS.has(name))
     .map((name) => `/tools/${name}`)
     .sort((a, b) => a.localeCompare(b));
 }

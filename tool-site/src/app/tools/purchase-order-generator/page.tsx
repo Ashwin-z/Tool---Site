@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Purchase Order Generator Online Free — Vendor PO Documents | ToolMint",
   description: "Create purchase orders online for free with ToolMint. Add vendor details, item quantities, rates, delivery terms, and printable PDF output. Coming soon.",
   keywords: ["purchase order generator","po generator","vendor purchase order","purchase order template","buying order generator","po pdf generator","procurement document generator","toolmint purchase order"],

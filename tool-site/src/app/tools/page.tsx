@@ -2,8 +2,26 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "All Tools | ToolMint",
-  description: "Browse all available and upcoming tools on ToolMint.",
+  title: "Free Online Tools — PDF, Image, Text, SEO, Calculator & More",
+  description:
+    "Browse 80+ free online tools on ToolMint. Compress, merge, split and convert PDFs, edit images, format code, calculate finances, check SEO, and more. No signup required.",
+  keywords: [
+    "free online tools",
+    "pdf tools online",
+    "image tools",
+    "text tools",
+    "online calculators",
+    "seo tools",
+    "developer tools",
+    "toolmint",
+  ],
+  alternates: { canonical: "/tools" },
+  openGraph: {
+    title: "Free Online Tools — PDF, Image, Text, SEO & Calculators | ToolMint",
+    description:
+      "80+ free browser-based tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
+    url: "/tools",
+  },
 };
 
 type ToolEntry = readonly [string, string];

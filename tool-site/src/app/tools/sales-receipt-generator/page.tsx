@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Sales Receipt Generator Online Free — POS & Retail Receipts | ToolMint",
   description: "Create sales receipts online with ToolMint for point-of-sale and retail transactions. Add sold items, taxes, quantities, payment methods, and PDF output. Coming soon.",
   keywords: ["sales receipt generator","pos receipt generator","retail receipt maker","sales receipt template","receipt for sold items","printable sales receipt","sales receipt pdf","toolmint sales receipt"],

@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Estimate Generator Online Free — Project Cost Estimates | ToolMint",
   description: "Create project cost estimates online with ToolMint. Add labor, materials, taxes, pricing breakdowns, and PDF-ready estimate documents. Coming soon.",
   keywords: ["estimate generator","cost estimate generator","project estimate template","service estimate maker","job estimate online","contractor estimate generator","estimate pdf maker","toolmint estimate generator"],

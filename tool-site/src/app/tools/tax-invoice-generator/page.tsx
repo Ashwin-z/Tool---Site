@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Tax Invoice Generator Online Free — GST & VAT Invoices | ToolMint",
   description:
     "Create GST, VAT, and tax-compliant invoices online with ToolMint. Add tax IDs, line items, taxable amounts, and printable PDF export. Coming soon.",

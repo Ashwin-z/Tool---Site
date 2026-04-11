@@ -21,7 +21,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://toolmint.com"),
+  metadataBase: new URL("https://toolmint.tools"),
   title: {
     template: "%s | ToolMint",
     default: "ToolMint — Free Online PDF Tools, Converters & Calculators",

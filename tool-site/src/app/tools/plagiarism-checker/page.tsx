@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Plagiarism Checker Online Free — Detect Duplicate Content Instantly",
   description:
     "Check text for plagiarism online for free with ToolMint. Scan your writing against billions of web pages to find duplicate content. Coming soon — no signup required.",

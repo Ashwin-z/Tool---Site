@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Delivery Note Generator Online Free — Shipment Delivery Notes | ToolMint",
   description: "Create delivery notes online with ToolMint. Add shipment details, item lists, delivery addresses, and printable PDF output for dispatch workflows. Coming soon.",
   keywords: ["delivery note generator","shipment note generator","dispatch note generator","delivery challan generator","goods delivery note","delivery note template","delivery note pdf","toolmint delivery note"],

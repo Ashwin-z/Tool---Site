@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Receipt Generator Online Free — Create Payment Receipts | ToolMint",
   description: "Create professional payment receipts online with ToolMint. Add payer details, payment methods, amounts, references, and printable PDF output. Coming soon.",
   keywords: ["receipt generator","payment receipt maker","receipt template online","receipt pdf generator","money receipt generator","simple receipt maker","printable receipt online","toolmint receipt generator"],

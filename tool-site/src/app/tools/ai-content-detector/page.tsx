@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "AI Content Detector Online Free — Check If Text Is AI or Human",
   description:
     "Detect AI-generated text online for free with ToolMint. Analyze any passage to determine whether it was written by a human or produced by ChatGPT, GPT-4, or other AI models. Coming soon.",

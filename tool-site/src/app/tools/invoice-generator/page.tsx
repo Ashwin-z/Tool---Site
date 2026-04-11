@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Invoice Generator Online Free — Create Professional Business Invoices | ToolMint",
   description:
     "Create professional invoices online for free with ToolMint. Add business details, line items, tax, discounts, payment terms, and download printable invoices as PDF. Coming soon.",

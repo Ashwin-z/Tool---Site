@@ -3,6 +3,7 @@ import Link from "next/link";
 import DocumentGeneratorComingSoon from "@/components/document-generator-coming-soon";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: "Cash Receipt Generator Online Free — Cash Payment Receipts | ToolMint",
   description: "Create cash payment receipts online for free with ToolMint. Add payer details, received amount, payment date, purpose, and printable PDF export. Coming soon.",
   keywords: ["cash receipt generator","cash payment receipt","money receipt generator","cash received receipt","receipt for cash payment","printable cash receipt","cash receipt pdf","toolmint cash receipt"],
