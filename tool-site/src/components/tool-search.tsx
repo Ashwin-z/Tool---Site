@@ -78,9 +78,14 @@ export default function ToolSearch({ className }: ToolSearchProps) {
         </label>
         <div
           className="flex w-full items-center gap-2 rounded-lg border px-3 py-2 transition focus-within:border-[#6c63ff]/60"
-          style={{ borderColor: "var(--border-strong)", background: "var(--surface-2)", color: "var(--foreground)" }}
+          style={{
+            borderColor: "var(--border-strong)",
+            background: "var(--surface-1)",
+            color: "var(--foreground)",
+            boxShadow: "0 1px 0 rgba(0,0,0,0.02)",
+          }}
         >
-          <span className="shrink-0 text-[var(--muted-2)]">
+          <span className="shrink-0" style={{ color: "var(--muted-2)" }}>
             <SearchIcon />
           </span>
           <input
@@ -93,14 +98,15 @@ export default function ToolSearch({ className }: ToolSearchProps) {
             }}
             onFocus={() => setOpen(true)}
             placeholder="Search tools by name or task"
-            className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--muted-2)]"
+            className="w-full border-0 bg-transparent text-sm outline-none"
+            style={{ color: "var(--foreground)" }}
             autoComplete="off"
             spellCheck={false}
           />
           <button
             type="submit"
-            className="shrink-0 rounded-md px-2 py-1 text-xs font-medium transition hover:bg-white/5"
-            style={{ color: "var(--muted-2)" }}
+            className="shrink-0 rounded-md px-2 py-1 text-xs font-medium transition"
+            style={{ color: "var(--muted-2)", background: "var(--surface-1)" }}
           >
             Search
           </button>
@@ -110,7 +116,11 @@ export default function ToolSearch({ className }: ToolSearchProps) {
       {open && query.trim() ? (
         <div
           className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-xl border shadow-2xl"
-          style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}
+          style={{
+            borderColor: "var(--border)",
+            background: "var(--surface-1)",
+            boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
+          }}
         >
           {results.length ? (
             <div className="py-2">
@@ -122,9 +132,10 @@ export default function ToolSearch({ className }: ToolSearchProps) {
                     setQuery("");
                     setOpen(false);
                   }}
-                  className={`block px-4 py-3 transition hover:bg-white/[.03] ${
-                    pathname === result.href ? "bg-white/[.04]" : ""
-                  }`}
+                  className="block px-4 py-3 transition"
+                  style={{
+                    background: pathname === result.href ? "var(--surface-3)" : "var(--surface-1)",
+                  }}
                 >
                   <div className="text-sm font-medium text-foreground">{result.name}</div>
                   <div className="mt-0.5 text-xs" style={{ color: "var(--muted-2)" }}>
@@ -138,14 +149,21 @@ export default function ToolSearch({ className }: ToolSearchProps) {
                   router.push(`/tools?q=${encodeURIComponent(query.trim())}`);
                   setOpen(false);
                 }}
-                className="block w-full border-t px-4 py-3 text-left text-xs font-medium transition hover:bg-white/[.03]"
-                style={{ borderColor: "var(--border)", color: "var(--accent-light)" }}
+                className="block w-full border-t px-4 py-3 text-left text-xs font-medium transition"
+                style={{
+                  borderColor: "var(--border)",
+                  color: "var(--accent-light)",
+                  background: "var(--surface-1)",
+                }}
               >
                 View all results for "{query.trim()}"
               </button>
             </div>
           ) : (
-            <div className="px-4 py-4 text-sm" style={{ color: "var(--muted-2)" }}>
+            <div
+              className="px-4 py-4 text-sm"
+              style={{ color: "var(--muted-2)", background: "var(--surface-1)" }}
+            >
               No tools matched "{query.trim()}". Press Search to view the tools page anyway.
             </div>
           )}
