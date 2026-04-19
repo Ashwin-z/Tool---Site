@@ -4,6 +4,27 @@ import Link from "next/link";
 import { useNavShell } from "@/components/nav-shell-context";
 import { useTheme } from "@/components/theme-context";
 import BrandMark from "@/components/brand-mark";
+import ToolSearch from "@/components/tool-search";
+
+function MoonIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path
+        d="M12.9 2.8a6.8 6.8 0 1 0 4.3 12.2 6.6 6.6 0 0 1-4.3-12.2Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <circle cx="10" cy="10" r="3.2" fill="currentColor" />
+      <path d="M10 2.2v2M10 15.8v2M17.8 10h-2M4.2 10h-2M15.5 4.5l-1.4 1.4M5.9 14.1l-1.4 1.4M15.5 15.5l-1.4-1.4M5.9 5.9 4.5 4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 export default function SiteHeader() {
   const { navOpen, toggleNav } = useNavShell();
@@ -18,19 +39,7 @@ export default function SiteHeader() {
         </Link>
 
         <div className="mx-auto hidden w-full max-w-xl items-center gap-2 md:flex">
-          <Link
-            href="/tools"
-            className="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-sm transition hover:border-[#6c63ff]/40"
-            style={{ borderColor: "var(--border-strong)", background: "var(--surface-2)", color: "var(--foreground)" }}
-          >
-            <span className="flex items-center gap-2">
-              <span className="text-xs" style={{ color: "var(--muted-2)" }}>ðŸ”</span>
-              Browse all live tools
-            </span>
-            <span className="text-xs" style={{ color: "var(--muted-2)" }}>
-              PDFs, images, text, calculators
-            </span>
-          </Link>
+          <ToolSearch />
         </div>
 
         <button
@@ -40,10 +49,10 @@ export default function SiteHeader() {
           style={{ borderColor: "var(--border-strong)", background: theme === "dark" ? "var(--surface-2)" : "var(--surface-3)" }}
         >
           <span
-            className="absolute flex h-5 w-5 items-center justify-center rounded-full bg-[#6c63ff] text-[10px] text-white shadow transition-transform duration-200"
+            className="absolute flex h-5 w-5 items-center justify-center rounded-full bg-[#6c63ff] text-white shadow transition-transform duration-200"
             style={{ transform: theme === "dark" ? "translateX(2px)" : "translateX(26px)" }}
           >
-            {theme === "dark" ? "ðŸŒ™" : "â˜€ï¸"}
+            {theme === "dark" ? <MoonIcon /> : <SunIcon />}
           </span>
         </button>
 

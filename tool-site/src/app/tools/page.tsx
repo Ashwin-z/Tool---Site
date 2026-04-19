@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Free Online Tools â€” PDF, Image, Text, SEO, Calculator & More",
+  title: "Free Online Tools - PDF, Image, Text, SEO, Calculator & More",
   description:
     "Browse 80+ free online tools on ToolMint. Compress, merge, split and convert PDFs, edit images, format code, calculate finances, check SEO, and more. No signup required.",
   keywords: [
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools" },
   openGraph: {
-    title: "Free Online Tools â€” PDF, Image, Text, SEO & Calculators | ToolMint",
+    title: "Free Online Tools - PDF, Image, Text, SEO & Calculators | ToolMint",
     description:
       "80+ free browser-based tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
     url: "/tools",
@@ -29,7 +29,7 @@ type ToolEntry = readonly [string, string];
 const categorizedTools: { title: string; icon: string; path?: string; summary: string; tools: ToolEntry[] }[] = [
   {
     title: "PDF Tools",
-    icon: "ðŸ“„",
+    icon: "\u{1F4C4}",
     path: "/tools/pdf-tools",
     summary: "Compress, merge, split, secure, and convert document files.",
     tools: [
@@ -61,14 +61,14 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "Image Tools",
-    icon: "ðŸ–¼ï¸",
+    icon: "\u{1F5BC}\u{FE0F}",
     path: "/tools/image-tools",
     summary: "Optimize, resize, crop, convert, and OCR image files.",
     tools: [
       ["Image Compressor", "/tools/image-compressor"],
       ["Image Resizer", "/tools/image-resizer"],
       ["Image Cropper", "/tools/image-cropper"],
-      ["JPG to PDF", "/tools/jpg-to-pdf"],
+      ["JPG to PDF", "/tools/image-to-pdf"],
       ["PNG to JPG", "/tools/png-to-jpg"],
       ["JPG to PNG", "/tools/jpg-to-png"],
       ["Image Converter", "/tools/image-converter"],
@@ -78,7 +78,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "Text Tools",
-    icon: "ðŸ“",
+    icon: "\u{1F4DD}",
     path: "/tools/text-tools",
     summary: "Count, compare, clean, and transform text online.",
     tools: [
@@ -93,7 +93,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "Calculators",
-    icon: "ðŸ”¢",
+    icon: "\u{1F522}",
     path: "/tools/calculators",
     summary: "Practical calculators for finance, study, health, and daily math.",
     tools: [
@@ -115,7 +115,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "Developer Tools",
-    icon: "ðŸ’»",
+    icon: "\u{1F4BB}",
     path: "/tools/developer-tools",
     summary: "Quick browser-based helpers for code, JSON, passwords, and encoding.",
     tools: [
@@ -129,7 +129,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "SEO Tools",
-    icon: "ðŸ“Š",
+    icon: "\u{1F4CA}",
     path: "/tools/seo-tools",
     summary: "Metadata, crawl, and publishing support for site owners.",
     tools: [
@@ -143,7 +143,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "Converters",
-    icon: "ðŸ”„",
+    icon: "\u{1F504}",
     path: "/tools/converters",
     summary: "Fast unit, file-size, color, and randomization utilities.",
     tools: [
@@ -157,7 +157,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
   },
   {
     title: "More Tools",
-    icon: "âœ¨",
+    icon: "\u{2728}",
     summary: "Extra utilities for QR codes, thumbnails, timers, and quick checks.",
     tools: [
       ["Stopwatch", "/tools/stopwatch"],
@@ -197,11 +197,11 @@ const selectionGuides = [
 const qualityNotes = [
   {
     title: "Live tools only",
-    desc: "This library is now focused on tools that are available today, so visitors are not sent into unfinished or placeholder pages.",
+    desc: "This library is focused on tools that are available today, so visitors are not sent into unfinished or placeholder pages.",
   },
   {
     title: "Task-first structure",
-    desc: "Categories are organized by the job a visitor wants to complete, not by vague marketing labels or thin landing pages.",
+    desc: "Categories are organized by the job a visitor wants to complete, not by vague labels or thin landing pages.",
   },
   {
     title: "Browser-friendly workflows",
@@ -232,11 +232,35 @@ const faqs = [
   },
 ];
 
-export default function ToolsPage() {
+type SearchParams = Promise<{ q?: string }>;
+
+export default async function ToolsPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const query = resolvedSearchParams?.q?.trim() ?? "";
+  const normalizedQuery = query.toLowerCase();
+
+  const visibleCategories = normalizedQuery
+    ? categorizedTools
+        .map((category) => ({
+          ...category,
+          tools: category.tools.filter(([name]) => {
+            const haystack = `${name} ${category.title} ${category.summary}`.toLowerCase();
+            return haystack.includes(normalizedQuery);
+          }),
+        }))
+        .filter((category) => category.tools.length > 0)
+    : categorizedTools;
+
+  const matchedTools = visibleCategories.reduce((sum, category) => sum + category.tools.length, 0);
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
       <Link href="/" className="text-sm transition hover:opacity-80" style={{ color: "var(--muted)" }}>
-        â† Back to home
+        Back to home
       </Link>
 
       <h1 className="font-display mt-4 text-4xl font-bold leading-[1.1] tracking-[-0.02em]">All Tools</h1>
@@ -244,94 +268,133 @@ export default function ToolsPage() {
         Browse {totalTools} live tools across {categorizedTools.length} categories. ToolMint focuses on practical online work:
         documents, images, writing, lightweight developer tasks, publishing helpers, and everyday calculations.
       </p>
-      <div className="mt-6 space-y-4 text-sm leading-7" style={{ color: "var(--muted)" }}>
-        <p>
-          This page is designed as a real navigation hub, not just a list of routes. Each collection groups related tasks so
-          visitors can quickly understand where to go next instead of bouncing between disconnected utility pages.
-        </p>
-        <p>
-          If you are compressing files, checking draft copy, generating metadata, or running quick calculations, the sections
-          below are the fastest way to find the right workflow.
-        </p>
-      </div>
 
-      <section className="mt-12">
-        <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-          Choose The Right Tool Category
-        </h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {selectionGuides.map((guide) => (
-            <article key={guide.title} className="rounded-2xl border border-white/10 bg-white/[.02] p-5">
-              <h3 className="font-semibold text-foreground">{guide.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">{guide.desc}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {query ? (
+        <section className="mt-6 rounded-2xl border border-white/10 bg-white/[.02] p-5">
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="font-display text-xl font-bold text-foreground">
+              Search results for "{query}"
+            </h2>
+            <span className="rounded-full bg-[#6c63ff]/15 px-3 py-1 text-xs font-medium text-[#bdb8ff]">
+              {matchedTools} match{matchedTools === 1 ? "" : "es"}
+            </span>
+            <Link href="/tools" className="text-sm font-medium text-[#8f86ff] transition hover:underline">
+              Clear search
+            </Link>
+          </div>
+        </section>
+      ) : null}
 
-      <div className="mt-12 space-y-8">
-        {categorizedTools.map((category) => (
-          <section key={category.title} className="rounded-2xl p-5" style={{ background: "var(--surface-1)", border: "1px solid var(--border)" }}>
-            <div className="mb-4 flex items-center gap-3">
-              <span className="text-2xl">{category.icon}</span>
-              <div>
-                <h2 className="font-display text-xl font-bold">{category.title}</h2>
-                <p className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>
-                  {category.summary}
-                </p>
-                <span className="text-xs" style={{ color: "var(--muted-2)" }}>
-                  {category.tools.length} tools
-                </span>
-              </div>
-              {category.path && (
-                <Link href={category.path} className="ml-auto text-xs font-medium text-[#6c63ff] transition hover:underline">
-                  View all â†’
-                </Link>
-              )}
-            </div>
-            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {category.tools.map(([name, href]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition hover:-translate-y-0.5"
-                  style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)" }}
-                >
-                  {name}
-                </Link>
+      {!query ? (
+        <>
+          <div className="mt-6 space-y-4 text-sm leading-7" style={{ color: "var(--muted)" }}>
+            <p>
+              This page is designed as a real navigation hub, not just a list of routes. Each collection groups related tasks so
+              visitors can quickly understand where to go next instead of bouncing between disconnected utility pages.
+            </p>
+            <p>
+              If you are compressing files, checking draft copy, generating metadata, or running quick calculations, the sections
+              below are the fastest way to find the right workflow.
+            </p>
+          </div>
+
+          <section className="mt-12">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Choose The Right Tool Category
+            </h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {selectionGuides.map((guide) => (
+                <article key={guide.title} className="rounded-2xl border border-white/10 bg-white/[.02] p-5">
+                  <h3 className="font-semibold text-foreground">{guide.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">{guide.desc}</p>
+                </article>
               ))}
             </div>
           </section>
-        ))}
-      </div>
+        </>
+      ) : null}
 
-      <section className="mt-16">
-        <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-          What Makes This Library More Useful
-        </h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {qualityNotes.map((note) => (
-            <article key={note.title} className="rounded-2xl border border-white/10 bg-white/[.02] p-5">
-              <h3 className="font-semibold text-foreground">{note.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">{note.desc}</p>
-            </article>
+      {visibleCategories.length ? (
+        <div className="mt-12 space-y-8">
+          {visibleCategories.map((category) => (
+            <section key={category.title} className="rounded-2xl p-5" style={{ background: "var(--surface-1)", border: "1px solid var(--border)" }}>
+              <div className="mb-4 flex items-center gap-3">
+                <span className="text-2xl">{category.icon}</span>
+                <div>
+                  <h2 className="font-display text-xl font-bold">{category.title}</h2>
+                  <p className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>
+                    {category.summary}
+                  </p>
+                  <span className="text-xs" style={{ color: "var(--muted-2)" }}>
+                    {category.tools.length} tool{category.tools.length === 1 ? "" : "s"}
+                  </span>
+                </div>
+                {category.path && !query ? (
+                  <Link href={category.path} className="ml-auto text-xs font-medium text-[#6c63ff] transition hover:underline">
+                    View all
+                  </Link>
+                ) : null}
+              </div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {category.tools.map(([name, href]) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition hover:-translate-y-0.5"
+                    style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--foreground)" }}
+                  >
+                    {name}
+                  </Link>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
-      </section>
+      ) : (
+        <section className="mt-12 rounded-2xl border border-white/10 bg-white/[.02] p-6">
+          <h2 className="font-display text-2xl font-bold text-foreground">No matching tools found</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
+            Try a different name like "pdf", "json", "counter", "calculator", or "image", or browse the full catalog again.
+          </p>
+          <div className="mt-4">
+            <Link href="/tools" className="text-sm font-medium text-[#8f86ff] transition hover:underline">
+              Browse all tools
+            </Link>
+          </div>
+        </section>
+      )}
 
-      <section className="mt-16">
-        <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-          Frequently Asked Questions
-        </h2>
-        <dl className="mt-6 space-y-6">
-          {faqs.map((faq) => (
-            <div key={faq.q}>
-              <dt className="font-semibold text-foreground">{faq.q}</dt>
-              <dd className="mt-1 text-sm leading-6 text-muted">{faq.a}</dd>
+      {!query ? (
+        <>
+          <section className="mt-16">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              What Makes This Library More Useful
+            </h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              {qualityNotes.map((note) => (
+                <article key={note.title} className="rounded-2xl border border-white/10 bg-white/[.02] p-5">
+                  <h3 className="font-semibold text-foreground">{note.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted">{note.desc}</p>
+                </article>
+              ))}
             </div>
-          ))}
-        </dl>
-      </section>
+          </section>
+
+          <section className="mt-16">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Frequently Asked Questions
+            </h2>
+            <dl className="mt-6 space-y-6">
+              {faqs.map((faq) => (
+                <div key={faq.q}>
+                  <dt className="font-semibold text-foreground">{faq.q}</dt>
+                  <dd className="mt-1 text-sm leading-6 text-muted">{faq.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        </>
+      ) : null}
     </main>
   );
 }

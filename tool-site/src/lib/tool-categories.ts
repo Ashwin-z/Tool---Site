@@ -13,7 +13,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "pdf",
     title: "PDF Tools",
-    icon: "ðŸ“„",
+    icon: "\u{1F4C4}",
     path: "/tools/pdf-tools",
     description:
       "Compress, merge, split, convert, and edit PDF files online for free. Most tasks are designed to stay fast and straightforward, with no signup required.",
@@ -21,7 +21,7 @@ export const toolCategories: ToolCategory[] = [
       { name: "PDF Compressor", slug: "pdf-compressor", desc: "Reduce PDF file size by up to 90%." },
       { name: "PDF Merger", slug: "pdf-merger", desc: "Combine multiple PDFs into one." },
       { name: "PDF Splitter", slug: "pdf-splitter", desc: "Split a PDF into separate files." },
-      { name: "Rotate PDF", slug: "rotate-pdf", desc: "Rotate PDF pages 90Â°, 180Â° or 270Â°." },
+      { name: "Rotate PDF", slug: "rotate-pdf", desc: "Rotate PDF pages 90, 180, or 270 degrees." },
       { name: "Edit PDF", slug: "edit-pdf", desc: "Add text, images and annotations." },
       { name: "Crop PDF", slug: "crop-pdf", desc: "Trim PDF page margins." },
       { name: "Add Page Numbers", slug: "add-page-numbers", desc: "Number your PDF pages." },
@@ -47,7 +47,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "image",
     title: "Image Tools",
-    icon: "ðŸ–¼ï¸",
+    icon: "\u{1F5BC}\u{FE0F}",
     path: "/tools/image-tools",
     description:
       "Compress, resize, crop, convert, and edit images online for free. Supports JPG, PNG, WebP, and more without forcing account creation.",
@@ -66,7 +66,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "text",
     title: "Text Tools",
-    icon: "ðŸ“",
+    icon: "\u{1F4DD}",
     path: "/tools/text-tools",
     description:
       "Count words, compare drafts, change case, and clean up text online for free. Built for quick writing and editing tasks.",
@@ -83,7 +83,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "calculators",
     title: "Calculators",
-    icon: "ðŸ”¢",
+    icon: "\u{1F522}",
     path: "/tools/calculators",
     description:
       "Free online calculators for math, finance, health, education, and everyday decisions.",
@@ -107,7 +107,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "developer",
     title: "Developer Tools",
-    icon: "ðŸ’»",
+    icon: "\u{1F4BB}",
     path: "/tools/developer-tools",
     description:
       "Format code, encode data, generate passwords, and solve small developer tasks from the browser.",
@@ -123,7 +123,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "seo",
     title: "SEO Tools",
-    icon: "ðŸ“Š",
+    icon: "\u{1F4CA}",
     path: "/tools/seo-tools",
     description:
       "Generate metadata, check snippets, create sitemaps, and handle small SEO publishing tasks online.",
@@ -139,14 +139,14 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "converters",
     title: "Converters",
-    icon: "ðŸ”„",
+    icon: "\u{1F504}",
     path: "/tools/converters",
     description:
       "Convert units of length, weight, temperature, file size, and colors online for free.",
     tools: [
       { name: "Length Converter", slug: "length-converter", desc: "Convert length and distance units." },
       { name: "Weight Converter", slug: "weight-converter", desc: "Convert weight and mass units." },
-      { name: "Temperature Converter", slug: "temperature-converter", desc: "Convert Â°C, Â°F and Kelvin." },
+      { name: "Temperature Converter", slug: "temperature-converter", desc: "Convert C, F, and Kelvin." },
       { name: "File Size Converter", slug: "file-size-converter", desc: "Convert bytes, KB, MB, and GB." },
       { name: "Color Converter", slug: "color-converter", desc: "Convert HEX, RGB, and HSL colors." },
       { name: "Random Number Generator", slug: "random-number-generator", desc: "Generate random numbers." },
@@ -155,7 +155,7 @@ export const toolCategories: ToolCategory[] = [
   {
     id: "more",
     title: "More Tools",
-    icon: "âœ¨",
+    icon: "\u{2728}",
     description:
       "Extra utility pages for timers, QR codes, file helpers, and small daily tasks.",
     tools: [
