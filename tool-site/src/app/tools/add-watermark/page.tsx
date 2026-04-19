@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import AddWatermarkTool from "@/components/add-watermark-tool";
+import AddWatermarkTool from "@/components/add-watermark-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Add Watermark to PDF Online Free — Text & Image Watermark",
+  title: "Add Watermark to PDF Online Free - Text & Image Watermark",
   description:
     "Add text or image watermarks to any PDF online for free with ToolMint. Control position, rotation, opacity, mosaic tiling, and page range. No upload, fully browser-based.",
   keywords: [
@@ -20,15 +20,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Add Watermark to PDF Online Free | ToolMint",
     description:
-      "Add text or image watermarks to PDFs online. Control position, opacity, rotation, mosaic, and page range — all in your browser.",
+      "Add text or image watermarks to PDFs online. Control position, opacity, rotation, mosaic, and page range in your browser.",
     url: "/tools/add-watermark",
   },
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Drag & drop or select the PDF you want to watermark." },
+  { title: "Upload a PDF", desc: "Drag and drop or select the PDF you want to watermark." },
   { title: "Choose watermark type", desc: "Add a text watermark or upload an image to use as the watermark stamp." },
-  { title: "Adjust settings", desc: "Set position, alignment, rotation, opacity/transparency, mosaic tiling, and page range." },
+  { title: "Adjust settings", desc: "Set position, alignment, rotation, opacity, mosaic tiling, and page range." },
   { title: "Download", desc: "Preview the watermarked PDF and save it to your device." },
 ];
 
@@ -47,7 +47,7 @@ const faqs = [
   },
   {
     q: "Will watermarking change my PDF quality?",
-    a: "No. Watermarks are drawn as vector overlays on the PDF canvas — no re-encoding or quality loss.",
+    a: "No. Watermarks are drawn as vector overlays on the PDF canvas with no re-encoding or quality loss.",
   },
   {
     q: "Is my file private?",
@@ -73,9 +73,14 @@ export default function AddWatermarkPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Add Watermark" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Add Watermark to PDF Online for Free
@@ -83,7 +88,7 @@ export default function AddWatermarkPage() {
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Stamp any PDF with a text or image watermark using ToolMint. Adjust the position,
           alignment, rotation, opacity, and mosaic tiling, then choose which pages to apply
-          it to — all in your browser with no file upload required.
+          it to with a browser-based watermark editor.
         </p>
 
         <div className="mt-8">

@@ -6136,8 +6136,8 @@ export default function EditPdfTool() {
                         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
                           <div className="rounded-2xl border border-amber-400/30 bg-amber-950/80 px-8 py-6 text-center shadow-xl backdrop-blur-sm">
                             <div className="text-3xl">🚧</div>
-                            <div className="mt-2 text-sm font-semibold text-amber-300">Under Construction</div>
-                            <div className="mt-1 text-xs text-amber-200/70">Text editing is being improved</div>
+                            <div className="mt-2 text-sm font-semibold text-amber-300">Text Editing Beta</div>
+                            <div className="mt-1 text-xs text-amber-200/70">Text editing is still being refined for better font matching</div>
                           </div>
                         </div>
                       )}
@@ -6613,8 +6613,8 @@ export default function EditPdfTool() {
                   <div className="mb-4 space-y-4">
                     <div className="rounded-2xl border border-amber-400/20 bg-amber-950/30 p-4 text-center space-y-3">
                       <div className="text-3xl">🚧</div>
-                      <div className="text-sm font-semibold text-amber-300">Under Construction</div>
-                      <p className="text-xs text-amber-200/60 leading-relaxed">The text editing feature is being improved to better detect and preserve original fonts, sizes and styles. Check back soon!</p>
+                      <div className="text-sm font-semibold text-amber-300">Text Editing Beta</div>
+                      <p className="text-xs text-amber-200/60 leading-relaxed">Text editing is being refined to better detect and preserve original fonts, sizes, and styles.</p>
                     </div>
                   </div>
                 ) : null}

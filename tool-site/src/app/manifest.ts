@@ -18,12 +18,6 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
         purpose: "any",
       },
-      {
-        src: "/branding/toolmint-logo.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-        purpose: "any",
-      },
     ],
   };
 }

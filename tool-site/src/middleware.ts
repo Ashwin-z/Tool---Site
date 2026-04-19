@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToolSlugFromHref, isToolAvailableSlug } from "./lib/tool-availability";
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
+
+  const toolSlug = getToolSlugFromHref(request.nextUrl.pathname);
+  if (toolSlug && !isToolAvailableSlug(toolSlug)) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return new NextResponse("Not Found", { status: 404, headers: response.headers });
+  }
 
   // ── Security headers ──────────────────────────────────────
   response.headers.set("X-Content-Type-Options", "nosniff");

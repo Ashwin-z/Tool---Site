@@ -3,44 +3,36 @@
 import Link from "next/link";
 import { useNavShell } from "@/components/nav-shell-context";
 import { useTheme } from "@/components/theme-context";
-import { useEffect } from "react";
 import BrandMark from "@/components/brand-mark";
 
 export default function SiteHeader() {
   const { navOpen, toggleNav } = useNavShell();
   const { theme, toggleTheme } = useTheme();
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        document.getElementById("main-search")?.focus();
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
   return (
     <header className="sticky top-0 z-50 border-b backdrop-blur" style={{ borderColor: "var(--border)", background: theme === "dark" ? "rgba(8,8,14,0.95)" : "rgba(248,249,251,0.95)" }}>
       <div className="mx-auto flex h-14 w-full max-w-[1400px] items-center gap-4 px-4">
-        {/* Logo */}
         <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight" style={{ color: "var(--foreground)" }}>
           <BrandMark size={28} className="shrink-0" />
           Tool<span className="text-[#6c63ff]">Mint</span>
         </Link>
 
-        {/* Search */}
-        <div className="mx-auto hidden w-full max-w-xl items-center gap-2 rounded-lg border px-3 py-2 md:flex" style={{ borderColor: "var(--border-strong)", background: "var(--surface-2)" }}>
-          <span className="text-xs" style={{ color: "var(--muted-2)" }}>🔍</span>
-          <input
-            id="main-search"
-            placeholder="Search tools... Ctrl+K"
-            className="w-full bg-transparent text-sm outline-none" style={{ color: "var(--foreground)" }}
-          />
+        <div className="mx-auto hidden w-full max-w-xl items-center gap-2 md:flex">
+          <Link
+            href="/tools"
+            className="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-sm transition hover:border-[#6c63ff]/40"
+            style={{ borderColor: "var(--border-strong)", background: "var(--surface-2)", color: "var(--foreground)" }}
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-xs" style={{ color: "var(--muted-2)" }}>ðŸ”</span>
+              Browse all live tools
+            </span>
+            <span className="text-xs" style={{ color: "var(--muted-2)" }}>
+              PDFs, images, text, calculators
+            </span>
+          </Link>
         </div>
 
-        {/* Theme toggle slider */}
         <button
           onClick={toggleTheme}
           aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
@@ -51,11 +43,10 @@ export default function SiteHeader() {
             className="absolute flex h-5 w-5 items-center justify-center rounded-full bg-[#6c63ff] text-[10px] text-white shadow transition-transform duration-200"
             style={{ transform: theme === "dark" ? "translateX(2px)" : "translateX(26px)" }}
           >
-            {theme === "dark" ? "🌙" : "☀️"}
+            {theme === "dark" ? "ðŸŒ™" : "â˜€ï¸"}
           </span>
         </button>
 
-        {/* Toggle nav */}
         <button
           onClick={toggleNav}
           className="flex shrink-0 items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition"

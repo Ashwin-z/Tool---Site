@@ -4,6 +4,7 @@ import { getRelatedTools, getCategoryForSlug } from "@/lib/tool-categories";
 export default function RelatedTools({ slug }: { slug: string }) {
   const related = getRelatedTools(slug, 5);
   const category = getCategoryForSlug(slug);
+
   if (related.length === 0) return null;
 
   return (
@@ -23,16 +24,16 @@ export default function RelatedTools({ slug }: { slug: string }) {
           </Link>
         ))}
       </div>
-      {category && (
+      {category?.path ? (
         <div className="mt-4">
           <Link
             href={category.path}
             className="text-sm font-medium text-[#6c63ff] transition hover:underline"
           >
-            View all {category.title} →
+            View all {category.title} â†’
           </Link>
         </div>
-      )}
+      ) : null}
     </section>
   );
 }

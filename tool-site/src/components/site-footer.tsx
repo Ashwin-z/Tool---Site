@@ -48,6 +48,7 @@ const footerColumns = [
     links: [
       { label: "Word Counter", href: "/tools/word-counter" },
       { label: "Case Converter", href: "/tools/text-case-converter" },
+      { label: "Text Compare", href: "/tools/text-compare" },
       { label: "Text Reverser", href: "/tools/text-reverser" },
       { label: "Whitespace Remover", href: "/tools/whitespace-remover" },
       { label: "Grammar Checker", href: "/tools/grammar-checker" },
@@ -62,7 +63,6 @@ const footerColumns = [
       { label: "Base64 Encoder", href: "/tools/base64-encoder-decoder" },
       { label: "Password Gen", href: "/tools/password-generator" },
       { label: "URL Encoder", href: "/tools/url-encoder-decoder" },
-      { label: "Regex Tester", href: "/tools/regex-tester" },
     ],
   },
   {
@@ -72,7 +72,7 @@ const footerColumns = [
       { label: "Meta Length Check", href: "/tools/meta-title-description-checker" },
       { label: "Sitemap Gen", href: "/tools/sitemap-generator" },
       { label: "Robots.txt", href: "/tools/robots-txt-generator" },
-      { label: "Keyword Density", href: "/tools/keyword-density-checker" },
+      { label: "Keyword Density", href: "/tools/keyword-density" },
       { label: "OG Generator", href: "/tools/og-tag-generator" },
     ],
   },
@@ -88,12 +88,16 @@ export default function SiteFooter() {
               <BrandMark size={32} className="shrink-0" />
               Tool<span className="text-[#6c63ff]">Mint</span>
             </Link>
-            <p className="max-w-xs text-sm leading-7" style={{ color: "var(--muted)" }}>100% free online tools. No account needed. Built with ❤️ for the web.</p>
+            <p className="max-w-xs text-sm leading-7" style={{ color: "var(--muted)" }}>
+              Free online tools for practical daily work, from PDF cleanup to quick calculators and browser-based utilities.
+            </p>
           </div>
 
           {footerColumns.map((column) => (
             <div key={column.title}>
-              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--muted-3)" }}>{column.title}</h4>
+              <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--muted-3)" }}>
+                {column.title}
+              </h4>
               <div className="space-y-2 text-sm" style={{ color: "var(--muted)" }}>
                 {column.links.map((link) => (
                   <Link key={link.label} href={link.href} className="block transition" style={{ color: "var(--muted)" }}>
@@ -106,7 +110,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm" style={{ borderTop: "1px solid var(--border)", color: "var(--muted-3)" }}>
-          <span>© {new Date().getFullYear()} ToolMint. All rights reserved.</span>
+          <span>Â© {new Date().getFullYear()} ToolMint. All rights reserved.</span>
           <div className="flex items-center gap-5">
             <Link href="/privacy" className="transition hover:opacity-80">
               Privacy

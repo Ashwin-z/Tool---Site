@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import PdfToPowerpointTool from "@/components/pdf-to-powerpoint-tool";
+import PdfToPowerpointTool from "@/components/pdf-to-powerpoint-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "PDF to PowerPoint Online Free — Convert PDF to PPTX",
+  title: "PDF to PowerPoint Online Free - Convert PDF to PPTX",
   description:
-    "Convert PDF to PowerPoint online for free with ToolMint. Turn each PDF page into a PowerPoint slide with full visual fidelity. No signup, no watermark — instant PDF to PPTX.",
+    "Convert PDF to PowerPoint online for free with ToolMint. Turn each PDF page into a PowerPoint slide with full visual fidelity. No signup, no watermark - instant PDF to PPTX.",
   keywords: [
     "pdf to powerpoint",
     "pdf to pptx",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-powerpoint" },
   openGraph: {
-    title: "PDF to PowerPoint Online Free — Convert PDF to PPTX | ToolMint",
+    title: "PDF to PowerPoint Online Free - Convert PDF to PPTX | ToolMint",
     description:
       "Convert PDF to PowerPoint online for free. Each page becomes a slide with full visual fidelity. No signup.",
     url: "/tools/pdf-to-powerpoint",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Drag & drop or select the PDF file you want to convert." },
+  { title: "Upload a PDF", desc: "Drag and drop or select the PDF file you want to convert." },
   { title: "Convert", desc: "ToolMint renders each PDF page as a full-bleed slide in your presentation." },
   { title: "Download PPTX", desc: "Get a PowerPoint file with one slide per PDF page." },
   { title: "Edit in PowerPoint", desc: "Open in Microsoft PowerPoint or Google Slides to add your own content." },
@@ -35,15 +35,15 @@ const steps = [
 const faqs = [
   {
     q: "How does PDF to PowerPoint conversion work?",
-    a: "Each PDF page is rendered as a high-resolution image and placed as a full-bleed slide in a PPTX file, preserving the exact visual layout.",
+    a: "Each PDF page is rendered as a high-resolution image and placed as a full-bleed slide in a PPTX file, preserving the visual layout.",
   },
   {
     q: "Can I edit the text in the PowerPoint slides after conversion?",
-    a: "The slides contain page images, not editable text. To get editable text first, use our PDF to Text (OCR) tool.",
+    a: "The slides contain page images, not editable text. To work with editable text first, use a text extraction workflow before rebuilding the deck.",
   },
   {
     q: "Is the PDF to PowerPoint conversion free?",
-    a: "Yes. Completely free — no signup, no limits, no watermarks on ToolMint.",
+    a: "Yes. It is free to use with no signup, no limits, and no watermarks on ToolMint.",
   },
   {
     q: "What PowerPoint format is the output?",
@@ -73,17 +73,22 @@ export default function PdfToPowerpointPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "PDF to PowerPoint" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to PowerPoint Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Transform any PDF into a PowerPoint presentation with ToolMint. Each page is rendered
-          as a full-bleed slide preserving every visual detail — layout, images, fonts, and
-          graphics — in a PPTX file you can open in Microsoft PowerPoint or Google Slides.
+          as a full-bleed slide preserving layout, images, fonts, and graphics in a PPTX file
+          you can open in Microsoft PowerPoint or Google Slides.
         </p>
 
         <div className="mt-8">

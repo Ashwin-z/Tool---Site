@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
-import PdfSplitterTool from "@/components/pdf-splitter-tool";
+import PdfSplitterTool from "@/components/pdf-splitter-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Split PDF Online Free — Extract PDF Pages",
+  title: "Split PDF Online Free - Extract PDF Pages",
   description:
-    "Split PDF files online for free with ToolMint. Extract pages by custom ranges, fixed intervals, or individual selection. No signup, no watermark — instant PDF splitting.",
+    "Split PDF files online for free with ToolMint. Extract pages by custom ranges, fixed intervals, or individual selection. No signup, no watermark - instant PDF splitting.",
   keywords: [
     "split pdf",
     "extract pdf pages",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-splitter" },
   openGraph: {
-    title: "Split PDF Online Free — Extract PDF Pages | ToolMint",
+    title: "Split PDF Online Free - Extract PDF Pages | ToolMint",
     description:
       "Split PDF files online for free. Extract pages by custom ranges, fixed intervals, or individual selection. No signup.",
     url: "/tools/pdf-splitter",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Drag & drop or select a PDF file from your device." },
+  { title: "Upload a PDF", desc: "Drag and drop or select a PDF file from your device." },
   { title: "Choose split mode", desc: "Select custom ranges, fixed intervals, or pick individual pages." },
   { title: "Select pages", desc: "Define which pages to extract using the visual page selector." },
   { title: "Download", desc: "Get your split PDF as one file or separate downloads." },
@@ -36,7 +36,7 @@ const steps = [
 const faqs = [
   {
     q: "What split modes does ToolMint offer?",
-    a: "ToolMint offers three modes: custom page ranges (e.g., 1–3, 7–10), fixed-size chunks (e.g., every 5 pages), and individual page selection.",
+    a: "ToolMint offers three modes: custom page ranges such as 1-3 and 7-10, fixed-size chunks such as every 5 pages, and individual page selection.",
   },
   {
     q: "Can I extract a single page from a PDF?",
@@ -74,9 +74,14 @@ export default function PdfSplitterPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "PDF Splitter" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Split PDF Online for Free
@@ -84,14 +89,13 @@ export default function PdfSplitterPage() {
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Extract specific pages from any PDF document with ToolMint. Split by custom page ranges,
           fixed intervals, or hand-pick individual pages. Download your selections as a single
-          merged PDF or separate files — all processed in your browser.
+          merged PDF or separate files - all processed in your browser.
         </p>
 
         <div className="mt-8">
           <PdfSplitterTool />
         </div>
 
-        {/* How-to section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Split a PDF Online
@@ -107,7 +111,6 @@ export default function PdfSplitterPage() {
           </div>
         </section>
 
-        {/* FAQ section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions

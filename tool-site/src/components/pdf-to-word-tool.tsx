@@ -1478,8 +1478,8 @@ export default function PdfToWordTool() {
       {/* ── Disclaimer ── */}
       <div className="rounded-xl border border-amber-500/10 bg-amber-500/5 px-4 py-3 text-center">
         <p className="text-[11px] leading-relaxed text-amber-200/70">
-          ⚠️ This tool is under active development. Some complex layouts, custom fonts, or advanced formatting may not convert perfectly.
-          PDF to Excel and PDF to PowerPoint conversions are coming soon.
+          Some complex layouts, custom fonts, or advanced formatting may not convert perfectly yet.
+          This converter works best with standard text-based PDFs and simple table layouts.
         </p>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import ExcelToPdfTool from "@/components/excel-to-pdf-tool";
+import ExcelToPdfTool from "@/components/excel-to-pdf-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Excel to PDF Online Free — Convert XLSX, CSV to PDF",
+  title: "Excel to PDF Online Free - Convert XLSX, CSV to PDF",
   description:
     "Convert Excel to PDF online for free with ToolMint. Upload XLSX, XLS, or CSV spreadsheets and download polished PDF documents. No signup, no watermark.",
   keywords: [
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/excel-to-pdf" },
   openGraph: {
-    title: "Excel to PDF Online Free — Convert XLSX, CSV to PDF | ToolMint",
+    title: "Excel to PDF Online Free - Convert XLSX, CSV to PDF | ToolMint",
     description:
       "Convert Excel to PDF online for free. Upload XLSX, XLS or CSV and download polished PDFs. No signup.",
     url: "/tools/excel-to-pdf",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const steps = [
-  { title: "Upload spreadsheets", desc: "Drag & drop or select up to 25 Excel or CSV files from your device." },
+  { title: "Upload spreadsheets", desc: "Drag and drop or select up to 25 Excel or CSV files from your device." },
   { title: "Preview", desc: "Review the uploaded files before conversion." },
   { title: "Convert", desc: "Click Convert and each spreadsheet is rendered into a formatted PDF." },
   { title: "Download", desc: "Save individual PDFs or grab all files as a ZIP archive." },
@@ -47,7 +47,7 @@ const faqs = [
   },
   {
     q: "Are formulas visible in the converted PDF?",
-    a: "The PDF shows calculated values, not the formulas themselves — the same as what you see on screen in the spreadsheet.",
+    a: "The PDF shows calculated values, not the formulas themselves, which matches what you see on screen in the spreadsheet.",
   },
   {
     q: "Is my data secure during conversion?",
@@ -73,9 +73,14 @@ export default function ExcelToPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Excel to PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert Excel to PDF Online for Free
@@ -90,7 +95,6 @@ export default function ExcelToPdfPage() {
           <ExcelToPdfTool />
         </div>
 
-        {/* How-to section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Convert Excel to PDF
@@ -106,7 +110,6 @@ export default function ExcelToPdfPage() {
           </div>
         </section>
 
-        {/* FAQ section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions

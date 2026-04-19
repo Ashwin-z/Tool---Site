@@ -4,20 +4,21 @@ import "./globals.css";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import SiteNav from "@/components/site-nav";
-import PopularTools from "@/components/popular-tools";
 import { NavShellProvider } from "@/components/nav-shell-context";
 import { ThemeProvider } from "@/components/theme-context";
 
 const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["600", "700", "800"],
+  display: "swap",
 });
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -44,10 +45,7 @@ export const metadata: Metadata = {
     locale: "en_US",
   },
   icons: {
-    icon: [
-      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
-      { url: "/branding/toolmint-logo.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/favicon.png", sizes: "512x512", type: "image/png" }],
     shortcut: [{ url: "/favicon.png", type: "image/png" }],
     apple: [{ url: "/apple-touch-icon.png", sizes: "512x512", type: "image/png" }],
   },
@@ -72,7 +70,6 @@ export default function RootLayout({
             <SiteHeader />
             <SiteNav />
             {children}
-            <PopularTools />
             <SiteFooter />
           </div>
         </NavShellProvider>

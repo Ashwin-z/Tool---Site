@@ -2,6 +2,7 @@ import { readdir } from "node:fs/promises";
 import path from "node:path";
 
 import type { MetadataRoute } from "next";
+import { unavailableToolSlugs } from "@/lib/tool-availability";
 
 const BASE_URL = "https://toolmint.tools";
 
@@ -18,21 +19,7 @@ const STATIC_ROUTES = [
 ];
 
 /** Tools that are placeholders / coming-soon — keep out of sitemap until live */
-const EXCLUDE_TOOLS = new Set([
-  "ai-content-detector",
-  "cash-receipt-generator",
-  "credit-note-generator",
-  "delivery-note-generator",
-  "estimate-generator",
-  "invoice-generator",
-  "plagiarism-checker",
-  "proforma-invoice-generator",
-  "purchase-order-generator",
-  "quotation-generator",
-  "receipt-generator",
-  "sales-receipt-generator",
-  "tax-invoice-generator",
-]);
+const EXCLUDE_TOOLS = new Set<string>(unavailableToolSlugs);
 
 /** Category landing pages — higher sitemap priority */
 const CATEGORY_PAGES = new Set([

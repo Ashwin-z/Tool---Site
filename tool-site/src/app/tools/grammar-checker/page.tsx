@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import GrammarCheckerTool from "@/components/grammar-checker-tool";
+import GrammarCheckerTool from "@/components/grammar-checker-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Grammar Checker Online Free — Fix Spelling & Grammar Instantly",
+  title: "Grammar Checker Online Free - Fix Spelling & Grammar Instantly",
   description:
     "Check grammar and spelling online for free with ToolMint. Find and fix spelling mistakes, capitalization errors, repeated words, confused words, and run-on sentences. No signup required.",
   keywords: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Grammar Checker Online Free | ToolMint",
     description:
-      "Find and fix spelling, capitalization, and grammar errors instantly. Rule-based checks — no signup needed.",
+      "Find and fix spelling, capitalization, and grammar errors instantly with fast browser-based checks.",
     url: "/tools/grammar-checker",
   },
 };
@@ -35,23 +35,38 @@ const steps = [
 const faqs = [
   {
     q: "What types of errors does it detect?",
-    a: "Spelling mistakes, capitalization errors, repeated words, commonly confused words (e.g. their/there), and run-on sentences.",
+    a: "Spelling mistakes, capitalization errors, repeated words, commonly confused words such as their and there, and run-on sentences.",
   },
   {
     q: "Is this AI-powered?",
-    a: "The current version uses rule-based checks. An advanced AI-powered grammar analysis mode is under development.",
+    a: "The current version focuses on fast rule-based checks for common writing mistakes. It is best for quick proofreading before you send or publish text.",
   },
   {
     q: "Does it work with non-English text?",
-    a: "The rule-based engine currently focuses on English. Support for additional languages is planned.",
+    a: "The rule-based engine currently focuses on English text, so results may be limited for other languages.",
   },
   {
     q: "Can I apply all fixes at once?",
-    a: "Yes. Click the 'Apply All' button to accept every suggestion in one step, or review them individually.",
+    a: "Yes. Click the Apply All button to accept every suggestion in one step, or review them individually.",
   },
   {
     q: "Is my text sent to a server?",
     a: "No. All grammar and spelling checks run locally in your browser. Your text is never transmitted.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Emails and messages",
+    desc: "Catch obvious spelling and capitalization mistakes before sending client emails, support replies, or application messages.",
+  },
+  {
+    title: "Essays and assignments",
+    desc: "Do a fast pass on student writing to spot repeated words, confused terms, and sentence-level issues before submission.",
+  },
+  {
+    title: "Website copy and captions",
+    desc: "Clean up homepage text, product descriptions, blog intros, and social captions without leaving your browser.",
   },
 ];
 
@@ -73,33 +88,43 @@ export default function GrammarCheckerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="text-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Text Tools", href: "/tools/text-tools" },
+            { name: "Grammar Checker" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Grammar Checker — Free Online
+          Grammar Checker - Free Online
         </h1>
 
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3">
-          <span className="text-lg">🚧</span>
-          <div>
-            <p className="text-sm font-semibold text-amber-300">Under Construction</p>
-            <p className="text-xs text-amber-300/70">
-              This tool uses rule-based checks. Advanced AI-powered grammar analysis is coming soon.
-            </p>
-          </div>
-        </div>
-
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
+        <p className="mt-4 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,
           capitalization errors, repeated words, confused words, and more. Fix issues one by one or
-          apply all suggestions at once with ToolMint.
+          apply all suggestions at once with ToolMint. The tool is tuned for quick English proofreading
+          that helps with emails, school work, blog drafts, and short-form website copy.
         </p>
 
         <div className="mt-8">
           <GrammarCheckerTool />
         </div>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            Best Uses for This Grammar Checker
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
