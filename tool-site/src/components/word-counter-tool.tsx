@@ -16,13 +16,13 @@ export default function WordCounterTool({ compact = false }: WordCounterToolProp
     const sentences = !text.trim() ? 0 : (text.match(/[.!?]+/g) || []).length || 1;
     const readingSeconds = Math.ceil(words / 3.3);
     const readTime =
-      words === 0 ? "—" : readingSeconds < 60 ? `${readingSeconds}s` : `${Math.ceil(readingSeconds / 60)} min`;
+      words === 0 ? "-" : readingSeconds < 60 ? `${readingSeconds}s` : `${Math.ceil(readingSeconds / 60)} min`;
 
     const density = Math.min(100, Math.round(chars / 5));
     const hint =
       words > 0
-        ? `Avg word length: ${(chars / words).toFixed(1)} chars · ${words.toLocaleString()} word${words === 1 ? "" : "s"} ✦`
-        : "Start typing to see your stats ✦";
+        ? `Avg word length: ${(chars / words).toFixed(1)} chars - ${words.toLocaleString()} word${words === 1 ? "" : "s"}`
+        : "Start typing to see your stats";
 
     return { words, chars, sentences, readTime, density, hint };
   }, [text]);
@@ -50,7 +50,7 @@ export default function WordCounterTool({ compact = false }: WordCounterToolProp
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#38d9a9]" />
-            <h2 className="font-display text-sm font-bold tracking-tight">Word Counter — Live</h2>
+            <h2 className="font-display text-sm font-bold tracking-tight">Word Counter - Live</h2>
           </div>
           <div className="flex items-center gap-2 text-xs">
             <button
@@ -72,7 +72,7 @@ export default function WordCounterTool({ compact = false }: WordCounterToolProp
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Paste or type your text here…\n\n✦ Live words, characters, sentences & reading time\n✦ Nothing leaves your browser"
+            placeholder={"Paste or type your text here...\n\n- Live words, characters, sentences, and reading time\n- Nothing leaves your browser"}
             className={`w-full resize-none border-r border-border bg-transparent px-5 py-4 text-sm leading-8 text-white outline-none placeholder:text-muted-3 ${
               compact ? "min-h-[320px]" : "min-h-[460px]"
             }`}
@@ -101,19 +101,18 @@ export default function WordCounterTool({ compact = false }: WordCounterToolProp
         </div>
       </div>
 
-      {/* ── Social media character limits ── */}
       <div className="mt-4 overflow-hidden rounded-2xl border border-border bg-surface shadow-lg">
         <div className="border-b border-border px-5 py-3">
-          <h3 className="font-display text-sm font-bold tracking-tight">📱 Social Media Limits</h3>
+          <h3 className="font-display text-sm font-bold tracking-tight">Social Media Limits</h3>
           <p className="mt-0.5 text-[11px] text-[#6f6f88]">See how your text fits each platform</p>
         </div>
         <div className="grid grid-cols-1 gap-px bg-surface-3/50 sm:grid-cols-2 lg:grid-cols-3">
-          <SocialLimit icon="𝕏" name="Twitter / X" used={stats.chars} limit={280} color="#1d9bf0" />
-          <SocialLimit icon="📸" name="Instagram Caption" used={stats.chars} limit={2200} color="#e1306c" />
-          <SocialLimit icon="📘" name="Facebook Post" used={stats.chars} limit={63206} color="#1877f2" />
-          <SocialLimit icon="💼" name="LinkedIn Post" used={stats.chars} limit={3000} color="#0a66c2" />
-          <SocialLimit icon="🎵" name="TikTok Caption" used={stats.chars} limit={2200} color="#ff0050" />
-          <SocialLimit icon="▶️" name="YouTube Title" used={stats.chars} limit={100} color="#ff0000" />
+          <SocialLimit icon="X" name="Twitter / X" used={stats.chars} limit={280} color="#1d9bf0" />
+          <SocialLimit icon="IG" name="Instagram Caption" used={stats.chars} limit={2200} color="#e1306c" />
+          <SocialLimit icon="FB" name="Facebook Post" used={stats.chars} limit={63206} color="#1877f2" />
+          <SocialLimit icon="LI" name="LinkedIn Post" used={stats.chars} limit={3000} color="#0a66c2" />
+          <SocialLimit icon="TT" name="TikTok Caption" used={stats.chars} limit={2200} color="#ff0050" />
+          <SocialLimit icon="YT" name="YouTube Title" used={stats.chars} limit={100} color="#ff0000" />
         </div>
       </div>
     </div>

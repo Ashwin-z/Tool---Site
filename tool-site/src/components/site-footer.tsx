@@ -110,7 +110,7 @@ export default function SiteFooter() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm" style={{ borderTop: "1px solid var(--border)", color: "var(--muted-3)" }}>
-          <span>Â© {new Date().getFullYear()} ToolMint. All rights reserved.</span>
+          <span>&copy; {new Date().getFullYear()} ToolMint. All rights reserved.</span>
           <div className="flex items-center gap-5">
             <Link href="/privacy" className="transition hover:opacity-80">
               Privacy

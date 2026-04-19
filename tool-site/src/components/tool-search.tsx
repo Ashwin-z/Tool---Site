@@ -139,7 +139,7 @@ export default function ToolSearch({ className }: ToolSearchProps) {
                 >
                   <div className="text-sm font-medium text-foreground">{result.name}</div>
                   <div className="mt-0.5 text-xs" style={{ color: "var(--muted-2)" }}>
-                    {result.category} · {result.description}
+                    {result.category} - {result.description}
                   </div>
                 </Link>
               ))}

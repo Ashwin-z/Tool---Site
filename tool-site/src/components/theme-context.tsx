@@ -15,18 +15,25 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("dark");
 
-  // Read from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("toolmint-theme") as Theme | null;
-    if (stored === "light" || stored === "dark") {
-      setThemeState(stored);
-      document.documentElement.setAttribute("data-theme", stored);
+    try {
+      const stored = localStorage.getItem("toolmint-theme") as Theme | null;
+      if (stored === "light" || stored === "dark") {
+        setThemeState(stored);
+        document.documentElement.setAttribute("data-theme", stored);
+      }
+    } catch {
+      document.documentElement.setAttribute("data-theme", "dark");
     }
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
-    localStorage.setItem("toolmint-theme", t);
+    try {
+      localStorage.setItem("toolmint-theme", t);
+    } catch {
+      // Ignore storage failures and still update the live document theme.
+    }
     document.documentElement.setAttribute("data-theme", t);
   }, []);
 

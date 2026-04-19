@@ -4,12 +4,12 @@ import HomeWordCounter from "@/components/home-word-counter";
 import { toolCategories } from "@/lib/tool-categories";
 
 export const metadata: Metadata = {
-  title: "ToolMint â€” Free Online PDF Tools, Converters & Calculators",
+  title: "ToolMint - Free Online PDF Tools, Converters & Calculators",
   description:
-    "ToolMint offers 80+ free online tools â€” compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
+    "ToolMint offers 80+ free online tools - compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "ToolMint â€” Free Online PDF Tools, Converters & Calculators",
+    title: "ToolMint - Free Online PDF Tools, Converters & Calculators",
     description:
       "80+ free online tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
     url: "/",
@@ -88,7 +88,7 @@ export default function Home() {
       <main className="mx-auto max-w-6xl px-6 pb-16 pt-14">
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#6c63ff]/30 bg-[#6c63ff]/12 px-3 py-1 text-xs text-[#b6b2ff]">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#6c63ff]" />
-          100% Free Â· No signup Â· No watermark Â· No limits
+          100% Free - No signup - No watermark - No limits
         </div>
 
         <h1 className="font-display max-w-4xl text-4xl font-bold leading-[1.08] tracking-[-0.02em] md:text-6xl">
@@ -133,7 +133,7 @@ export default function Home() {
           </div>
           <div className="mt-6">
             <Link href="/tools" className="text-sm font-medium text-[#6c63ff] transition hover:underline">
-              Browse all 80+ tools â†’
+              Browse all 80+ tools -&gt;
             </Link>
           </div>
         </section>

@@ -25,10 +25,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://toolmint.tools"),
   title: {
     template: "%s | ToolMint",
-    default: "ToolMint — Free Online PDF Tools, Converters & Calculators",
+    default: "ToolMint - Free Online PDF Tools, Converters & Calculators",
   },
   description:
-    "ToolMint offers 80+ free online tools — compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
+    "ToolMint offers 80+ free online tools - compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
   keywords: [
     "free online tools",
     "pdf tools online",
@@ -65,14 +65,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${syne.variable} ${dmSans.variable} antialiased`}>
         <ThemeProvider>
-        <NavShellProvider>
-          <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
-            <SiteHeader />
-            <SiteNav />
-            {children}
-            <SiteFooter />
-          </div>
-        </NavShellProvider>
+          <NavShellProvider>
+            <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+              <SiteHeader />
+              <SiteNav />
+              {children}
+              <SiteFooter />
+            </div>
+          </NavShellProvider>
         </ThemeProvider>
       </body>
     </html>
