@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import ComparePdfTool from "@/components/compare-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Compare PDF Online Free — Side-by-Side PDF Diff Tool",
+  title: "Compare PDF Online Free - Side-by-Side PDF Diff Tool",
   description:
     "Compare two PDF files online for free with ToolMint. Detect text changes with semantic diff, overlay pages visually, and download a change report. Browser-based, no upload.",
   keywords: [
@@ -18,9 +19,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/compare-pdf" },
   openGraph: {
-    title: "Compare PDF Online Free | ToolMint",
+    title: "Compare PDF Online Free - Side-by-Side PDF Diff Tool | ToolMint",
     description:
-      "Compare two PDF files side by side. Detect text changes with semantic diff, overlay pages visually, and download a change report — free and browser-based.",
+      "Compare two PDF files side by side. Detect text changes with semantic diff, overlay pages visually, and download a change report.",
     url: "/tools/compare-pdf",
   },
 };
@@ -73,9 +74,14 @@ export default function ComparePdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-[1700px] px-4 py-8 md:px-6 md:py-10">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Compare PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Compare PDF Online for Free
@@ -118,6 +124,10 @@ export default function ComparePdfPage() {
             ))}
           </dl>
         </section>
+
+        <div className="max-w-5xl">
+          <RelatedTools slug="compare-pdf" />
+        </div>
       </main>
     </>
   );

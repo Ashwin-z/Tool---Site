@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PdfToPdfaTool from "@/components/pdf-to-pdfa-tool";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "PDF to PDF/A Online Free — Convert PDF for Long-Term Archiving",
+  title: "PDF to PDF/A Online Free - Convert PDF for Long-Term Archiving",
   description:
-    "Convert PDF to PDF/A online for free with ToolMint. Create archival-quality PDF/A-1b, PDF/A-2b, or PDF/A-3b documents that meet ISO 19005 compliance standards. No signup.",
+    "Convert PDF to PDF/A online for free with ToolMint. Create archival-quality PDF/A-1b, PDF/A-2b, or PDF/A-3b documents that meet long-term storage requirements.",
   keywords: [
     "pdf to pdfa",
     "pdf to pdf/a",
@@ -18,40 +19,40 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-pdfa" },
   openGraph: {
-    title: "PDF to PDF/A Online Free — Convert PDF for Long-Term Archiving | ToolMint",
+    title: "PDF to PDF/A Online Free - Convert PDF for Long-Term Archiving | ToolMint",
     description:
-      "Convert PDF to PDF/A online for free. Create ISO 19005-compliant archival PDFs in PDF/A-1b, 2b, or 3b. No signup.",
+      "Convert PDF to PDF/A online for free. Create archival PDF/A files in PDF/A-1b, PDF/A-2b, or PDF/A-3b.",
     url: "/tools/pdf-to-pdfa",
   },
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Drag & drop or select the PDF file you want to archive." },
-  { title: "Select conformance", desc: "Choose PDF/A-1b, PDF/A-2b, or PDF/A-3b based on your compliance requirements." },
-  { title: "Convert", desc: "ToolMint processes the file with Ghostscript to produce a fully conformant PDF/A." },
+  { title: "Upload a PDF", desc: "Drag and drop or select the PDF file you want to archive." },
+  { title: "Select conformance", desc: "Choose PDF/A-1b, PDF/A-2b, or PDF/A-3b based on your archive requirements." },
+  { title: "Convert", desc: "ToolMint processes the file into a conformant PDF/A document." },
   { title: "Download", desc: "Save the archival PDF ready for long-term storage or submission." },
 ];
 
 const faqs = [
   {
     q: "What is PDF/A format?",
-    a: "PDF/A is an ISO 19005 standard designed for long-term digital preservation. It embeds all fonts, colors, and resources to ensure documents look the same decades from now.",
+    a: "PDF/A is a standard for long-term digital preservation. It embeds the resources needed so the document is more likely to render consistently in the future.",
   },
   {
     q: "What is the difference between PDF/A-1b, PDF/A-2b, and PDF/A-3b?",
-    a: "PDF/A-1b is the broadest compatibility level. PDF/A-2b adds support for JPEG 2000, transparency layers, and digital signatures. PDF/A-3b extends this by allowing embedded files of any format.",
+    a: "PDF/A-1b is the broadest compatibility level. PDF/A-2b adds support for newer PDF features, while PDF/A-3b allows embedded files.",
   },
   {
     q: "Is the conversion done server-side?",
-    a: "Yes. PDF/A conversion requires Ghostscript, which runs server-side. Your file is processed securely and deleted automatically after conversion.",
+    a: "Yes. PDF/A conversion is handled as a server-assisted task and the file is removed after processing completes.",
   },
   {
     q: "Does PDF/A support digital signatures?",
-    a: "PDF/A-2b and PDF/A-3b support digital signatures. PDF/A-1b does not.",
+    a: "PDF/A-2b and PDF/A-3b can support digital signatures depending on the workflow. PDF/A-1b is more limited.",
   },
   {
     q: "Is this tool suitable for legal or government submissions?",
-    a: "Yes. ToolMint produces ISO-compliant PDF/A files suitable for legal archives, government submissions, and institutional repositories that require long-term preservation.",
+    a: "It is useful for archiving and submission workflows that request PDF/A, but you should always confirm the exact version required by the receiving system.",
   },
 ];
 
@@ -73,17 +74,22 @@ export default function PdfToPdfaPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "PDF to PDF/A" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to PDF/A for Long-Term Archiving
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Create ISO 19005-compliant archival PDFs with ToolMint. Choose PDF/A-1b, PDF/A-2b,
-          or PDF/A-3b conformance to meet legal, government, or institutional archiving
-          requirements. Conversion is powered by Ghostscript — batch conversion supported.
+          Create archival PDF/A files with ToolMint. Choose PDF/A-1b, PDF/A-2b,
+          or PDF/A-3b when you need a document format better suited to records,
+          institutional storage, or submission requirements.
         </p>
 
         <div className="mt-8">
@@ -118,6 +124,8 @@ export default function PdfToPdfaPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="pdf-to-pdfa" />
       </main>
     </>
   );

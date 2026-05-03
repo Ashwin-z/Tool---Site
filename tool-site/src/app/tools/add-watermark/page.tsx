@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import AddWatermarkTool from "@/components/add-watermark-tool-loader";
+import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Add Watermark to PDF Online Free - Text & Image Watermark",
+  title: "Add Watermark to PDF Online Free - Text and Image Watermark",
   description:
     "Add text or image watermarks to any PDF online for free with ToolMint. Control position, rotation, opacity, mosaic tiling, and page range. No upload, fully browser-based.",
   keywords: [
@@ -47,7 +48,7 @@ const faqs = [
   },
   {
     q: "Will watermarking change my PDF quality?",
-    a: "No. Watermarks are drawn as vector overlays on the PDF canvas with no re-encoding or quality loss.",
+    a: "No. Watermarks are drawn as overlays without re-encoding the rest of the page content.",
   },
   {
     q: "Is my file private?",
@@ -123,6 +124,8 @@ export default function AddWatermarkPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="add-watermark" />
       </main>
     </>
   );

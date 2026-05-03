@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import RelatedTools from "@/components/related-tools";
 import PdfToJpgTool from "@/components/pdf-to-jpg-tool";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "PDF to JPG Online Free — Convert PDF Pages to Images",
+  title: "PDF to JPG Online Free - Convert PDF Pages to Images",
   description:
-    "Convert PDF to JPG online for free with ToolMint. Turn every PDF page into a high-quality image. No signup, no upload to any server — 100% browser-based PDF to image conversion.",
+    "Convert PDF to JPG online for free with ToolMint. Turn every PDF page into a high-quality image. No signup, no upload to any server, fully browser-based PDF to image conversion.",
   keywords: [
     "pdf to jpg",
     "pdf to image",
@@ -19,15 +19,15 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-jpg" },
   openGraph: {
-    title: "PDF to JPG Online Free — Convert PDF Pages to Images | ToolMint",
+    title: "PDF to JPG Online Free - Convert PDF Pages to Images | ToolMint",
     description:
-      "Convert PDF to JPG online for free. Turn every PDF page into a high-quality image. No signup, no server upload.",
+      "Convert PDF to JPG online for free. Turn every PDF page into a high-quality image with no server upload.",
     url: "/tools/pdf-to-jpg",
   },
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Drag & drop or select any PDF file from your device." },
+  { title: "Upload a PDF", desc: "Drag and drop or select any PDF file from your device." },
   { title: "Choose quality", desc: "Pick your preferred image resolution and quality setting." },
   { title: "Convert", desc: "ToolMint renders each PDF page into a JPG image instantly in your browser." },
   { title: "Download", desc: "Save individual images or download all pages as a ZIP." },
@@ -36,7 +36,7 @@ const steps = [
 const faqs = [
   {
     q: "What image formats can I export PDF pages to?",
-    a: "ToolMint converts PDF pages to JPG (JPEG) format. The images are rendered at high resolution for crisp quality.",
+    a: "ToolMint converts PDF pages to JPG format. The images are rendered at high resolution for crisp quality.",
   },
   {
     q: "Are my PDF files uploaded to a server?",
@@ -74,17 +74,22 @@ export default function PdfToJpgPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "PDF to JPG" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to JPG Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn any PDF into high-quality JPG images with ToolMint. Every page is rendered as a
-          separate image — choose your resolution, then download individual pages or all of them
-          as a ZIP. Everything processes locally in your browser; nothing is uploaded to any server.
+          separate image, choose your resolution, then download individual pages or all of them
+          as a ZIP. Everything processes locally in your browser.
         </p>
 
         <div className="mt-8">

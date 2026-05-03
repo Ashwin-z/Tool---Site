@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import SignPdfTool from "@/components/sign-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Sign PDF Online Free — Add Signature to PDF",
+  title: "Sign PDF Online Free - Add Signature to PDF",
   description:
-    "Sign PDF online for free with ToolMint. Add your signature, initials, name, date, or company stamp to any page. Draw, type, or upload your signature. No signup required.",
+    "Sign PDF online for free with ToolMint. Add your signature, initials, name, date, or company stamp to any page. Draw, type, or upload your signature.",
   keywords: [
     "sign pdf online free",
     "add signature to pdf",
@@ -20,15 +21,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sign PDF Online Free | ToolMint",
     description:
-      "Add your signature to any PDF online. Draw, type, or upload your signature and place it on any page — free, no signup.",
+      "Add your signature to any PDF online. Draw, type, or upload your signature and place it on any page.",
     url: "/tools/sign-pdf",
   },
 };
 
 const steps = [
   { title: "Upload a PDF", desc: "Open the PDF you need to sign in the browser workspace." },
-  { title: "Create your signature", desc: "Draw your signature with a mouse/stylus, type it in a style, or upload an image of your signature." },
-  { title: "Place on the page", desc: "Drag and resize the signature, plus any initials, name, date, or stamp fields, anywhere on the page." },
+  { title: "Create your signature", desc: "Draw your signature, type it in a style, or upload an image of your signature." },
+  { title: "Place on the page", desc: "Drag and resize the signature, initials, name, date, or stamp fields anywhere on the page." },
   { title: "Download", desc: "Download the signed PDF instantly. No account or email required." },
 ];
 
@@ -39,11 +40,11 @@ const faqs = [
   },
   {
     q: "Can I add a date and initials as well?",
-    a: "Yes. Insert name, initials, date, company, and free text fields in addition to your signature, then drag each element to the correct position.",
+    a: "Yes. Insert name, initials, date, company, and free text fields in addition to your signature, then drag each element into place.",
   },
   {
     q: "Is this a legally binding electronic signature?",
-    a: "This tool creates visual signatures on PDF pages. Legal validity depends on your jurisdiction and use case. For legally binding e-signatures, use a qualified signature service.",
+    a: "This tool creates visual signatures on PDF pages. Legal validity depends on your jurisdiction and use case, so use a qualified signature service when a regulated e-signature is required.",
   },
   {
     q: "Can I sign multiple pages?",
@@ -73,9 +74,14 @@ export default function SignPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 md:px-6 md:py-10">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Sign PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Sign PDF Online for Free
@@ -118,6 +124,10 @@ export default function SignPdfPage() {
             ))}
           </dl>
         </section>
+
+        <div className="max-w-5xl">
+          <RelatedTools slug="sign-pdf" />
+        </div>
       </main>
     </>
   );

@@ -142,7 +142,7 @@ const categories: Category[] = [
     icon: "\u{1F522}",
     name: "Calculators",
     subtitle: "Finance, health, study, and everyday calculation tools.",
-    count: 14,
+    count: 15,
     color: "bg-amber-400/15 text-amber-300",
     tools: [
       { name: "Scientific Calculator", desc: "Full scientific calc", href: "/tools/scientific-calculator", badge: "New" },
@@ -159,6 +159,7 @@ const categories: Category[] = [
       { name: "Work Hours Calculator", desc: "Track weekly hours and pay", href: "/tools/work-hours-calculator", badge: "New" },
       { name: "Calorie Calculator", desc: "TDEE, BMR, and macro estimates", href: "/tools/calorie-calculator", badge: "New" },
       { name: "Tip Calculator", desc: "Split bills and calculate tips", href: "/tools/tip-calculator", badge: "New" },
+      { name: "Palworld Breeding Calculator", desc: "Pal breeding results and combo finder", href: "/tools/palworld-breeding-calculator", badge: "New" },
     ],
   },
   {
@@ -238,7 +239,7 @@ const badgeClass: Record<NonNullable<Tool["badge"]>, string> = {
 
 export default function SiteNav() {
   const pathname = usePathname();
-  const { navOpen } = useNavShell();
+  const { navOpen, setNavOpen } = useNavShell();
   const [activeCat, setActiveCat] = useState<string>("txt");
   const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({ txt: true });
 
@@ -275,191 +276,339 @@ export default function SiteNav() {
     [activeCategoryFromPath],
   );
 
+  const handleToolClick = useCallback(
+    (categoryId: string) => {
+      setActiveCat(categoryId);
+      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+        setNavOpen(false);
+      }
+    },
+    [setNavOpen],
+  );
+
   return (
     <section
-      className={`grid overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,.25)] transition-all duration-300 ${
-        navOpen
-          ? "h-[420px] md:h-[460px] grid-cols-1 lg:grid-cols-[260px_1fr] opacity-100"
-          : "h-0 opacity-0"
+      className={`overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,.25)] transition-all duration-300 ${
+        navOpen ? "max-h-[78vh] opacity-100 lg:max-h-[460px]" : "max-h-0 opacity-0"
       }`}
       style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-1)" }}
     >
-      <aside className="h-full overflow-y-auto p-3" style={{ borderRight: "1px solid var(--border)", background: "var(--surface-2)" }}>
-        <div className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-3)" }}>
-          Categories
-        </div>
-        <div className="space-y-1">
-          {categories.map((category) => {
-            const isActive = resolvedActiveCat === category.id;
-            const isOpen = openSubmenus[category.id] ?? (activeCategoryFromPath === category.id);
-
-            return (
-              <div key={category.id}>
-                <button
-                  onClick={() => toggleCategory(category.id)}
-                  className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm transition ${
-                    isActive ? "border-l-2 border-[#6c63ff]" : "hover:opacity-80"
-                  }`}
-                  style={{
-                    color: isActive ? "var(--foreground)" : "var(--muted)",
-                    background: isActive ? "rgba(108,99,255,0.15)" : "transparent",
-                  }}
-                >
-                  <span className={`grid h-7 w-7 place-items-center rounded-md ${category.color}`}>
-                    {category.icon}
-                  </span>
-                  <span>{category.name}</span>
-                  <span className="ml-auto rounded px-1.5 py-0.5 text-[10px]" style={{ background: "var(--surface-1)", color: "var(--muted-3)" }}>
-                    {category.count}
-                  </span>
-                  <span className="rounded p-1" style={{ color: isOpen ? "var(--accent)" : "var(--muted-3)" }}>
-                    <ChevronDownIcon open={isOpen} />
-                  </span>
-                </button>
-
-                {isOpen && (
-                  <div className="space-y-1 py-1 pl-10 pr-2">
-                    {category.sections ? (
-                      category.sections.map((section) => (
-                        <div key={section.heading}>
-                          <div className="px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-3)" }}>
-                            {section.heading}
-                          </div>
-                          {section.items.map((tool) => (
-                            <Link
-                              key={tool.name}
-                              href={tool.href}
-                              onClick={() => setActiveCat(category.id)}
-                              className={`flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-xs transition ${
-                                pathname === tool.href ? "" : "hover:opacity-80"
-                              }`}
-                              style={{
-                                color: pathname === tool.href ? "var(--accent-light)" : "var(--muted-2)",
-                                background: pathname === tool.href ? "rgba(108,99,255,0.15)" : "transparent",
-                              }}
-                            >
-                              <span className="h-1 w-1 rounded-full bg-current" />
-                              {tool.name}
-                            </Link>
-                          ))}
-                        </div>
-                      ))
-                    ) : (
-                      category.tools.map((tool) => (
-                        <Link
-                          key={tool.name}
-                          href={tool.href}
-                          onClick={() => setActiveCat(category.id)}
-                          className={`flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-xs transition ${
-                            pathname === tool.href ? "" : "hover:opacity-80"
-                          }`}
-                          style={{
-                            color: pathname === tool.href ? "var(--accent-light)" : "var(--muted-2)",
-                            background: pathname === tool.href ? "rgba(108,99,255,0.15)" : "transparent",
-                          }}
-                        >
-                          <span className="h-1 w-1 rounded-full bg-current" />
-                          {tool.name}
-                        </Link>
-                      ))
-                    )}
-                  </div>
-                )}
+      <div className="lg:hidden">
+        <div className="p-4">
+          <div className="rounded-[28px] border border-white/10 bg-surface-2/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,.22)]">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em]" style={{ color: "var(--muted-3)" }}>
+                  Browse Tools
+                </p>
+                <h3 className="mt-2 font-display text-2xl font-bold tracking-tight">
+                  Pick a category
+                </h3>
+                <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
+                  Explore the tool library without crowding the page.
+                </p>
               </div>
-            );
-          })}
-        </div>
-      </aside>
+              <span className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ borderColor: "var(--border-strong)", color: "var(--accent-light)", background: "rgba(108,99,255,0.12)" }}>
+                {activeCategory.count} tools
+              </span>
+            </div>
 
-      <div className="flex min-h-[280px] flex-col">
-        <div className="flex items-center gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
-          <div className={`grid h-10 w-10 place-items-center rounded-xl ${activeCategory.color}`}>
-            {activeCategory.icon}
-          </div>
-          <div>
-            <h3 className="font-display text-lg font-bold tracking-tight">{activeCategory.name}</h3>
-            <p className="text-xs" style={{ color: "var(--muted)" }}>{activeCategory.subtitle}</p>
-          </div>
-        </div>
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+              {categories.map((category) => {
+                const isActive = resolvedActiveCat === category.id;
 
-        <div className="h-full overflow-y-auto p-4">
-          {categories
-            .filter((category) => category.id === resolvedActiveCat)
-            .map((category) => (
-              <div key={category.id} className="mb-5">
-                {category.sections ? (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    {category.sections.map((section) => (
-                      <div
-                        key={section.heading}
-                        className="rounded-xl border p-3"
-                        style={{
-                          borderColor: "var(--border)",
-                          background: "var(--surface-2)",
-                        }}
-                      >
-                        <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--accent)" }}>
-                          {section.heading}
-                        </h4>
-                        <div className="space-y-2">
-                          {section.items.map((tool) => (
-                            <Link
-                              key={tool.name}
-                              href={tool.href}
-                              className="flex items-center gap-3 rounded-lg border px-3 py-2 transition hover:-translate-y-0.5"
-                              style={{
-                                borderColor: pathname === tool.href ? "rgba(108,99,255,0.4)" : "transparent",
-                                background: pathname === tool.href ? "var(--surface-3)" : "transparent",
-                              }}
-                            >
-                              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-md ${category.color}`}>
-                                {category.icon}
-                              </span>
-                              <div className="min-w-0 flex-1">
-                                <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
-                                <div className="text-xs" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
-                              </div>
-                              {tool.badge && (
-                                <span className={`ml-auto rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
-                                  {tool.badge}
-                                </span>
-                              )}
-                            </Link>
-                          ))}
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => setActiveCat(category.id)}
+                    className="min-w-[148px] shrink-0 rounded-2xl border px-3 py-3 text-left transition"
+                    style={{
+                      borderColor: isActive ? "rgba(108,99,255,0.38)" : "var(--border)",
+                      background: isActive ? "rgba(108,99,255,0.12)" : "var(--surface-1)",
+                      color: isActive ? "var(--foreground)" : "var(--muted)",
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className={`grid h-9 w-9 place-items-center rounded-xl ${category.color}`}>
+                        {category.icon}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold">{category.name}</div>
+                        <div className="text-[11px]" style={{ color: "var(--muted-3)" }}>
+                          {category.count} tools
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-5 rounded-3xl border p-4" style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}>
+              <div className="flex items-center gap-3">
+                <div className={`grid h-11 w-11 place-items-center rounded-2xl ${activeCategory.color}`}>
+                  {activeCategory.icon}
+                </div>
+                <div>
+                  <h4 className="font-display text-xl font-bold tracking-tight">{activeCategory.name}</h4>
+                  <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>
+                    {activeCategory.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 max-h-[46vh] space-y-4 overflow-y-auto pr-1">
+                {activeCategory.sections ? (
+                  activeCategory.sections.map((section) => (
+                    <div key={section.heading} className="rounded-2xl border p-3" style={{ borderColor: "var(--border)", background: "var(--surface-2)" }}>
+                      <h5 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: "var(--accent-light)" }}>
+                        {section.heading}
+                      </h5>
+                      <div className="space-y-2">
+                        {section.items.map((tool) => (
+                          <Link
+                            key={tool.name}
+                            href={tool.href}
+                            onClick={() => handleToolClick(activeCategory.id)}
+                            className="flex items-center gap-3 rounded-2xl border px-3 py-3 transition"
+                            style={{
+                              borderColor: pathname === tool.href ? "rgba(108,99,255,0.35)" : "var(--border)",
+                              background: pathname === tool.href ? "rgba(108,99,255,0.12)" : "var(--surface-1)",
+                            }}
+                          >
+                            <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${activeCategory.color}`}>
+                              {activeCategory.icon}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
+                              <div className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
+                            </div>
+                            {tool.badge ? (
+                              <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
+                                {tool.badge}
+                              </span>
+                            ) : null}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))
                 ) : (
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
-                    {category.tools.map((tool) => (
+                  <div className="space-y-2">
+                    {activeCategory.tools.map((tool) => (
                       <Link
                         key={tool.name}
                         href={tool.href}
-                        className="flex items-center gap-3 rounded-lg border px-3 py-2 transition hover:-translate-y-0.5"
+                        onClick={() => handleToolClick(activeCategory.id)}
+                        className="flex items-center gap-3 rounded-2xl border px-3 py-3 transition"
                         style={{
-                          borderColor: pathname === tool.href ? "rgba(108,99,255,0.4)" : "transparent",
-                          background: pathname === tool.href ? "var(--surface-3)" : "transparent",
+                          borderColor: pathname === tool.href ? "rgba(108,99,255,0.35)" : "var(--border)",
+                          background: pathname === tool.href ? "rgba(108,99,255,0.12)" : "var(--surface-2)",
                         }}
                       >
-                        <span className={`grid h-8 w-8 place-items-center rounded-md ${category.color}`}>
-                          {category.icon}
+                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${activeCategory.color}`}>
+                          {activeCategory.icon}
                         </span>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
-                          <div className="text-xs" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
+                          <div className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
                         </div>
-                        {tool.badge && (
-                          <span className={`ml-auto rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
+                        {tool.badge ? (
+                          <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
                             {tool.badge}
                           </span>
-                        )}
+                        ) : null}
                       </Link>
                     ))}
                   </div>
                 )}
               </div>
-            ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden h-[460px] lg:grid lg:grid-cols-[260px_1fr]">
+        <aside className="h-full overflow-y-auto p-3" style={{ borderRight: "1px solid var(--border)", background: "var(--surface-2)" }}>
+          <div className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-3)" }}>
+            Categories
+          </div>
+          <div className="space-y-1">
+            {categories.map((category) => {
+              const isActive = resolvedActiveCat === category.id;
+              const isOpen = openSubmenus[category.id] ?? (activeCategoryFromPath === category.id);
+
+              return (
+                <div key={category.id}>
+                  <button
+                    onClick={() => toggleCategory(category.id)}
+                    className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm transition ${
+                      isActive ? "border-l-2 border-[#6c63ff]" : "hover:opacity-80"
+                    }`}
+                    style={{
+                      color: isActive ? "var(--foreground)" : "var(--muted)",
+                      background: isActive ? "rgba(108,99,255,0.15)" : "transparent",
+                    }}
+                  >
+                    <span className={`grid h-7 w-7 place-items-center rounded-md ${category.color}`}>
+                      {category.icon}
+                    </span>
+                    <span>{category.name}</span>
+                    <span className="ml-auto rounded px-1.5 py-0.5 text-[10px]" style={{ background: "var(--surface-1)", color: "var(--muted-3)" }}>
+                      {category.count}
+                    </span>
+                    <span className="rounded p-1" style={{ color: isOpen ? "var(--accent)" : "var(--muted-3)" }}>
+                      <ChevronDownIcon open={isOpen} />
+                    </span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="space-y-1 py-1 pl-10 pr-2">
+                      {category.sections ? (
+                        category.sections.map((section) => (
+                          <div key={section.heading}>
+                            <div className="px-2 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-3)" }}>
+                              {section.heading}
+                            </div>
+                            {section.items.map((tool) => (
+                              <Link
+                                key={tool.name}
+                                href={tool.href}
+                                onClick={() => handleToolClick(category.id)}
+                                className={`flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-xs transition ${
+                                  pathname === tool.href ? "" : "hover:opacity-80"
+                                }`}
+                                style={{
+                                  color: pathname === tool.href ? "var(--accent-light)" : "var(--muted-2)",
+                                  background: pathname === tool.href ? "rgba(108,99,255,0.15)" : "transparent",
+                                }}
+                              >
+                                <span className="h-1 w-1 rounded-full bg-current" />
+                                {tool.name}
+                              </Link>
+                            ))}
+                          </div>
+                        ))
+                      ) : (
+                        category.tools.map((tool) => (
+                          <Link
+                            key={tool.name}
+                            href={tool.href}
+                            onClick={() => handleToolClick(category.id)}
+                            className={`flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-xs transition ${
+                              pathname === tool.href ? "" : "hover:opacity-80"
+                            }`}
+                            style={{
+                              color: pathname === tool.href ? "var(--accent-light)" : "var(--muted-2)",
+                              background: pathname === tool.href ? "rgba(108,99,255,0.15)" : "transparent",
+                            }}
+                          >
+                            <span className="h-1 w-1 rounded-full bg-current" />
+                            {tool.name}
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </aside>
+
+        <div className="flex min-h-[280px] min-w-0 flex-col">
+          <div className="flex items-center gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+            <div className={`grid h-10 w-10 place-items-center rounded-xl ${activeCategory.color}`}>
+              {activeCategory.icon}
+            </div>
+            <div>
+              <h3 className="font-display text-lg font-bold tracking-tight">{activeCategory.name}</h3>
+              <p className="text-xs" style={{ color: "var(--muted)" }}>{activeCategory.subtitle}</p>
+            </div>
+          </div>
+
+          <div className="h-full overflow-y-auto p-4">
+            {categories
+              .filter((category) => category.id === resolvedActiveCat)
+              .map((category) => (
+                <div key={category.id} className="mb-5">
+                  {category.sections ? (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {category.sections.map((section) => (
+                        <div
+                          key={section.heading}
+                          className="rounded-xl border p-3"
+                          style={{
+                            borderColor: "var(--border)",
+                            background: "var(--surface-2)",
+                          }}
+                        >
+                          <h4 className="mb-3 text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--accent)" }}>
+                            {section.heading}
+                          </h4>
+                          <div className="space-y-2">
+                            {section.items.map((tool) => (
+                              <Link
+                                key={tool.name}
+                                href={tool.href}
+                                onClick={() => handleToolClick(category.id)}
+                                className="flex items-center gap-3 rounded-lg border px-3 py-2 transition hover:-translate-y-0.5"
+                                style={{
+                                  borderColor: pathname === tool.href ? "rgba(108,99,255,0.4)" : "transparent",
+                                  background: pathname === tool.href ? "var(--surface-3)" : "transparent",
+                                }}
+                              >
+                                <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-md ${category.color}`}>
+                                  {category.icon}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
+                                  <div className="text-xs" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
+                                </div>
+                                {tool.badge && (
+                                  <span className={`ml-auto rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
+                                    {tool.badge}
+                                  </span>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                      {category.tools.map((tool) => (
+                        <Link
+                          key={tool.name}
+                          href={tool.href}
+                          onClick={() => handleToolClick(category.id)}
+                          className="flex items-center gap-3 rounded-lg border px-3 py-2 transition hover:-translate-y-0.5"
+                          style={{
+                            borderColor: pathname === tool.href ? "rgba(108,99,255,0.4)" : "transparent",
+                            background: pathname === tool.href ? "var(--surface-3)" : "transparent",
+                          }}
+                        >
+                          <span className={`grid h-8 w-8 place-items-center rounded-md ${category.color}`}>
+                            {category.icon}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
+                            <div className="text-xs" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
+                          </div>
+                          {tool.badge && (
+                            <span className={`ml-auto rounded px-2 py-0.5 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
+                              {tool.badge}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </section>

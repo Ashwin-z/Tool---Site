@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useId, useMemo, useState } from "react";
 import { toolCategories } from "@/lib/tool-categories";
 
 type ToolSearchProps = {
@@ -31,6 +31,7 @@ function SearchIcon() {
 export default function ToolSearch({ className }: ToolSearchProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const inputId = useId();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -73,7 +74,7 @@ export default function ToolSearch({ className }: ToolSearchProps) {
   return (
     <div className={`relative w-full ${className ?? ""}`}>
       <form onSubmit={handleSubmit} role="search" className="w-full">
-        <label className="sr-only" htmlFor="tool-search-input">
+        <label className="sr-only" htmlFor={inputId}>
           Search tools
         </label>
         <div
@@ -89,7 +90,7 @@ export default function ToolSearch({ className }: ToolSearchProps) {
             <SearchIcon />
           </span>
           <input
-            id="tool-search-input"
+            id={inputId}
             type="search"
             value={query}
             onChange={(event) => {
@@ -156,7 +157,7 @@ export default function ToolSearch({ className }: ToolSearchProps) {
                   background: "var(--surface-1)",
                 }}
               >
-                View all results for "{query.trim()}"
+                View all results for &quot;{query.trim()}&quot;
               </button>
             </div>
           ) : (
@@ -164,7 +165,7 @@ export default function ToolSearch({ className }: ToolSearchProps) {
               className="px-4 py-4 text-sm"
               style={{ color: "var(--muted-2)", background: "var(--surface-1)" }}
             >
-              No tools matched "{query.trim()}". Press Search to view the tools page anyway.
+              No tools matched &quot;{query.trim()}&quot;. Press Search to view the tools page anyway.
             </div>
           )}
         </div>

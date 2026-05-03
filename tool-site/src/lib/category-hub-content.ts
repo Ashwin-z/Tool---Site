@@ -2,24 +2,58 @@ export type CategoryHubContent = {
   intro: string[];
   highlights: { title: string; desc: string }[];
   faqs: { q: string; a: string }[];
+  workflows?: { title: string; desc: string; links: { label: string; href: string }[] }[];
 };
 
 export const categoryHubContent: Record<string, CategoryHubContent> = {
   pdf: {
     intro: [
-      "ToolMint's PDF collection focuses on practical document work: reducing file size, combining pages, protecting sensitive files, and converting documents into formats people actually need at work or school.",
-      "Instead of sending visitors through multiple sites, the goal is to keep everyday PDF tasks in one place with clear steps, lightweight interfaces, and outputs that are ready to download immediately.",
+      "ToolMint's PDF collection is built around document jobs people repeat every week: shrinking PDFs to meet upload limits, joining supporting files into one packet, pulling tables out of reports, and converting office files into something easier to share.",
+      "The goal of this hub is to help visitors choose the right PDF tool for the job, not just drop them onto a generic utility page. Each tool is paired with practical examples, clear workflow language, and internal paths to the next step when a task usually involves more than one tool.",
+      "That matters for both users and search quality. A PDF tool page should help someone finish a real document task such as preparing an application, cleaning up a client file, or extracting reusable content from a report.",
+    ],
+    workflows: [
+      {
+        title: "Prepare a file for upload",
+        desc: "Start with the document itself, clean up page orientation or margins, then reduce the file size before sending it to a portal or attaching it to an email.",
+        links: [
+          { label: "Rotate PDF", href: "/tools/rotate-pdf" },
+          { label: "Crop PDF", href: "/tools/crop-pdf" },
+          { label: "Compress PDF", href: "/tools/pdf-compressor" },
+        ],
+      },
+      {
+        title: "Assemble a final PDF packet",
+        desc: "Turn source files into PDFs, combine them in the right order, then add numbering, watermarks, or signatures before sharing the final version.",
+        links: [
+          { label: "Word to PDF", href: "/tools/word-to-pdf" },
+          { label: "Image to PDF", href: "/tools/image-to-pdf" },
+          { label: "PDF Merger", href: "/tools/pdf-merger" },
+          { label: "Sign PDF", href: "/tools/sign-pdf" },
+        ],
+      },
+      {
+        title: "Reuse information from an existing PDF",
+        desc: "When you need to work with the contents of a PDF again, choose the right output format for editing, analysis, or copying text from scanned pages.",
+        links: [
+          { label: "Unlock PDF", href: "/tools/unlock-pdf" },
+          { label: "PDF to Word", href: "/tools/pdf-to-word" },
+          { label: "PDF to Excel", href: "/tools/pdf-to-excel" },
+          { label: "PDF to Text", href: "/tools/pdf-to-text" },
+        ],
+      },
     ],
     highlights: [
-      { title: "Document Cleanup", desc: "Compress, crop, rotate, split, and merge files before you share or archive them." },
-      { title: "Conversion Workflows", desc: "Move between PDF, Word, Excel, PowerPoint, JPG, and text depending on the next task in your workflow." },
-      { title: "Security Tasks", desc: "Protect files with passwords, remove passwords from files you own, redact sensitive text, and add signatures." },
-      { title: "Practical Editing", desc: "Add watermarks, page numbers, and layout adjustments without installing heavyweight desktop software." },
+      { title: "Document Cleanup", desc: "Compress, crop, rotate, split, and merge PDFs when you need cleaner files for email, applications, printing, or archiving." },
+      { title: "Conversion Workflows", desc: "Move between PDF, Word, Excel, PowerPoint, JPG, and text depending on whether you need to edit, share, present, or extract data." },
+      { title: "Security Tasks", desc: "Protect sensitive PDFs with passwords, remove passwords from files you are authorized to edit, redact private content, and add signatures." },
+      { title: "Practical Editing", desc: "Handle common document fixes such as watermarks, page numbers, annotations, and page layout changes without installing heavy desktop software." },
     ],
     faqs: [
-      { q: "Are ToolMint PDF tools browser-based or server-based?", a: "Most PDF utilities are designed to stay simple and privacy-conscious. Some operations run locally in your browser, while heavier PDF conversions may use secure server-side processing when needed." },
-      { q: "Who are these PDF tools built for?", a: "They are useful for students, office teams, freelancers, recruiters, accountants, and anyone who needs fast document fixes without buying a dedicated PDF suite." },
-      { q: "What makes this collection different from a simple link directory?", a: "Each tool is paired with task-specific guidance, clear naming, related-tool pathways, and focused page copy so visitors can solve a job instead of hunting through a generic list." },
+      { q: "Are ToolMint PDF tools browser-based or server-based?", a: "The PDF collection favors local browser processing where possible, especially for editing, rotation, cropping, redaction, and comparison. Some conversion-heavy jobs may use secure server-side processing when the task requires it." },
+      { q: "Who are these PDF tools built for?", a: "They are most useful for students, office teams, freelancers, recruiters, accountants, legal staff, and small business owners who need fast document fixes without a full PDF software subscription." },
+      { q: "How do I choose the right PDF tool for a task?", a: "Start with the job you are trying to finish, not the file format alone. If you need a smaller upload, use compression. If you need one final packet, merge. If you need editable content, convert the PDF to Word, Excel, or text." },
+      { q: "What makes this collection different from a thin tool directory?", a: "Each PDF page is being built as a task-focused landing page with use cases, limitations, related workflows, and clear internal paths so visitors can solve the entire document task in one place." },
     ],
   },
   image: {

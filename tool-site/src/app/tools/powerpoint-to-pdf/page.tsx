@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import PowerPointToPdfTool from "@/components/powerpoint-to-pdf-tool";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "PowerPoint to PDF Online Free — Convert PPTX to PDF",
+  title: "PowerPoint to PDF Online Free - Convert PPTX to PDF",
   description:
-    "Convert PowerPoint to PDF online for free with ToolMint. Upload PPTX presentations and download them as PDF documents. No signup, no watermark — instant conversion.",
+    "Convert PowerPoint to PDF online for free with ToolMint. Upload PPTX presentations and download them as PDF documents. No signup, no watermark.",
   keywords: [
     "powerpoint to pdf",
     "pptx to pdf",
@@ -18,15 +19,15 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/powerpoint-to-pdf" },
   openGraph: {
-    title: "PowerPoint to PDF Online Free — Convert PPTX to PDF | ToolMint",
+    title: "PowerPoint to PDF Online Free - Convert PPTX to PDF | ToolMint",
     description:
-      "Convert PowerPoint to PDF online for free. Upload PPTX presentations and download PDFs instantly. No signup.",
+      "Convert PowerPoint to PDF online for free. Upload PPTX presentations and download PDFs instantly.",
     url: "/tools/powerpoint-to-pdf",
   },
 };
 
 const steps = [
-  { title: "Upload presentations", desc: "Drag & drop or select up to 25 PPTX files from your device." },
+  { title: "Upload presentations", desc: "Drag and drop or select up to 25 PPTX files from your device." },
   { title: "Preview", desc: "Check the file list before converting." },
   { title: "Convert", desc: "Click Convert and each presentation is rendered as a PDF." },
   { title: "Download", desc: "Save individual PDFs or download all files as a ZIP." },
@@ -43,15 +44,15 @@ const faqs = [
   },
   {
     q: "What PowerPoint formats are supported?",
-    a: "ToolMint supports .pptx files (PowerPoint 2007 and later format).",
+    a: "ToolMint supports PPTX files from modern versions of PowerPoint.",
   },
   {
     q: "Are animations or transitions preserved in the PDF?",
-    a: "No. PDFs are static documents, so animations and transitions are not included. Each slide is rendered as a single page.",
+    a: "No. PDFs are static documents, so animations and transitions are not included. Each slide becomes a single PDF page.",
   },
   {
     q: "Is my presentation data secure?",
-    a: "Yes. Your files are processed securely and automatically deleted. We never store or share your presentations.",
+    a: "Yes. Your files are processed for conversion and removed afterward.",
   },
 ];
 
@@ -73,9 +74,14 @@ export default function PowerPointToPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "PowerPoint to PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PowerPoint to PDF Online for Free
@@ -90,7 +96,6 @@ export default function PowerPointToPdfPage() {
           <PowerPointToPdfTool />
         </div>
 
-        {/* How-to section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Convert PowerPoint to PDF
@@ -106,7 +111,6 @@ export default function PowerPointToPdfPage() {
           </div>
         </section>
 
-        {/* FAQ section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -120,6 +124,8 @@ export default function PowerPointToPdfPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="powerpoint-to-pdf" />
       </main>
     </>
   );

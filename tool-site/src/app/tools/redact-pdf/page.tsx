@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import RedactPdfTool from "@/components/redact-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Redact PDF Online Free — Black Out Sensitive Text in PDF",
+  title: "Redact PDF Online Free - Black Out Sensitive Text in PDF",
   description:
     "Redact PDF online for free with ToolMint. Search for text to auto-mark, draw manual black-out boxes, and export a flattened PDF with sensitive content permanently removed.",
   keywords: [
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Redact PDF Online Free | ToolMint",
     description:
-      "Black out sensitive text and areas in any PDF online. Search by keyword or draw manual boxes, then export a permanently flattened, redacted PDF.",
+      "Black out sensitive text and areas in any PDF online. Search by keyword or draw manual boxes, then export a permanently flattened PDF.",
     url: "/tools/redact-pdf",
   },
 };
@@ -29,13 +30,13 @@ const steps = [
   { title: "Upload a PDF", desc: "Open the PDF that contains sensitive content you need to redact." },
   { title: "Mark content", desc: "Search for text to auto-select matching words, or draw redaction boxes manually over any area." },
   { title: "Review", desc: "Check all redaction marks on the page preview before finalizing." },
-  { title: "Download flattened PDF", desc: "Export the permanently redacted, flattened PDF with all marked content blacked out." },
+  { title: "Download flattened PDF", desc: "Export the permanently redacted PDF with all marked content blacked out." },
 ];
 
 const faqs = [
   {
     q: "Is the redaction permanent?",
-    a: "Yes. ToolMint flattens the PDF on export, permanently removing the content under each redaction box. The original text cannot be recovered from the downloaded file.",
+    a: "Yes. ToolMint flattens the PDF on export, permanently removing the content under each redaction box from the downloaded file.",
   },
   {
     q: "Can I search for specific words to redact?",
@@ -47,7 +48,7 @@ const faqs = [
   },
   {
     q: "What color are the redaction boxes?",
-    a: "Redacted areas are filled with a solid black rectangle, which is the standard appearance for legal and professional document redaction.",
+    a: "Redacted areas are filled with a solid black rectangle, which is the standard appearance for professional document redaction.",
   },
   {
     q: "Is my PDF uploaded to a server?",
@@ -73,9 +74,14 @@ export default function RedactPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 md:px-6 md:py-10">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Redact PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Redact PDF Online for Free
@@ -83,7 +89,7 @@ export default function RedactPdfPage() {
         <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
           Permanently black out sensitive text and areas in any PDF using ToolMint. Search
           for keywords to auto-mark all matches, or draw manual redaction boxes over any
-          part of the page. The exported PDF is fully flattened so redacted content cannot
+          part of the page. The exported PDF is flattened so redacted content cannot
           be recovered.
         </p>
 
@@ -119,6 +125,10 @@ export default function RedactPdfPage() {
             ))}
           </dl>
         </section>
+
+        <div className="max-w-5xl">
+          <RelatedTools slug="redact-pdf" />
+        </div>
       </main>
     </>
   );

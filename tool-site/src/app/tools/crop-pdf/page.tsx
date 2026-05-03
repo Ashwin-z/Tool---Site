@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import CropPdfTool from "@/components/crop-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Crop PDF Online Free — Trim PDF Pages to Any Size",
+  title: "Crop PDF Online Free - Trim PDF Pages to Any Size",
   description:
     "Crop PDF pages online for free with ToolMint. Use the draggable crop box on a live preview to trim margins or remove unwanted areas. No upload, browser-based.",
   keywords: [
@@ -20,22 +21,22 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Crop PDF Online Free | ToolMint",
     description:
-      "Crop PDF pages online. Drag the crop box on a live preview to remove margins or unwanted areas — fast, free, no upload.",
+      "Crop PDF pages online. Drag the crop box on a live preview to remove margins or unwanted areas.",
     url: "/tools/crop-pdf",
   },
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Select or drag & drop the PDF whose pages you want to crop." },
+  { title: "Upload a PDF", desc: "Select or drag and drop the PDF whose pages you want to crop." },
   { title: "Set the crop area", desc: "Drag the handles on the live page preview to define the region you want to keep." },
   { title: "Choose page scope", desc: "Apply the crop to all pages, just the current page, or a custom page range." },
-  { title: "Download", desc: "Click Download to save the cropped PDF to your device instantly." },
+  { title: "Download", desc: "Save the cropped PDF to your device instantly." },
 ];
 
 const faqs = [
   {
     q: "What does cropping a PDF actually do?",
-    a: "Cropping adjusts the visible area of each page without discarding any underlying content. It trims the displayed region, which is useful for removing white margins or cutting out unwanted borders.",
+    a: "Cropping adjusts the visible area of each page without discarding any underlying content. It is useful for removing white margins or cutting out unwanted borders.",
   },
   {
     q: "Can I crop different pages to different sizes?",
@@ -43,11 +44,11 @@ const faqs = [
   },
   {
     q: "Will cropping reduce the file size?",
-    a: "Cropping changes page dimensions but does not remove embedded content from the file, so the size reduction is minimal. Use the PDF Compressor tool to reduce file size.",
+    a: "Cropping changes page dimensions but does not remove embedded content from the file, so the size reduction is usually minimal. Use the PDF Compressor tool when size is the main goal.",
   },
   {
     q: "Can I undo a crop after downloading?",
-    a: "The crop is applied to the downloaded file. Keep your original PDF if you may need to adjust the crop boundaries later.",
+    a: "The crop is applied to the downloaded file, so keep your original PDF if you may want to adjust the crop later.",
   },
   {
     q: "Is my file uploaded anywhere?",
@@ -73,9 +74,14 @@ export default function CropPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Crop PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Crop PDF Online for Free
@@ -118,6 +124,8 @@ export default function CropPdfPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="crop-pdf" />
       </main>
     </>
   );

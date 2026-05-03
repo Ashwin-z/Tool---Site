@@ -1,36 +1,36 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WordToPdfTool from "@/components/word-to-pdf-tool";
 
 export const metadata: Metadata = {
-  title: "Word to PDF Online Free — Convert DOCX to PDF",
+  title: "Word to PDF Converter Online - Convert DOCX to PDF",
   description:
-    "Convert Word documents to PDF online for free with ToolMint. Upload DOCX files and download perfectly formatted PDFs. No signup, no watermark — fast conversion.",
+    "Convert Word documents to PDF with ToolMint. Upload DOCX files, keep layout and formatting intact, and download polished PDFs for sharing, printing, or form submissions.",
   keywords: [
-    "word to pdf",
-    "docx to pdf",
-    "convert word to pdf",
-    "word to pdf converter online free",
-    "doc to pdf",
+    "word to pdf converter",
+    "convert docx to pdf online",
     "word document to pdf",
-    "free word to pdf",
-    "docx to pdf converter",
+    "docx to pdf",
+    "save word as pdf online",
+    "batch word to pdf",
+    "resume docx to pdf",
+    "report docx to pdf",
   ],
   alternates: { canonical: "/tools/word-to-pdf" },
   openGraph: {
-    title: "Word to PDF Online Free — Convert DOCX to PDF | ToolMint",
+    title: "Word to PDF Converter Online - Convert DOCX to PDF | ToolMint",
     description:
-      "Convert Word documents to PDF online for free. Upload DOCX files and download perfectly formatted PDFs. No signup.",
+      "Turn DOCX files into clean PDFs for sharing, printing, and submissions without changing the layout.",
     url: "/tools/word-to-pdf",
   },
 };
 
 const steps = [
-  { title: "Upload Word files", desc: "Drag & drop or select up to 25 DOCX files from your device." },
-  { title: "Preview", desc: "Review the files before conversion to ensure you have the right documents." },
-  { title: "Convert", desc: "Click Convert and each Word file is transformed into a PDF." },
-  { title: "Download", desc: "Save individual PDFs or download all files as a ZIP archive." },
+  { title: "Upload Word files", desc: "Drag and drop or select up to 25 DOCX files from your device." },
+  { title: "Preview", desc: "Review the file list to confirm you are converting the right documents." },
+  { title: "Convert", desc: "Click Convert and each Word document is transformed into a PDF." },
+  { title: "Download", desc: "Save individual PDFs or download the full batch as a ZIP archive." },
 ];
 
 const faqs = [
@@ -40,19 +40,34 @@ const faqs = [
   },
   {
     q: "Can I convert multiple Word files at once?",
-    a: "Yes. You can upload and convert up to 25 DOCX files simultaneously.",
+    a: "Yes. You can upload and convert up to 25 DOCX files in a batch.",
   },
   {
     q: "What Word file formats are supported?",
-    a: "ToolMint supports .docx files (Microsoft Word 2007 and later format).",
+    a: "ToolMint supports DOCX files, which cover modern Microsoft Word documents.",
   },
   {
     q: "Is my document secure during conversion?",
-    a: "Yes. Files are processed securely and never stored or shared.",
+    a: "Yes. Files are processed for conversion and removed after the job completes. They are not kept for reuse or sharing.",
   },
   {
     q: "Do I need Microsoft Word installed?",
-    a: "No. ToolMint converts Word files independently — no Microsoft Office or any other software is needed.",
+    a: "No. ToolMint handles the conversion without requiring Microsoft Word or Office on your device.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Job applications and resumes",
+    desc: "Convert DOCX resumes, cover letters, or writing samples into PDFs before sending them to employers or portals.",
+  },
+  {
+    title: "Contracts and formal documents",
+    desc: "Turn editable drafts into PDFs so the layout stays consistent when clients, colleagues, or vendors open the file.",
+  },
+  {
+    title: "Classwork and reports",
+    desc: "Export essays, assignments, or internal reports into shareable PDFs that print more reliably than editable docs.",
   },
 ];
 
@@ -74,24 +89,42 @@ export default function WordToPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Word to PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Convert Word to PDF Online for Free
+          Convert Word to PDF Online
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Transform your Word documents into universally shareable PDF files with ToolMint. Upload
-          up to 25 DOCX files and download them as perfectly formatted PDFs — or get everything
-          in a single ZIP file.
+          Transform Word documents into clean, shareable PDF files with ToolMint. Upload DOCX
+          files and download PDFs that keep your layout intact, which makes this tool useful for
+          resumes, formal documents, reports, and print-ready handoffs.
         </p>
 
         <div className="mt-8">
           <WordToPdfTool />
         </div>
 
-        {/* How-to section */}
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            When Word to PDF Is the Better Format
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Convert Word to PDF
@@ -107,7 +140,6 @@ export default function WordToPdfPage() {
           </div>
         </section>
 
-        {/* FAQ section */}
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions

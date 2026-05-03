@@ -1,30 +1,64 @@
 import type { Metadata } from "next";
 import ToolCategoryHub from "@/components/tool-category-hub";
+import { toolCategories } from "@/lib/tool-categories";
 
 export const metadata: Metadata = {
-  title: "Free Online PDF Tools â€” Compress, Merge, Split, Convert & Edit PDFs",
+  title: "PDF Tools Online for Everyday Document Work | ToolMint",
   description:
-    "24 free online PDF tools on ToolMint. Compress, merge, split, rotate, edit, sign, redact PDFs and convert between PDF, Word, Excel, PowerPoint, JPG and more. No signup required.",
+    "Explore ToolMint's PDF tools for compressing PDFs, merging files, splitting page ranges, converting Office documents, and protecting or signing paperwork. Built for practical document cleanup and sharing tasks.",
   keywords: [
     "pdf tools online",
-    "free pdf tools",
-    "compress pdf online",
-    "merge pdf online",
-    "split pdf online",
-    "pdf to word",
-    "word to pdf",
-    "pdf editor online free",
-    "pdf converter",
+    "document tools",
+    "compress pdf for email",
+    "merge pdf files online",
+    "split pdf by page range",
+    "pdf converter tools",
+    "password protect pdf",
+    "pdf to word converter",
+    "word to pdf converter",
+    "pdf tools for students and office work",
   ],
   alternates: { canonical: "/tools/pdf-tools" },
   openGraph: {
-    title: "Free Online PDF Tools â€” Compress, Merge, Convert & Edit | ToolMint",
+    title: "PDF Tools Online for Everyday Document Work | ToolMint",
     description:
-      "24 free browser-based PDF tools. Compress, merge, split, convert and edit PDFs with no signup and no watermark.",
+      "Compress, merge, split, convert, sign, and protect PDFs with practical tool pages built for real document workflows.",
     url: "/tools/pdf-tools",
   },
 };
 
 export default function PdfToolsPage() {
-  return <ToolCategoryHub categoryId="pdf" />;
+  const pdfCategory = toolCategories.find((entry) => entry.id === "pdf");
+
+  const collectionSchema = pdfCategory
+    ? {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "ToolMint PDF Tools",
+        description:
+          "PDF utilities for compression, merging, splitting, conversion, editing, and document security workflows.",
+        url: "https://toolmint.tools/tools/pdf-tools",
+        mainEntity: {
+          "@type": "ItemList",
+          itemListElement: pdfCategory.tools.map((tool, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: tool.name,
+            url: `https://toolmint.tools/tools/${tool.slug}`,
+          })),
+        },
+      }
+    : null;
+
+  return (
+    <>
+      {collectionSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        />
+      ) : null}
+      <ToolCategoryHub categoryId="pdf" />
+    </>
+  );
 }

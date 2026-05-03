@@ -111,6 +111,7 @@ const categorizedTools: { title: string; icon: string; path?: string; summary: s
       ["Work Hours Calculator", "/tools/work-hours-calculator"],
       ["Calorie Calculator", "/tools/calorie-calculator"],
       ["Tip Calculator", "/tools/tip-calculator"],
+      ["Palworld Breeding Calculator", "/tools/palworld-breeding-calculator"],
     ],
   },
   {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getRelatedTools, getCategoryForSlug } from "@/lib/tool-categories";
+import { getCategoryForSlug, getRelatedTools } from "@/lib/tool-categories";
 
 export default function RelatedTools({ slug }: { slug: string }) {
   const related = getRelatedTools(slug, 5);
@@ -30,7 +30,7 @@ export default function RelatedTools({ slug }: { slug: string }) {
             href={category.path}
             className="text-sm font-medium text-[#6c63ff] transition hover:underline"
           >
-            View all {category.title} â†’
+            View all {category.title} →
           </Link>
         </div>
       ) : null}

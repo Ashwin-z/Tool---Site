@@ -41,6 +41,7 @@ const footerColumns = [
       { label: "ROI Calculator", href: "/tools/roi-calculator" },
       { label: "GST / Tax Calc", href: "/tools/gst-calculator" },
       { label: "Calorie Calc", href: "/tools/calorie-calculator" },
+      { label: "Palworld Breeding", href: "/tools/palworld-breeding-calculator" },
     ],
   },
   {
@@ -81,7 +82,7 @@ const footerColumns = [
 export default function SiteFooter() {
   return (
     <footer className="mt-16" style={{ borderTop: "1px solid var(--border)" }}>
-      <div className="mx-auto max-w-[1400px] px-6 pb-4 pt-10">
+      <div className="mx-auto max-w-[1400px] px-4 pb-4 pt-10 sm:px-6">
         <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="mb-3 inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight">
@@ -111,7 +112,7 @@ export default function SiteFooter() {
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm" style={{ borderTop: "1px solid var(--border)", color: "var(--muted-3)" }}>
           <span>&copy; {new Date().getFullYear()} ToolMint. All rights reserved.</span>
-          <div className="flex items-center gap-5">
+          <div className="flex max-w-full flex-wrap items-center gap-x-4 gap-y-2 sm:justify-end">
             <Link href="/privacy" className="transition hover:opacity-80">
               Privacy
             </Link>

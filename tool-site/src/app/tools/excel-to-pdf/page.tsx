@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import ExcelToPdfTool from "@/components/excel-to-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Excel to PDF Online Free - Convert XLSX, CSV to PDF",
+  title: "Excel to PDF Online Free - Convert XLSX and CSV to PDF",
   description:
     "Convert Excel to PDF online for free with ToolMint. Upload XLSX, XLS, or CSV spreadsheets and download polished PDF documents. No signup, no watermark.",
   keywords: [
@@ -18,9 +19,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/excel-to-pdf" },
   openGraph: {
-    title: "Excel to PDF Online Free - Convert XLSX, CSV to PDF | ToolMint",
+    title: "Excel to PDF Online Free - Convert XLSX and CSV to PDF | ToolMint",
     description:
-      "Convert Excel to PDF online for free. Upload XLSX, XLS or CSV and download polished PDFs. No signup.",
+      "Convert Excel to PDF online for free. Upload XLSX, XLS, or CSV and download polished PDFs.",
     url: "/tools/excel-to-pdf",
   },
 };
@@ -35,7 +36,7 @@ const steps = [
 const faqs = [
   {
     q: "What spreadsheet formats can I convert to PDF?",
-    a: "ToolMint supports .xlsx, .xls (Microsoft Excel), and .csv (comma-separated values) file formats.",
+    a: "ToolMint supports XLSX, XLS, and CSV file formats.",
   },
   {
     q: "Does the table formatting stay the same?",
@@ -47,11 +48,11 @@ const faqs = [
   },
   {
     q: "Are formulas visible in the converted PDF?",
-    a: "The PDF shows calculated values, not the formulas themselves, which matches what you see on screen in the spreadsheet.",
+    a: "The PDF shows calculated values rather than the formulas themselves, which matches what you see in the sheet view.",
   },
   {
     q: "Is my data secure during conversion?",
-    a: "Yes. Your files are processed securely and never stored or shared with anyone.",
+    a: "Yes. Your files are processed for conversion and removed after the job completes.",
   },
 ];
 
@@ -123,6 +124,8 @@ export default function ExcelToPdfPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="excel-to-pdf" />
       </main>
     </>
   );

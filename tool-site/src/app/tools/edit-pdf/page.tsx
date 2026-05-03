@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import RelatedTools from "@/components/related-tools";
 import EditPdfTool from "@/components/edit-pdf-tool-loader";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Edit PDF Online Free — Annotate, Draw & Stamp PDF Pages",
+  title: "Edit PDF Online Free - Annotate, Draw and Stamp PDF Pages",
   description:
     "Edit PDF online for free with ToolMint. Add text, annotations, drawings, highlights, and image stamps on any page. Full editor workspace with page thumbnails and layer panel.",
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Edit PDF Online Free | ToolMint",
     description:
-      "Edit PDF online — add text, drawings, highlights, and image stamps. Full browser-based editor with page thumbnails and layers.",
+      "Edit PDF online, add text, drawings, highlights, and image stamps in a full browser-based editor.",
     url: "/tools/edit-pdf",
   },
 };
@@ -40,7 +40,7 @@ const faqs = [
   },
   {
     q: "Can I edit text that is already in the PDF?",
-    a: "This tool adds new content on top of existing pages. For editing original embedded text, a full-featured desktop PDF editor is needed.",
+    a: "This tool adds new content on top of existing pages. For editing original embedded text, a full-featured desktop PDF editor is still needed.",
   },
   {
     q: "Can I edit multiple pages?",
@@ -74,9 +74,14 @@ export default function EditPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 md:px-6 md:py-10">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Edit PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Edit PDF Online for Free
@@ -120,7 +125,9 @@ export default function EditPdfPage() {
           </dl>
         </section>
 
-        <RelatedTools slug="edit-pdf" />
+        <div className="max-w-5xl">
+          <RelatedTools slug="edit-pdf" />
+        </div>
       </main>
     </>
   );

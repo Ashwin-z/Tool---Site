@@ -1,57 +1,73 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfSecurityTool from "@/components/pdf-security-tool";
 
 export const metadata: Metadata = {
-  title: "Protect PDF Online Free — Password Encrypt PDF with AES-256",
+  title: "Password Protect PDF Online - Encrypt PDF in Browser",
   description:
-    "Protect PDF online for free with ToolMint. Add AES-256 password encryption, set an open password, and control viewer permissions. Browser-based, no server upload.",
+    "Password protect a PDF with ToolMint. Add AES-256 encryption, set an open password, and choose sharing permissions before sending contracts, reports, or confidential files.",
   keywords: [
-    "protect pdf online",
-    "password protect pdf",
-    "encrypt pdf online free",
-    "lock pdf with password",
-    "pdf password protection",
-    "secure pdf online",
-    "pdf encryption tool",
+    "password protect pdf online",
+    "encrypt pdf with password",
+    "secure pdf document",
+    "protect pdf in browser",
+    "lock pdf file",
     "aes 256 pdf encryption",
+    "protect client pdf files",
+    "confidential pdf password",
   ],
   alternates: { canonical: "/tools/protect-pdf" },
   openGraph: {
-    title: "Protect PDF Online Free | ToolMint",
+    title: "Password Protect PDF Online - Encrypt PDF in Browser | ToolMint",
     description:
-      "Add AES-256 password encryption to any PDF online. Set an open password and control viewer permissions — all in your browser.",
+      "Add AES-256 password protection to PDFs and control how shared documents can be opened or printed.",
     url: "/tools/protect-pdf",
   },
 };
 
 const steps = [
-  { title: "Upload a PDF", desc: "Select the PDF you want to password-protect." },
-  { title: "Set a password", desc: "Enter the open password required to view the protected file." },
-  { title: "Choose permissions", desc: "Optionally restrict printing, copying, or editing by setting permission flags." },
-  { title: "Download", desc: "Download the AES-256 encrypted PDF ready to share securely." },
+  { title: "Upload a PDF", desc: "Select the PDF you want to protect before sharing or storing it." },
+  { title: "Set a password", desc: "Create the open password required to access the protected file." },
+  { title: "Choose permissions", desc: "Optionally restrict printing, copying, or editing for recipients." },
+  { title: "Download", desc: "Save the encrypted PDF and share the password separately." },
 ];
 
 const faqs = [
   {
     q: "What encryption standard is used?",
-    a: "ToolMint applies AES-256 bit encryption, which is the industry standard for securing PDF documents.",
+    a: "ToolMint applies AES-256 encryption, which is a strong modern standard for protecting PDF documents.",
   },
   {
     q: "Can I restrict printing or copying as well?",
-    a: "Yes. The permissions panel lets you individually restrict printing, copying text, and modifying the document.",
+    a: "Yes. You can set permission flags that limit printing, copying text, or modifying the document.",
   },
   {
     q: "What happens if I forget the password?",
-    a: "There is no way to recover a forgotten password — keep it somewhere safe. If you lose it, the file cannot be decrypted.",
+    a: "There is no recovery path inside the file itself, so keep the password somewhere safe before distributing the protected PDF.",
   },
   {
     q: "Can I protect a PDF that is already encrypted?",
-    a: "You need to unlock the existing encryption first using the Unlock PDF tool, then re-protect with a new password.",
+    a: "If the file already has an open password, unlock it first with the correct password and then re-protect it with the new settings you want.",
   },
   {
     q: "Is my PDF sent to a server?",
-    a: "No. Encryption is performed entirely in your browser using WebAssembly. Your file never leaves your device.",
+    a: "No. Encryption runs in your browser for this tool, so the file stays on your device during processing.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Contracts and proposals",
+    desc: "Protect documents before emailing them to clients when they include terms, pricing, or personal information.",
+  },
+  {
+    title: "Financial and HR files",
+    desc: "Add a password to salary sheets, statements, internal forms, or employee paperwork before sharing them across teams.",
+  },
+  {
+    title: "Confidential drafts",
+    desc: "Lock draft agreements, reports, or board materials before wider circulation so only intended recipients can open them.",
   },
 ];
 
@@ -73,17 +89,22 @@ export default function ProtectPdfPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "PDF Tools", href: "/tools/pdf-tools" },
+            { name: "Protect PDF" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Protect PDF Online for Free
+          Password Protect a PDF Online
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Lock any PDF with a password using strong AES-256 encryption on ToolMint. Set the
-          open password viewers will need to access the file, and optionally restrict
-          permissions such as printing and copying — all without uploading to any server.
+          Lock a PDF with a password using ToolMint. Add AES-256 protection, decide whether viewers
+          can print or copy the document, and download a safer file for contracts, reports, and
+          confidential records.
         </p>
 
         <div className="mt-8">
@@ -92,7 +113,21 @@ export default function ProtectPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Password-Protect a PDF
+            Good Times to Password Protect a PDF
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How to Password Protect a PDF
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
@@ -118,6 +153,8 @@ export default function ProtectPdfPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="protect-pdf" />
       </main>
     </>
   );
