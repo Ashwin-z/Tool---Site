@@ -1,58 +1,76 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import SignPdfTool from "@/components/sign-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Sign PDF Online Free - Add Signature to PDF",
+  title: "Sign PDF Online Free â€“ Add Digital Signature",
   description:
-    "Sign PDF online for free with ToolMint. Add your signature, initials, name, date, or company stamp to any page. Draw, type, or upload your signature.",
+    "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
   keywords: [
     "sign pdf online free",
     "add signature to pdf",
-    "pdf signature online",
     "electronic signature pdf",
-    "esign pdf free",
-    "draw signature on pdf",
+    "digital signature pdf online",
+    "esign pdf",
     "pdf signer online",
-    "sign pdf without adobe",
+    "draw signature on pdf",
+    "free pdf signature tool",
   ],
   alternates: { canonical: "/tools/sign-pdf" },
   openGraph: {
-    title: "Sign PDF Online Free | ToolMint",
+    title: "Sign PDF Online Free â€“ Add Digital Signature | ToolMint",
     description:
-      "Add your signature to any PDF online. Draw, type, or upload your signature and place it on any page.",
+      "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
     url: "/tools/sign-pdf",
+    images: [{ url: "/og/sign-pdf.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Contracts and agreements",
+    desc: "Sign contracts, NDAs, rental agreements, and service agreements electronically without printing, signing, and rescanning.",
+  },
+  {
+    title: "Approval workflows",
+    desc: "Add your signature or initials to approval documents, purchase orders, and authorization forms before returning them.",
+  },
+  {
+    title: "Forms and applications",
+    desc: "Complete application forms, consent documents, and authorization releases that require a handwritten signature.",
+  },
+];
+
 const steps = [
-  { title: "Upload a PDF", desc: "Open the PDF you need to sign in the browser workspace." },
-  { title: "Create your signature", desc: "Draw your signature, type it in a style, or upload an image of your signature." },
-  { title: "Place on the page", desc: "Drag and resize the signature, initials, name, date, or stamp fields anywhere on the page." },
-  { title: "Download", desc: "Download the signed PDF instantly. No account or email required." },
+  { title: "Upload a PDF", desc: "Select the document you need to sign." },
+  { title: "Create your signature", desc: "Draw, type, or upload an image of your signature." },
+  { title: "Place it", desc: "Click on the PDF to position your signature at the right location." },
+  { title: "Download", desc: "Save the signed PDF to your device." },
 ];
 
 const faqs = [
   {
-    q: "How can I create my signature?",
-    a: "Draw it freehand with your mouse or touchscreen, type it and choose a handwriting font, or upload an image file of your signature.",
+    q: "Is an online PDF signature legally valid?",
+    a: "Electronic signatures are legally valid in most countries under laws like the eSign Act (US), eIDAS (EU), and equivalent regulations in many other jurisdictions. The legal weight depends on the type of signature and the context â€” a simple drawn signature is accepted for most commercial agreements.",
   },
   {
-    q: "Can I add a date and initials as well?",
-    a: "Yes. Insert name, initials, date, company, and free text fields in addition to your signature, then drag each element into place.",
+    q: "What is the difference between a digital and electronic signature?",
+    a: "An electronic signature is any electronic indicator of intent to sign â€” a drawn signature, typed name, or uploaded image. A digital signature is a specific cryptographic mechanism that uses certificates to verify the signer's identity and detect tampering. ToolMint provides electronic signatures; certified digital signatures require a certificate authority.",
   },
   {
-    q: "Is this a legally binding electronic signature?",
-    a: "This tool creates visual signatures on PDF pages. Legal validity depends on your jurisdiction and use case, so use a qualified signature service when a regulated e-signature is required.",
+    q: "Can I sign a PDF on my phone?",
+    a: "Yes. Open ToolMint in your phone's browser, upload the PDF, draw your signature on the touchscreen, position it, and download the signed document. No app needed.",
   },
   {
-    q: "Can I sign multiple pages?",
-    a: "Yes. Use the page panel to switch between pages and add signature elements to each one as needed.",
+    q: "How do I add my handwritten signature to a PDF?",
+    a: "Use the draw option to sign with your mouse or finger on a touchscreen, replicating your handwriting. Alternatively, sign on paper, photograph or scan it, and upload the image as your signature.",
   },
   {
-    q: "Is my PDF uploaded anywhere?",
-    a: "No. All signing runs entirely in your browser. Your document never leaves your device.",
+    q: "Can multiple people sign the same PDF?",
+    a: "Yes. Each person can upload the same PDF, add their signature, and download their signed version. For coordinated multi-party signing with audit trails, a dedicated e-signature platform like DocuSign or HelloSign provides a more structured workflow.",
   },
 ];
 
@@ -69,11 +87,12 @@ export default function SignPdfPage() {
 
   return (
     <>
+      <WebAppSchema slug="sign-pdf" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-[1600px] px-4 py-8 md:px-6 md:py-10">
+      <main className="pdf-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
         <ToolBreadcrumbs
           items={[
             { name: "Home", href: "/" },
@@ -84,19 +103,32 @@ export default function SignPdfPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Sign PDF Online for Free
+          Add Digital Signature to PDF Online – Free, No Software
         </h1>
-        <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
-          Add your signature to any PDF document with ToolMint. Draw, type, or upload your
-          signature, then place it alongside initials, date, name, and company stamp fields
-          on any page. Resize and reposition every element before downloading the signed PDF.
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
+          Add your signature to any PDF document with ToolMint. Draw, type, or upload a signature
+          image, place it anywhere on the page, and download the signed PDF â€” no account required.
         </p>
 
         <div className="mt-8">
           <SignPdfTool />
         </div>
 
-        <section className="mt-16 max-w-5xl">
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            When to Sign a PDF Online
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Sign a PDF Online
           </h2>
@@ -111,7 +143,42 @@ export default function SignPdfPage() {
           </div>
         </section>
 
-        <section className="mt-16 max-w-5xl">
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Is a Digital Signature on a PDF Legally Binding?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Electronic signatures are legally recognized in most countries for most types of
+              agreements. In the United States, the ESIGN Act and UETA make electronic signatures
+              enforceable for contracts and agreements. The EU's eIDAS regulation similarly
+              recognizes electronic signatures. For most business contracts â€” freelance agreements,
+              service contracts, rental agreements, and corporate approvals â€” an electronic
+              signature placed on a PDF is legally sufficient. Exceptions include wills, real
+              estate deeds in some jurisdictions, and certain government forms that specifically
+              require wet (physical) signatures. When in doubt about legal requirements for a
+              specific document type, consult a legal professional.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Types of PDF Signatures Explained
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              There are three main types of PDF signatures. A simple electronic signature is a
+              visual representation â€” a drawn, typed, or uploaded image of your signature â€”
+              placed on the PDF. It carries intent but no cryptographic verification. An advanced
+              electronic signature includes identity verification tied to the signer, often via
+              email confirmation or SMS. A qualified digital signature (QES) is backed by a
+              certificate from a trusted Certificate Authority and provides the highest level of
+              legal assurance. ToolMint provides simple electronic signatures, which are accepted
+              for the majority of everyday business documents.
+            </p>
+          </div>
+        </section>
+
+        <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
           </h2>
@@ -125,9 +192,7 @@ export default function SignPdfPage() {
           </dl>
         </section>
 
-        <div className="max-w-5xl">
-          <RelatedTools slug="sign-pdf" />
-        </div>
+        <RelatedTools slug="sign-pdf" />
       </main>
     </>
   );

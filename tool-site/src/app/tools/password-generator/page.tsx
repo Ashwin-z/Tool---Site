@@ -1,33 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
 import PasswordGeneratorTool from "@/components/password-generator-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Password Generator — Strong Passwords & Passphrases with Entropy | ToolMint",
+  title: "Password Generator – Create Strong Random Passwords & Passphrases Free",
   description:
-    "Generate cryptographically secure passwords or passphrases in your browser. Up to 128 characters, custom charsets, exclude ambiguous characters, passphrase separators, entropy in bits, and bulk generation up to 20 at once.",
+    "Generate cryptographically secure passwords or passphrases in your browser. Customize length, character sets, entropy score, and bulk-generate up to 20 at once. 100% browser-side, free.",
   keywords: [
-    "password generator",
-    "strong password generator",
-    "random password generator",
-    "secure password generator",
-    "passphrase generator",
-    "cryptographic password generator",
-    "password strength checker",
+    "strong password generator free",
+    "random password generator online",
+    "how to create a strong password",
+    "secure password generator no login",
+    "passphrase generator online free",
     "password entropy calculator",
-    "bulk password generator",
-    "custom password generator",
-    "online password generator free",
-    "generate strong password",
+    "generate password with special characters",
+    "cryptographic password generator browser",
   ],
   alternates: { canonical: "/tools/password-generator" },
   openGraph: {
-    title: "Password Generator — Strong Passwords & Passphrases with Entropy | ToolMint",
+    title: "Password Generator – Strong Passwords & Passphrases with Entropy | ToolMint",
     description:
       "Generate cryptographically secure passwords or passphrases with entropy scoring. Up to 128 chars, custom rules, bulk generate up to 20 at once. 100% browser-side.",
     url: "/tools/password-generator",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
@@ -80,22 +78,29 @@ export default function PasswordGeneratorPage() {
 
   return (
     <>
+      <WebAppSchema slug="password-generator" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="dev-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Developer Tools", href: "/tools/developer-tools" },
+            { name: "Password Generator" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Password Generator — Passwords &amp; Passphrases with Entropy Score
+          Password Generator – Strong Passwords & Passphrases with Entropy Score
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Create cryptographically secure passwords (up to 128 characters) or memorable passphrases in your browser.
-          Customize character sets, exclude ambiguous characters, set word count and separators, and generate up to 20 at once.
-          Every password is scored with Shannon entropy in bits so you see exactly how strong it is.
+          Create cryptographically secure passwords (up to 128 characters) or memorable
+          passphrases in your browser. Customize character sets, exclude ambiguous characters,
+          set word count and separators, and generate up to 20 at once. Every password is scored
+          with Shannon entropy in bits so you see exactly how strong it is.
         </p>
 
         <div className="mt-8">
@@ -128,6 +133,48 @@ export default function PasswordGeneratorPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Password Entropy: How to Measure How Strong a Password Really Is
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Password entropy is measured in bits and represents the number of possible
+              combinations an attacker would need to try to crack a password by brute force.
+              The formula is: entropy = log₂(character set size ^ password length). A 12-character
+              password using only lowercase letters (26 chars) has log₂(26¹²) ≈ 56 bits of
+              entropy. The same 12 characters using uppercase + lowercase + digits + symbols
+              (94 chars) gives log₂(94¹²) ≈ 79 bits. General guidelines: below 40 bits is weak
+              and crackable quickly with modern hardware; 60–80 bits is strong for most accounts;
+              100+ bits is very strong and impractical to crack even with significant computing
+              resources. Length increases entropy more efficiently than adding character types:
+              a 20-character lowercase password (94 bits) is stronger than a 12-character
+              mixed-charset password (79 bits). The entropy meter in this generator shows the
+              exact bit count so you can make an informed choice rather than guessing.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Passphrases vs Passwords: Which Should You Use?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Passphrases — sequences of random words like <em>cloud-bridge-falcon-river</em> —
+              have two advantages over traditional random-character passwords: they are easier
+              to remember and type, and they can be longer (more entropy) without being harder
+              to use. A 4-word passphrase drawn from a 7,776-word wordlist has log₂(7776⁴) ≈
+              51 bits of entropy. A 5-word passphrase reaches ≈ 64 bits — equivalent to a
+              12-character random string with full charset. For accounts you need to type from
+              memory (laptop login, password manager master password, Wi-Fi password), passphrases
+              are generally the better choice. For accounts where you copy-paste from a password
+              manager, a fully random 20-character string is equally strong and slightly more
+              compact. The key rule for both: never reuse. Use a different password or passphrase
+              for every account. If one site is breached, unique passwords ensure the attacker
+              cannot access your other accounts.
+            </p>
           </div>
         </section>
 

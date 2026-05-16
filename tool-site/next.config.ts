@@ -36,6 +36,35 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/tools/pdf-compressor",
+        destination: "/tools/compress-pdf",
+        permanent: true,
+      },
+      {
+        source: "/tools/pdf-merger",
+        destination: "/tools/merge-pdf",
+        permanent: true,
+      },
+      {
+        source: "/tools/pdf-splitter",
+        destination: "/tools/split-pdf",
+        permanent: true,
+      },
+      {
+        source: "/tools/add-page-numbers",
+        destination: "/tools/add-page-numbers-to-pdf",
+        permanent: true,
+      },
+      {
+        source: "/tools/add-watermark",
+        destination: "/tools/add-watermark-to-pdf",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

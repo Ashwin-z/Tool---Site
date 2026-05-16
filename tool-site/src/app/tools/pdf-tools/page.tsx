@@ -3,28 +3,30 @@ import ToolCategoryHub from "@/components/tool-category-hub";
 import { toolCategories } from "@/lib/tool-categories";
 
 export const metadata: Metadata = {
-  title: "PDF Tools Online for Everyday Document Work | ToolMint",
+  title: "Free PDF Tools Online – No Signup Required",
   description:
-    "Explore ToolMint's PDF tools for compressing PDFs, merging files, splitting page ranges, converting Office documents, and protecting or signing paperwork. Built for practical document cleanup and sharing tasks.",
+    "Free PDF tools online for compressing, merging, splitting, converting, editing, and securing PDF documents. No signup, no watermark — all tools run in your browser.",
   keywords: [
-    "pdf tools online",
-    "document tools",
-    "compress pdf for email",
-    "merge pdf files online",
-    "split pdf by page range",
+    "free pdf tools online",
+    "pdf tools no signup",
+    "compress pdf online",
+    "merge pdf online",
+    "split pdf online",
     "pdf converter tools",
-    "password protect pdf",
-    "pdf to word converter",
-    "word to pdf converter",
-    "pdf tools for students and office work",
+    "pdf editor online free",
+    "pdf to word online",
+    "word to pdf online",
+    "protect pdf online",
   ],
   alternates: { canonical: "/tools/pdf-tools" },
   openGraph: {
-    title: "PDF Tools Online for Everyday Document Work | ToolMint",
+    title: "Free PDF Tools Online – No Signup Required | ToolMint",
     description:
-      "Compress, merge, split, convert, sign, and protect PDFs with practical tool pages built for real document workflows.",
+      "Free PDF tools online for compressing, merging, splitting, converting, editing, and securing PDF documents. No signup, no watermark.",
     url: "/tools/pdf-tools",
+    images: [{ url: "/og/pdf-tools.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function PdfToolsPage() {
@@ -34,9 +36,9 @@ export default function PdfToolsPage() {
     ? {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        name: "ToolMint PDF Tools",
+        name: "Free PDF Tools Online – ToolMint",
         description:
-          "PDF utilities for compression, merging, splitting, conversion, editing, and document security workflows.",
+          "Free online PDF tools for compression, merging, splitting, conversion, editing, and document security. No signup required.",
         url: "https://toolmint.tools/tools/pdf-tools",
         mainEntity: {
           "@type": "ItemList",

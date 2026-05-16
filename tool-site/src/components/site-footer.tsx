@@ -5,9 +5,9 @@ const footerColumns = [
   {
     title: "PDF Tools",
     links: [
-      { label: "PDF Compressor", href: "/tools/pdf-compressor" },
-      { label: "PDF Merger", href: "/tools/pdf-merger" },
-      { label: "PDF Splitter", href: "/tools/pdf-splitter" },
+      { label: "Compress PDF", href: "/tools/compress-pdf" },
+      { label: "Merge PDF", href: "/tools/merge-pdf" },
+      { label: "Split PDF", href: "/tools/split-pdf" },
       { label: "Protect PDF", href: "/tools/protect-pdf" },
       { label: "Unlock PDF", href: "/tools/unlock-pdf" },
       { label: "Redact PDF", href: "/tools/redact-pdf" },

@@ -1,30 +1,49 @@
 import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
-import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WordCounterTool from "@/components/word-counter-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Word Counter Online Free - Count Words, Characters & Reading Time",
+  title: "Free Online Word Counter – Count Words, Characters & Reading Time",
   description:
-    "Count words, characters, sentences, and reading time online for free with ToolMint. Real-time stats as you type or paste. No signup, fully browser-based.",
+    "Count words, characters, sentences, paragraphs, and reading time online for free. Real-time stats as you type or paste. Works for essays, blog posts, and scripts. No signup required.",
   keywords: [
-    "word counter",
-    "word counter online",
-    "character counter",
-    "count words online",
-    "sentence counter",
+    "word counter online free",
+    "word count for essays",
+    "character counter online",
+    "count words in text",
     "reading time calculator",
-    "word count tool",
-    "free word counter",
+    "check word count online",
+    "word counter for twitter",
+    "sentence counter tool",
+    "word count checker",
+    "how many words in my text",
   ],
   alternates: { canonical: "/tools/word-counter" },
   openGraph: {
-    title: "Word Counter Online Free | ToolMint",
+    title: "Free Online Word Counter – Count Words, Characters & Reading Time | ToolMint",
     description:
-      "Count words, characters, sentences, and estimate reading time in real time. No signup, browser-based.",
+      "Real-time word, character, sentence, and reading time counts. Paste any text and see stats instantly. No signup.",
     url: "/tools/word-counter",
   },
+  twitter: { card: "summary_large_image" },
 };
+
+const useCases = [
+  {
+    title: "Essays and academic writing",
+    desc: "Track assignment word limits, paragraph length, and reading time before submitting essays or research drafts.",
+  },
+  {
+    title: "Blog posts and SEO content",
+    desc: "Check article length when drafting outlines, meta descriptions, or long-form posts against target word counts.",
+  },
+  {
+    title: "Scripts and presentations",
+    desc: "Estimate speaking time for YouTube scripts, presentations, and speeches using the per-word speaking-pace calculation.",
+  },
+];
 
 const steps = [
   { title: "Type or paste text", desc: "Enter your text directly or paste it from any source." },
@@ -44,7 +63,7 @@ const faqs = [
   },
   {
     q: "Can I use this for essays and assignments?",
-    a: "Yes. Many writers use ToolMint to meet word-count limits for essays, blog posts, social captions, and other written work.",
+    a: "Yes. Paste or type your essay draft and see the live word count against your target. Works for school assignments, blog posts, social captions, and any other written work with a length requirement.",
   },
   {
     q: "Does it work with non-English text?",
@@ -53,21 +72,6 @@ const faqs = [
   {
     q: "Is my text stored or sent anywhere?",
     a: "No. All counting runs locally in your browser. Your text is never transmitted to any server.",
-  },
-];
-
-const useCases = [
-  {
-    title: "Essays and academic writing",
-    desc: "Track assignment word limits, paragraph length, and reading time before submitting essays or research drafts.",
-  },
-  {
-    title: "Blog posts and SEO briefs",
-    desc: "Check article length quickly when drafting outlines, landing pages, or metadata support copy.",
-  },
-  {
-    title: "Scripts and speeches",
-    desc: "Estimate speaking time for presentations, YouTube scripts, meeting notes, and public speaking drafts.",
   },
 ];
 
@@ -84,6 +88,7 @@ export default function WordCounterPage() {
 
   return (
     <>
+      <WebAppSchema slug="word-counter" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -99,12 +104,12 @@ export default function WordCounterPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Word Counter Online - Free
+          Free Online Word Counter – Count Words, Characters & Reading Time
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Count words, characters, sentences, paragraphs, and estimated reading time in real
           time with ToolMint. Type directly or paste text from any source and the stats update
-          instantly in your browser.
+          instantly in your browser — no signup, no upload, completely free.
         </p>
 
         <div className="mt-8">
@@ -137,6 +142,40 @@ export default function WordCounterPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Word Count Requirements by Writing Type
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Different writing tasks have different expected lengths, and knowing the range helps
+              you hit the mark. Blog posts optimized for SEO typically land between 1,200 and 2,500
+              words. Short essays for school are usually 500–800 words; longer academic papers range
+              from 2,000 to 5,000 words. A standard 5-minute speech runs about 650–750 words at a
+              normal speaking pace. Twitter posts cap at 280 characters, Instagram captions at around
+              2,200 characters, and LinkedIn posts perform best under 1,300 characters. Meta
+              descriptions should stay between 150 and 160 characters to avoid being truncated in
+              search results. Paste your draft here and check your count against any of these targets.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Reading Time vs. Speaking Time: What Is the Difference?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Reading time and speaking time are both calculated from word count, but the rates differ.
+              Silent reading averages 200–250 words per minute for most adults — the range depends on
+              text complexity and the reader. Speaking time is slower: most presenters and podcasters
+              average 120–150 words per minute when speaking clearly. A 1,000-word script takes roughly
+              4–5 minutes to read silently but 7–8 minutes to deliver as a speech. If you are
+              preparing slides, a video script, or a speech, use the speaking time estimate here to
+              plan your pacing. For written content published online, the reading time figure is more
+              useful — it tells readers upfront how long your article will take to finish.
+            </p>
           </div>
         </section>
 

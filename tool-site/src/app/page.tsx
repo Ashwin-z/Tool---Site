@@ -114,8 +114,8 @@ export default function Home() {
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { name: "PDF Compressor", href: "/tools/pdf-compressor", desc: "Reduce PDF size by up to 90%." },
-              { name: "PDF Merger", href: "/tools/pdf-merger", desc: "Combine multiple PDFs into one." },
+              { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Reduce PDF size by up to 90%." },
+              { name: "Merge PDF", href: "/tools/merge-pdf", desc: "Combine multiple PDFs into one." },
               { name: "Image Compressor", href: "/tools/image-compressor", desc: "Shrink images without quality loss." },
               { name: "Word Counter", href: "/tools/word-counter", desc: "Count words, characters, and reading time." },
               { name: "JSON Formatter", href: "/tools/json-formatter", desc: "Beautify, validate, and minify JSON." },

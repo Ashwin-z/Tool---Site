@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import PythonCodeEditorTool from "@/components/python-code-editor-tool-loader";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Python Code Editor — Run Python Online Free in Browser | ToolMint",
+  title: "Python Code Editor – Run Python Online Without Installing Anything",
   description:
-    "Write and run Python code directly in your browser. Powered by Pyodide (WebAssembly CPython) with stdin simulation, output console, and auto-saved workspace. No install, no signup.",
+    "Write and run Python code directly in your browser. Powered by Pyodide (WebAssembly CPython) with stdin simulation, output console, and auto-saved workspace. No install, no signup, free.",
   keywords: [
-    "python code editor online",
-    "run python in browser",
-    "online python compiler",
-    "python playground",
-    "pyodide editor",
-    "free python editor",
-    "python ide online",
-    "python runner online",
-    "python stdin simulator",
-    "browser python",
-    "python webassembly",
-    "execute python online",
+    "run python online without install",
+    "python online compiler free",
+    "python code editor browser",
+    "python playground online free",
+    "execute python code online",
+    "python editor no download",
+    "online python interpreter free",
+    "pyodide python browser editor",
   ],
   alternates: { canonical: "/tools/python-code-editor" },
   openGraph: {
-    title: "Python Code Editor — Run Python Online Free in Browser | ToolMint",
+    title: "Python Code Editor – Run Python Online Free in Browser | ToolMint",
     description:
       "Write and run Python right in your browser. Powered by Pyodide — no install, no server, with stdin simulation and output console.",
     url: "/tools/python-code-editor",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
@@ -79,22 +78,29 @@ export default function PythonCodeEditorPage() {
 
   return (
     <>
+      <WebAppSchema slug="python-code-editor" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="dev-tool-page mx-auto min-h-screen w-full max-w-6xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Developer Tools", href: "/tools/developer-tools" },
+            { name: "Python Code Editor" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Python Code Editor — Run Python in Your Browser
+          Python Code Editor – Run Python in Your Browser
         </h1>
         <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
-          Write and execute Python code entirely in your browser — powered by Pyodide (WebAssembly CPython).
-          Simulate stdin input, view stdout and stderr in a clean console, and keep your workspace auto-saved between sessions.
-          No installation, no server, no account needed.
+          Write and execute Python code entirely in your browser — powered by Pyodide
+          (WebAssembly CPython). Simulate stdin input, view stdout and stderr in a clean
+          console, and keep your workspace auto-saved between sessions. No installation,
+          no server, no account needed.
         </p>
 
         <div className="mt-8">
@@ -130,6 +136,50 @@ export default function PythonCodeEditorPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How Pyodide Runs Python in the Browser Without a Server
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Traditional online Python compilers send your code to a server, execute it there,
+              and return the output over the network — which means latency, rate limits, and
+              privacy concerns about your code leaving your device. Pyodide takes a completely
+              different approach: it compiles CPython (the same interpreter you install locally)
+              to WebAssembly, which is a binary instruction format that modern browsers can run
+              natively at near-native speed. When you click &quot;Run Python,&quot; your code executes
+              inside your own browser tab — the same process as your JavaScript. No network
+              request is made. The Python standard library is bundled with Pyodide and available
+              immediately: <code className="rounded bg-white/10 px-1 text-xs">import math</code>,
+              <code className="rounded bg-white/10 px-1 text-xs">import json</code>,
+              <code className="rounded bg-white/10 px-1 text-xs">import random</code>,
+              <code className="rounded bg-white/10 px-1 text-xs">import datetime</code> all work without any setup.
+              The initial load takes a few seconds the first time because the WebAssembly
+              runtime is downloaded (~10MB). After that, execution is instant.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Who This Python Editor Is Most Useful For
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Students learning Python: run code from a tutorial or textbook without installing
+              Python locally. This removes the setup barrier that causes many beginners to give
+              up before writing their first program. The stdin simulator handles practice
+              problems that use <code className="rounded bg-white/10 px-1 text-xs">input()</code> — common in
+              competitive programming and classroom exercises. Developers who need a quick
+              scratchpad: test a data transformation, string manipulation, regex pattern, or
+              algorithm without opening an IDE or terminal for a small throwaway script. Teachers
+              and content creators: demonstrate Python concepts in a live, immediately runnable
+              format without requiring students to have any local setup. The auto-save feature
+              means returning students find their last code intact. Interview preparation: practice
+              coding problems using the same syntax and standard library as the actual interview
+              environment, with immediate output feedback on each run.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -143,6 +193,8 @@ export default function PythonCodeEditorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="python-code-editor" />
       </main>
     </>
   );

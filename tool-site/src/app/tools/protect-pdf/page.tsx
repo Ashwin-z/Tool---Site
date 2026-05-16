@@ -1,73 +1,76 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfSecurityTool from "@/components/pdf-security-tool";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Password Protect PDF Online - Encrypt PDF in Browser",
+  title: "Protect PDF with Password â€“ Encrypt PDF Free",
   description:
-    "Password protect a PDF with ToolMint. Add AES-256 encryption, set an open password, and choose sharing permissions before sending contracts, reports, or confidential files.",
+    "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
   keywords: [
+    "protect pdf",
     "password protect pdf online",
-    "encrypt pdf with password",
-    "secure pdf document",
-    "protect pdf in browser",
-    "lock pdf file",
-    "aes 256 pdf encryption",
-    "protect client pdf files",
-    "confidential pdf password",
+    "encrypt pdf online free",
+    "pdf password protection",
+    "lock pdf with password",
+    "secure pdf online",
+    "add password to pdf",
+    "pdf encryption",
   ],
   alternates: { canonical: "/tools/protect-pdf" },
   openGraph: {
-    title: "Password Protect PDF Online - Encrypt PDF in Browser | ToolMint",
+    title: "Protect PDF with Password â€“ Encrypt PDF Free | ToolMint",
     description:
-      "Add AES-256 password protection to PDFs and control how shared documents can be opened or printed.",
+      "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
     url: "/tools/protect-pdf",
+    images: [{ url: "/og/protect-pdf.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
+
+const useCases = [
+  {
+    title: "Confidential document sharing",
+    desc: "Add a password to sensitive contracts, financial reports, or personnel files before emailing them to ensure only authorized recipients can open them.",
+  },
+  {
+    title: "Client deliverables",
+    desc: "Protect proposals, invoices, or creative work files you share with clients so the documents cannot be forwarded or opened by others.",
+  },
+  {
+    title: "Restrict editing and printing",
+    desc: "Set permission-level passwords to prevent recipients from printing, copying, or modifying a PDF even after they open it.",
+  },
+];
 
 const steps = [
   { title: "Upload a PDF", desc: "Select the PDF you want to protect before sharing or storing it." },
   { title: "Set a password", desc: "Create the open password required to access the protected file." },
-  { title: "Choose permissions", desc: "Optionally restrict printing, copying, or editing for recipients." },
-  { title: "Download", desc: "Save the encrypted PDF and share the password separately." },
+  { title: "Set permissions", desc: "Optionally restrict printing, copying, and editing." },
+  { title: "Download", desc: "Save the encrypted, password-protected PDF." },
 ];
 
 const faqs = [
   {
-    q: "What encryption standard is used?",
-    a: "ToolMint applies AES-256 encryption, which is a strong modern standard for protecting PDF documents.",
+    q: "What is the difference between open password and permission password?",
+    a: "An open password (user password) is required to open the file at all. A permission password (owner password) controls what actions are allowed after opening â€” printing, copying, and editing. You can set one or both.",
   },
   {
-    q: "Can I restrict printing or copying as well?",
-    a: "Yes. You can set permission flags that limit printing, copying text, or modifying the document.",
+    q: "Can a password-protected PDF be cracked?",
+    a: "ToolMint applies AES-256 encryption, which is resistant to brute-force attacks with current technology. However, simple or guessable passwords can be cracked with dictionary attacks. Use a strong, unique password for sensitive documents.",
   },
   {
-    q: "What happens if I forget the password?",
-    a: "There is no recovery path inside the file itself, so keep the password somewhere safe before distributing the protected PDF.",
+    q: "How do I password protect a PDF on mobile?",
+    a: "Open ToolMint in your mobile browser, upload the PDF, set your password, and download the protected file. No app installation is required â€” the tool works in any mobile browser.",
   },
   {
-    q: "Can I protect a PDF that is already encrypted?",
-    a: "If the file already has an open password, unlock it first with the correct password and then re-protect it with the new settings you want.",
+    q: "Does protecting a PDF change its file size?",
+    a: "Adding a password adds a small amount of encryption overhead, typically increasing the file size by less than 5%. For most documents, the size difference is negligible.",
   },
   {
-    q: "Is my PDF sent to a server?",
-    a: "No. Encryption runs in your browser for this tool, so the file stays on your device during processing.",
-  },
-];
-
-const useCases = [
-  {
-    title: "Contracts and proposals",
-    desc: "Protect documents before emailing them to clients when they include terms, pricing, or personal information.",
-  },
-  {
-    title: "Financial and HR files",
-    desc: "Add a password to salary sheets, statements, internal forms, or employee paperwork before sharing them across teams.",
-  },
-  {
-    title: "Confidential drafts",
-    desc: "Lock draft agreements, reports, or board materials before wider circulation so only intended recipients can open them.",
+    q: "Can I set permissions to prevent printing or copying?",
+    a: "Yes. The permissions settings let you restrict printing, content copying, and document modification independently. Recipients who open the file with the user password will have access limited to the permissions you set.",
   },
 ];
 
@@ -84,6 +87,7 @@ export default function ProtectPdfPage() {
 
   return (
     <>
+      <WebAppSchema slug="protect-pdf" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -99,12 +103,11 @@ export default function ProtectPdfPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Password Protect a PDF Online
+          Password Protect PDF Online – AES-256 Encryption Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Lock a PDF with a password using ToolMint. Add AES-256 protection, decide whether viewers
-          can print or copy the document, and download a safer file for contracts, reports, and
-          confidential records.
+          Lock a PDF with AES-256 encryption using ToolMint. Add an open password, set sharing
+          permissions, and download a protected PDF â€” no account, no software required.
         </p>
 
         <div className="mt-8">
@@ -113,7 +116,7 @@ export default function ProtectPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Good Times to Password Protect a PDF
+            When to Protect a PDF
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {useCases.map((item) => (
@@ -127,7 +130,7 @@ export default function ProtectPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Password Protect a PDF
+            How to Protect a PDF with a Password
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
@@ -137,6 +140,41 @@ export default function ProtectPdfPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Types of PDF Password Protection Explained
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              PDF security has two distinct layers. The first is the open password (also called
+              the user password), which controls access to the file â€” recipients must enter this
+              password to open the PDF at all. The second is the owner password (also called the
+              permissions password), which controls what a recipient can do once the file is open.
+              With an owner password, you can prevent printing, copying text, filling in form
+              fields, or making edits. You can set one or both. A file protected only by an owner
+              password can be opened without a password but has restricted functionality. A file
+              protected only by a user password requires the password to open but places no
+              restrictions on usage.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How Strong Is PDF Password Encryption?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Modern PDFs use AES-256 encryption, which is a military-grade standard used across
+              banking, government, and healthcare applications. With a strong password, AES-256
+              encrypted PDFs are practically uncrackable by brute force with current hardware. The
+              weak point is always the password itself. Short passwords, dictionary words, or easily
+              guessed combinations can be cracked by automated tools in seconds or minutes. Use a
+              password of at least 12 characters with a mix of letters, numbers, and symbols for
+              any document that requires genuine security. Store the password separately â€” there is
+              no recovery mechanism built into the PDF format.
+            </p>
           </div>
         </section>
 

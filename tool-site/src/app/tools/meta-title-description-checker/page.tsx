@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import MetaTitleDescriptionCheckerTool from "@/components/meta-title-description-checker-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Meta Title & Description Checker — SERP Snippet Length & Pixel Width | ToolMint",
+  title: "Meta Title & Description Checker – SERP Snippet Preview & Length Check",
   description:
-    "Check meta title and description length for SEO. Get character counts, estimated pixel width, keyword presence check, and a live Google SERP preview. Free, instant, no signup.",
+    "Check meta title and description character count, pixel width, and keyword presence. Get a live Google SERP snippet preview instantly. Free SEO title length checker, no signup.",
   keywords: [
     "meta title length checker",
     "meta description length checker",
-    "serp snippet preview",
-    "title tag checker",
-    "meta description checker",
-    "seo snippet tool",
-    "google snippet preview",
-    "pixel width title tag",
-    "meta tag length tool",
+    "google title tag character limit",
+    "serp snippet preview tool",
     "seo title checker free",
-    "meta description seo",
-    "title tag seo checker",
+    "how long should meta description be",
+    "meta title pixel width checker",
+    "google search snippet preview",
   ],
   alternates: { canonical: "/tools/meta-title-description-checker" },
   openGraph: {
-    title: "Meta Title & Description Checker — SERP Snippet Length & Pixel Width | ToolMint",
+    title: "Meta Title & Description Checker – SERP Preview & Character Count | ToolMint",
     description:
-      "Check meta title and description character counts, pixel width, keyword presence, and get a live Google SERP preview. Free SEO snippet tool.",
+      "Check title and description length, pixel width, and keyword presence. See a live Google SERP snippet preview instantly.",
     url: "/tools/meta-title-description-checker",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
@@ -37,10 +36,10 @@ const includedTools = [
 ];
 
 const steps = [
-  { title: "Enter your title tag", desc: "Type or paste your page title into the Meta Title field. The character count, word count, and pixel width update instantly." },
-  { title: "Enter your meta description", desc: "Add your meta description and see the same 4 metrics — including whether it falls in the 70–160 char sweet spot." },
-  { title: "Add a target keyword", desc: "Enter your primary keyword to check whether it appears in both the title and description, a key on-page SEO signal." },
-  { title: "Review the SERP preview", desc: "The live Google-style snippet shows exactly how your title and description will look in search results, including truncation points." },
+  { title: "Enter your title tag", desc: "Type or paste your page title. Character count, word count, and pixel width update instantly." },
+  { title: "Enter your meta description", desc: "Add your description and see the same 4 metrics — including whether it falls in the 70–160 char sweet spot." },
+  { title: "Add a target keyword", desc: "Enter your primary keyword to check whether it appears in both title and description." },
+  { title: "Review the SERP preview", desc: "The live Google-style snippet shows exactly how your title and description look in search results, including truncation." },
 ];
 
 const faqs = [
@@ -79,22 +78,29 @@ export default function MetaTitleDescriptionCheckerPage() {
 
   return (
     <>
+      <WebAppSchema slug="meta-title-description-checker" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="seo-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "SEO Tools", href: "/tools/seo-tools" },
+            { name: "Meta Title & Description Checker" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Meta Title &amp; Description Checker — SERP Snippet Preview
+          Meta Title & Description Checker – SERP Snippet Preview
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Analyze your meta title and description for character count, pixel width, keyword presence, and get a
-          live Google-style SERP snippet preview — all in real time. Know instantly whether your snippet is too
-          short, too long, or landing in the ideal range before publishing.
+          Analyze your meta title and description for character count, pixel width, and keyword
+          presence. Get a live Google-style SERP snippet preview in real time — know instantly
+          whether your snippet is too short, too long, or landing in the ideal range before you
+          publish.
         </p>
 
         <div className="mt-8">
@@ -103,7 +109,7 @@ export default function MetaTitleDescriptionCheckerPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Included SEO Checker Tools
+            What This Checker Analyzes
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {includedTools.map((tool) => (
@@ -130,6 +136,46 @@ export default function MetaTitleDescriptionCheckerPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Google Truncates Titles at Pixel Width, Not Character Count
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Google renders title tags using a proportional font — meaning different characters
+              take different widths. The letter &quot;W&quot; is about twice as wide as &quot;i&quot;. A title of
+              55 characters made up of wide letters may overflow the SERP display area, while a
+              60-character title with many narrow letters fits perfectly. Google&apos;s truncation
+              limit is approximately 580px of rendered width. This is why character count alone
+              is an unreliable guide: &quot;WWW Marketing Management&quot; (22 chars) may take more space
+              than &quot;slim minimal toolkit&quot; (20 chars). This checker estimates pixel width using
+              character-width averages for the font Google uses, giving you a more accurate
+              prediction of how your title will render in search results than any character-count
+              limit alone.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How to Write Meta Titles and Descriptions That Get Clicked
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Meta title best practices: put your primary keyword near the start of the title, keep
+              it under 580px (roughly 55 chars), include a benefit or differentiator, and avoid
+              writing the same title as your H1 — they can differ. Brand name at the end after a
+              dash is the standard format: &quot;Primary Keyword – Specific Benefit | BrandName&quot;.
+              Meta description best practices: write for humans, not for keyword density. The
+              description does not affect rankings — it affects whether a real person clicks.
+              Include the primary keyword naturally (Google bolds it when it matches the search
+              query), add a clear action or benefit, and stay within 160 characters. Avoid
+              generic filler like &quot;Welcome to our page&quot; — tell the searcher exactly what they
+              will find and why it is worth clicking. Pages with compelling descriptions
+              consistently outperform those with generic or missing descriptions on click-through
+              rate, which is a secondary signal Google may use to evaluate quality.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -143,6 +189,8 @@ export default function MetaTitleDescriptionCheckerPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="meta-title-description-checker" />
       </main>
     </>
   );

@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import RobotsTxtGeneratorTool from "@/components/robots-txt-generator-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Robots.txt Generator — Auto-Detect Platform & Sensitive Paths | ToolMint",
+  title: "Robots.txt Generator – Create a robots.txt File for Any Website Free",
   description:
-    "Generate a valid robots.txt file for any website. Auto-detects platform (WordPress, Shopify, OpenCart) and sensitive paths. Downloads as robots.txt instantly. Free, no signup.",
+    "Generate a valid robots.txt file for any website. Auto-detects WordPress, Shopify, and OpenCart. Blocks sensitive paths, reads existing sitemap reference, and downloads ready-to-upload. Free.",
   keywords: [
-    "robots.txt generator",
     "robots txt generator free",
-    "create robots.txt",
-    "robots txt builder",
-    "robots txt file generator",
-    "wordpress robots.txt",
-    "shopify robots.txt",
-    "disallow path generator",
-    "crawl rules generator",
-    "seo robots file",
-    "user-agent rules generator",
-    "robots txt online tool",
+    "how to create robots txt file",
+    "robots txt generator wordpress",
+    "robots txt file generator online",
+    "create robots txt without plugin",
+    "robots txt disallow path generator",
+    "robots txt for shopify",
+    "robots txt builder online",
   ],
   alternates: { canonical: "/tools/robots-txt-generator" },
   openGraph: {
-    title: "Robots.txt Generator — Auto-Detect Platform & Sensitive Paths | ToolMint",
+    title: "Robots.txt Generator – Platform Detection & Sensitive Path Blocker | ToolMint",
     description:
       "Auto-detects WordPress, Shopify, OpenCart and sensitive paths to generate a valid robots.txt. Download instantly. Free.",
     url: "/tools/robots-txt-generator",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
@@ -79,22 +78,29 @@ export default function RobotsTxtGeneratorPage() {
 
   return (
     <>
+      <WebAppSchema slug="robots-txt-generator" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="seo-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "SEO Tools", href: "/tools/seo-tools" },
+            { name: "Robots.txt Generator" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Robots.txt Generator — Platform Detection &amp; Sensitive Path Blocker
+          Robots.txt Generator – Platform Detection & Sensitive Path Blocker
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Generate a ready-to-use robots.txt file for any website. Enter your URL and the tool automatically
-          detects your CMS (WordPress, Shopify, OpenCart), scans for sensitive paths to block, and reads your
-          existing sitemap reference — producing a well-formed robots.txt you can download and deploy instantly.
+          Generate a ready-to-use robots.txt file for any website. Enter your URL and the tool
+          automatically detects your CMS (WordPress, Shopify, OpenCart), scans for sensitive paths
+          to block, and reads your existing sitemap reference — producing a well-formed robots.txt
+          you can download and deploy instantly.
         </p>
 
         <div className="mt-8">
@@ -103,7 +109,7 @@ export default function RobotsTxtGeneratorPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Included Robots.txt Tools
+            What This Generator Builds for You
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {includedTools.map((tool) => (
@@ -130,6 +136,46 @@ export default function RobotsTxtGeneratorPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              What to Block in robots.txt (and Common Mistakes)
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Robots.txt is used to prevent crawlers from wasting time on pages that should not
+              appear in search results. Pages worth blocking include: admin panels and login pages
+              (/wp-admin/, /admin/, /login/), internal search result pages, URL parameter variants
+              that create near-duplicate content (?sort=, ?ref=, ?session=), staging or preview
+              environments, and private API endpoints. Do not block: your sitemap URL, public
+              content pages you want indexed, CSS and JavaScript files (Google needs these to
+              render and understand your pages — blocking them was a common old-school mistake that
+              hurts rankings), and image files unless you specifically want to exclude image search.
+              The most damaging robots.txt mistake is accidentally disallowing the entire site with
+              &quot;Disallow: /&quot; under Googlebot — this is a single line that prevents Google from
+              indexing anything. Always verify your live robots.txt at yourdomain.com/robots.txt
+              after deploying.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Robots.txt for WordPress, Shopify, and Static Sites
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Different platforms have different directories that need protection. WordPress should
+              block /wp-admin/ (allow /wp-admin/admin-ajax.php for AJAX functionality), /wp-includes/,
+              and search URLs like /?s=. Shopify auto-generates a robots.txt and does not allow
+              full customization — you can only add custom rules via the Shopify robots.txt.liquid
+              template. OpenCart should block /admin/, /catalog/controller/, /install/, and
+              /system/. Static sites (plain HTML, Next.js static export, Hugo, Gatsby) typically
+              only need a minimal robots.txt allowing all crawlers and pointing to the sitemap.
+              The generated file from this tool handles all these cases automatically based on
+              the detected platform and adds the Sitemap: directive pointing to your sitemap.xml
+              so crawlers know where to find it.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -143,6 +189,8 @@ export default function RobotsTxtGeneratorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="robots-txt-generator" />
       </main>
     </>
   );

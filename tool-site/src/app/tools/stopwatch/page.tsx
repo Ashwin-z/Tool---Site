@@ -1,51 +1,44 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import StopwatchTool from "@/components/stopwatch-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Stopwatch & Countdown Timer — Lap Splits, Centiseconds | ToolMint",
+  title: "Online Stopwatch – Countdown Timer with Lap Splits Free",
   description:
-    "Use ToolMint's free Stopwatch and Countdown Timer with lap splits, centisecond precision, and browser-based timing powered by performance.now(). Fast and accurate.",
+    "Free online stopwatch and countdown timer with lap splits and centisecond precision. Runs entirely in your browser — no install, no signup.",
   keywords: [
-    "stopwatch",
-    "online stopwatch",
-    "lap timer",
-    "countdown timer",
-    "centisecond stopwatch",
-    "browser stopwatch",
-    "performance now stopwatch",
-    "lap split timer",
+    "online stopwatch free",
+    "stopwatch with lap timer",
+    "countdown timer online free",
+    "stopwatch online no download",
+    "browser stopwatch timer",
+    "lap timer online free",
     "online timer with laps",
-    "stopwatch and countdown",
-    "toolmint stopwatch",
-    "accurate stopwatch online",
+    "centisecond stopwatch online",
   ],
   alternates: { canonical: "/tools/stopwatch" },
   openGraph: {
-    title: "Stopwatch & Countdown Timer — Lap Splits, Centiseconds | ToolMint",
+    title: "Online Stopwatch – Countdown Timer with Lap Splits | ToolMint",
     description:
-      "Run a stopwatch with lap tracking or switch to countdown mode for a quick timer. Centisecond precision and browser-based timing.",
+      "Run a stopwatch with lap tracking or switch to countdown mode. Centisecond precision, browser-based timing.",
     url: "/tools/stopwatch",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
-  {
-    title: "Stopwatch Mode",
-    desc: "Run an accurate stopwatch with live elapsed time, pause and resume support, and clean centisecond formatting for workouts or events.",
-  },
-  {
-    title: "Countdown Timer Mode",
-    desc: "Switch to countdown mode, enter minutes and seconds, and let the timer run down with a clear completion state when time is up.",
-  },
-  {
-    title: "Lap Splits",
-    desc: "Record lap times instantly while the stopwatch is running, including split order and a readable history of each recorded lap.",
-  },
-  {
-    title: "High-Precision Timing Engine",
-    desc: "Uses performance.now() and requestAnimationFrame for smooth updates and accurate centisecond timing directly in your browser.",
-  },
+  { title: "Stopwatch Mode", desc: "Run an accurate stopwatch with live elapsed time, pause and resume support, and clean centisecond formatting for workouts or events." },
+  { title: "Countdown Timer Mode", desc: "Switch to countdown mode, enter minutes and seconds, and let the timer run down with a clear completion state when time is up." },
+  { title: "Lap Splits", desc: "Record lap times instantly while the stopwatch is running, including split order and a readable history of each recorded lap." },
+  { title: "High-Precision Timing Engine", desc: "Uses performance.now() and requestAnimationFrame for smooth updates and accurate centisecond timing directly in your browser." },
+];
+
+const useCases = [
+  { title: "Fitness & Sports", desc: "Time running intervals, gym sets, or swimming laps. Lap splits let you compare splits across your session without pausing the overall clock." },
+  { title: "Cooking & Tasks", desc: "Use countdown mode for pasta timers, baking, or any fixed-duration task. The clear completion state tells you the moment time is up." },
+  { title: "Presentations & Events", desc: "Time speeches, presentations, or game show rounds where centisecond accuracy keeps the event on schedule." },
 ];
 
 const steps = [
@@ -74,7 +67,7 @@ const faqs = [
   },
   {
     q: "Does the stopwatch work without installing an app?",
-    a: "Yes. Everything runs directly in your browser with no install, no signup, and no data sent to a server. It works as a quick browser-based stopwatch and timer.",
+    a: "Yes. Everything runs directly in your browser with no install, no signup, and no data sent to a server.",
   },
 ];
 
@@ -91,22 +84,27 @@ export default function StopwatchPage() {
 
   return (
     <>
+      <WebAppSchema slug="stopwatch" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="calc-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Stopwatch" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Stopwatch &amp; Countdown Timer with Lap Splits
+          Online Stopwatch &amp; Countdown Timer with Lap Splits
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Use a clean online stopwatch with lap splits, or switch to countdown mode for a quick timer.
-          ToolMint's timer runs entirely in the browser with centisecond precision and smooth updates powered
-          by performance.now() and requestAnimationFrame.
+          Runs entirely in the browser with centisecond precision and smooth updates powered
+          by performance.now() and requestAnimationFrame. No install, no signup.
         </p>
 
         <div className="mt-8">
@@ -129,6 +127,20 @@ export default function StopwatchPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            Who Uses an Online Stopwatch
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {useCases.map((u) => (
+              <div key={u.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{u.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{u.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Use the Stopwatch
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -139,6 +151,47 @@ export default function StopwatchPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{step.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Browser-Based Stopwatches Are More Accurate Than You Think
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Early browser timers had a reputation for inaccuracy because they were built on
+              <code className="rounded bg-white/10 px-1 text-xs">setTimeout</code> and
+              <code className="rounded bg-white/10 px-1 text-xs">setInterval</code> — both of which can drift significantly
+              when the tab is throttled, the CPU is under load, or the browser deprioritizes background
+              timers. Modern browsers solve this with <code className="rounded bg-white/10 px-1 text-xs">performance.now()</code>, a
+              high-resolution monotonic timer that provides sub-millisecond precision relative to the page load
+              time. Unlike <code className="rounded bg-white/10 px-1 text-xs">Date.now()</code> which can jump backward during system
+              clock adjustments (NTP sync), <code className="rounded bg-white/10 px-1 text-xs">performance.now()</code> always moves
+              forward at a consistent rate. This stopwatch pairs <code className="rounded bg-white/10 px-1 text-xs">performance.now()</code>
+              with <code className="rounded bg-white/10 px-1 text-xs">requestAnimationFrame</code> for rendering — the display updates
+              roughly every 16ms (60fps) but the underlying elapsed time measurement is always read fresh from
+              the high-res timer, so display lag never accumulates into timing error. The result is centisecond
+              accuracy that is reliable enough for sports timing, interval training, and event management.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Stopwatch vs Countdown Timer – When to Use Each
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              A stopwatch measures elapsed time from zero upward — it is the right tool when you want to
+              know how long something takes. Use it for timing a 5K run, measuring how long a build script
+              takes, recording the duration of a meeting, or tracking gym rest intervals with lap splits.
+              The lap split feature is particularly useful for interval training: you record a lap at each
+              interval boundary while the total elapsed time keeps running, so you end up with a complete
+              picture of each split alongside the total duration. A countdown timer works in reverse — it
+              starts at a target duration and counts down to zero. It is the right tool for cooking, baking,
+              presentations, game show rounds, pomodoro work sessions, or any scenario where you need
+              to be alerted when a fixed time has expired rather than track how long something took.
+              Both modes share the same underlying timing engine so precision is identical in either direction.
+            </p>
           </div>
         </section>
 
@@ -155,6 +208,8 @@ export default function StopwatchPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="stopwatch" />
       </main>
     </>
   );

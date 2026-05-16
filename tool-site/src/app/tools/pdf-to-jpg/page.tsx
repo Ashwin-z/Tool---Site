@@ -1,58 +1,76 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import PdfToJpgTool from "@/components/pdf-to-jpg-tool";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "PDF to JPG Online Free - Convert PDF Pages to Images",
+  title: "PDF to JPG Converter â€“ Convert PDF Pages to Images Free",
   description:
-    "Convert PDF to JPG online for free with ToolMint. Turn every PDF page into a high-quality image. No signup, no upload to any server, fully browser-based PDF to image conversion.",
+    "Convert PDF pages to high-quality JPG images online for free. Download pages individually or as a zip. No signup.",
   keywords: [
     "pdf to jpg",
     "pdf to image",
     "convert pdf to jpg online free",
-    "pdf to jpeg",
+    "pdf page to jpeg",
+    "extract images from pdf",
     "pdf to png",
-    "pdf pages to images",
+    "save pdf as image",
     "free pdf to jpg converter",
-    "pdf image extractor",
   ],
   alternates: { canonical: "/tools/pdf-to-jpg" },
   openGraph: {
-    title: "PDF to JPG Online Free - Convert PDF Pages to Images | ToolMint",
+    title: "PDF to JPG Converter â€“ Convert PDF Pages to Images Free | ToolMint",
     description:
-      "Convert PDF to JPG online for free. Turn every PDF page into a high-quality image with no server upload.",
+      "Convert PDF pages to high-quality JPG images online for free. Download pages individually or as a zip. No signup.",
     url: "/tools/pdf-to-jpg",
+    images: [{ url: "/og/pdf-to-jpg.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Preview and thumbnails",
+    desc: "Convert PDF pages to JPG for use as document previews, social media images, or thumbnails in a file management system.",
+  },
+  {
+    title: "Extract specific content",
+    desc: "Pull a chart, diagram, or scanned page from a PDF as an image for use in presentations or documents.",
+  },
+  {
+    title: "Platforms that require images",
+    desc: "Submit PDF content to platforms like Instagram, Canva, or email builders that accept image uploads but not PDF files.",
+  },
+];
+
 const steps = [
-  { title: "Upload a PDF", desc: "Drag and drop or select any PDF file from your device." },
-  { title: "Choose quality", desc: "Pick your preferred image resolution and quality setting." },
-  { title: "Convert", desc: "ToolMint renders each PDF page into a JPG image instantly in your browser." },
-  { title: "Download", desc: "Save individual images or download all pages as a ZIP." },
+  { title: "Upload a PDF", desc: "Select a PDF file from your device." },
+  { title: "Choose quality", desc: "Set the output resolution or quality level for the JPG images." },
+  { title: "Convert", desc: "ToolMint renders each PDF page as a JPG image." },
+  { title: "Download", desc: "Download pages individually or as a zip archive." },
 ];
 
 const faqs = [
   {
-    q: "What image formats can I export PDF pages to?",
-    a: "ToolMint converts PDF pages to JPG format. The images are rendered at high resolution for crisp quality.",
+    q: "Can I convert all PDF pages to JPG at once?",
+    a: "Yes. ToolMint converts every page in the PDF to a separate JPG image. You can download them individually or as a single zip archive containing all pages.",
   },
   {
-    q: "Are my PDF files uploaded to a server?",
-    a: "No. All conversion happens locally in your browser. Your PDF never leaves your device.",
+    q: "What quality setting should I use for PDF to JPG?",
+    a: "Use high quality (150â€“300 DPI) for documents where text or fine detail needs to remain readable in the image. Use medium quality for web use or social media where file size matters more than pixel precision.",
   },
   {
-    q: "How many pages can I convert at once?",
-    a: "You can convert all pages in any PDF. Each page is rendered as a separate JPG image.",
+    q: "Does converting PDF to JPG lose quality?",
+    a: "Some quality loss occurs because JPG is a lossy format. Text and sharp lines can look slightly softer compared to the original PDF. For documents with a lot of fine text, PNG output at the same resolution produces a sharper result.",
   },
   {
-    q: "Can I choose the image quality?",
-    a: "Yes. ToolMint lets you select the output resolution so you can balance file size against image clarity.",
+    q: "Can I convert a scanned PDF to JPG?",
+    a: "Yes. A scanned PDF is already an image embedded in a PDF container. Converting it to JPG extracts those images at the resolution they were scanned and saved.",
   },
   {
-    q: "Can I convert just one page of a PDF to an image?",
-    a: "Yes. After conversion, you can download individual page images or all pages together as a ZIP archive.",
+    q: "Is JPG or PNG better for converting PDF pages?",
+    a: "PNG is better for text-heavy pages because it is lossless and preserves sharp edges. JPG is better for photo-heavy pages where a smaller file size is the priority. For most document-to-image conversions, PNG produces a higher-fidelity result.",
   },
 ];
 
@@ -69,6 +87,7 @@ export default function PdfToJpgPage() {
 
   return (
     <>
+      <WebAppSchema slug="pdf-to-jpg" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -87,9 +106,9 @@ export default function PdfToJpgPage() {
           Convert PDF to JPG Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Turn any PDF into high-quality JPG images with ToolMint. Every page is rendered as a
-          separate image, choose your resolution, then download individual pages or all of them
-          as a ZIP. Everything processes locally in your browser.
+          Turn PDF pages into high-quality JPG images with ToolMint. Convert a single page or an
+          entire document and download the images individually or as a zip archive â€” no account
+          required.
         </p>
 
         <div className="mt-8">
@@ -98,7 +117,21 @@ export default function PdfToJpgPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Convert PDF Pages to JPG Images
+            When to Convert PDF to JPG
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How to Convert PDF to JPG Online
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
@@ -108,6 +141,38 @@ export default function PdfToJpgPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              When to Convert PDF to JPG Instead of Sharing as PDF
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Some platforms and workflows accept images but not PDFs. Social media platforms,
+              presentation tools, email campaign builders, and messaging apps are common examples.
+              Converting PDF pages to JPG is also useful when you need to embed a document page
+              inside a Word file, Google Slides, or Canva design. For quick sharing in a chat or
+              messaging platform, a JPG is simpler than a PDF â€” it opens immediately without a
+              viewer. Marketers often convert PDF brochures and catalogs to JPG pages for use in
+              product listings, website galleries, or digital ads.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              What Resolution Should PDF to JPG Be?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Resolution determines how sharp the image looks at different sizes. 72â€“96 DPI is
+              sufficient for screen display and web use. 150 DPI is a good middle ground for
+              documents where text needs to remain readable in the image. 300 DPI is the standard
+              for high-quality print output where the image will be enlarged or printed at full
+              page size. For most web and document use cases, 150 DPI gives a sharp image at a
+              reasonable file size. Going higher than 300 DPI rarely produces visible improvement
+              for document pages and significantly increases file size.
+            </p>
           </div>
         </section>
 

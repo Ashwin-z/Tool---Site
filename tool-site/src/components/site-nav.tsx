@@ -42,9 +42,9 @@ const pdfSections: ToolSection[] = [
   {
     heading: "Organize & Compress",
     items: [
-      { name: "PDF Compressor", desc: "Reduce file size", href: "/tools/pdf-compressor", badge: "Hot" },
-      { name: "PDF Merger", desc: "Combine multiple PDFs", href: "/tools/pdf-merger", badge: "Top" },
-      { name: "PDF Splitter", desc: "Extract pages", href: "/tools/pdf-splitter" },
+      { name: "Compress PDF", desc: "Reduce file size", href: "/tools/compress-pdf", badge: "Hot" },
+      { name: "Merge PDF", desc: "Combine multiple PDFs", href: "/tools/merge-pdf", badge: "Top" },
+      { name: "Split PDF", desc: "Extract pages", href: "/tools/split-pdf" },
     ],
   },
   {
@@ -72,8 +72,8 @@ const pdfSections: ToolSection[] = [
     heading: "Edit PDF",
     items: [
       { name: "Rotate PDF", desc: "Turn pages left or right", href: "/tools/rotate-pdf", badge: "New" },
-      { name: "Add Page Numbers", desc: "Number every page", href: "/tools/add-page-numbers", badge: "New" },
-      { name: "Add Watermark", desc: "Stamp text or logo", href: "/tools/add-watermark", badge: "New" },
+      { name: "Add Page Numbers", desc: "Number every page", href: "/tools/add-page-numbers-to-pdf", badge: "New" },
+      { name: "Add Watermark", desc: "Stamp text or logo", href: "/tools/add-watermark-to-pdf", badge: "New" },
       { name: "Crop PDF", desc: "Trim visible page area", href: "/tools/crop-pdf", badge: "New" },
       { name: "Edit PDF", desc: "Edit text and objects", href: "/tools/edit-pdf", badge: "New" },
     ],
@@ -288,148 +288,12 @@ export default function SiteNav() {
 
   return (
     <section
-      className={`overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,.25)] transition-all duration-300 ${
-        navOpen ? "max-h-[78vh] opacity-100 lg:max-h-[460px]" : "max-h-0 opacity-0"
+      className={`hidden overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,.25)] transition-all duration-300 lg:block ${
+        navOpen ? "max-h-[460px] opacity-100" : "max-h-0 opacity-0"
       }`}
       style={{ borderBottom: "1px solid var(--border)", background: "var(--surface-1)" }}
     >
-      <div className="lg:hidden">
-        <div className="p-4">
-          <div className="rounded-[28px] border border-white/10 bg-surface-2/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,.22)]">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em]" style={{ color: "var(--muted-3)" }}>
-                  Browse Tools
-                </p>
-                <h3 className="mt-2 font-display text-2xl font-bold tracking-tight">
-                  Pick a category
-                </h3>
-                <p className="mt-1 text-sm leading-6" style={{ color: "var(--muted)" }}>
-                  Explore the tool library without crowding the page.
-                </p>
-              </div>
-              <span className="rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ borderColor: "var(--border-strong)", color: "var(--accent-light)", background: "rgba(108,99,255,0.12)" }}>
-                {activeCategory.count} tools
-              </span>
-            </div>
-
-            <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-              {categories.map((category) => {
-                const isActive = resolvedActiveCat === category.id;
-
-                return (
-                  <button
-                    key={category.id}
-                    type="button"
-                    onClick={() => setActiveCat(category.id)}
-                    className="min-w-[148px] shrink-0 rounded-2xl border px-3 py-3 text-left transition"
-                    style={{
-                      borderColor: isActive ? "rgba(108,99,255,0.38)" : "var(--border)",
-                      background: isActive ? "rgba(108,99,255,0.12)" : "var(--surface-1)",
-                      color: isActive ? "var(--foreground)" : "var(--muted)",
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className={`grid h-9 w-9 place-items-center rounded-xl ${category.color}`}>
-                        {category.icon}
-                      </span>
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold">{category.name}</div>
-                        <div className="text-[11px]" style={{ color: "var(--muted-3)" }}>
-                          {category.count} tools
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-5 rounded-3xl border p-4" style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}>
-              <div className="flex items-center gap-3">
-                <div className={`grid h-11 w-11 place-items-center rounded-2xl ${activeCategory.color}`}>
-                  {activeCategory.icon}
-                </div>
-                <div>
-                  <h4 className="font-display text-xl font-bold tracking-tight">{activeCategory.name}</h4>
-                  <p className="text-xs leading-5" style={{ color: "var(--muted)" }}>
-                    {activeCategory.subtitle}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 max-h-[46vh] space-y-4 overflow-y-auto pr-1">
-                {activeCategory.sections ? (
-                  activeCategory.sections.map((section) => (
-                    <div key={section.heading} className="rounded-2xl border p-3" style={{ borderColor: "var(--border)", background: "var(--surface-2)" }}>
-                      <h5 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: "var(--accent-light)" }}>
-                        {section.heading}
-                      </h5>
-                      <div className="space-y-2">
-                        {section.items.map((tool) => (
-                          <Link
-                            key={tool.name}
-                            href={tool.href}
-                            onClick={() => handleToolClick(activeCategory.id)}
-                            className="flex items-center gap-3 rounded-2xl border px-3 py-3 transition"
-                            style={{
-                              borderColor: pathname === tool.href ? "rgba(108,99,255,0.35)" : "var(--border)",
-                              background: pathname === tool.href ? "rgba(108,99,255,0.12)" : "var(--surface-1)",
-                            }}
-                          >
-                            <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${activeCategory.color}`}>
-                              {activeCategory.icon}
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
-                              <div className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
-                            </div>
-                            {tool.badge ? (
-                              <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
-                                {tool.badge}
-                              </span>
-                            ) : null}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="space-y-2">
-                    {activeCategory.tools.map((tool) => (
-                      <Link
-                        key={tool.name}
-                        href={tool.href}
-                        onClick={() => handleToolClick(activeCategory.id)}
-                        className="flex items-center gap-3 rounded-2xl border px-3 py-3 transition"
-                        style={{
-                          borderColor: pathname === tool.href ? "rgba(108,99,255,0.35)" : "var(--border)",
-                          background: pathname === tool.href ? "rgba(108,99,255,0.12)" : "var(--surface-2)",
-                        }}
-                      >
-                        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${activeCategory.color}`}>
-                          {activeCategory.icon}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="text-sm font-medium" style={{ color: "var(--foreground)" }}>{tool.name}</div>
-                          <div className="text-xs leading-5" style={{ color: "var(--muted-2)" }}>{tool.desc}</div>
-                        </div>
-                        {tool.badge ? (
-                          <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase ${badgeClass[tool.badge]}`}>
-                            {tool.badge}
-                          </span>
-                        ) : null}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden h-[460px] lg:grid lg:grid-cols-[260px_1fr]">
+      <div className="h-[460px] grid grid-cols-[260px_1fr]">
         <aside className="h-full overflow-y-auto p-3" style={{ borderRight: "1px solid var(--border)", background: "var(--surface-2)" }}>
           <div className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "var(--muted-3)" }}>
             Categories

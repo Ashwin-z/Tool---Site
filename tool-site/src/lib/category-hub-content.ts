@@ -1,4 +1,5 @@
-export type CategoryHubContent = {
+﻿export type CategoryHubContent = {
+  h1?: string;
   intro: string[];
   highlights: { title: string; desc: string }[];
   faqs: { q: string; a: string }[];
@@ -7,10 +8,10 @@ export type CategoryHubContent = {
 
 export const categoryHubContent: Record<string, CategoryHubContent> = {
   pdf: {
+    h1: "Free PDF Tools Online â€“ No Signup Required",
     intro: [
-      "ToolMint's PDF collection is built around document jobs people repeat every week: shrinking PDFs to meet upload limits, joining supporting files into one packet, pulling tables out of reports, and converting office files into something easier to share.",
-      "The goal of this hub is to help visitors choose the right PDF tool for the job, not just drop them onto a generic utility page. Each tool is paired with practical examples, clear workflow language, and internal paths to the next step when a task usually involves more than one tool.",
-      "That matters for both users and search quality. A PDF tool page should help someone finish a real document task such as preparing an application, cleaning up a client file, or extracting reusable content from a report.",
+      "ToolMint offers free PDF tools online for the document tasks you repeat every week: compressing PDFs for email, merging files into one packet, splitting out specific pages, converting between Office formats and PDF, and securing or signing documents before sharing them. Every tool runs in your browser â€” no account, no watermark, no software to install.",
+      "This collection is organized by task rather than by format, because the right starting point is usually the job you need to finish, not the file type you have. Whether you need to prepare a document for a portal upload, extract data from a PDF report, or add a signature to a contract, the tools here cover the full workflow.",
     ],
     workflows: [
       {
@@ -19,7 +20,7 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
         links: [
           { label: "Rotate PDF", href: "/tools/rotate-pdf" },
           { label: "Crop PDF", href: "/tools/crop-pdf" },
-          { label: "Compress PDF", href: "/tools/pdf-compressor" },
+          { label: "Compress PDF", href: "/tools/compress-pdf" },
         ],
       },
       {
@@ -28,7 +29,7 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
         links: [
           { label: "Word to PDF", href: "/tools/word-to-pdf" },
           { label: "Image to PDF", href: "/tools/image-to-pdf" },
-          { label: "PDF Merger", href: "/tools/pdf-merger" },
+          { label: "Merge PDF", href: "/tools/merge-pdf" },
           { label: "Sign PDF", href: "/tools/sign-pdf" },
         ],
       },
@@ -57,105 +58,264 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
     ],
   },
   image: {
+    h1: "Free Online Image Tools – Compress, Resize, Crop & Convert",
     intro: [
-      "The image category is built around common jobs people repeat every week: shrinking photos for websites, resizing product images, converting formats, cropping screenshots, and extracting text from pictures.",
-      "These pages prioritize speed and privacy, which is why most image processing runs directly in the browser. That makes the tools useful for marketers, students, designers, store owners, and support teams alike.",
+      "The image tools collection covers the jobs you repeat most: shrinking photos before uploading to a website, resizing product images for listings, converting between formats, cropping screenshots for presentations, and extracting text from pictures. Every tool runs directly in your browser so your files never leave your device.",
+      "Whether you are a blogger optimizing post images, a seller preparing product photos, a student extracting notes from a screenshot, or a developer handling image assets, each tool is built around one clear task so you can get in, get the result, and move on.",
+    ],
+    workflows: [
+      {
+        title: "Prepare images for a website",
+        desc: "Start with compression to reduce file size, then resize to the exact pixel dimensions your template needs, and convert to WebP for modern browsers.",
+        links: [
+          { label: "Compress Image", href: "/tools/image-compressor" },
+          { label: "Resize Image", href: "/tools/image-resizer" },
+          { label: "Image Converter", href: "/tools/image-converter" },
+        ],
+      },
+      {
+        title: "Clean up a photo or screenshot",
+        desc: "Crop to remove unwanted edges, rotate to fix orientation, then compress for sharing by email or messaging.",
+        links: [
+          { label: "Crop Image", href: "/tools/image-cropper" },
+          { label: "Rotate/Flip", href: "/tools/image-rotate-flip" },
+          { label: "Compress Image", href: "/tools/image-compressor" },
+        ],
+      },
+      {
+        title: "Convert and reuse image content",
+        desc: "Change the format to match platform requirements, extract text from a screenshot with OCR, or convert images into a PDF for sharing.",
+        links: [
+          { label: "Image Converter", href: "/tools/image-converter" },
+          { label: "Image to Text (OCR)", href: "/tools/image-to-text" },
+          { label: "JPG to PDF", href: "/tools/image-to-pdf" },
+        ],
+      },
     ],
     highlights: [
-      { title: "Compression for Web Use", desc: "Reduce upload sizes for blogs, landing pages, listings, and email attachments." },
-      { title: "Format Conversion", desc: "Switch between PNG, JPG, and WebP depending on transparency, compatibility, or file-size needs." },
-      { title: "Quick Visual Edits", desc: "Crop, resize, rotate, and flip images when you need a clean asset fast." },
-      { title: "OCR Utilities", desc: "Extract text from screenshots, photos, notes, and scanned image files." },
+      { title: "Compression for Web Use", desc: "Reduce JPG, PNG, and WebP file sizes by up to 90% without visible quality loss. Essential for fast-loading websites and email attachments." },
+      { title: "Format Conversion", desc: "Switch between PNG, JPG, WebP, and other formats based on transparency needs, browser compatibility, or file-size targets." },
+      { title: "Quick Visual Edits", desc: "Crop to exact dimensions, resize without distortion, rotate sideways shots, and flip images for mirror or layout needs." },
+      { title: "OCR Text Extraction", desc: "Extract typed or printed text from screenshots, photos, scanned notes, and image files without retyping anything manually." },
     ],
     faqs: [
-      { q: "Will my images be uploaded to a server?", a: "For this category, the primary design choice is local browser-based processing wherever possible so files remain on your device." },
-      { q: "Can these tools help with website performance?", a: "Yes. Compression and resizing are especially useful for reducing page weight and improving load times without sacrificing acceptable visual quality." },
-      { q: "Why keep separate image tools instead of one giant editor?", a: "Focused tools are faster to understand and better for intent-based visits. Someone searching for image compression, for example, should land on a page built specifically for that job." },
+      { q: "Are images processed on the server or in the browser?", a: "Most image tools in this collection run entirely in your browser. Your files are never uploaded to a server, which keeps them private and makes processing instant." },
+      { q: "Can these tools help improve website performance?", a: "Yes. Compressing images and converting to WebP format are two of the highest-impact steps for reducing page weight and improving load times." },
+      { q: "What image formats are supported?", a: "The tools collectively support JPG, JPEG, PNG, WebP, GIF, BMP, and TIFF. Individual tools list the formats they accept on their own pages." },
+      { q: "Is there a file size limit for image uploads?", a: "Most tools handle standard image files without issue. Very large RAW files or extremely high-resolution photographs may take longer to process." },
     ],
   },
   text: {
+    h1: "Free Online Text Tools – Word Counter, Case Converter, Grammar Checker & More",
     intro: [
       "Text tools work best when they solve fast, repeatable writing tasks: counting words, cleaning whitespace, comparing edits, converting case, and checking draft quality before publishing or submitting.",
-      "This category is intentionally useful for writers, students, editors, marketers, and support teams who need immediate text feedback without accounts, installations, or unnecessary clutter.",
+      "Every tool here runs entirely in your browser — no account, no upload, no waiting. Paste your text and get an instant result.",
     ],
     highlights: [
-      { title: "Writing Metrics", desc: "Track words, characters, reading time, and structure when you're writing to a target length." },
+      { title: "Writing Metrics", desc: "Track words, characters, reading time, and structure when writing to a target length." },
       { title: "Cleanup and Formatting", desc: "Normalize casing, remove messy whitespace, and prepare text for publishing or coding workflows." },
-      { title: "Revision Support", desc: "Compare two versions of text to spot changes before sending edits onward." },
-      { title: "Language Assistance", desc: "Use lightweight grammar and spelling help for quick proofreading passes." },
+      { title: "Revision Support", desc: "Compare two versions of text side by side to spot additions and deletions instantly." },
+      { title: "Language Assistance", desc: "Catch spelling mistakes, capitalization errors, and repeated words before publishing." },
+    ],
+    workflows: [
+      {
+        title: "Prepare a blog post for publishing",
+        desc: "Check your word count is in the 1,200–2,000 word range, run the grammar checker for typos, then normalize whitespace if you pasted from a doc.",
+        links: [
+          { label: "Word Counter", href: "/tools/word-counter" },
+          { label: "Grammar Checker", href: "/tools/grammar-checker" },
+          { label: "Whitespace Remover", href: "/tools/whitespace-remover" },
+        ],
+      },
+      {
+        title: "Format text for a coding project",
+        desc: "Paste a phrase and convert it to the naming convention your project uses — camelCase for JavaScript, snake_case for Python, kebab-case for CSS.",
+        links: [
+          { label: "Text Case Converter", href: "/tools/text-case-converter" },
+          { label: "Whitespace Remover", href: "/tools/whitespace-remover" },
+        ],
+      },
+      {
+        title: "Review a document edit",
+        desc: "Paste the original and revised text into the compare tool to see exactly what changed, then do a final word count.",
+        links: [
+          { label: "Text Compare", href: "/tools/text-compare" },
+          { label: "Word Counter", href: "/tools/word-counter" },
+        ],
+      },
     ],
     faqs: [
       { q: "Who gets the most value from these text tools?", a: "Students, bloggers, copywriters, technical writers, recruiters, SEO teams, and anyone who regularly drafts or revises text online." },
-      { q: "Are these pages only tools, or do they provide context too?", a: "Each text page includes task-specific explanations, workflow guidance, and FAQ content so the page offers more than a plain input box." },
-      { q: "Why hide unfinished text tools during the AdSense cleanup?", a: "Google's guidance emphasizes unique content and a good user experience. Hiding unfinished pages helps keep the live site focused on tools that genuinely work today." },
+      { q: "Do these tools work with non-English text?", a: "Word Counter, Text Case Converter, Text Compare, Text Reverser, and Whitespace Remover all handle Unicode and non-English text. The Grammar Checker is currently optimized for English only." },
+      { q: "Is my text sent to any server?", a: "No. Every tool in this category runs entirely in your browser using client-side processing. Your text is never uploaded or stored anywhere." },
     ],
   },
   calculators: {
+    h1: "Free Online Calculators – Finance, Health, Math & More",
     intro: [
-      "ToolMint's calculators are aimed at everyday decision-making: finances, health estimates, academic planning, tax math, and percentage-based checks that people often need in a hurry.",
-      "Instead of acting like a thin calculator directory, the goal is to explain what each calculator is for, what inputs matter, and how to interpret the result before making a decision.",
+      "ToolMint's calculators cover the decisions you face regularly: working out EMI on a loan, finding how many calories you need to lose weight, calculating GST on an invoice, converting CGPA to a percentage, or checking if a business idea is worth pursuing. Each calculator is paired with enough context to help you understand the output, not just read a number.",
+      "All calculators run instantly in your browser — no account, no signup, no waiting.",
     ],
     highlights: [
-      { title: "Finance and Budgeting", desc: "Estimate EMI, ROI, break-even points, margins, tips, and tax amounts before committing money." },
-      { title: "Academic and Work Planning", desc: "Use GPA and work-hours tools to plan study goals, schedules, and payroll checks." },
-      { title: "Health and Lifestyle Estimates", desc: "Run BMI and calorie calculations as quick reference tools before deeper professional advice." },
-      { title: "Core Math Utilities", desc: "Handle percentages, scientific functions, age differences, and common daily calculations from one library." },
+      { title: "Finance and Business", desc: "Calculate loan EMI, compound interest, profit margin, ROI, break-even point, and GST — the numbers behind everyday financial decisions." },
+      { title: "Health and Fitness", desc: "Find your BMI with healthy weight range, estimate daily calorie needs based on activity level, or use the scientific calculator for any health formula." },
+      { title: "Academic and Educational", desc: "Calculate GPA and CGPA on India's 10-point scale, convert marks to percentage, find exact age for exam eligibility, and use the scientific calculator for board exam problems." },
+      { title: "Work and Everyday Math", desc: "Track work hours and overtime pay, split restaurant bills with tips, calculate percentages in seconds, and solve any scientific function from the browser." },
+    ],
+    workflows: [
+      {
+        title: "Plan a loan or investment decision",
+        desc: "Start with the EMI calculator to understand monthly repayment obligations, then check compound interest to compare investment growth, and finally calculate ROI to evaluate if the return justifies the cost.",
+        links: [
+          { label: "Loan EMI Calculator", href: "/tools/loan-emi-calculator" },
+          { label: "Compound Interest Calculator", href: "/tools/compound-interest-calculator" },
+          { label: "ROI Calculator", href: "/tools/roi-calculator" },
+        ],
+      },
+      {
+        title: "Check business viability",
+        desc: "Calculate GST on your pricing, find your profit margin, then run a break-even analysis to see the minimum sales volume your business needs.",
+        links: [
+          { label: "GST Calculator", href: "/tools/gst-calculator" },
+          { label: "Profit Margin Calculator", href: "/tools/profit-margin-calculator" },
+          { label: "Break-Even Calculator", href: "/tools/breakeven-calculator" },
+        ],
+      },
+      {
+        title: "Track academic progress",
+        desc: "Calculate your semester GPA, convert your CGPA to percentage using the standard Indian formula, and use the scientific calculator for exam practice.",
+        links: [
+          { label: "GPA Calculator", href: "/tools/gpa-calculator" },
+          { label: "Percentage Calculator", href: "/tools/percentage-calculator" },
+          { label: "Scientific Calculator", href: "/tools/scientific-calculator" },
+        ],
+      },
     ],
     faqs: [
-      { q: "Are calculator results a substitute for professional advice?", a: "No. They are designed as planning and estimation tools, and the site clearly states that legal, financial, tax, or medical decisions should still be reviewed with qualified professionals." },
-      { q: "Why include explanations around simple calculators?", a: "Good calculator pages should help users understand the output, not just display a number. Context makes the tool more trustworthy and more useful." },
-      { q: "What kinds of visitors benefit from this category?", a: "Borrowers, small-business owners, students, freelancers, job seekers, and people checking quick what-if scenarios before acting." },
+      { q: "Are calculator results a substitute for professional advice?", a: "No. These calculators are estimation and planning tools. For financial, tax, legal, or medical decisions, consult a qualified professional. The results here help you understand your numbers before that conversation." },
+      { q: "Why does each calculator page have so much explanatory content?", a: "A number alone is rarely useful without context. The explanations help you understand what the result means, whether the inputs are correct, and what to do next. That is what separates a useful tool from a thin utility page." },
+      { q: "What kinds of visitors benefit from this category?", a: "Students preparing for exams, borrowers comparing loan options, small business owners pricing products, freelancers verifying timesheets, and anyone checking a financial or health estimate before acting." },
     ],
   },
   developer: {
+    h1: "Free Developer Tools – JSON Formatter, Base64, URL Encoder, Password Generator & More",
     intro: [
-      "Developer tools on ToolMint focus on quick browser-side utility work: formatting JSON, testing encoding, generating passwords, and working with snippets without opening a full IDE for every small task.",
-      "The category is intentionally lightweight so it helps engineers, QA teams, support staff, students, and technical marketers solve a small problem and move on quickly.",
+      "Developer tools on ToolMint are built for the small, immediate tasks that come up during development, testing, debugging, and support: formatting a JSON payload, encoding a URL parameter, decoding a Base64 string from an API response, generating a secure password for a new service, or testing a front-end snippet without spinning up a project. Each tool runs entirely in the browser — nothing is sent to any server.",
+      "The tools here are useful not just for engineers but for QA analysts, support agents, SEO specialists, and students who need a quick technical utility without installing anything.",
     ],
     highlights: [
-      { title: "Data Formatting", desc: "Beautify, validate, and inspect JSON when debugging APIs or payloads." },
-      { title: "Encoding Utilities", desc: "Handle Base64 and URL encoding tasks that come up during development, testing, and support work." },
-      { title: "Sandboxed Experiments", desc: "Use the snippet and Python pages for lightweight browser-based experimentation." },
-      { title: "Security Helpers", desc: "Generate stronger passwords quickly with configurable rules instead of relying on guesswork." },
+      { title: "JSON Workspace", desc: "Beautify, validate, minify, and convert JSON to XML, CSV, or YAML — with exact line-number error location on parse failure." },
+      { title: "Encoding Utilities", desc: "Handle Base64 encoding/decoding for text and files, and URL percent-encoding with the correct method for query params vs full URLs." },
+      { title: "Code Playgrounds", desc: "Live HTML/CSS/JS preview with sandboxed iframe isolation, and a full Python environment powered by Pyodide WebAssembly — no install needed." },
+      { title: "Security Tools", desc: "Generate cryptographically secure passwords and passphrases using the Web Crypto API with entropy scoring in bits." },
+    ],
+    workflows: [
+      {
+        title: "Debug an API response",
+        desc: "Paste the raw JSON to format and validate it. If the response contains Base64-encoded fields, decode them. If query parameters look wrong, use the URL parser to inspect them.",
+        links: [
+          { label: "JSON Formatter", href: "/tools/json-formatter" },
+          { label: "Base64 Decoder", href: "/tools/base64-encoder-decoder" },
+          { label: "URL Encoder/Decoder", href: "/tools/url-encoder-decoder" },
+        ],
+      },
+      {
+        title: "Set up a new project or account",
+        desc: "Generate a strong password for the new service, then use the JSON formatter to clean up any config files you copy in.",
+        links: [
+          { label: "Password Generator", href: "/tools/password-generator" },
+          { label: "JSON Formatter", href: "/tools/json-formatter" },
+        ],
+      },
+      {
+        title: "Learn or prototype without setup",
+        desc: "Write and run Python directly in the browser for quick experiments, or use the HTML/CSS/JS playground to prototype a UI component without creating a project.",
+        links: [
+          { label: "Python Code Editor", href: "/tools/python-code-editor" },
+          { label: "Code Snippet Playground", href: "/tools/code-snippet" },
+        ],
+      },
     ],
     faqs: [
-      { q: "Why would developers use browser tools instead of local scripts?", a: "Because many jobs are tiny and immediate. Opening a page and solving one JSON or encoding task can be faster than switching context into a terminal or project repo." },
-      { q: "Are these tools useful for non-developers too?", a: "Yes. QA analysts, support agents, SEO specialists, and content teams often need quick technical utilities without writing code." },
-      { q: "How does this category add value beyond common utility pages?", a: "By combining usable interfaces, focused copy, practical defaults, and related-tool paths that help visitors complete adjacent tasks from one trusted place." },
+      { q: "Why use browser-based developer tools instead of local scripts?", a: "For small immediate tasks — formatting one JSON response, decoding one Base64 string — opening a browser tab is faster than switching to a terminal, writing a script, and running it. These tools are optimized for that use case: paste input, get output, move on." },
+      { q: "Are these tools safe to use with sensitive data?", a: "Yes. All processing runs in your browser. No JSON, Base64, URL, or password data is ever sent to any server. Your data stays on your device." },
+      { q: "Who else besides developers uses these tools?", a: "QA testers debugging API responses, support engineers reading encoded tokens, SEO specialists parsing URLs, students learning to code, and anyone who needs a quick encoding or formatting task done without installing a tool." },
     ],
   },
   seo: {
+    h1: "Free SEO Tools – Meta Tags, Sitemap Generator, Robots.txt & More",
     intro: [
-      "The SEO collection is built for site owners, content teams, and freelancers who need quick help with metadata, previews, crawl files, and on-page checks without subscribing to a full SEO suite.",
-      "These tools are most useful when paired with explanations, because a sitemap, robots.txt file, or meta tag generator is only valuable if the visitor also understands what to do with the output.",
+      "The SEO tools collection covers the technical publishing tasks that every site owner faces when launching or maintaining a website: generating correct meta tags, creating an XML sitemap for Google, writing a robots.txt file, checking snippet lengths, and auditing keyword usage in content. Each tool produces a ready-to-use output — copy-paste HTML, a downloadable file, or a live preview — so you can complete the task and move on.",
+      "These tools are especially useful for new sites and solo founders who need to get the SEO fundamentals right without a paid platform subscription.",
     ],
     highlights: [
-      { title: "Metadata Drafting", desc: "Generate title, description, Open Graph, and social-sharing tags for new pages." },
-      { title: "Preview and QA", desc: "Check search-snippet lengths and keyword usage before publishing or updating content." },
-      { title: "Crawl Control", desc: "Create sitemap and robots.txt files to help search engines discover and understand your site." },
-      { title: "Small-Site SEO Support", desc: "Give solo founders and small teams practical tools without the cost or complexity of enterprise platforms." },
+      { title: "Metadata and Social Tags", desc: "Generate SEO title tags, meta descriptions, Open Graph tags, and Twitter Card tags in one place — with a live SERP and social preview." },
+      { title: "Crawl and Discovery", desc: "Create an XML sitemap with auto-crawl and generate a robots.txt file with platform-specific rules to help Google discover and understand your site." },
+      { title: "On-Page Content Audit", desc: "Check keyword density and n-gram frequency to catch over-optimization and ensure your primary topics appear naturally before publishing." },
+      { title: "Zero-Cost Technical SEO", desc: "Handle the core technical SEO tasks — indexability, social sharing, meta tags — without a paid tool subscription." },
+    ],
+    workflows: [
+      {
+        title: "Set up a new website for search",
+        desc: "Generate your sitemap and submit it to Google Search Console, create a robots.txt to block non-public paths, then write and check your homepage meta tags.",
+        links: [
+          { label: "Sitemap Generator", href: "/tools/sitemap-generator" },
+          { label: "Robots.txt Generator", href: "/tools/robots-txt-generator" },
+          { label: "Meta Tag Generator", href: "/tools/meta-tag-generator" },
+        ],
+      },
+      {
+        title: "Optimize a page before publishing",
+        desc: "Check that your title and description are the right length and contain your target keyword, verify the social share preview looks correct, then check keyword density in the body content.",
+        links: [
+          { label: "Meta Title & Description Checker", href: "/tools/meta-title-description-checker" },
+          { label: "OG Tag Generator", href: "/tools/og-tag-generator" },
+          { label: "Keyword Density Checker", href: "/tools/keyword-density" },
+        ],
+      },
     ],
     faqs: [
-      { q: "Who is this category for?", a: "Founders, bloggers, agencies, content marketers, affiliate publishers, and developers doing lightweight SEO work for their own sites." },
-      { q: "Why are SEO tools a strong fit for ToolMint?", a: "They solve specific publishing tasks, produce copyable outputs, and pair well with concise educational content that helps visitors avoid common mistakes." },
-      { q: "What makes these pages more than thin utility pages?", a: "Each page combines the generator itself with instructions, examples, and clarification about how the output fits into a real publishing workflow." },
+      { q: "Who are these SEO tools for?", a: "Bloggers, founders, content marketers, freelancers, and developers who need to handle the core technical SEO tasks for their own sites without subscribing to an enterprise platform like Ahrefs or Semrush." },
+      { q: "Do these tools help a new site rank on Google?", a: "They handle the technical foundations — correct meta tags, a valid sitemap, a proper robots.txt — which are prerequisites for indexing. Ranking still depends on content quality, keyword targeting, and over time, backlinks. These tools remove the technical barriers so the content can do its job." },
+      { q: "Are the generated files (sitemap.xml, robots.txt) ready to use?", a: "Yes. Both files are generated in the correct format and can be downloaded and uploaded to your site root immediately. After uploading sitemap.xml, submit it via Google Search Console → Sitemaps to trigger indexing." },
     ],
   },
   converters: {
+    h1: "Free Online Unit Converters – Length, Weight, Temperature, File Size & Color",
     intro: [
-      "Converters are some of the most frequently reused utilities on a site like this because they solve quick factual tasks: file sizes, temperature, weights, lengths, colors, and numbers expressed in words.",
-      "To keep the category useful, each page aims to be immediate, readable, and practical for day-to-day work rather than burying a simple conversion inside an ad-heavy or distracting interface.",
+      "Unit converters handle one of the most common micro-tasks in daily life: translating a number from one system to another. Whether you need km to miles for a road trip, Celsius to Fahrenheit for a recipe, kg to lbs for a fitness app, or HEX to RGB for a CSS file — each converter here gives you an instant answer with no ads, no signup, and no friction.",
+      "Every converter includes an all-units comparison table so you can see your value in every supported unit at once, not just the pair you selected. This makes it easier to understand scale and choose the right unit for your purpose — especially useful when working across metric and imperial systems or between SI decimal and IEC binary file sizes.",
     ],
     highlights: [
-      { title: "Unit Conversion", desc: "Switch between metric and imperial values for work, study, travel, and logistics." },
-      { title: "Digital Measurements", desc: "Convert bytes and file sizes when planning uploads, hosting, or storage." },
-      { title: "Color Utilities", desc: "Move between HEX, RGB, and HSL during design and front-end work." },
-      { title: "Everyday Helpers", desc: "Use number and randomization utilities for drafting, testing, and quick calculations." },
+      { title: "Length & Distance", desc: "Convert km to miles, meters to feet, cm to inches, and more across 12 units including nautical miles and light years." },
+      { title: "Weight & Mass", desc: "Switch between kg, lbs, stone, grams, ounces, carats, and three types of tons — with full cross-unit comparison." },
+      { title: "File Size (SI & IEC)", desc: "Understand the MB vs MiB difference and convert between 12 file size units in both decimal and binary standards." },
+      { title: "Color Formats", desc: "Convert HEX, RGB, and HSL with a visual color picker and one-click CSS copy — built for designers and developers." },
+    ],
+    workflows: [
+      {
+        title: "Travel & Cooking",
+        desc: "Convert measurements for road trips, recipes, and international travel.",
+        links: [
+          { label: "km to miles", href: "/tools/length-converter" },
+          { label: "Celsius to Fahrenheit", href: "/tools/temperature-converter" },
+          { label: "grams to ounces", href: "/tools/weight-converter" },
+        ],
+      },
+      {
+        title: "Design & Development",
+        desc: "Convert color codes and file sizes for CSS, assets, and storage planning.",
+        links: [
+          { label: "HEX to RGB", href: "/tools/color-converter" },
+          { label: "MB to GB", href: "/tools/file-size-converter" },
+          { label: "random number", href: "/tools/random-number-generator" },
+        ],
+      },
     ],
     faqs: [
-      { q: "Why include converters on a broader tools site?", a: "Because they are high-intent utilities that people need repeatedly, and they complement adjacent categories like design, development, and office workflows." },
-      { q: "How do you keep conversion pages from feeling low-value?", a: "By pairing the calculator with clear labels, relevant examples, and supporting context so visitors immediately understand both the input and the output." },
-      { q: "What type of users rely on this category?", a: "Students, designers, developers, office teams, and anyone who needs a dependable answer without jumping between multiple niche sites." },
+      { q: "What is the difference between MB and MiB?", a: "MB (megabyte) uses powers of 1,000 — 1 MB = 1,000,000 bytes — the SI standard used by hard drives and cloud storage. MiB (mebibyte) uses powers of 1,024 — 1 MiB = 1,048,576 bytes — the IEC binary standard used by RAM and operating systems. Windows reports file sizes in MiB but labels them MB, causing the common confusion where a 1 TB drive shows as ~931 GB." },
+      { q: "How do I convert Celsius to Fahrenheit without a calculator?", a: "The exact formula is °F = (°C × 9/5) + 32. A quick mental approximation: double the Celsius value and add 30 (e.g., 20°C → 70°F — actual is 68°F). For exact results, use the temperature converter above." },
+      { q: "What color format should I use in CSS — HEX, RGB, or HSL?", a: "All three work in modern CSS. HEX is most compact and what design tools export. RGB is easiest to manipulate programmatically. HSL is the most intuitive for building color palettes since you can adjust lightness without changing the hue. The color converter supports all three." },
     ],
   },
 };

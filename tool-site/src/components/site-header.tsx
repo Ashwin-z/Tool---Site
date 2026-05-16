@@ -27,41 +27,74 @@ function SunIcon() {
 }
 
 export default function SiteHeader() {
-  const { navOpen, toggleNav } = useNavShell();
+  const { navOpen, toggleNav, mobileSidebarOpen, toggleMobileSidebar } = useNavShell();
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur" style={{ borderColor: "var(--border)", background: theme === "dark" ? "rgba(8,8,14,0.95)" : "rgba(248,249,251,0.95)" }}>
+    <header
+      className="sticky top-0 z-50 border-b backdrop-blur"
+      style={{
+        borderColor: "var(--border)",
+        background:
+          theme === "dark" ? "rgba(8,8,14,0.95)" : "rgba(248,249,251,0.95)",
+      }}
+    >
       <div className="mx-auto w-full max-w-[1400px] px-4 py-3">
-        <div className="flex items-center gap-3 md:h-14 md:gap-4">
-          <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight" style={{ color: "var(--foreground)" }}>
+        <div className="flex items-center gap-3 lg:h-14 lg:gap-4">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-2 text-lg font-extrabold tracking-tight"
+            style={{ color: "var(--foreground)" }}
+          >
             <BrandMark size={28} className="shrink-0" />
             Tool<span className="text-[#6c63ff]">Mint</span>
           </Link>
 
-          <div className="mx-auto hidden min-w-0 flex-1 items-center gap-2 md:flex md:max-w-xl">
+          {/* Search — desktop inline */}
+          <div className="mx-auto hidden min-w-0 flex-1 items-center gap-2 lg:flex lg:max-w-xl">
             <ToolSearch />
           </div>
 
+          {/* Blog — desktop only */}
+          <Link
+            href="/blog"
+            className="hidden shrink-0 items-center rounded-full border px-3 py-2 text-xs font-semibold transition hover:opacity-80 lg:flex"
+            style={{ borderColor: "var(--border-strong)", color: "var(--muted)" }}
+          >
+            Blog
+          </Link>
+
+          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            className="relative flex h-10 w-[60px] shrink-0 items-center rounded-full border transition-colors duration-200"
-            style={{ borderColor: "var(--border-strong)", background: theme === "dark" ? "var(--surface-2)" : "var(--surface-3)" }}
+            className="relative ml-auto flex h-10 w-[60px] shrink-0 items-center rounded-full border transition-colors duration-200 lg:ml-0"
+            style={{
+              borderColor: "var(--border-strong)",
+              background:
+                theme === "dark" ? "var(--surface-2)" : "var(--surface-3)",
+            }}
           >
             <span
               className="absolute flex h-7 w-7 items-center justify-center rounded-full bg-[#6c63ff] text-white shadow transition-transform duration-200"
-              style={{ transform: theme === "dark" ? "translateX(3px)" : "translateX(29px)" }}
+              style={{
+                transform:
+                  theme === "dark" ? "translateX(3px)" : "translateX(29px)",
+              }}
             >
               {theme === "dark" ? <MoonIcon /> : <SunIcon />}
             </span>
           </button>
 
+          {/* Browse Tools — desktop only */}
           <button
             onClick={toggleNav}
-            className="flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold transition sm:px-4"
+            className="hidden shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition lg:flex"
             style={{
-              borderColor: navOpen ? "rgba(108,99,255,0.38)" : "var(--border-strong)",
+              borderColor: navOpen
+                ? "rgba(108,99,255,0.38)"
+                : "var(--border-strong)",
               color: navOpen ? "var(--foreground)" : "var(--muted)",
               background: navOpen ? "rgba(108,99,255,0.12)" : "transparent",
             }}
@@ -69,24 +102,54 @@ export default function SiteHeader() {
             {navOpen ? (
               <>
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-[#6c63ff] text-white">
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </span>
-                <span className="sm:hidden">Close</span>
-                <span className="hidden sm:inline">Close Menu</span>
+                Close Menu
               </>
             ) : (
               <>
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-white/[0.06]">
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
                 </span>
-                <span className="sm:hidden">Menu</span>
-                <span className="hidden sm:inline">Browse Tools</span>
+                Browse Tools
               </>
+            )}
+          </button>
+
+          {/* Hamburger — mobile only */}
+          <button
+            onClick={toggleMobileSidebar}
+            aria-label="Open navigation menu"
+            aria-expanded={mobileSidebarOpen}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition hover:opacity-80 lg:hidden"
+            style={{
+              borderColor: mobileSidebarOpen
+                ? "rgba(108,99,255,0.38)"
+                : "var(--border-strong)",
+              background: mobileSidebarOpen
+                ? "rgba(108,99,255,0.12)"
+                : "transparent",
+              color: "var(--muted)",
+            }}
+          >
+            {mobileSidebarOpen ? (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
             )}
           </button>
         </div>
 
-        <div className="mt-3 md:hidden">
+        {/* Search — mobile below header */}
+        <div className="mt-3 lg:hidden">
           <ToolSearch />
         </div>
       </div>

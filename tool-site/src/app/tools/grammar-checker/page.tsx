@@ -1,29 +1,49 @@
 import type { Metadata } from "next";
+import RelatedTools from "@/components/related-tools";
 import GrammarCheckerTool from "@/components/grammar-checker-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Grammar Checker Online Free - Fix Spelling & Grammar Instantly",
+  title: "Free Grammar Checker Online – Fix Spelling & Grammar Instantly",
   description:
-    "Check grammar and spelling online for free with ToolMint. Find and fix spelling mistakes, capitalization errors, repeated words, confused words, and run-on sentences. No signup required.",
+    "Check grammar and spelling online for free. Find and fix spelling mistakes, capitalization errors, repeated words, confused words, and run-on sentences. No signup required.",
   keywords: [
-    "grammar checker",
     "grammar checker online free",
-    "spell check online",
-    "fix grammar online",
-    "free grammar checker",
-    "spelling and grammar tool",
-    "online proofreader",
-    "grammar correction tool",
+    "check grammar online",
+    "spell check online free",
+    "fix grammar mistakes online",
+    "free proofreading tool online",
+    "grammar correction online",
+    "spelling and grammar checker",
+    "proofread text online free",
+    "online grammar fixer",
+    "check spelling without grammarly",
   ],
   alternates: { canonical: "/tools/grammar-checker" },
   openGraph: {
-    title: "Grammar Checker Online Free | ToolMint",
+    title: "Free Grammar Checker Online – Fix Spelling & Grammar Instantly | ToolMint",
     description:
-      "Find and fix spelling, capitalization, and grammar errors instantly with fast browser-based checks.",
+      "Instantly find and fix spelling, capitalization, and grammar errors. Fast browser-based checks, no signup.",
     url: "/tools/grammar-checker",
   },
+  twitter: { card: "summary_large_image" },
 };
+
+const useCases = [
+  {
+    title: "Emails and messages",
+    desc: "Catch obvious spelling and capitalization mistakes before sending client emails, support replies, or application messages.",
+  },
+  {
+    title: "Essays and assignments",
+    desc: "Do a fast pass on student writing to spot repeated words, confused terms, and sentence-level issues before submission.",
+  },
+  {
+    title: "Website copy and captions",
+    desc: "Clean up homepage text, product descriptions, blog intros, and social captions without leaving your browser.",
+  },
+];
 
 const steps = [
   { title: "Paste your text", desc: "Type or paste the text you want to proofread." },
@@ -35,7 +55,7 @@ const steps = [
 const faqs = [
   {
     q: "What types of errors does it detect?",
-    a: "Spelling mistakes, capitalization errors, repeated words, commonly confused words such as their and there, and run-on sentences.",
+    a: "Spelling mistakes, capitalization errors, repeated words, commonly confused words such as 'their' and 'there', and run-on sentences.",
   },
   {
     q: "Is this AI-powered?",
@@ -55,21 +75,6 @@ const faqs = [
   },
 ];
 
-const useCases = [
-  {
-    title: "Emails and messages",
-    desc: "Catch obvious spelling and capitalization mistakes before sending client emails, support replies, or application messages.",
-  },
-  {
-    title: "Essays and assignments",
-    desc: "Do a fast pass on student writing to spot repeated words, confused terms, and sentence-level issues before submission.",
-  },
-  {
-    title: "Website copy and captions",
-    desc: "Clean up homepage text, product descriptions, blog intros, and social captions without leaving your browser.",
-  },
-];
-
 export default function GrammarCheckerPage() {
   const faqSchema = {
     "@context": "https://schema.org",
@@ -83,6 +88,7 @@ export default function GrammarCheckerPage() {
 
   return (
     <>
+      <WebAppSchema slug="grammar-checker" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -98,14 +104,14 @@ export default function GrammarCheckerPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Grammar Checker - Free Online
+          Free Grammar Checker – Fix Spelling & Grammar Errors Online
         </h1>
 
         <p className="mt-4 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,
           capitalization errors, repeated words, confused words, and more. Fix issues one by one or
-          apply all suggestions at once with ToolMint. The tool is tuned for quick English proofreading
-          that helps with emails, school work, blog drafts, and short-form website copy.
+          apply all suggestions at once with ToolMint. Tuned for quick English proofreading of
+          emails, school work, blog drafts, and short-form website copy — no account needed.
         </p>
 
         <div className="mt-8">
@@ -141,6 +147,47 @@ export default function GrammarCheckerPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Most Common Grammar Mistakes in English Writing
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The most frequently flagged issues in English writing fall into a handful of
+              recurring patterns. Confused homophones — their/there/they&apos;re, your/you&apos;re,
+              its/it&apos;s, affect/effect — account for a large share of errors in casual writing
+              because spell-checkers pass them as correctly spelled words. Repeated words occur
+              when editing leaves a duplicate term after a cut and paste — &ldquo;the the&rdquo; or
+              &ldquo;had had&rdquo; — and are easy to miss in a normal read-through. Capitalization errors are
+              common when pasting text from all-caps sources or when proper nouns are left
+              lowercase. Run-on sentences join two independent clauses with only a comma instead
+              of a conjunction or full stop. Subject-verb agreement errors (&ldquo;the team are&rdquo; vs.
+              &ldquo;the team is&rdquo;) appear most often in longer sentences where the subject and verb
+              are separated by a relative clause. This tool catches all of these categories in
+              a single pass.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Rule-Based Checking vs. AI Grammar Checkers: What Is the Difference?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Rule-based grammar checkers apply a fixed set of linguistic rules to detect
+              specific error patterns. They are fast, predictable, and work entirely in the
+              browser without sending your text to any server. The trade-off is that they cannot
+              interpret context — a confused homophone that is correctly spelled will pass most
+              rule-based checks unless the tool has a curated list of common confusable word pairs.
+              AI-based grammar checkers like Grammarly use language models to evaluate meaning and
+              suggest rewrites, which catches subtler issues but requires uploading your text to a
+              remote server. For quick proofreading of emails, blog posts, and short documents —
+              especially when privacy matters — rule-based checking is faster and more suitable.
+              For in-depth editing of long-form writing where tone and style matter, an AI tool adds
+              more value. This tool is designed for the former use case: fast, private, and free.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -154,6 +201,8 @@ export default function GrammarCheckerPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="grammar-checker" />
       </main>
     </>
   );

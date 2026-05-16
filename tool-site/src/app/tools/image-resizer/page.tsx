@@ -1,58 +1,70 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+﻿import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageResizerTool from "@/components/image-resizer-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Resize Images Online Free — Exact Pixel Dimensions",
+  title: "Resize Images Online to Any Dimension – Free, No Signup",
   description:
-    "Resize images online for free with ToolMint. Scale JPG, PNG, and WebP to exact pixel dimensions using custom sizes or 12 social-media presets. Aspect-ratio lock included.",
+    "Resize JPG, PNG, and WebP images to exact pixel dimensions or a percentage online for free. No distortion, no signup — browser-based image resizer.",
   keywords: [
-    "resize image online",
+    "resize image online free",
     "image resizer",
-    "resize image pixels",
-    "resize photo online free",
-    "resize image for instagram",
-    "change image dimensions",
+    "resize photo to exact pixels",
+    "resize image without stretching",
     "resize jpg online",
-    "image size changer",
+    "resize png online",
+    "change image dimensions online",
+    "bulk image resizer",
   ],
   alternates: { canonical: "/tools/image-resizer" },
   openGraph: {
-    title: "Resize Images Online Free | ToolMint",
-    description:
-      "Resize JPG, PNG, and WebP images to exact pixel dimensions. Social-media presets, aspect-ratio lock — free, browser-based.",
+    title: "Resize Images to Any Dimension – Free Online | ToolMint",
+    description: "Resize JPG, PNG, and WebP images to exact pixel dimensions or percentage. Browser-based, no signup.",
     url: "/tools/image-resizer",
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Social media thumbnails",
+    desc: "Each platform has specific image dimensions. Resize photos to the exact pixel size required for Twitter, LinkedIn, Instagram, or Facebook cover images.",
+  },
+  {
+    title: "Product listing photos",
+    desc: "E-commerce platforms often require images at a specific resolution. Resize product photos to match platform requirements before uploading.",
+  },
+  {
+    title: "Email and web images",
+    desc: "Large images slow down emails and web pages. Resize to a display-appropriate size first, then compress for the best balance of quality and speed.",
+  },
+];
+
 const steps = [
-  { title: "Upload an image", desc: "Select or drag & drop a JPG, PNG, or WebP file." },
-  { title: "Set dimensions", desc: "Enter exact pixel width and height, or pick a social-media preset." },
-  { title: "Adjust options", desc: "Lock aspect ratio, choose output format, and set quality." },
-  { title: "Download", desc: "Save the resized image to your device instantly." },
+  { title: "Upload image", desc: "Drag or click to upload a JPG, PNG, or WebP file." },
+  { title: "Set dimensions", desc: "Enter the target width and height in pixels or a percentage." },
+  { title: "Maintain aspect ratio", desc: "Lock the ratio to prevent distortion when resizing." },
+  { title: "Download", desc: "Download the resized image in your chosen format." },
 ];
 
 const faqs = [
   {
-    q: "Can I maintain the aspect ratio while resizing?",
-    a: "Yes. Toggle the aspect-ratio lock to automatically calculate the matching height or width when you change one dimension.",
+    q: "How do I resize an image without stretching or distorting it?",
+    a: "Enable the 'maintain aspect ratio' option. Enter either the target width or height — the other dimension is calculated automatically to keep the original proportions.",
   },
   {
-    q: "What social-media presets are available?",
-    a: "ToolMint includes 12 presets covering Instagram post/story, Facebook cover/profile, Twitter header, YouTube thumbnail, LinkedIn, and more.",
+    q: "Can I resize an image to a specific file size, not just pixel dimensions?",
+    a: "Pixel dimensions and file size are related but not the same. After resizing to your target dimensions, use the Image Compressor to reduce the file size further.",
   },
   {
-    q: "Will resizing reduce image quality?",
-    a: "Enlarging an image can reduce sharpness. Shrinking preserves quality well. Use the quality slider to fine-tune the output.",
+    q: "What is the difference between resizing and cropping?",
+    a: "Resizing changes the entire image to new dimensions. Cropping cuts away the edges to show only a selected portion of the image.",
   },
   {
     q: "Can I resize multiple images at once?",
-    a: "Yes. Upload a batch and apply the same dimensions to all images. Download them individually or as a ZIP.",
-  },
-  {
-    q: "Is my image uploaded to a server?",
-    a: "No. All resizing runs locally in your browser. Your images never leave your device.",
+    a: "Yes. Upload several images together and apply the same dimensions to all files in one batch.",
   },
 ];
 
@@ -69,32 +81,38 @@ export default function ImageResizerPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <WebAppSchema slug="image-resizer" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="image-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
-
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Image Tools", href: "/tools/image-tools" },
+            { name: "Image Resizer" },
+          ]}
+        />
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Resize Images Online for Free
+          Resize Images Online to Any Dimension
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Scale any image to exact pixel dimensions with ToolMint. Enter custom width and
-          height or pick from 12 social-media presets for Instagram, Facebook, Twitter, and
-          more. Lock the aspect ratio, choose your output format, and download instantly.
+          Change image dimensions to exact pixels or a percentage of the original. Supports JPG,
+          PNG, and WebP with aspect ratio lock to prevent distortion. Runs entirely in your browser.
         </p>
-
-        <div className="mt-8">
-          <ImageResizerTool />
-        </div>
-
+        <div className="mt-8"><ImageResizerTool /></div>
         <section className="mt-16">
-          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Resize an Image
-          </h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">When to Resize an Image</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">How to Resize an Image Online</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
               <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
@@ -105,11 +123,33 @@ export default function ImageResizerPage() {
             ))}
           </div>
         </section>
-
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">Common Image Dimensions by Platform</h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Different platforms require specific image sizes. Profile photos are typically square
+              (400x400 or 800x800 pixels). Blog post featured images are usually 1200x630 pixels
+              for sharing previews. Twitter post images work best at 1200x675 pixels. Instagram
+              square posts are 1080x1080 pixels. E-commerce product images vary but 800x800 or
+              1000x1000 pixels is a common starting point. Resizing to the correct dimensions
+              before uploading prevents platforms from cropping or compressing your images in
+              unexpected ways.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">Resize vs. Compress: What Is the Difference?</h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Resizing changes the number of pixels in the image. A 4000x3000 pixel photo resized
+              to 800x600 pixels contains less data, which automatically reduces file size as a
+              side effect. Compression reduces file size by encoding the existing pixel data more
+              efficiently, without changing the dimensions. For the best results, resize first to
+              your target display dimensions, then apply compression to further reduce the file
+              size without sacrificing sharpness.
+            </p>
+          </div>
+        </section>
         <section className="mt-16">
-          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Frequently Asked Questions
-          </h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">Frequently Asked Questions</h2>
           <dl className="mt-6 space-y-6">
             {faqs.map((f, i) => (
               <div key={i}>
@@ -119,7 +159,6 @@ export default function ImageResizerPage() {
             ))}
           </dl>
         </section>
-
         <RelatedTools slug="image-resizer" />
       </main>
     </>

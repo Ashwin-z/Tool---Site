@@ -4,6 +4,7 @@ import "./globals.css";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import SiteNav from "@/components/site-nav";
+import MobileSidebar from "@/components/mobile-sidebar";
 import { NavShellProvider } from "@/components/nav-shell-context";
 import { ThemeProvider } from "@/components/theme-context";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
             <div className="min-h-screen" style={{ background: "var(--background)", color: "var(--foreground)" }}>
               <SiteHeader />
               <SiteNav />
+              <MobileSidebar />
               {children}
               <SiteFooter />
             </div>

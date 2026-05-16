@@ -1,73 +1,75 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfToExcelTool from "@/components/pdf-to-excel-tool";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "PDF to Excel Converter Online - Extract PDF Tables",
+  title: "PDF to Excel Converter â€“ Extract PDF Tables Free",
   description:
-    "Convert PDF tables to Excel with ToolMint. Pull rows and columns into editable XLSX files so you can reuse invoice data, reports, and spreadsheet-ready tables faster.",
+    "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
   keywords: [
-    "pdf to excel converter",
-    "extract tables from pdf",
-    "pdf table to xlsx",
-    "convert pdf report to excel",
-    "invoice pdf to excel",
-    "pdf spreadsheet extraction",
-    "pdf to xlsx online",
-    "editable excel from pdf",
+    "pdf to excel",
+    "pdf to xlsx",
+    "convert pdf to excel online free",
+    "extract table from pdf",
+    "pdf table extractor",
+    "pdf data to spreadsheet",
+    "free pdf to excel converter",
+    "pdf to csv",
   ],
   alternates: { canonical: "/tools/pdf-to-excel" },
   openGraph: {
-    title: "PDF to Excel Converter Online - Extract PDF Tables | ToolMint",
+    title: "PDF to Excel Converter â€“ Extract PDF Tables Free | ToolMint",
     description:
-      "Turn PDF tables into editable Excel files for reports, invoices, and spreadsheet workflows.",
+      "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
     url: "/tools/pdf-to-excel",
+    images: [{ url: "/og/pdf-to-excel.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Extract financial data",
+    desc: "Pull financial statements, budget tables, or cost breakdowns from PDF reports into Excel for analysis, charting, or further calculation.",
+  },
+  {
+    title: "Reuse survey or inventory data",
+    desc: "Convert PDF survey results, inventory lists, or data exports into spreadsheet format so you can sort, filter, and work with the numbers.",
+  },
+  {
+    title: "Recover data from legacy PDFs",
+    desc: "When the original spreadsheet is lost but a PDF version survives, extract the table data to rebuild a working Excel file.",
+  },
+];
+
 const steps = [
-  { title: "Upload a PDF", desc: "Select the PDF that contains the tables you want to reuse." },
-  { title: "Detect tables", desc: "ToolMint identifies table structures and maps rows, columns, and merged cells." },
-  { title: "Convert", desc: "The table data is rebuilt into an editable XLSX workbook." },
-  { title: "Download XLSX", desc: "Open the spreadsheet in Excel, Google Sheets, or LibreOffice Calc." },
+  { title: "Upload a PDF", desc: "Select the PDF containing the tables you want to extract." },
+  { title: "Convert", desc: "ToolMint detects and extracts table structures from the PDF." },
+  { title: "Download", desc: "Save the .xlsx file and open it in Excel or Google Sheets." },
 ];
 
 const faqs = [
   {
-    q: "How accurate is the PDF to Excel table extraction?",
-    a: "ToolMint is designed to preserve rows, columns, merged cells, borders, and visible structure for standard table-based PDFs.",
+    q: "Can PDF to Excel extract tables accurately?",
+    a: "Well-defined tables with clear borders and consistent column alignment extract accurately. Tables in scanned PDFs or tables without visible grid lines may require manual cleanup after extraction.",
   },
   {
-    q: "Does ToolMint preserve cell colors and borders?",
-    a: "Yes. Colors, borders, merged cells, and many layout details are kept in the XLSX output where possible.",
+    q: "What happens to non-table content in PDF to Excel?",
+    a: "Non-table content like paragraphs, headers, and images is generally not included in the Excel output. The converter focuses on extracting structured tabular data from the PDF.",
   },
   {
-    q: "Can I convert scanned PDFs to Excel?",
-    a: "Scanned PDFs usually need OCR before reliable table extraction is possible, so digital PDFs with selectable text work best.",
+    q: "Does it work on scanned PDF tables?",
+    a: "Scanned PDFs require OCR to read the text before table extraction can occur. ToolMint applies OCR to scanned pages, though accuracy depends on scan quality and the complexity of the table layout.",
   },
   {
-    q: "What Excel format does ToolMint output?",
-    a: "The output is an XLSX file that works with Microsoft Excel, Google Sheets, and LibreOffice Calc.",
+    q: "Why are my numbers showing as text after PDF to Excel?",
+    a: "This happens when the extracted data contains formatting characters like currency symbols, thousands separators, or extra spaces that prevent Excel from recognizing the values as numbers. Use Excel's Text to Columns or Find & Replace to clean the data after conversion.",
   },
   {
-    q: "Is my PDF secure during conversion?",
-    a: "Files are processed for conversion and removed afterward. They are not kept for storage or sharing.",
-  },
-];
-
-const useCases = [
-  {
-    title: "Invoices and statements",
-    desc: "Move line items, dates, and totals from PDF invoices or financial statements into an editable spreadsheet faster.",
-  },
-  {
-    title: "Reports and exported tables",
-    desc: "Reuse tables from business reports, dashboards, or vendor PDFs without rebuilding them manually in Excel.",
-  },
-  {
-    title: "Operations and recordkeeping",
-    desc: "Extract tabular data from forms or archived PDFs when you need to sort, filter, or analyze it later.",
+    q: "Can I convert multi-page PDFs with tables to Excel?",
+    a: "Yes. ToolMint processes all pages and places each table it detects into the spreadsheet. Tables from different pages are placed in separate sections or sheets in the Excel output.",
   },
 ];
 
@@ -84,6 +86,7 @@ export default function PdfToExcelPage() {
 
   return (
     <>
+      <WebAppSchema slug="pdf-to-excel" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -99,12 +102,12 @@ export default function PdfToExcelPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Convert PDF Tables to Excel
+          Convert PDF to Excel Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Extract tables from a PDF into an editable Excel workbook with ToolMint. This page is
-          built for people who need to reuse invoice lines, report tables, or spreadsheet-style
-          data without copying everything by hand.
+          Extract tables and data from PDF documents into editable Excel spreadsheets with ToolMint.
+          Upload a PDF and get an .xlsx file with the table data ready to work with in Excel or
+          Google Sheets. No account required.
         </p>
 
         <div className="mt-8">
@@ -113,7 +116,7 @@ export default function PdfToExcelPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Good Fits for PDF to Excel Conversion
+            When to Convert PDF to Excel
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {useCases.map((item) => (
@@ -127,9 +130,9 @@ export default function PdfToExcelPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Convert PDF to Excel
+            How to Convert PDF to Excel Online
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((s, i) => (
               <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
                 <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
@@ -137,6 +140,40 @@ export default function PdfToExcelPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How Does PDF to Excel Table Extraction Work?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              PDF table extraction works by analyzing the spatial coordinates of text elements on
+              each page. When rows and columns of text align consistently, the converter recognizes
+              those patterns as a table structure and maps them into spreadsheet rows and columns.
+              PDFs that were created from Excel or Word (rather than scanned) have clean text
+              positioning that makes extraction straightforward. Scanned PDFs require OCR first,
+              which introduces more variability. Tables with thin or invisible borders are detected
+              using alignment patterns rather than explicit grid lines, which works well for simple
+              tables but can miss columns in complex layouts.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              When to Use PDF to Excel Conversion
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The clearest use case is when you need to calculate, sort, or filter data that is
+              locked inside a PDF. Financial statements from banks, vendor invoices, government
+              data exports, and regulatory filings frequently arrive as PDFs but contain data
+              that needs to be analyzed in a spreadsheet. Rather than typing the data manually,
+              conversion extracts it in seconds. It is also useful for migrating historical data
+              from legacy PDF reports into a database or analytics tool. For quick one-off data
+              lookups, reading the PDF directly is faster â€” conversion pays off when you need to
+              do more than just read the numbers.
+            </p>
           </div>
         </section>
 

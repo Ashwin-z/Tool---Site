@@ -1,73 +1,75 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfToTextTool from "@/components/pdf-to-text-tool";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Extract Text from PDF Online - OCR for Scanned PDFs",
+  title: "PDF to Text (OCR) â€“ Extract Text from PDF Free",
   description:
-    "Extract text from digital and scanned PDFs with ToolMint. Use native extraction for selectable text or OCR for scanned pages when you need reusable copy, notes, or records.",
+    "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
   keywords: [
+    "pdf to text",
     "extract text from pdf",
-    "pdf to text ocr",
+    "pdf ocr online free",
     "scanned pdf to text",
-    "ocr pdf online",
-    "copy text from scanned pdf",
     "pdf text extractor",
-    "convert pdf to txt",
-    "read text from pdf image",
+    "ocr pdf online",
+    "copy text from pdf",
+    "free pdf to text converter",
   ],
   alternates: { canonical: "/tools/pdf-to-text" },
   openGraph: {
-    title: "Extract Text from PDF Online - OCR for Scanned PDFs | ToolMint",
+    title: "PDF to Text (OCR) â€“ Extract Text from PDF Free | ToolMint",
     description:
-      "Pull text from digital or scanned PDFs with native extraction and OCR support in the browser.",
+      "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
     url: "/tools/pdf-to-text",
+    images: [{ url: "/og/pdf-to-text.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Extract from scanned documents",
+    desc: "Convert scanned PDFs, photographed documents, or image-based PDFs into selectable, searchable text using OCR.",
+  },
+  {
+    title: "Copy content for reuse",
+    desc: "Pull quotes, data, or reference text from a PDF report or academic paper for use in notes, presentations, or other documents.",
+  },
+  {
+    title: "Index and search documents",
+    desc: "Extract the full text content of PDFs so they can be indexed, searched, or processed by other tools and scripts.",
+  },
+];
+
 const steps = [
-  { title: "Upload a PDF", desc: "Choose a digital PDF or a scanned document from your device." },
-  { title: "Pick extraction mode", desc: "Use Native mode for selectable text or OCR mode for scanned pages." },
-  { title: "Select language", desc: "Choose the OCR language when the file is image-based or scanned." },
-  { title: "Copy or download", desc: "Review the extracted text, then copy it or save it as a TXT file." },
+  { title: "Upload a PDF", desc: "Select a digital or scanned PDF file from your device." },
+  { title: "Extract", desc: "ToolMint extracts text from digital PDFs directly, and applies OCR to scanned pages." },
+  { title: "Copy or download", desc: "Copy the extracted text or download it as a .txt file." },
 ];
 
 const faqs = [
   {
-    q: "What is the difference between Native and OCR mode?",
-    a: "Native mode reads text already embedded in a digital PDF. OCR mode recognizes text from scanned pages or image-based PDFs where the text is not stored digitally.",
+    q: "Can OCR extract text from a scanned PDF?",
+    a: "Yes. OCR (Optical Character Recognition) reads scanned page images and converts them to text. Accuracy is highest for clean, high-resolution scans of printed documents in common languages.",
   },
   {
-    q: "Can I extract text from a scanned PDF?",
-    a: "Yes. OCR mode is specifically designed for scanned PDFs and image-based documents.",
+    q: "How accurate is online OCR for PDFs?",
+    a: "For clearly printed text in English and other common languages at 150 DPI or higher, accuracy typically exceeds 95%. Handwriting, unusual fonts, low-resolution scans, and degraded documents produce lower accuracy.",
   },
   {
-    q: "What languages does the OCR support?",
-    a: "ToolMint supports a broad set of OCR languages, including major languages used in business, education, and document archiving workflows.",
+    q: "What languages does OCR support?",
+    a: "ToolMint's OCR supports the most common Latin-script languages including English, French, German, Spanish, Italian, and Portuguese. Support for other scripts varies â€” check the tool for current language options.",
   },
   {
-    q: "Is my PDF processed on a server?",
-    a: "No. OCR and text extraction run in your browser for this tool, so your file stays on your device.",
+    q: "Why is my extracted text scrambled or wrong?",
+    a: "Scrambled text usually means the PDF has a non-standard text encoding, right-to-left text direction, or was created by a program that stored text in a different order than it appears visually. Low scan quality also produces garbled OCR output.",
   },
   {
-    q: "What format can I save the text in?",
-    a: "You can copy the extracted text directly or download it as a plain TXT file.",
-  },
-];
-
-const useCases = [
-  {
-    title: "Scanned notes and handouts",
-    desc: "Pull text out of scanned lecture notes, manuals, or printed documents so you can quote, search, or rewrite them.",
-  },
-  {
-    title: "Archived paperwork",
-    desc: "Extract text from older scanned records when you need searchable content for internal documentation or indexing.",
-  },
-  {
-    title: "Quick reuse of document content",
-    desc: "Copy paragraphs, lists, or details from PDFs into emails, spreadsheets, or editing workflows without retyping everything.",
+    q: "Can I extract text from a password-protected PDF?",
+    a: "No. Password-protected PDFs must be unlocked first. Use the Unlock PDF tool with the correct password, then return here to extract the text.",
   },
 ];
 
@@ -84,6 +86,7 @@ export default function PdfToTextPage() {
 
   return (
     <>
+      <WebAppSchema slug="pdf-to-text" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -99,12 +102,11 @@ export default function PdfToTextPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Extract Text from PDF Online
+          Extract Text from Scanned PDF Online – Free OCR Tool
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Pull text from digital PDFs and scanned documents with ToolMint. Use native extraction
-          when the file already contains selectable text, or switch to OCR when you need text from
-          scanned pages, image-based documents, or archived paperwork.
+          Pull text out of any PDF document with ToolMint. Works on digital PDFs and scanned
+          documents using OCR. Copy the output or download it as a text file â€” no account required.
         </p>
 
         <div className="mt-8">
@@ -113,7 +115,7 @@ export default function PdfToTextPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Useful Cases for PDF OCR and Text Extraction
+            When to Extract Text from a PDF
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {useCases.map((item) => (
@@ -129,7 +131,7 @@ export default function PdfToTextPage() {
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Extract Text from a PDF
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((s, i) => (
               <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
                 <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
@@ -137,6 +139,42 @@ export default function PdfToTextPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              What Is OCR and How Does It Work?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              OCR stands for Optical Character Recognition. It is a technology that analyzes the
+              visual content of an image â€” whether a photograph, a scanned page, or a PDF rendered
+              as an image â€” and identifies letter shapes to reconstruct text. The process involves
+              preprocessing the image for contrast and orientation, segmenting the image into lines
+              and characters, comparing character shapes against trained letter models, and
+              assembling the recognized characters into words and sentences. Modern OCR engines
+              use deep learning models that achieve high accuracy on clean printed text in supported
+              languages. Handwriting, unusual typefaces, and degraded documents are harder to
+              recognize accurately.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              When to Use PDF to Text Extraction
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Text extraction is most useful when you need to work with the content of a PDF rather
+              than its visual layout. If you want to paste a quote, count words, translate content,
+              run a search across many pages, or feed document content into another tool, extracted
+              plain text is easier to work with than a PDF. Developers use text extraction to build
+              search indices, data pipelines, and natural language processing workflows on document
+              collections. For a simple task like copying a paragraph from a PDF you can open in
+              your browser, direct copy-paste from the viewer is faster. Text extraction tools add
+              value when PDFs are scanned, when content spans many pages, or when you need
+              machine-readable output.
+            </p>
           </div>
         </section>
 

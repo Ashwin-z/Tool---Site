@@ -1,29 +1,49 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import TextCompareTool from "@/components/text-compare-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Text Compare Online Free — Side-by-Side Text Diff Tool",
+  title: "Text Compare Online – Find Differences Between Two Texts Free",
   description:
-    "Compare two texts online for free with ToolMint. Side-by-side diff highlights additions, deletions, and unchanged lines. Ignore case or whitespace. No signup required.",
+    "Compare two texts online for free and see line-by-line differences highlighted in color. Find additions, deletions, and unchanged lines instantly. Ignore case or whitespace. No signup required.",
   keywords: [
-    "text compare",
-    "text diff online",
-    "compare two texts",
-    "text comparison tool",
+    "text compare online free",
+    "compare two texts online",
+    "find differences between two texts",
+    "text diff tool online",
     "diff checker online",
-    "online text diff",
     "side by side text compare",
-    "find text differences",
+    "online text comparison",
+    "text difference finder",
+    "compare paragraphs online",
+    "spot changes in text",
   ],
   alternates: { canonical: "/tools/text-compare" },
   openGraph: {
-    title: "Text Compare Online Free | ToolMint",
+    title: "Text Compare Online – Find Differences Between Two Texts | ToolMint",
     description:
-      "Compare two texts side by side. Highlight additions, deletions, and unchanged lines with optional case and whitespace ignoring.",
+      "Compare two texts side by side. Additions, deletions, and unchanged lines highlighted in color. Free, browser-based.",
     url: "/tools/text-compare",
   },
+  twitter: { card: "summary_large_image" },
 };
+
+const useCases = [
+  {
+    title: "Reviewing document edits",
+    desc: "Paste the original and revised version of a document to instantly see what changed, was added, or was removed between drafts.",
+  },
+  {
+    title: "Checking code or config changes",
+    desc: "Compare two versions of a config file, script, or snippet to spot unintended edits without switching to a code editor.",
+  },
+  {
+    title: "Proofreading translated text",
+    desc: "Check that a translated or paraphrased passage matches the original structure and hasn't dropped or altered sentences.",
+  },
+];
 
 const steps = [
   { title: "Paste original text", desc: "Enter or paste the first text into the left panel." },
@@ -39,11 +59,11 @@ const faqs = [
   },
   {
     q: "Can I ignore case differences?",
-    a: "Yes. Toggle the case-insensitive option to treat uppercase and lowercase letters as equal.",
+    a: "Yes. Toggle the case-insensitive option to treat uppercase and lowercase letters as equal when comparing.",
   },
   {
     q: "Can I ignore whitespace differences?",
-    a: "Yes. Enable the whitespace-ignore option to focus on meaningful content changes only.",
+    a: "Yes. Enable the whitespace-ignore option to focus only on meaningful content changes, not formatting differences.",
   },
   {
     q: "Is there a character or length limit?",
@@ -68,27 +88,48 @@ export default function TextComparePage() {
 
   return (
     <>
+      <WebAppSchema slug="text-compare" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="text-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Text Tools", href: "/tools/text-tools" },
+            { name: "Text Compare" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Text Compare — Free Online Diff Tool
+          Text Compare – Find Differences Between Two Texts Online
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Compare two texts side by side and see line-by-line differences with ToolMint.
-          Additions, deletions, and unchanged content are color-coded for clarity. Optionally
-          ignore case or whitespace for a cleaner comparison.
+          Paste two versions of any text and instantly see what changed. Additions are highlighted
+          in green, deletions in red, and unchanged lines stay neutral. Toggle case-insensitive
+          and whitespace-ignore modes for cleaner results. Everything runs in your browser — no
+          files are uploaded or stored.
         </p>
 
         <div className="mt-8">
           <TextCompareTool />
         </div>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            When to Use a Text Diff Tool
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
@@ -105,6 +146,42 @@ export default function TextComparePage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How Line-by-Line Diff Works
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              A diff tool compares two text inputs and identifies which lines are identical, which
+              are new, and which have been removed. The algorithm used here is based on the
+              longest common subsequence approach — it finds the maximum set of lines that exist
+              in both texts in the same order, then marks everything else as either added or
+              deleted. This is the same underlying logic used by version control systems like Git
+              when showing a commit diff. Color-coding makes it easy to scan: green lines exist
+              only in the second (modified) text, red lines exist only in the first (original)
+              text, and neutral lines are present in both. No line numbers or file headers are
+              required — just paste two blocks of text and the result is instant.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              When to Use "Ignore Whitespace" and "Ignore Case"
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The ignore-whitespace option removes differences caused by extra spaces, tabs, or
+              indentation changes. This is useful when comparing text that has been reformatted
+              without any real content changes — for example, a document copied from a PDF with
+              irregular line breaks, or a configuration file where indentation was adjusted.
+              The ignore-case option treats uppercase and lowercase as equivalent. Use this when
+              you care about content changes but not capitalization — for example, comparing a
+              draft with a proofreading pass where only spelling was corrected. Using both
+              options together gives a minimal diff that only flags actual word-level changes,
+              which is often cleaner when reviewing long documents.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -118,6 +195,8 @@ export default function TextComparePage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="text-compare" />
       </main>
     </>
   );

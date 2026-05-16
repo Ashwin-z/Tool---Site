@@ -1,58 +1,75 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import ExcelToPdfTool from "@/components/excel-to-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Excel to PDF Online Free - Convert XLSX and CSV to PDF",
+  title: "Excel to PDF Converter â€“ Convert XLSX to PDF Free",
   description:
-    "Convert Excel to PDF online for free with ToolMint. Upload XLSX, XLS, or CSV spreadsheets and download polished PDF documents. No signup, no watermark.",
+    "Convert Excel spreadsheets to PDF online for free. Upload .xlsx or .xls and get a perfectly formatted PDF. No signup.",
   keywords: [
     "excel to pdf",
     "xlsx to pdf",
-    "convert excel to pdf",
+    "convert excel to pdf online free",
     "spreadsheet to pdf",
-    "csv to pdf",
-    "excel to pdf converter online free",
     "xls to pdf",
-    "free excel to pdf",
+    "microsoft excel to pdf",
+    "free excel to pdf converter",
+    "export excel as pdf",
   ],
   alternates: { canonical: "/tools/excel-to-pdf" },
   openGraph: {
-    title: "Excel to PDF Online Free - Convert XLSX and CSV to PDF | ToolMint",
+    title: "Excel to PDF Converter â€“ Convert XLSX to PDF Free | ToolMint",
     description:
-      "Convert Excel to PDF online for free. Upload XLSX, XLS, or CSV and download polished PDFs.",
+      "Convert Excel spreadsheets to PDF online for free. Upload .xlsx or .xls and get a perfectly formatted PDF. No signup.",
     url: "/tools/excel-to-pdf",
+    images: [{ url: "/og/excel-to-pdf.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Sharing reports without formulas",
+    desc: "Send spreadsheet data as a read-only PDF so recipients see the numbers without being able to modify or copy formulas.",
+  },
+  {
+    title: "Invoice and financial documents",
+    desc: "Convert invoice, budget, or financial summary sheets to PDF before emailing to clients or submitting to accounting systems.",
+  },
+  {
+    title: "Print-ready tables",
+    desc: "Fix column widths and page breaks before converting to PDF to ensure tables print neatly across pages.",
+  },
+];
+
 const steps = [
-  { title: "Upload spreadsheets", desc: "Drag and drop or select up to 25 Excel or CSV files from your device." },
-  { title: "Preview", desc: "Review the uploaded files before conversion." },
-  { title: "Convert", desc: "Click Convert and each spreadsheet is rendered into a formatted PDF." },
-  { title: "Download", desc: "Save individual PDFs or grab all files as a ZIP archive." },
+  { title: "Upload your Excel file", desc: "Select a .xlsx or .xls file from your device." },
+  { title: "Convert", desc: "ToolMint renders each sheet as a PDF page." },
+  { title: "Download", desc: "Save the formatted PDF to your device." },
 ];
 
 const faqs = [
   {
-    q: "What spreadsheet formats can I convert to PDF?",
-    a: "ToolMint supports XLSX, XLS, and CSV file formats.",
+    q: "Does Excel to PDF preserve formulas?",
+    a: "No. The PDF shows the calculated values of formula cells, not the formulas themselves. This is usually the desired behavior when sharing data â€” recipients see the result, not the underlying calculation.",
   },
   {
-    q: "Does the table formatting stay the same?",
-    a: "Yes. Cell borders, colors, fonts, and layout are preserved in the PDF output.",
+    q: "How do I convert multiple Excel sheets to PDF?",
+    a: "ToolMint converts the active or visible sheets in the uploaded file. If you need all sheets in one PDF, make sure they are set to print in the workbook before uploading.",
   },
   {
-    q: "Can I convert multiple spreadsheets at once?",
-    a: "Yes. Upload up to 25 files and convert all of them in a single batch.",
+    q: "Why does my Excel PDF cut off columns?",
+    a: "This happens when the spreadsheet is wider than the page size selected for the PDF. Adjust column widths, reduce font size, or set the sheet to 'Fit to page' in Excel's Page Layout settings before converting.",
   },
   {
-    q: "Are formulas visible in the converted PDF?",
-    a: "The PDF shows calculated values rather than the formulas themselves, which matches what you see in the sheet view.",
+    q: "Can I convert a password-protected Excel file to PDF?",
+    a: "No. Password-protected Excel files must be unlocked in Excel first before they can be converted to PDF.",
   },
   {
-    q: "Is my data secure during conversion?",
-    a: "Yes. Your files are processed for conversion and removed after the job completes.",
+    q: "How do I convert Excel to PDF on mobile?",
+    a: "Open ToolMint in your mobile browser, upload the .xlsx file from your phone's storage, and tap Convert. The PDF downloads directly without needing any app.",
   },
 ];
 
@@ -69,6 +86,7 @@ export default function ExcelToPdfPage() {
 
   return (
     <>
+      <WebAppSchema slug="excel-to-pdf" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -87,9 +105,8 @@ export default function ExcelToPdfPage() {
           Convert Excel to PDF Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Transform your spreadsheets into shareable PDF documents with ToolMint. Upload up to
-          25 XLSX, XLS, or CSV files and download clean, formatted PDFs ready for printing
-          or sharing.
+          Turn .xlsx and .xls spreadsheets into PDF documents with ToolMint. Upload your Excel file
+          and download a clean, print-ready PDF â€” no account, no software required.
         </p>
 
         <div className="mt-8">
@@ -98,9 +115,23 @@ export default function ExcelToPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Convert Excel to PDF
+            When to Convert Excel to PDF
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How to Convert Excel to PDF Online
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((s, i) => (
               <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
                 <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
@@ -108,6 +139,40 @@ export default function ExcelToPdfPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Convert Excel to PDF?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Excel files look different depending on the software version and screen size used to
+              open them. Columns shift, formulas display instead of values, and charts render
+              differently across versions. PDF locks the visual layout so every recipient sees the
+              same thing. This matters for invoices, financial reports, and any data that will be
+              signed, printed, or filed. PDFs are also smaller and harder to accidentally modify,
+              which makes them better for distribution. For compliance and record-keeping, a PDF
+              snapshot of a spreadsheet provides a stable reference that will not change even if
+              the original Excel data is later edited.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How to Fit an Excel Sheet on One PDF Page
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Before converting, open the Excel file and go to Page Layout â†’ Scale to Fit. Set
+              Width to 1 page and Height to 1 page (or adjust only width for tall datasets). This
+              tells Excel to shrink the content to fit within a single page when it renders the
+              sheet. Alternatively, reduce the font size and narrow column widths to bring the data
+              within the printable area. You can also set the orientation to Landscape for wide
+              tables. Making these adjustments in Excel before uploading the file to ToolMint
+              ensures the PDF output matches what you expect rather than requiring post-conversion
+              editing.
+            </p>
           </div>
         </section>
 

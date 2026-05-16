@@ -31,7 +31,7 @@ export default function ToolCategoryHub({ categoryId }: ToolCategoryHubProps) {
       />
 
       <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-[-0.02em]">
-        {category.icon} {category.title}
+        {content.h1 ?? `${category.icon} ${category.title}`}
       </h1>
       <p className="mt-3 max-w-3xl text-sm leading-7" style={{ color: "var(--muted)" }}>
         {category.description}

@@ -1,73 +1,76 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageToPdfTool from "@/components/image-to-pdf-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Image to PDF Online Free - Convert JPG, PNG to PDF",
+  title: "Image to PDF Converter â€“ JPG, PNG to PDF Free",
   description:
-    "Convert images to PDF online for free with ToolMint. Upload JPG, PNG, WEBP, GIF, BMP, or SVG files, arrange them, and create a single PDF. No signup, no limits.",
+    "Convert JPG, PNG, or any image to PDF online for free. Combine multiple images into one PDF. No signup, instant result.",
   keywords: [
     "image to pdf",
     "jpg to pdf",
     "png to pdf",
-    "convert image to pdf",
+    "convert image to pdf online free",
+    "multiple images to pdf",
     "photo to pdf",
-    "picture to pdf online free",
-    "free image to pdf converter",
-    "images to pdf",
+    "picture to pdf converter",
+    "free image to pdf",
   ],
   alternates: { canonical: "/tools/image-to-pdf" },
   openGraph: {
-    title: "Image to PDF Online Free - Convert JPG, PNG to PDF | ToolMint",
+    title: "Image to PDF Converter â€“ JPG, PNG to PDF Free | ToolMint",
     description:
-      "Convert images to PDF online for free. Upload JPG, PNG, WEBP, GIF, BMP or SVG and create a single PDF. No signup.",
+      "Convert JPG, PNG, or any image to PDF online for free. Combine multiple images into one PDF. No signup, instant result.",
     url: "/tools/image-to-pdf",
+    images: [{ url: "/og/image-to-pdf.png" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
+const useCases = [
+  {
+    title: "Scan-to-PDF workflow",
+    desc: "Convert a batch of scanned JPG images from your phone into a single, organized PDF for archiving or submission.",
+  },
+  {
+    title: "Photo documentation",
+    desc: "Combine product photos, site inspection images, or event pictures into one PDF report for clients or records.",
+  },
+  {
+    title: "Submission requirements",
+    desc: "Many portals accept only PDF uploads. Convert your PNG or JPG certificates, ID scans, or receipts before submitting.",
+  },
+];
+
 const steps = [
-  { title: "Upload images", desc: "Drag and drop or select up to 25 image files such as JPG, PNG, WEBP, GIF, BMP, or SVG." },
-  { title: "Arrange order", desc: "Drag thumbnails to set the page order in your PDF." },
-  { title: "Convert", desc: "Click Convert and your images are assembled into a PDF instantly." },
-  { title: "Download", desc: "Save the combined PDF to your device." },
+  { title: "Upload images", desc: "Select one or more JPG, PNG, or other image files from your device." },
+  { title: "Reorder if needed", desc: "Drag thumbnails to set the order images appear in the PDF." },
+  { title: "Set page size", desc: "Choose A4, Letter, or fit-to-image for each page." },
+  { title: "Download", desc: "Click Convert and save your PDF instantly." },
 ];
 
 const faqs = [
   {
-    q: "What image formats can I convert to PDF?",
-    a: "ToolMint supports JPG and JPEG, PNG, WEBP, GIF, BMP, and SVG image formats.",
+    q: "Can I combine multiple images into one PDF?",
+    a: "Yes. Upload as many images as you need, arrange them in the order you want, and ToolMint combines them into a single multi-page PDF with one image per page.",
   },
   {
-    q: "How many images can I combine into one PDF?",
-    a: "You can upload and combine up to 25 images in a single PDF document.",
+    q: "Will converting to PDF reduce image quality?",
+    a: "No significant quality loss occurs. The images are embedded in the PDF at their original resolution. You only lose quality if you choose a compression option that explicitly reduces resolution.",
   },
   {
-    q: "Can I rearrange the image order before converting?",
-    a: "Yes. After uploading, drag and drop thumbnails to set the exact page order you want in the final PDF.",
+    q: "What is the best format for images in a PDF?",
+    a: "PNG is best for screenshots, graphics, and images with text because it is lossless. JPG is better for photographs where smaller file size matters more than pixel-perfect accuracy.",
   },
   {
-    q: "Is the image quality preserved in the PDF?",
-    a: "Yes. Images are embedded at their original resolution without additional compression.",
+    q: "How do I convert a JPG to PDF on mobile?",
+    a: "Open ToolMint in your phone's browser, tap the upload area to select a JPG from your camera roll, and tap Convert. The PDF downloads directly to your device without any app installation.",
   },
   {
-    q: "Do I need to install any software?",
-    a: "No. ToolMint works entirely in your browser with no downloads, plugins, or signup required.",
-  },
-];
-
-const useCases = [
-  {
-    title: "JPG to PDF for forms",
-    desc: "Bundle photo scans of forms, ID copies, or signed pages into one PDF before uploading to a portal.",
-  },
-  {
-    title: "Receipts and invoices",
-    desc: "Turn phone photos of receipts or invoices into a cleaner PDF file that is easier to email and archive.",
-  },
-  {
-    title: "Assignments and notes",
-    desc: "Combine notebook photos, worksheets, or whiteboard captures into a single PDF document for sharing.",
+    q: "Can I set the page size when converting images to PDF?",
+    a: "Yes. You can choose standard page sizes like A4 or US Letter, or use the image's natural dimensions as the page size, which produces a PDF where the page fits the image exactly.",
   },
 ];
 
@@ -84,6 +87,7 @@ export default function ImageToPdfPage() {
 
   return (
     <>
+      <WebAppSchema slug="image-to-pdf" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -99,13 +103,12 @@ export default function ImageToPdfPage() {
         />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          JPG to PDF and Image to PDF Converter Online
+          Convert Images to PDF Online for Free
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Turn your images into a polished PDF document with ToolMint. Upload up to 25 JPG, PNG,
-          WEBP, GIF, BMP, or SVG files, drag to rearrange them, and download a single combined
-          PDF. This page is ideal when you need a fast JPG to PDF converter for receipts, scans,
-          assignments, or photo collections.
+          Turn JPG, PNG, WebP, or any image file into a PDF document with ToolMint. Upload multiple
+          images, reorder them, choose a page size, and download a clean PDF â€” all in your browser
+          with no account required.
         </p>
 
         <div className="mt-8">
@@ -114,7 +117,7 @@ export default function ImageToPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Common Uses for JPG to PDF Conversion
+            When to Convert Images to PDF
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {useCases.map((item) => (
@@ -128,7 +131,7 @@ export default function ImageToPdfPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Convert Images to PDF
+            How to Convert Images to PDF Online
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => (
@@ -138,6 +141,40 @@ export default function ImageToPdfPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Convert Images to PDF?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              PDF is the most universally accepted document format for official submissions,
+              professional sharing, and long-term storage. Many government portals, job applications,
+              and academic systems only accept PDFs â€” not image files. Converting images to PDF also
+              makes multi-page documents easier to share as a single file rather than a folder of
+              separate images. PDFs are easier to print predictably, they preserve aspect ratios on
+              any device, and they reduce the risk of images being accidentally edited. If you have
+              photographed receipts, contracts, certificates, or handwritten notes, converting them
+              to PDF is the cleanest way to archive and share that content.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              What Image Formats Can Be Converted to PDF?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              ToolMint supports JPG (JPEG), PNG, WebP, and GIF images as inputs for PDF conversion.
+              JPG is the most common format for photographs and scanned documents. PNG is preferred
+              for screenshots, diagrams, and images with transparency or text because it does not
+              use lossy compression. WebP is a modern format produced by many phones and browsers
+              that offers small file sizes at good quality. BMP and TIFF files from older scanners
+              may need to be converted to JPG or PNG first before uploading. Most image files
+              captured by a modern phone or downloaded from the web will work without any prior
+              conversion.
+            </p>
           </div>
         </section>
 

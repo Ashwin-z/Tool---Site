@@ -1,84 +1,75 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import CalorieCalculatorTool from "@/components/calorie-calculator-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Calorie Calculator — BMR, TDEE & Macro Calculator | ToolMint",
+  title: "Calorie Calculator – Daily Calorie Needs for Weight Loss or Gain",
   description:
-    "Estimate your BMR, TDEE, and daily macro targets with ToolMint's free Calorie Calculator. Uses the Mifflin-St Jeor formula, activity multipliers, and built-in macro presets.",
+    "Calculate your daily calorie needs based on age, weight, height, and activity level. Find the calorie target for weight loss, maintenance, or muscle gain. Free, instant.",
   keywords: [
-    "calorie calculator",
-    "bmr calculator",
-    "tdee calculator",
-    "macro calculator",
-    "maintenance calories calculator",
-    "daily calorie needs",
-    "mifflin st jeor calculator",
+    "calorie calculator for weight loss",
+    "daily calorie needs calculator by age",
+    "how many calories to lose 1kg per week",
     "calorie deficit calculator",
-    "macro split calculator",
-    "protein fat carbs calculator",
-    "calorie needs by activity",
-    "toolmint calorie calculator",
+    "tdee calculator online free",
+    "bmr calculator online",
+    "calorie intake calculator india",
+    "calories to eat per day calculator",
   ],
   alternates: { canonical: "/tools/calorie-calculator" },
   openGraph: {
-    title: "Calorie Calculator — BMR, TDEE & Macro Calculator | ToolMint",
+    title: "Calorie Calculator – Daily Needs for Weight Loss, Maintenance & Gain | ToolMint",
     description:
-      "Calculate BMR, maintenance calories, and macro targets using activity level and macro presets. Fast, private, and browser-based.",
+      "Find your TDEE and daily calorie target for weight loss, maintenance, or muscle gain based on your stats and activity level.",
     url: "/tools/calorie-calculator",
   },
+  twitter: { card: "summary_large_image" },
 };
 
-const includedTools = [
+const useCases = [
   {
-    title: "BMR Calculator",
-    desc: "Estimates your Basal Metabolic Rate using the Mifflin-St Jeor formula, with separate calculations for male and female body stats.",
+    title: "Weight loss planning",
+    desc: "Find your maintenance calories and subtract 300–500 to create a daily calorie deficit for sustainable weight loss without aggressive restriction.",
   },
   {
-    title: "TDEE Calculator",
-    desc: "Turns your BMR into daily maintenance calories by applying one of five activity multipliers from sedentary to very active.",
+    title: "Maintaining current weight",
+    desc: "Eat at your TDEE (Total Daily Energy Expenditure) to maintain your current weight while adjusting for activity level changes.",
   },
   {
-    title: "Activity Level Selector",
-    desc: "Choose from 5 activity levels with clear descriptions so your maintenance calorie estimate matches your routine more accurately.",
-  },
-  {
-    title: "Macro Presets",
-    desc: "Switch between Balanced, High Protein, and Lower Carb presets to instantly calculate protein, fat, and carbohydrate targets.",
-  },
-  {
-    title: "Daily Macro Breakdown",
-    desc: "See each macro in both calories and grams, so you can use the results directly for meal planning or cutting and bulking phases.",
+    title: "Muscle building",
+    desc: "Add 200–300 calories above maintenance for a lean bulk — enough surplus to support muscle growth without excessive fat gain.",
   },
 ];
 
 const steps = [
-  { title: "Enter body stats", desc: "Fill in your age, sex, height, and weight to provide the calculator with the data needed for BMR estimation." },
-  { title: "Choose activity level", desc: "Pick the activity level that best matches your weekly routine so the tool can estimate your TDEE or maintenance calories." },
-  { title: "Pick a macro preset", desc: "Select Balanced, High Protein, or Lower Carb to apply a macro ratio to your daily calories automatically." },
-  { title: "Read your targets", desc: "Review your BMR, TDEE, and daily protein, fat, and carbohydrate grams to plan meals or calorie targets." },
+  { title: "Enter your stats", desc: "Provide age, gender, height, and current weight." },
+  { title: "Select activity level", desc: "Choose from sedentary, lightly active, moderately active, or very active." },
+  { title: "Choose your goal", desc: "Select weight loss, maintenance, or weight gain." },
+  { title: "View calorie target", desc: "See your BMR, TDEE, and recommended daily calories for your goal." },
 ];
 
 const faqs = [
   {
-    q: "What is the difference between BMR and TDEE?",
-    a: "BMR is the number of calories your body needs at complete rest to maintain basic functions such as breathing and circulation. TDEE is your Total Daily Energy Expenditure, which adds activity on top of BMR and represents your estimated maintenance calories.",
+    q: "How many calories do I need to lose 1 kg per week?",
+    a: "1 kg of body fat contains roughly 7,700 calories. To lose 1 kg per week, you need a daily deficit of about 1,100 calories. Most nutrition guidelines recommend a more sustainable deficit of 500–750 calories per day, which yields 0.45–0.7 kg of fat loss per week.",
   },
   {
-    q: "Which formula does this calorie calculator use?",
-    a: "ToolMint's Calorie Calculator uses the Mifflin-St Jeor formula for BMR. It is widely used because it gives practical calorie estimates for most adults when combined with an activity multiplier.",
+    q: "What is BMR?",
+    a: "BMR (Basal Metabolic Rate) is the number of calories your body burns at complete rest — just to maintain basic functions like breathing, circulation, and cell repair. It is calculated from age, gender, height, and weight.",
   },
   {
-    q: "How do I calculate calories for weight loss?",
-    a: "Use the TDEE result as your maintenance baseline. For weight loss, most people subtract around 300 to 500 calories per day from maintenance. For muscle gain, they typically add calories above maintenance. This tool gives the baseline so you can adjust according to your goal.",
+    q: "What is TDEE?",
+    a: "TDEE (Total Daily Energy Expenditure) is your total calorie burn per day, including BMR plus activity. It is calculated by multiplying BMR by an activity factor. TDEE is your calorie maintenance level — eat below it to lose, above it to gain.",
   },
   {
-    q: "What macro presets are included?",
-    a: "The calculator includes 3 built-in presets: Balanced 30/30/40, High Protein 35/30/35, and Lower Carb 35/40/25. These percentages are converted into daily grams for protein, fat, and carbs automatically.",
+    q: "What calorie formula does this use?",
+    a: "The calculator uses the Mifflin-St Jeor equation, which is the most accurate formula for most adults: BMR = (10 × weight kg) + (6.25 × height cm) − (5 × age) + 5 (men) or − 161 (women).",
   },
   {
-    q: "Does the calculator validate unrealistic inputs?",
-    a: "Yes. The tool validates ranges such as age, height, and weight to keep the estimates practical. It accepts ages 5 to 120, heights 80 to 250 cm, and weights 20 to 350 kg.",
+    q: "Should I eat back exercise calories?",
+    a: "Activity level in TDEE calculation already accounts for regular exercise. If you use a sedentary or lightly active multiplier and then exercise on top, you can eat back a portion of exercise calories. Aim for 50–75% of estimated exercise burn to account for calculator imprecision.",
   },
 ];
 
@@ -95,22 +86,28 @@ export default function CalorieCalculatorPage() {
 
   return (
     <>
+      <WebAppSchema slug="calorie-calculator" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="calc-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Calculators", href: "/tools/calculators" },
+            { name: "Calorie Calculator" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Calorie Calculator — BMR, Maintenance Calories &amp; Macros
+          Calorie Calculator – Daily Calorie Needs for Weight Loss, Maintenance & Gain
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Estimate your BMR and TDEE from your age, sex, height, weight, and activity level. Then use
-          built-in macro presets to convert your daily calories into protein, fat, and carbohydrate targets
-          you can actually use for meal planning.
+          Find out how many calories you need per day based on your age, gender, height,
+          weight, and activity level. See your BMR, TDEE, and the daily calorie target for
+          weight loss, maintenance, or muscle gain.
         </p>
 
         <div className="mt-8">
@@ -119,14 +116,14 @@ export default function CalorieCalculatorPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Included Calorie Calculator Tools
+            Setting a Calorie Goal That Matches Your Target
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {includedTools.map((tool) => (
-              <div key={tool.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
-                <h3 className="font-semibold text-foreground">{tool.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{tool.desc}</p>
-              </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
             ))}
           </div>
         </section>
@@ -136,13 +133,53 @@ export default function CalorieCalculatorPage() {
             How to Use the Calorie Calculator
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, index) => (
-              <div key={step.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
-                <span className="font-display text-2xl font-bold text-[#6c63ff]">{index + 1}</span>
-                <h3 className="mt-2 font-semibold text-foreground">{step.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{step.desc}</p>
+            {steps.map((s, i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
+                <h3 className="mt-2 font-semibold text-foreground">{s.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              How Many Calories to Lose Weight Safely
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Safe, sustainable weight loss requires a calorie deficit — eating fewer
+              calories than you burn each day. A deficit of 500 calories per day produces
+              approximately 0.45 kg (1 lb) of fat loss per week, which is the standard
+              recommendation from most nutrition authorities. A deficit of 750 calories per
+              day gives roughly 0.7 kg per week. Going beyond 1,000 calories per day deficit
+              is generally not recommended without medical supervision as it increases
+              muscle loss, fatigue, and nutrient deficiencies. For most adults, the practical
+              minimum daily calorie intake is 1,200 kcal for women and 1,500 kcal for men —
+              eating below these levels makes it difficult to get adequate protein, vitamins,
+              and minerals. Find your TDEE from this calculator, subtract 500, and ensure
+              the result stays above these minimums.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Activity Level Multipliers: How to Choose Yours
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The TDEE calculation multiplies your BMR by an activity factor. Sedentary
+              (desk job, no exercise) uses 1.2×. Lightly active (1–3 days/week light
+              exercise or walking) uses 1.375×. Moderately active (3–5 days/week moderate
+              exercise) uses 1.55×. Very active (6–7 days/week hard exercise or physical
+              job) uses 1.725×. Extra active (twice-daily training or very physical work)
+              uses 1.9×. Most people in desk jobs who exercise 3–4 times per week fall into
+              the moderately active category. If you are just starting out or have a
+              sedentary job and walk occasionally, start with lightly active. The activity
+              multiplier is the main source of TDEE estimation error — if you are not losing
+              weight at the calculated deficit, try reducing by 100–150 calories rather than
+              changing the multiplier.
+            </p>
           </div>
         </section>
 
@@ -151,14 +188,16 @@ export default function CalorieCalculatorPage() {
             Frequently Asked Questions
           </h2>
           <dl className="mt-6 space-y-6">
-            {faqs.map((faq) => (
-              <div key={faq.q}>
-                <dt className="font-semibold text-foreground">{faq.q}</dt>
-                <dd className="mt-1 text-sm leading-6 text-muted">{faq.a}</dd>
+            {faqs.map((f, i) => (
+              <div key={i}>
+                <dt className="font-semibold text-foreground">{f.q}</dt>
+                <dd className="mt-1 text-sm leading-6 text-muted">{f.a}</dd>
               </div>
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="calorie-calculator" />
       </main>
     </>
   );

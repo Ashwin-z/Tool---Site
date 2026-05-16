@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import OgTagGeneratorTool from "@/components/og-tag-generator-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "OG Tag Generator — Open Graph & Twitter Card Meta Tags with Live Preview | ToolMint",
+  title: "OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview",
   description:
-    "Generate Open Graph and Twitter Card meta tags with a live social media preview. Supports 6 OG types, 4 Twitter card types, og:locale, og:site_name. Copy-ready HTML output. Free.",
+    "Generate Open Graph and Twitter Card meta tags with a live social media preview. See how your link looks on Facebook, LinkedIn, and Twitter before publishing. Free, instant.",
   keywords: [
-    "og tag generator",
-    "open graph generator",
-    "twitter card generator",
-    "open graph meta tags",
-    "og tags generator online",
-    "facebook open graph",
-    "social media meta tags",
-    "og:image generator",
-    "twitter card meta tags",
-    "open graph preview",
-    "meta tag generator seo",
-    "social preview generator",
+    "og tag generator free",
+    "open graph tag generator online",
+    "twitter card generator free",
+    "how to add open graph tags to website",
+    "facebook link preview image size",
+    "social media meta tags generator",
+    "og image size for social sharing",
+    "open graph preview tool",
   ],
   alternates: { canonical: "/tools/og-tag-generator" },
   openGraph: {
-    title: "OG Tag Generator — Open Graph & Twitter Card Tags with Live Preview | ToolMint",
+    title: "OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview | ToolMint",
     description:
       "Generate Open Graph and Twitter Card meta tags instantly. Live social preview card, 6 OG types, 4 Twitter card types. Copy-ready HTML output.",
     url: "/tools/og-tag-generator",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
@@ -79,22 +78,29 @@ export default function OgTagGeneratorPage() {
 
   return (
     <>
+      <WebAppSchema slug="og-tag-generator" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="seo-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "SEO Tools", href: "/tools/seo-tools" },
+            { name: "OG Tag Generator" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          OG Tag Generator — Open Graph &amp; Twitter Card Tags
+          OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Generate Open Graph and Twitter Card meta tags with a live social media preview — see exactly how your
-          link will appear on Facebook, LinkedIn, Slack, and Twitter before you publish. Supports 6 OG content types,
-          4 Twitter card styles, og:locale, og:site_name, and outputs copy-ready HTML in one block.
+          Generate Open Graph and Twitter Card meta tags with a live social media preview — see
+          exactly how your link will appear on Facebook, LinkedIn, Slack, and Twitter before you
+          publish. Supports 6 OG content types, 4 Twitter card styles, og:locale, og:site_name,
+          and outputs copy-ready HTML in one block.
         </p>
 
         <div className="mt-8">
@@ -103,7 +109,7 @@ export default function OgTagGeneratorPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Included OG Tag Tools
+            What This OG Tag Generator Creates
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {includedTools.map((tool) => (
@@ -130,6 +136,50 @@ export default function OgTagGeneratorPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why OG Image Is the Most Important Social Tag
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              When your link is shared on Facebook, LinkedIn, or Slack, the OG image is the single
+              largest visual element in the preview card. Links with a compelling, correctly sized
+              OG image consistently receive higher engagement than links with missing or poorly
+              sized images — because the image is what catches the eye before the title is read.
+              The recommended size is 1200×630px (1.91:1 ratio). Images smaller than 600×315px
+              may be shown as a small thumbnail beside the text rather than a large card.
+              Square images work better for Twitter&apos;s summary card format. If your CMS generates
+              OG images automatically (like WordPress with Yoast or Next.js with next/og), verify
+              that the generated image URL is actually accessible and that the image dimensions are
+              correct — a common issue is the og:image URL pointing to a path that returns a 404
+              or a redirect. You can test your OG tags using Facebook&apos;s Sharing Debugger or
+              LinkedIn&apos;s Post Inspector after publishing.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Where to Place Meta Tags in Your Page (and Common Mistakes)
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              All meta tags — including OG tags and Twitter Card tags — must be placed inside the
+              <code className="rounded bg-white/10 px-1 text-xs">&lt;head&gt;</code> element of your HTML page, before the
+              closing <code className="rounded bg-white/10 px-1 text-xs">&lt;/head&gt;</code> tag. In Next.js, use the
+              built-in <code className="rounded bg-white/10 px-1 text-xs">Metadata</code> API (or the legacy
+              <code className="rounded bg-white/10 px-1 text-xs">Head</code> component) to inject tags server-side so
+              crawlers and social scrapers see them. In WordPress, use a plugin like Yoast SEO or
+              Rank Math that outputs OG tags automatically per post. The most common mistakes:
+              placing OG tags in the <code className="rounded bg-white/10 px-1 text-xs">&lt;body&gt;</code> (not read by social
+              crawlers), using a relative URL for og:image instead of a full absolute URL with
+              https://, forgetting twitter:card (without it Twitter ignores all other twitter:*
+              tags), and setting og:type incorrectly — most pages should be &quot;website&quot; unless
+              they are articles, products, or profiles. Copy the complete output from this
+              generator and paste it directly inside your page&apos;s
+              <code className="rounded bg-white/10 px-1 text-xs">&lt;head&gt;</code> — no manual rewriting needed.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -143,6 +193,8 @@ export default function OgTagGeneratorPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="og-tag-generator" />
       </main>
     </>
   );

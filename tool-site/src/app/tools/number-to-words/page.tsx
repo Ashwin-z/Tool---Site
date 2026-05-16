@@ -1,29 +1,49 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import NumberToWordsTool from "@/components/number-to-words-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Number to Words Converter Online Free — Spell Out Any Number",
+  title: "Number to Words Converter – Spell Out Any Number in English Free",
   description:
-    "Convert numbers to words online for free with ToolMint. Spell out any number in English using Western or Indian numbering, ordinal form, or currency formats (USD, EUR, GBP, INR, JPY).",
+    "Convert any number to English words online for free. Western and Indian numbering, ordinal form, and currency formats (USD, EUR, GBP, INR, JPY). Instant, no signup required.",
   keywords: [
-    "number to words",
-    "number to words converter",
-    "spell out number",
-    "number spelling online",
-    "convert number to text",
-    "number to english words",
+    "number to words converter online free",
+    "spell out number in words",
+    "convert number to english words",
+    "number to words for cheque",
+    "write number in words online",
+    "number spelling tool",
     "number to currency words",
-    "number to ordinal",
+    "convert numbers to ordinal",
+    "indian numbering lakh crore",
+    "number to words for legal documents",
   ],
   alternates: { canonical: "/tools/number-to-words" },
   openGraph: {
-    title: "Number to Words Converter Online Free | ToolMint",
+    title: "Number to Words Converter – Spell Out Any Number in English | ToolMint",
     description:
-      "Spell out any number in English. Western and Indian numbering, ordinal, and currency formats supported.",
+      "Convert numbers to English words. Western and Indian numbering, ordinal, and currency formats. Free, instant, browser-based.",
     url: "/tools/number-to-words",
   },
+  twitter: { card: "summary_large_image" },
 };
+
+const useCases = [
+  {
+    title: "Cheques and legal documents",
+    desc: "Many financial and legal documents require numbers written out in words to prevent fraud. Convert the amount once and paste it directly.",
+  },
+  {
+    title: "Academic and formal writing",
+    desc: "Style guides like APA, Chicago, and MLA require numbers below ten to be spelled out in prose. Convert quickly without looking up the rule each time.",
+  },
+  {
+    title: "Indian numbering (lakh/crore)",
+    desc: "Switch to Indian numbering format to express amounts in lakhs and crores — the standard for business communication in India and South Asia.",
+  },
+];
 
 const steps = [
   { title: "Enter a number", desc: "Type any number — integers, decimals, or negatives." },
@@ -39,7 +59,7 @@ const faqs = [
   },
   {
     q: "Can I convert to ordinal form?",
-    a: "Yes. Switch to ordinal mode to get outputs like \u201cfirst,\u201d \u201csecond,\u201d \u201ctwenty-third,\u201d and so on.",
+    a: "Yes. Switch to ordinal mode to get outputs like 'first,' 'second,' 'twenty-third,' and so on.",
   },
   {
     q: "Which currencies are available?",
@@ -68,27 +88,47 @@ export default function NumberToWordsPage() {
 
   return (
     <>
+      <WebAppSchema slug="number-to-words" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="text-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Text Tools", href: "/tools/text-tools" },
+            { name: "Number to Words" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Number to Words Converter — Free Online
+          Number to Words Converter – Spell Out Any Number in English
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert any number to its English word form with ToolMint. Supports Western and
           Indian numbering systems, ordinal numbers, and currency formatting for USD, EUR,
-          GBP, INR, and JPY.
+          GBP, INR, and JPY. Instant results, nothing uploaded, completely free.
         </p>
 
         <div className="mt-8">
           <NumberToWordsTool />
         </div>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            When to Spell Out Numbers in Words
+          </h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
@@ -105,6 +145,44 @@ export default function NumberToWordsPage() {
           </div>
         </section>
 
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Western vs. Indian Numbering: What Is the Difference?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The Western numbering system groups digits by thousands: one thousand, one million,
+              one billion, one trillion. Each new named unit is one thousand times the previous.
+              This system is standard in the United States, Europe, and most international finance.
+              The Indian numbering system uses different grouping conventions after the first
+              thousand: 100,000 is called one lakh, and 10,000,000 is called one crore. Higher
+              values follow the same pattern — ten crore, one hundred crore, and so on. The
+              system is used in India, Pakistan, Bangladesh, Nepal, and Sri Lanka for business
+              communication, financial reporting, and everyday amounts. This tool supports both
+              systems natively — switch the format selector to convert the same number under
+              either convention without manual calculation.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Writing Numbers on Cheques and in Legal Documents
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Financial and legal documents require amounts to be written in both numeric and word
+              form for fraud prevention. If the numeric amount is altered after signing, the written
+              words serve as the authoritative version. On a bank cheque, the written form must be
+              precise — including dollars and cents, pounds and pence, or rupees and paise depending
+              on the currency. Legal contracts, deeds, and agreements often follow the same pattern.
+              The currency modes here output the full formal phrase — for example, USD mode converts
+              1,250.75 to &ldquo;one thousand two hundred fifty dollars and seventy-five cents&rdquo; — ready to
+              paste directly into the document. For INR, the tool uses the Indian numbering convention
+              (lakh, crore) with rupees and paise. Select the appropriate currency in the format
+              dropdown before copying the result.
+            </p>
+          </div>
+        </section>
+
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Frequently Asked Questions
@@ -118,6 +196,8 @@ export default function NumberToWordsPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="number-to-words" />
       </main>
     </>
   );

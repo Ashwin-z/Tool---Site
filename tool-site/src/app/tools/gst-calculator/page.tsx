@@ -1,64 +1,75 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import GSTCalculatorTool from "@/components/gst-calculator-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "GST / Sales Tax Calculator Online Free - Add Tax, Remove Tax & Reverse Rate",
+  title: "GST Calculator – Add or Remove GST from Any Price Instantly",
   description:
-    "Use ToolMint's free GST and sales tax calculator to add tax, remove tax, reverse-calculate tax rates, and total multi-item invoices with different tax percentages.",
+    "Calculate GST online for India. Add GST to a price, remove GST from an inclusive amount, reverse-calculate tax rates, and total invoices with multiple tax slabs. Free, instant.",
   keywords: [
-    "gst calculator",
-    "sales tax calculator",
-    "gst calculator online free",
-    "vat calculator",
-    "add tax calculator",
-    "remove tax calculator",
-    "reverse tax rate calculator",
-    "free tax calculator",
+    "gst calculator india",
+    "add gst to price calculator",
+    "remove gst from amount calculator",
+    "gst inclusive exclusive calculator",
+    "18 percent gst calculator",
+    "gst calculator online free india",
+    "reverse gst calculator",
+    "gst on invoice calculator",
   ],
   alternates: { canonical: "/tools/gst-calculator" },
   openGraph: {
-    title: "GST / Sales Tax Calculator Online Free | ToolMint",
+    title: "GST Calculator – Add or Remove GST, Reverse Rate & Invoice Totals | ToolMint",
     description:
-      "Add or remove GST, VAT, or sales tax instantly, reverse-calculate tax rates, and total multi-item invoices.",
+      "Add GST to a base price, remove GST from an inclusive amount, or reverse-calculate the tax rate. Free India GST calculator.",
     url: "/tools/gst-calculator",
   },
+  twitter: { card: "summary_large_image" },
 };
 
-const includedTools = [
-  { title: "Add Tax", desc: "Add GST, VAT, or sales tax to a base price and get the final amount." },
-  { title: "Remove Tax", desc: "Extract pre-tax value and tax amount from a tax-inclusive price." },
-  { title: "Multi-item Invoice", desc: "Calculate totals across multiple items with different tax rates." },
-  { title: "Reverse Tax Rate Finder", desc: "Work backward from inclusive and exclusive prices to identify the applied tax rate." },
+const useCases = [
+  {
+    title: "Adding GST to a base price",
+    desc: "Find the final GST-inclusive price for any product or service by entering the base amount and selecting the applicable GST slab (5%, 12%, 18%, or 28%).",
+  },
+  {
+    title: "Removing GST from a price",
+    desc: "Extract the pre-tax base price and exact GST amount from a GST-inclusive total — useful for expense reports and reverse-calculating supplier prices.",
+  },
+  {
+    title: "Invoice totalling",
+    desc: "Calculate the total amount with GST for multiple line items at different tax rates, useful for preparing invoices and purchase orders.",
+  },
 ];
 
 const steps = [
-  { title: "Choose tax mode", desc: "Select whether you want to add tax, remove tax, or reverse-calculate the applied rate." },
-  { title: "Enter amount and rate", desc: "Provide the price and GST, VAT, or sales tax percentage." },
-  { title: "Calculate totals", desc: "The tool instantly shows pre-tax amount, tax value, and final total." },
-  { title: "Use invoice results", desc: "Apply the totals to invoices, pricing, receipts, or tax-inclusive product calculations." },
+  { title: "Enter the amount", desc: "Provide the base price or GST-inclusive amount depending on your direction." },
+  { title: "Select the mode", desc: "Choose 'Add GST' to calculate GST-inclusive price, or 'Remove GST' to extract base price." },
+  { title: "Pick the GST rate", desc: "Select 5%, 12%, 18%, 28%, or enter a custom rate." },
+  { title: "Get result", desc: "See the base amount, GST component, and total amount broken down clearly." },
 ];
 
 const faqs = [
   {
-    q: "Can I add and remove GST or sales tax?",
-    a: "Yes. The calculator supports both adding tax to a base price and extracting tax from a tax-inclusive amount.",
+    q: "What are the GST slabs in India?",
+    a: "India's GST has five main rate slabs: 0% (essential goods like unprocessed food), 5% (daily necessities), 12% (processed food, medicines), 18% (most services and manufactured goods), and 28% (luxury goods, automobiles, tobacco).",
   },
   {
-    q: "Does it work for VAT too?",
-    a: "Yes. It works for GST, VAT, sales tax, and most percentage-based indirect tax systems.",
+    q: "How do I remove GST from a GST-inclusive price?",
+    a: "Divide the inclusive price by (1 + GST rate). For example, to remove 18% GST from ₹1,180: ₹1,180 ÷ 1.18 = ₹1,000 base price, with ₹180 as the GST component.",
   },
   {
-    q: "Does this page include reverse tax calculation?",
-    a: "Yes. Reverse tax calculation helps you determine the original pre-tax price or tax rate when you already know the final price.",
+    q: "What is CGST and SGST?",
+    a: "For transactions within a state, GST is split equally between Central GST (CGST) and State GST (SGST). For example, 18% GST becomes 9% CGST + 9% SGST. For inter-state transactions, the full rate applies as IGST.",
   },
   {
-    q: "Can I calculate invoices with different tax rates?",
-    a: "Yes. The multi-item invoice mode helps you total multiple items that each use different tax percentages.",
+    q: "Can I use this for VAT or sales tax?",
+    a: "Yes. The 'custom rate' option lets you enter any tax percentage, making this calculator usable for VAT (UK/EU), HST/GST (Canada), or US sales tax.",
   },
   {
-    q: "Is this GST calculator free?",
-    a: "Yes. It is free to use online with no signup required.",
+    q: "Does this calculator include CESS?",
+    a: "The base calculation covers standard GST rates. Cess applies on top of the 28% slab for specific goods — add the cess percentage separately if applicable to your product.",
   },
 ];
 
@@ -66,30 +77,37 @@ export default function GSTCalculatorPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
+    mainEntity: faqs.map((f) => ({
       "@type": "Question",
-      name: faq.q,
-      acceptedAnswer: { "@type": "Answer", text: faq.a },
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
 
   return (
     <>
+      <WebAppSchema slug="gst-calculator" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="calc-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Calculators", href: "/tools/calculators" },
+            { name: "GST Calculator" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          GST / Sales Tax Calculator Online for Free
+          GST Calculator – Add or Remove GST from Any Price Instantly
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Calculate GST, VAT, and sales tax instantly with ToolMint. Add tax to a base price, remove tax from an
-          inclusive amount, reverse-calculate rates, and handle multi-item tax-based pricing more accurately for invoices and sales.
+          Calculate GST for India instantly. Add GST to a base price to get the inclusive total,
+          remove GST from an inclusive amount to find the base price, or reverse-calculate the
+          tax rate. Covers all GST slabs — 5%, 12%, 18%, 28%, and custom rates.
         </p>
 
         <div className="mt-8">
@@ -98,30 +116,68 @@ export default function GSTCalculatorPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Included Tax Calculators
+            Common GST Calculation Tasks
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {includedTools.map((tool) => (
-              <div key={tool.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
-                <h3 className="font-semibold text-foreground">{tool.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{tool.desc}</p>
-              </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {useCases.map((item) => (
+              <article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p>
+              </article>
             ))}
           </div>
         </section>
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Calculate GST or Sales Tax Online
+            How to Calculate GST Online
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, index) => (
-              <div key={index} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
-                <span className="font-display text-2xl font-bold text-[#6c63ff]">{index + 1}</span>
-                <h3 className="mt-2 font-semibold text-foreground">{step.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{step.desc}</p>
+            {steps.map((s, i) => (
+              <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
+                <h3 className="mt-2 font-semibold text-foreground">{s.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              GST-Exclusive vs. GST-Inclusive Pricing Explained
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              GST-exclusive pricing (also called base price or net price) is the amount before
+              tax is added. This is the number used on B2B invoices between registered
+              businesses because both parties can claim input tax credits. To get the
+              GST-inclusive price, add the applicable GST percentage: a ₹10,000 base at
+              18% GST gives ₹11,800 inclusive. GST-inclusive pricing is what consumers pay
+              at retail — the final MRP printed on products already includes GST. To work
+              backwards from an inclusive price, divide by (1 + rate): ₹11,800 ÷ 1.18 =
+              ₹10,000 base. The &ldquo;Remove GST&rdquo; mode here does exactly this calculation, showing
+              you both the base price and the GST component separately.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Which GST Rate Applies to Your Product or Service?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              India&apos;s GST rate structure has five slabs. The 0% slab covers essential
+              unprocessed food items like fresh vegetables, milk, eggs, and grains. The 5%
+              slab includes items of daily necessity such as sugar, tea, coffee, edible oils,
+              and medicines. The 12% slab applies to processed foods, packaged food products,
+              and certain medicines and medical devices. The 18% slab is the most common
+              for services and manufactured goods — restaurant bills, hotel stays, most
+              professional services, software, electronics, and consumer appliances fall here.
+              The 28% slab covers luxury goods, automobiles, and products with a social cost
+              such as tobacco and aerated drinks — and many of these attract an additional
+              cess. When unsure, check the GST Council&apos;s official rate schedule or consult
+              your CA, as misclassification leads to incorrect invoicing and compliance issues.
+            </p>
           </div>
         </section>
 
@@ -130,14 +186,16 @@ export default function GSTCalculatorPage() {
             Frequently Asked Questions
           </h2>
           <dl className="mt-6 space-y-6">
-            {faqs.map((faq, index) => (
-              <div key={index}>
-                <dt className="font-semibold text-foreground">{faq.q}</dt>
-                <dd className="mt-1 text-sm leading-6 text-muted">{faq.a}</dd>
+            {faqs.map((f, i) => (
+              <div key={i}>
+                <dt className="font-semibold text-foreground">{f.q}</dt>
+                <dd className="mt-1 text-sm leading-6 text-muted">{f.a}</dd>
               </div>
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="gst-calculator" />
       </main>
     </>
   );

@@ -1,51 +1,44 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import RelatedTools from "@/components/related-tools";
 import RandomNamePickerTool from "@/components/random-name-picker-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Random Name Picker — Raffle Winner Picker & Random Selector | ToolMint",
+  title: "Random Name Picker – Pick Winner from List Free Online",
   description:
-    "Pick one or more random names from a list for raffles, giveaways, classrooms, and team selection. ToolMint's Random Name Picker supports duplicate mode, history, and animated winner selection.",
+    "Randomly pick one or more names from a list for raffles, giveaways, classrooms, and team selection. Free, fair, animated draw with pick history. No signup.",
   keywords: [
-    "random name picker",
-    "raffle winner picker",
-    "random winner generator",
-    "name picker online",
-    "random selector",
-    "giveaway winner picker",
-    "classroom name picker",
-    "team picker",
-    "random draw tool",
-    "random list picker",
-    "fisher yates name picker",
-    "toolmint random name picker",
+    "random name picker online free",
+    "pick random winner from list",
+    "raffle winner picker free",
+    "random name selector online",
+    "giveaway winner picker free",
+    "classroom name picker online",
+    "random draw tool free",
+    "name picker wheel free online",
   ],
   alternates: { canonical: "/tools/random-name-picker" },
   openGraph: {
-    title: "Random Name Picker — Raffle Winner Picker & Random Selector | ToolMint",
+    title: "Random Name Picker – Pick Winner from List Free Online | ToolMint",
     description:
       "Enter a list of names, choose how many winners to pick, allow duplicates if needed, and track recent picks in your browser.",
     url: "/tools/random-name-picker",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 const includedTools = [
-  {
-    title: "Name List Input",
-    desc: "Paste or type one name per line into the textarea and the tool automatically counts how many valid names are loaded.",
-  },
-  {
-    title: "Pick Count Selector",
-    desc: "Choose exactly how many names to draw so you can use the same tool for a single winner, multiple winners, or group assignments.",
-  },
-  {
-    title: "Duplicate Mode",
-    desc: "Allow duplicates when you want names to be eligible for reselection, or turn duplicates off for fair one-time winner draws.",
-  },
-  {
-    title: "Animated Results & History",
-    desc: "Watch a short spinning animation during each draw, then review the selected names and the recent pick history for up to 20 rounds.",
-  },
+  { title: "Name List Input", desc: "Paste or type one name per line into the textarea and the tool automatically counts how many valid names are loaded." },
+  { title: "Pick Count Selector", desc: "Choose exactly how many names to draw so you can use the same tool for a single winner, multiple winners, or group assignments." },
+  { title: "Duplicate Mode", desc: "Allow duplicates when you want names to be eligible for reselection, or turn duplicates off for fair one-time winner draws." },
+  { title: "Animated Results & History", desc: "Watch a short spinning animation during each draw, then review the selected names and the recent pick history for up to 20 rounds." },
+];
+
+const useCases = [
+  { title: "Giveaways & Contests", desc: "Pick a fair winner from a list of entrants. Turn duplicates off for a one-per-person raffle, or on if some participants entered multiple times." },
+  { title: "Classrooms & Teams", desc: "Teachers can randomly call on students to answer questions, or fairly assign students to project groups without perceived favoritism." },
+  { title: "Decision Making", desc: "Can't decide who goes first, who pays, or which task to tackle next? Paste your options and let the randomizer decide without debate." },
 ];
 
 const steps = [
@@ -91,22 +84,27 @@ export default function RandomNamePickerPage() {
 
   return (
     <>
+      <WebAppSchema slug="random-name-picker" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <main className="calc-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
+        <ToolBreadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Tools", href: "/tools" },
+            { name: "Random Name Picker" },
+          ]}
+        />
 
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Random Name Picker — Pick Winners, Teams &amp; Classroom Names
+          Random Name Picker – Pick Winners, Teams &amp; Classroom Names
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Enter a list of names and randomly pick one or more winners instantly. ToolMint's picker is
-          built for raffles, giveaways, classroom picks, and team selection, with duplicate mode,
-          animated draws, and recent pick history built in.
+          Enter a list of names and randomly pick one or more winners instantly. Built for raffles,
+          giveaways, classroom picks, and team selection, with duplicate mode, animated draws, and recent
+          pick history. No signup required.
         </p>
 
         <div className="mt-8">
@@ -129,6 +127,20 @@ export default function RandomNamePickerPage() {
 
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            Who Uses a Random Name Picker
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            {useCases.map((u) => (
+              <div key={u.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
+                <h3 className="font-semibold text-foreground">{u.title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted">{u.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             How to Use the Random Name Picker
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -139,6 +151,47 @@ export default function RandomNamePickerPage() {
                 <p className="mt-1 text-sm leading-6 text-muted">{step.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        <section className="mt-16 space-y-10">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Fairness Matters in Random Draws – and How to Achieve It
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              A common mistake with manual random selection is using methods that appear random but have
+              hidden biases. Drawing from a hat seems fair but the order in which names were placed affects
+              the odds if the hat isn&apos;t shaken properly — names put in first tend to clump at the bottom and
+              get drawn less often. Spreadsheet RAND() functions can produce repeated picks if the formula
+              recalculates, and basic random number generators like JavaScript&apos;s Math.random() — while
+              statistically decent for most purposes — are not cryptographically random and could in theory
+              be predicted. This picker uses Fisher-Yates shuffling (a mathematically proven unbiased
+              algorithm) on the full name list before selecting the required number of winners. Each shuffle
+              decision uses the browser&apos;s available randomness rather than a predictable formula, ensuring
+              that every possible ordering of names is equally likely. The result is a draw that meets the
+              standard of statistical fairness that would hold up to scrutiny in a public contest or official
+              school selection.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Duplicates On vs Off – When to Use Each Mode
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              The duplicate mode setting changes the fundamental behavior of the picker. With duplicates
+              off (the default), each name can only be selected once per draw — useful for raffles where
+              each entry gets exactly one shot, classroom random calling where you want to make sure everyone
+              gets a turn before anyone is called twice, or team selection where each person goes to exactly
+              one team. With duplicates on, the picker treats each draw as independent — the same name can
+              be selected multiple times in the same draw. This is useful when you are picking from a
+              weighted list (someone entered a contest 5 times and appears 5 times in the list), running
+              probability simulations, or playing a quick decision game where the same option can legitimately
+              come up more than once. The pick history tracks every round separately so even with duplicates
+              off you can run multiple rounds of a contest — the history shows what was picked in each prior
+              round so you can track who has already been selected across sessions.
+            </p>
           </div>
         </section>
 
@@ -155,6 +208,8 @@ export default function RandomNamePickerPage() {
             ))}
           </dl>
         </section>
+
+        <RelatedTools slug="random-name-picker" />
       </main>
     </>
   );

@@ -1,58 +1,42 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+﻿import type { Metadata } from "next";
+import RelatedTools from "@/components/related-tools";
 import ImageConverterTool from "@/components/image-converter-tool";
+import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
+import WebAppSchema from "@/components/web-app-schema";
 
 export const metadata: Metadata = {
-  title: "Image Format Converter Online Free — JPG, PNG, WebP & More",
+  title: "Convert Images Between JPG, PNG, WebP & More – Free Online",
   description:
-    "Convert images between JPG, PNG, WebP, BMP, GIF, AVIF, TIFF, and SVG online for free with ToolMint. Adjustable quality, background-color control, and bulk conversion with ZIP export.",
+    "Convert images between JPG, PNG, WebP, GIF, BMP, and TIFF formats online for free. Batch convert multiple files at once. Browser-based, no signup.",
   keywords: [
-    "image converter online",
-    "convert image format",
-    "image format converter",
-    "convert png to webp",
-    "jpg to webp online",
-    "bulk image converter",
-    "free image converter",
-    "webp to jpg converter",
+    "image format converter online",
+    "convert image format free",
+    "jpg to webp converter",
+    "png to webp online",
+    "convert image to jpg",
+    "image converter free",
+    "batch image converter",
   ],
   alternates: { canonical: "/tools/image-converter" },
   openGraph: {
-    title: "Image Format Converter Online Free | ToolMint",
-    description:
-      "Convert between JPG, PNG, WebP, BMP, GIF, AVIF, TIFF, and SVG. Quality control and bulk conversion with ZIP export — free, browser-based.",
+    title: "Image Format Converter – JPG, PNG, WebP, GIF Free | ToolMint",
+    description: "Convert between JPG, PNG, WebP, GIF, BMP, and TIFF online free. Batch support, no signup.",
     url: "/tools/image-converter",
   },
+  twitter: { card: "summary_large_image" },
 };
 
-const steps = [
-  { title: "Upload images", desc: "Select or drag & drop one or more images in any supported format." },
-  { title: "Choose output format", desc: "Pick the target format: JPG, PNG, WebP, or another supported type." },
-  { title: "Adjust settings", desc: "Set quality, background color for transparent images, and review file previews." },
-  { title: "Download", desc: "Save converted files individually or download all as a ZIP archive." },
+const formats = [
+  { title: "JPG / JPEG", desc: "Best for photographs and complex images. Lossy compression produces small files. No transparency support." },
+  { title: "PNG", desc: "Lossless format supporting transparency. Best for logos, screenshots, and graphics with sharp edges or text." },
+  { title: "WebP", desc: "Modern format developed by Google. Produces files 25-35% smaller than JPG at equal quality. Supported by all major browsers." },
 ];
 
 const faqs = [
-  {
-    q: "Which image formats are supported?",
-    a: "ToolMint supports JPG, PNG, WebP, BMP, GIF, AVIF, TIFF, and SVG as both input and output formats.",
-  },
-  {
-    q: "Can I convert multiple images at once?",
-    a: "Yes. Upload a batch of images and convert them all to the same format. Download individually or as a single ZIP file.",
-  },
-  {
-    q: "What happens to transparent areas when converting to JPG?",
-    a: "JPG does not support transparency. You can choose a background color (default: white) that will fill the transparent areas.",
-  },
-  {
-    q: "Is WebP output supported?",
-    a: "Yes. You can convert any supported image to WebP for smaller file sizes ideal for web use.",
-  },
-  {
-    q: "Are my images private?",
-    a: "Yes. All conversion runs in your browser using Canvas APIs. No images are uploaded to any server.",
-  },
+  { q: "Which image format is best for websites?", a: "WebP is the best choice for modern websites — it is smaller than JPG and PNG at similar quality. For maximum compatibility, JPG works for photos and PNG for graphics with transparency." },
+  { q: "Can I convert multiple images at once?", a: "Yes. Upload a batch of images and convert all of them to the same output format in one operation." },
+  { q: "Will converting between formats change the image dimensions?", a: "No. Format conversion changes how the image data is encoded, not the pixel dimensions. The width and height stay the same." },
+  { q: "Is converting from JPG to PNG lossless?", a: "The PNG output is lossless, but converting from JPG does not restore quality lost in the original JPG compression. Start with the highest-quality source available." },
 ];
 
 export default function ImageConverterPage() {
@@ -68,56 +52,60 @@ export default function ImageConverterPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <WebAppSchema slug="image-converter" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <main className="image-tool-page mx-auto min-h-screen w-full max-w-5xl px-6 py-12">
-        <Link href="/" className="mb-5 inline-block text-sm text-muted transition hover:text-foreground">
-          ← Back to home
-        </Link>
-
+        <ToolBreadcrumbs items={[{ name: "Home", href: "/" },{ name: "Tools", href: "/tools" },{ name: "Image Tools", href: "/tools/image-tools" },{ name: "Image Converter" }]} />
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
-          Image Format Converter — Free Online
+          Convert Images Between JPG, PNG, WebP and More
         </h1>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Convert any image between JPG, PNG, WebP, BMP, GIF, AVIF, TIFF, and SVG with ToolMint.
-          Control output quality, pick a background color for transparent images, and convert
-          in bulk — all 100% in your browser with no file uploads.
+          Convert images between all major formats — JPG, PNG, WebP, GIF, BMP, and TIFF. Batch
+          convert multiple files at once. All processing runs in your browser.
         </p>
-
-        <div className="mt-8">
-          <ImageConverterTool />
-        </div>
-
+        <div className="mt-8"><ImageConverterTool /></div>
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            How to Convert Image Formats
+            Image Format Guide
           </h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((s, i) => (
-              <div key={i} className="rounded-xl border border-white/10 bg-white/[.02] p-5">
-                <span className="font-display text-2xl font-bold text-[#6c63ff]">{i + 1}</span>
-                <h3 className="mt-2 font-semibold text-foreground">{s.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{s.desc}</p>
-              </div>
-            ))}
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {formats.map((item) => (<article key={item.title} className="rounded-xl border border-white/10 bg-white/[.02] p-5"><h3 className="font-semibold text-foreground">{item.title}</h3><p className="mt-1 text-sm leading-6 text-muted">{item.desc}</p></article>))}
           </div>
         </section>
-
+        <section className="mt-16 space-y-8">
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Why Convert to WebP for Web Use?
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              WebP was designed specifically for web delivery. At the same visual quality,
+              WebP files are typically 25-35% smaller than JPG and 50-60% smaller than PNG.
+              All modern browsers — Chrome, Firefox, Safari 14+, and Edge — support WebP natively.
+              Converting your site images to WebP is one of the most effective single steps for
+              improving page load speed and passing Core Web Vitals audits.
+            </p>
+          </div>
+          <div>
+            <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              Choosing the Right Output Format
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-muted">
+              Use JPG for photographs where file size matters and transparency is not needed. Use
+              PNG for logos, icons, screenshots, and images with transparent backgrounds. Use WebP
+              when building or updating a website and browser compatibility with modern browsers is
+              all you need. Use GIF only for animated images — for static graphics, PNG or WebP
+              is always better. BMP and TIFF are primarily used for archiving or printing workflows
+              where lossless, uncompressed quality is required.
+            </p>
+          </div>
+        </section>
         <section className="mt-16">
-          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Frequently Asked Questions
-          </h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">Frequently Asked Questions</h2>
           <dl className="mt-6 space-y-6">
-            {faqs.map((f, i) => (
-              <div key={i}>
-                <dt className="font-semibold text-foreground">{f.q}</dt>
-                <dd className="mt-1 text-sm leading-6 text-muted">{f.a}</dd>
-              </div>
-            ))}
+            {faqs.map((f, i) => (<div key={i}><dt className="font-semibold text-foreground">{f.q}</dt><dd className="mt-1 text-sm leading-6 text-muted">{f.a}</dd></div>))}
           </dl>
         </section>
+        <RelatedTools slug="image-converter" />
       </main>
     </>
   );
