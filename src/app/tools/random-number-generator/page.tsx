@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import RandomNumberGeneratorTool from "@/components/random-number-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Random Number Generator – Dice Roller, Coin Flip & List Picker Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/random-number-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Random Number Generator – Dice Roller, Coin Flip & List Picker | ToolMint",
     description:
       "5 random generation modes: integers, decimals, dice roller with SVG faces, animated coin flip, and pick from list with Fisher-Yates shuffle.",
@@ -103,6 +106,9 @@ export default function RandomNumberGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Random Number Generator – 5 Modes incl. Dice &amp; Coin Flip
         </h1>
+
+        <ProcessingBadge slug="random-number-generator" />
+        <ToolAnalytics slug="random-number-generator" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate cryptographically secure random results in 5 modes — integers, decimals, dice roller
           with animated SVG faces, coin flip simulator, and pick-from-list with Fisher-Yates shuffle.

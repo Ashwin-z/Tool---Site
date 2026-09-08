@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import UrlEncoderDecoderTool from "@/components/url-encoder-decoder-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "URL Encoder / Decoder – Encode, Decode & Parse URLs Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/url-encoder-decoder" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "URL Encoder / Decoder – Encode, Decode & Parse URLs | ToolMint",
     description:
       "Encode URLs with 4 percent-encoding methods, decode with 3 methods, and parse any URL into its components. 100% browser-side.",
@@ -95,6 +98,9 @@ export default function UrlEncoderDecoderPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           URL Encoder / Decoder – Encode, Decode & Parse URLs
         </h1>
+
+        <ProcessingBadge slug="url-encoder-decoder" />
+        <ToolAnalytics slug="url-encoder-decoder" category="developer" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Encode URLs using 4 percent-encoding methods or decode them with 3 methods — including
           form-urlencoded and encodeURIComponent. Paste any full URL to instantly break it down

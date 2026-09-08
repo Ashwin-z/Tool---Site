@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageToPdfTool from "@/components/image-to-pdf-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Image to PDF Converter â€“ JPG, PNG to PDF Free",
+  title: "Image to PDF Converter – JPG, PNG to PDF Free",
   description:
     "Convert JPG, PNG, or any image to PDF online for free. Combine multiple images into one PDF. No signup, instant result.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-to-pdf" },
   openGraph: {
-    title: "Image to PDF Converter â€“ JPG, PNG to PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Image to PDF Converter – JPG, PNG to PDF Free | ToolMint",
     description:
       "Convert JPG, PNG, or any image to PDF online for free. Combine multiple images into one PDF. No signup, instant result.",
     url: "/tools/image-to-pdf",
-    images: [{ url: "/og/image-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -105,9 +107,12 @@ export default function ImageToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert Images to PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="image-to-pdf" />
+        <ToolAnalytics slug="image-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn JPG, PNG, WebP, or any image file into a PDF document with ToolMint. Upload multiple
-          images, reorder them, choose a page size, and download a clean PDF â€” all in your browser
+          images, reorder them, choose a page size, and download a clean PDF — all in your browser
           with no account required.
         </p>
 
@@ -152,7 +157,7 @@ export default function ImageToPdfPage() {
             <p className="mt-4 text-sm leading-7 text-muted">
               PDF is the most universally accepted document format for official submissions,
               professional sharing, and long-term storage. Many government portals, job applications,
-              and academic systems only accept PDFs â€” not image files. Converting images to PDF also
+              and academic systems only accept PDFs — not image files. Converting images to PDF also
               makes multi-page documents easier to share as a single file rather than a folder of
               separate images. PDFs are easier to print predictably, they preserve aspect ratios on
               any device, and they reduce the risk of images being accidentally edited. If you have

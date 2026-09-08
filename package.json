@@ -7,7 +7,9 @@
     "build": "node --max-old-space-size=8192 ./node_modules/next/dist/bin/next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "setup:pdf-compressor": "powershell -ExecutionPolicy Bypass -File scripts/setup-pdf-compression.ps1"
+    "setup:pdf-compressor": "powershell -ExecutionPolicy Bypass -File scripts/setup-pdf-compression.ps1",
+    "audit:metadata": "node scripts/audit-metadata.mjs",
+    "verify": "npm run build && node scripts/audit-metadata.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.97",

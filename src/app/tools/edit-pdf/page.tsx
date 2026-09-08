@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import EditPdfTool from "@/components/edit-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Edit PDF Online Free â€“ Add Text, Images & More",
+  title: "Edit PDF Online Free – Add Text, Images & More",
   description:
     "Edit PDF files online for free. Add text, images, shapes, and annotations without any software. No signup required.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/edit-pdf" },
   openGraph: {
-    title: "Edit PDF Online Free â€“ Add Text, Images & More | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Edit PDF Online Free – Add Text, Images & More | ToolMint",
     description:
       "Edit PDF files online for free. Add text, images, shapes, and annotations without any software. No signup required.",
     url: "/tools/edit-pdf",
-    images: [{ url: "/og/edit-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -105,9 +107,12 @@ export default function EditPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Edit PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="edit-pdf" />
+        <ToolAnalytics slug="edit-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Add text, images, shapes, and annotations to any PDF document with ToolMint. No software
-          installation needed â€” edit directly in your browser and download the result instantly.
+          installation needed — edit directly in your browser and download the result instantly.
         </p>
 
         <div className="mt-8">
@@ -153,7 +158,7 @@ export default function EditPdfPage() {
               than modifying the original content streams. This means you can add text boxes,
               images, shapes, lines, highlights, and sticky note annotations anywhere on the page.
               You can move, resize, and delete these added elements before saving. What you cannot
-              easily do is modify the original embedded text â€” changing a word in a paragraph
+              easily do is modify the original embedded text — changing a word in a paragraph
               requires replacing that text with a new text box placed precisely over the original,
               which works but requires careful positioning. For filling in blank areas and adding
               new information, online editors work very well.

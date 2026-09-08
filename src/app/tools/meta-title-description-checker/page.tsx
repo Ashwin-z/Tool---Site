@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import MetaTitleDescriptionCheckerTool from "@/components/meta-title-description-checker-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Meta Title & Description Checker – SERP Snippet Preview & Length Check",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/meta-title-description-checker" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Meta Title & Description Checker – SERP Preview & Character Count | ToolMint",
     description:
       "Check title and description length, pixel width, and keyword presence. See a live Google SERP snippet preview instantly.",
@@ -96,6 +99,9 @@ export default function MetaTitleDescriptionCheckerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Meta Title & Description Checker – SERP Snippet Preview
         </h1>
+
+        <ProcessingBadge slug="meta-title-description-checker" />
+        <ToolAnalytics slug="meta-title-description-checker" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Analyze your meta title and description for character count, pixel width, and keyword
           presence. Get a live Google-style SERP snippet preview in real time — know instantly

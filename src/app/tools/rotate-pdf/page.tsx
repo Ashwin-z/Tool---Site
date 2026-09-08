@@ -1,13 +1,15 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RotatePdfTool from "@/components/rotate-pdf-tool";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Rotate PDF Pages Online Free â€“ Fix PDF Orientation",
+  title: "Rotate PDF Pages Online Free – Fix PDF Orientation",
   description:
-    "Rotate PDF pages 90Â° or 180Â° online for free. Fix upside-down or sideways pages instantly. No signup required.",
+    "Rotate PDF pages 90° or 180° online for free. Fix upside-down or sideways pages instantly. No signup required.",
   keywords: [
     "rotate pdf",
     "rotate pdf pages online free",
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/rotate-pdf" },
   openGraph: {
-    title: "Rotate PDF Pages Online Free â€“ Fix PDF Orientation | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Rotate PDF Pages Online Free – Fix PDF Orientation | ToolMint",
     description:
-      "Rotate PDF pages 90Â° or 180Â° online for free. Fix upside-down or sideways pages instantly. No signup required.",
+      "Rotate PDF pages 90° or 180° online for free. Fix upside-down or sideways pages instantly. No signup required.",
     url: "/tools/rotate-pdf",
-    images: [{ url: "/og/rotate-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -47,7 +49,7 @@ const useCases = [
 const steps = [
   { title: "Upload a PDF", desc: "Select the PDF you want to rotate from your device." },
   { title: "Select pages", desc: "Choose to rotate all pages or click individual page thumbnails." },
-  { title: "Set rotation", desc: "Choose 90Â° clockwise, 90Â° counter-clockwise, or 180Â°." },
+  { title: "Set rotation", desc: "Choose 90° clockwise, 90° counter-clockwise, or 180°." },
   { title: "Download", desc: "Save the correctly oriented PDF instantly." },
 ];
 
@@ -62,11 +64,11 @@ const faqs = [
   },
   {
     q: "How do I rotate a PDF on my iPhone?",
-    a: "Open ToolMint in Safari or Chrome on your iPhone, upload the PDF, set the rotation, and download the result. No app installation is needed â€” the tool works directly in your mobile browser.",
+    a: "Open ToolMint in Safari or Chrome on your iPhone, upload the PDF, set the rotation, and download the result. No app installation is needed — the tool works directly in your mobile browser.",
   },
   {
     q: "Can I rotate a PDF 180 degrees?",
-    a: "Yes. The 180Â° option flips the entire page upside-down, which corrects documents that were scanned or photographed in an inverted orientation.",
+    a: "Yes. The 180° option flips the entire page upside-down, which corrects documents that were scanned or photographed in an inverted orientation.",
   },
   {
     q: "Why does my PDF look rotated when I open it?",
@@ -105,9 +107,12 @@ export default function RotatePdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Rotate PDF Pages Online for Free
         </h1>
+
+        <ProcessingBadge slug="rotate-pdf" />
+        <ToolAnalytics slug="rotate-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Fix sideways or upside-down PDF pages with ToolMint. Rotate all pages or individual pages
-          in 90Â° increments and download the corrected PDF in seconds â€” no account required.
+          in 90° increments and download the corrected PDF in seconds — no account required.
         </p>
 
         <div className="mt-8">
@@ -150,11 +155,11 @@ export default function RotatePdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               Incorrect page orientation in PDFs comes from several sources. The most common is a
-              scanner or phone camera that captured the physical document sideways â€” the image was
+              scanner or phone camera that captured the physical document sideways — the image was
               saved at the angle it was photographed, not corrected to portrait. Software that
               exports PDFs from screen recordings or presentations sometimes defaults to landscape
               orientation. Another cause is the PDF viewer's interpretation of a rotation flag stored
-              in the file metadata â€” the file itself may store pages in one orientation while the
+              in the file metadata — the file itself may store pages in one orientation while the
               metadata flag tells viewers to display them rotated. ToolMint permanently corrects the
               visual orientation so the pages are right-side-up in every viewer.
             </p>
@@ -170,7 +175,7 @@ export default function RotatePdfPage() {
               correctly because they respect the rotation metadata, while other viewers and printers
               ignore it and display the uncorrected orientation. ToolMint applies the rotation
               directly to the page geometry, which means the corrected orientation is baked into
-              the file and displays consistently in all viewers, printers, and PDF readers â€”
+              the file and displays consistently in all viewers, printers, and PDF readers —
               including browser-based viewers, mobile apps, and print drivers. This is the only
               reliable way to ensure a PDF looks correct on every device.
             </p>

@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
+import { analytics, classifyError, sizeBucket } from "@/lib/analytics";
+
+/** Identity for every analytics event this tool emits. */
+const TOOL = { tool_slug: "merge-pdf", category: "pdf", processing_mode: "browser" } as const;
 
 const MAX_FILES = 25;
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
@@ -204,12 +208,22 @@ export default function PdfMergerTool() {
   const handleMerge = useCallback(async () => {
     if (queue.length < 2) {
       setErrorMessage("Add at least 2 PDFs to merge them.");
+      analytics.toolError({ ...TOOL, failure_type: "invalid_input" });
       return;
     }
 
     setProcessing(true);
     setErrorMessage(null);
     setResult(null);
+
+    const startedAt = performance.now();
+    const totalBytes = queue.reduce((sum, item) => sum + item.file.size, 0);
+    analytics.toolStart({
+      ...TOOL,
+      file_type: "pdf",
+      file_count: queue.length,
+      file_size_bucket: sizeBucket(totalBytes),
+    });
 
     try {
       const mergedPdf = await PDFDocument.create();
@@ -232,8 +246,24 @@ export default function PdfMergerTool() {
         totalPages,
         mergedSize: blob.size,
       });
-    } catch {
+
+      analytics.toolComplete({
+        ...TOOL,
+        file_type: "pdf",
+        output_type: "pdf",
+        file_count: queue.length,
+        file_size_bucket: sizeBucket(blob.size),
+        duration_ms: Math.round(performance.now() - startedAt),
+      });
+    } catch (err) {
       setErrorMessage("Failed to merge PDFs. Please try different files.");
+      analytics.toolError({
+        ...TOOL,
+        file_type: "pdf",
+        file_count: queue.length,
+        failure_type: classifyError(err),
+        duration_ms: Math.round(performance.now() - startedAt),
+      });
     } finally {
       setProcessing(false);
     }
@@ -241,6 +271,12 @@ export default function PdfMergerTool() {
 
   const handleDownload = useCallback(() => {
     if (!result) return;
+    analytics.toolDownload({
+      ...TOOL,
+      output_type: "pdf",
+      file_count: result.totalFiles,
+      file_size_bucket: sizeBucket(result.mergedSize),
+    });
     const url = URL.createObjectURL(result.blob);
     const link = document.createElement("a");
     link.href = url;
@@ -250,6 +286,7 @@ export default function PdfMergerTool() {
   }, [result]);
 
   const handleReset = useCallback(() => {
+    analytics.toolReset(TOOL);
     setQueue([]);
     setResult(null);
     setErrorMessage(null);

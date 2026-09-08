@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import PasswordGeneratorTool from "@/components/password-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Password Generator – Create Strong Random Passwords & Passphrases Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/password-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Password Generator – Strong Passwords & Passphrases with Entropy | ToolMint",
     description:
       "Generate cryptographically secure passwords or passphrases with entropy scoring. Up to 128 chars, custom rules, bulk generate up to 20 at once. 100% browser-side.",
@@ -96,6 +99,9 @@ export default function PasswordGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Password Generator – Strong Passwords & Passphrases with Entropy Score
         </h1>
+
+        <ProcessingBadge slug="password-generator" />
+        <ToolAnalytics slug="password-generator" category="developer" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Create cryptographically secure passwords (up to 128 characters) or memorable
           passphrases in your browser. Customize character sets, exclude ambiguous characters,

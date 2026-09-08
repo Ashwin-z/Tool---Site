@@ -5,7 +5,7 @@ import { toolCategories } from "@/lib/tool-categories";
 export const metadata: Metadata = {
   title: "Free PDF Tools Online – No Signup Required",
   description:
-    "Free PDF tools online for compressing, merging, splitting, converting, editing, and securing PDF documents. No signup, no watermark — all tools run in your browser.",
+    "Free PDF tools to compress, merge, split, convert, edit and secure PDFs. No signup, no watermark. Most tools run entirely in your browser.",
   keywords: [
     "free pdf tools online",
     "pdf tools no signup",
@@ -20,11 +20,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-tools" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free PDF Tools Online – No Signup Required | ToolMint",
     description:
       "Free PDF tools online for compressing, merging, splitting, converting, editing, and securing PDF documents. No signup, no watermark.",
     url: "/tools/pdf-tools",
-    images: [{ url: "/og/pdf-tools.png" }],
   },
   twitter: { card: "summary_large_image" },
 };

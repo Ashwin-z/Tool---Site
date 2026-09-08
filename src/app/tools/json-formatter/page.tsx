@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import JsonFormatterTool from "@/components/json-formatter-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "JSON Formatter – Beautify, Validate, Minify & Convert JSON Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/json-formatter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "JSON Formatter – Beautify, Validate, Minify & Convert JSON | ToolMint",
     description:
       "Beautify, validate, minify, and convert JSON to XML, CSV, or YAML in a side-by-side browser workspace.",
@@ -113,6 +116,9 @@ export default function JsonFormatterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           JSON Formatter – Beautify, Validate, Minify & Convert Online Free
         </h1>
+
+        <ProcessingBadge slug="json-formatter" />
+        <ToolAnalytics slug="json-formatter" category="developer" />
         <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
           A full-featured JSON workspace: beautify and validate JSON in seconds, minify it for
           production, or convert it to XML, CSV, or YAML in a side-by-side editor that runs in

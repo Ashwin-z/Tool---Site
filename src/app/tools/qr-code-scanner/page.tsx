@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import QrCodeScannerTool from "@/components/qr-code-scanner-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "QR Code Scanner – Scan QR Code Online Free with Camera or Image",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/qr-code-scanner" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "QR Code Scanner – Scan QR Code Online Free with Camera or Image | ToolMint",
     description:
       "Use your camera for live QR scanning or upload an image file. Runs locally in your browser with copy and link detection features.",
@@ -101,6 +104,9 @@ export default function QrCodeScannerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           QR Code Scanner – Camera Scan or Image Upload, Free & Private
         </h1>
+
+        <ProcessingBadge slug="qr-code-scanner" />
+        <ToolAnalytics slug="qr-code-scanner" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Scan any QR code instantly using your camera or by uploading an image. Processes the
           scan locally in your browser with BarcodeDetector support, then lets you copy the result or open

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import QrCodeGeneratorTool from "@/components/qr-code-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "QR Code Generator – Create QR Code Free Online, PNG & SVG",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/qr-code-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "QR Code Generator – Create QR Code Free Online, PNG & SVG | ToolMint",
     description:
       "Create QR codes from text or URLs, customize colors, preview instantly, and export as PNG or SVG.",
@@ -101,6 +104,9 @@ export default function QrCodeGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           QR Code Generator – Custom Colors, PNG &amp; SVG Download Free
         </h1>
+
+        <ProcessingBadge slug="qr-code-generator" />
+        <ToolAnalytics slug="qr-code-generator" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate QR codes from text, URLs, and other content with live preview and custom foreground
           and background colors. Exports high-resolution PNG, scalable SVG, and can copy the QR

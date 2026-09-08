@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageCropperTool from "@/components/image-cropper-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Crop Images Online to Exact Dimensions – Free Browser Tool",
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-cropper" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Crop Images to Exact Dimensions – Free Online | ToolMint",
     description: "Crop any image to a precise area, aspect ratio, or pixel size. Browser-based, no signup.",
     url: "/tools/image-cropper",
@@ -73,6 +76,9 @@ export default function ImageCropperPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Crop Images Online to Exact Dimensions
         </h1>
+
+        <ProcessingBadge slug="image-cropper" />
+        <ToolAnalytics slug="image-cropper" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Remove unwanted edges, crop to a fixed aspect ratio, or cut to a precise pixel area. Works
           with JPG, PNG, and WebP — fully browser-based with no signup required.

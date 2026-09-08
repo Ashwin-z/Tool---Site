@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageToTextTool from "@/components/image-to-text-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Extract Text from Images Using OCR – Free Online Tool",
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-to-text" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Extract Text from Images Free – OCR Online | ToolMint",
     description: "Use OCR to extract text from JPG, PNG, and screenshots free online. No signup, instant output.",
     url: "/tools/image-to-text",
@@ -60,6 +63,9 @@ export default function ImageToTextPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Extract Text from Images Using OCR – Free Online
         </h1>
+
+        <ProcessingBadge slug="image-to-text" />
+        <ToolAnalytics slug="image-to-text" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Use optical character recognition (OCR) to extract text from photos, screenshots, and
           scanned images. No retyping, no signup — paste or upload your image and get the text instantly.

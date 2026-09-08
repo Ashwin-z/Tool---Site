@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import PdfToWordTool from "@/components/pdf-to-word-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Word Converter â€“ Convert PDF to DOCX Free",
+  title: "PDF to Word Converter – Convert PDF to DOCX Free",
   description:
     "Convert PDF to editable Word document online for free. Accurate formatting, instant DOCX download. No signup required.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-word" },
   openGraph: {
-    title: "PDF to Word Converter â€“ Convert PDF to DOCX Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PDF to Word Converter – Convert PDF to DOCX Free | ToolMint",
     description:
       "Convert PDF to editable Word document online for free. Accurate formatting, instant DOCX download. No signup required.",
     url: "/tools/pdf-to-word",
-    images: [{ url: "/og/pdf-to-word.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -104,9 +107,13 @@ export default function PdfToWordPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to Editable Word Document – Free, No Signup
         </h1>
+
+        <ToolStatusNotice slug="pdf-to-word" />
+        <ProcessingBadge slug="pdf-to-word" />
+        <ToolAnalytics slug="pdf-to-word" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn a PDF into an editable .docx file with ToolMint. Upload your PDF and get a Word
-          document that preserves text, headings, and basic layout â€” ready to edit in Microsoft Word
+          document that preserves text, headings, and basic layout — ready to edit in Microsoft Word
           or Google Docs. No account required.
         </p>
 
@@ -150,7 +157,7 @@ export default function PdfToWordPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               Accuracy depends on the complexity of the source PDF. Text-based PDFs with simple
-              formatting â€” single column, standard fonts, clean paragraphs â€” convert with high
+              formatting — single column, standard fonts, clean paragraphs — convert with high
               fidelity. The text, headings, and basic structure map cleanly to Word styles. PDFs
               created from complex desktop publishing layouts, those with decorative fonts,
               background graphics, or multi-column designs will require more cleanup after
@@ -169,7 +176,7 @@ export default function PdfToWordPage() {
               sections in another document. Common scenarios include updating a contract you
               received as a PDF, extracting data from a report to paste into another document,
               or recovering a Word document when you only have the PDF version. If you only need
-              to read the content, there is no reason to convert â€” most PDF viewers let you
+              to read the content, there is no reason to convert — most PDF viewers let you
               select and copy text already. Conversion is most valuable when you need to make
               structural edits, change formatting, or use the document as a starting point for
               a new version.

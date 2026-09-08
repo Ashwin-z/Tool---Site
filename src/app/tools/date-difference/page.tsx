@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import DateDifferenceTool from "@/components/date-difference-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Date Difference Calculator – Days Between Two Dates Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/date-difference" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Date Difference Calculator – Days Between Two Dates | ToolMint",
     description:
       "Find the exact gap between two dates in days, hours, minutes, and a weeks-plus-days breakdown. Fast and browser-based.",
@@ -101,6 +104,9 @@ export default function DateDifferencePage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Date Difference Calculator — Days, Hours, Minutes &amp; Weeks
         </h1>
+
+        <ProcessingBadge slug="date-difference" />
+        <ToolAnalytics slug="date-difference" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Pick a start date and end date to calculate the exact difference in days, hours, and minutes.
           Also shows the result as complete weeks plus remaining days, with local date handling

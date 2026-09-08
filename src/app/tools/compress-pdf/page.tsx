@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import PdfCompressorTool from "@/components/pdf-compressor-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Compress PDF Online Free â€“ Reduce PDF Size",
+  title: "Compress PDF Online Free – Reduce PDF Size",
   description:
     "Compress PDF files online for free. Reduce PDF size by up to 90% with no quality loss. No signup, no watermark, instant download.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/compress-pdf" },
   openGraph: {
-    title: "Compress PDF Online Free â€“ Reduce PDF Size | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Compress PDF Online Free – Reduce PDF Size | ToolMint",
     description:
       "Compress PDF files online for free. Reduce PDF size by up to 90% with no quality loss. No signup, no watermark, instant download.",
     url: "/tools/compress-pdf",
-    images: [{ url: "/og/compress-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -105,9 +108,13 @@ export default function CompressPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Compress PDF Without Losing Quality – Free Online Tool
         </h1>
+
+        <ToolStatusNotice slug="compress-pdf" />
+        <ProcessingBadge slug="compress-pdf" />
+        <ToolAnalytics slug="compress-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Reduce the file size of any PDF document in seconds. ToolMint offers three compression
-          levels so you can balance quality and file size â€” from minimal reduction for print-ready
+          levels so you can balance quality and file size — from minimal reduction for print-ready
           files to maximum compression for email and portal uploads.
         </p>
 
@@ -151,9 +158,9 @@ export default function CompressPdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               A good target depends on where the file is going. For email attachments, most providers
-              cap uploads at 10â€“25MB, but recipients appreciate files under 5MB for fast loading. For
-              government or job portal uploads, limits are commonly 2â€“5MB. For web downloads, keeping
-              a PDF under 1â€“2MB improves page speed and user experience. Scanned documents often
+              cap uploads at 10–25MB, but recipients appreciate files under 5MB for fast loading. For
+              government or job portal uploads, limits are commonly 2–5MB. For web downloads, keeping
+              a PDF under 1–2MB improves page speed and user experience. Scanned documents often
               compress the most because their embedded images have the most room for optimization.
               Text-only PDFs are already compact and rarely need compression unless they contain
               embedded fonts or a large number of pages. If your file is already under 500KB, there is
@@ -167,9 +174,9 @@ export default function CompressPdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               It depends on the compression level you choose. Low compression reduces file size by
-              roughly 20â€“40% with almost no visible change to images or text rendering. Medium
-              compression targets 50â€“70% reduction and is the best choice for most document sharing
-              needs â€” quality remains acceptable for screen reading and standard printing. High
+              roughly 20–40% with almost no visible change to images or text rendering. Medium
+              compression targets 50–70% reduction and is the best choice for most document sharing
+              needs — quality remains acceptable for screen reading and standard printing. High
               compression maximizes size reduction, which can produce some image softening in
               photo-heavy PDFs. Text and vector content are never degraded regardless of the level
               chosen, because only raster images are re-sampled during compression. If you are

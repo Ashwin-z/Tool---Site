@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import PdfSplitterTool from "@/components/pdf-splitter-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Split PDF Online Free â€“ Extract PDF Pages",
+  title: "Split PDF Online Free – Extract PDF Pages",
   description:
     "Split a PDF into separate pages or extract a page range online for free. Fast, easy, no signup needed.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/split-pdf" },
   openGraph: {
-    title: "Split PDF Online Free â€“ Extract PDF Pages | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Split PDF Online Free – Extract PDF Pages | ToolMint",
     description:
       "Split a PDF into separate pages or extract a page range online for free. Fast, easy, no signup needed.",
     url: "/tools/split-pdf",
-    images: [{ url: "/og/split-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -70,7 +72,7 @@ const faqs = [
   },
   {
     q: "How do I split a large PDF into smaller parts?",
-    a: "Use the fixed-interval mode to divide a long PDF into equal chunks â€” for example, every 10 pages. Each chunk downloads as a separate file, or you can choose to combine them all into one output.",
+    a: "Use the fixed-interval mode to divide a long PDF into equal chunks — for example, every 10 pages. Each chunk downloads as a separate file, or you can choose to combine them all into one output.",
   },
 ];
 
@@ -105,10 +107,13 @@ export default function SplitPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Split PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="split-pdf" />
+        <ToolAnalytics slug="split-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Extract specific pages from any PDF document with ToolMint. Split by custom page ranges,
           fixed intervals, or hand-pick individual pages. Download your selections as a single
-          merged PDF or as separate files â€” all processed in your browser.
+          merged PDF or as separate files — all processed in your browser.
         </p>
 
         <div className="mt-8">
@@ -156,7 +161,7 @@ export default function SplitPdfPage() {
               to fit a portal upload limit. Legal teams often split contracts to share only relevant
               clauses. Students extract specific readings from course packs. Finance teams pull
               individual invoices from a monthly statement PDF. Rather than sending a full 50-page
-              document when a recipient needs only pages 12â€“15, splitting produces a smaller, more
+              document when a recipient needs only pages 12–15, splitting produces a smaller, more
               focused file that is easier to work with.
             </p>
           </div>
@@ -169,7 +174,7 @@ export default function SplitPdfPage() {
               To pull a single page, upload your PDF and switch to individual page selection mode.
               Click the thumbnail of the page you want and click Download. The output is a
               single-page PDF with the same quality as the original. If you need several non-adjacent
-              pages â€” for example, pages 2, 5, and 9 â€” select each one individually and download
+              pages — for example, pages 2, 5, and 9 — select each one individually and download
               them together as a combined file or as separate PDFs. The fixed-interval mode is better
               suited for splitting a long document into equal chunks rather than extracting specific
               pages. For most single-page extraction tasks, individual selection is the fastest path.

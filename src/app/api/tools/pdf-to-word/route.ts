@@ -7,6 +7,7 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 
 import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+import { isToolDown, maintenanceResponse } from "@/lib/tool-status";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -217,6 +218,13 @@ finally {
 /* ── Route handler ───────────────────────────────────────── */
 
 export async function POST(request: Request) {
+  // Batch 0: this tool depends on a binary that is not working in production.
+  // Fail fast with an honest 503 rather than accepting an upload we cannot process.
+  // Delete the entry in src/lib/tool-status.ts to re-enable this route.
+  if (isToolDown("pdf-to-word")) {
+    return maintenanceResponse("pdf-to-word");
+  }
+
   const rl = checkRateLimit(`pdf-to-word:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });

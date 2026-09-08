@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfToExcelTool from "@/components/pdf-to-excel-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Excel Converter â€“ Extract PDF Tables Free",
+  title: "PDF to Excel Converter – Extract PDF Tables Free",
   description:
     "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-excel" },
   openGraph: {
-    title: "PDF to Excel Converter â€“ Extract PDF Tables Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PDF to Excel Converter – Extract PDF Tables Free | ToolMint",
     description:
       "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
     url: "/tools/pdf-to-excel",
-    images: [{ url: "/og/pdf-to-excel.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -104,6 +106,9 @@ export default function PdfToExcelPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to Excel Online for Free
         </h1>
+
+        <ProcessingBadge slug="pdf-to-excel" />
+        <ToolAnalytics slug="pdf-to-excel" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Extract tables and data from PDF documents into editable Excel spreadsheets with ToolMint.
           Upload a PDF and get an .xlsx file with the table data ready to work with in Excel or
@@ -171,7 +176,7 @@ export default function PdfToExcelPage() {
               that needs to be analyzed in a spreadsheet. Rather than typing the data manually,
               conversion extracts it in seconds. It is also useful for migrating historical data
               from legacy PDF reports into a database or analytics tool. For quick one-off data
-              lookups, reading the PDF directly is faster â€” conversion pays off when you need to
+              lookups, reading the PDF directly is faster — conversion pays off when you need to
               do more than just read the numbers.
             </p>
           </div>

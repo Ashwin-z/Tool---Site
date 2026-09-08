@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import PowerPointToPdfTool from "@/components/powerpoint-to-pdf-tool";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PowerPoint to PDF â€“ Convert PPTX to PDF Free",
+  title: "PowerPoint to PDF – Convert PPTX to PDF Free",
   description:
     "Convert PowerPoint presentations to PDF online free. Upload .pptx and download a high-quality PDF instantly. No signup.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/powerpoint-to-pdf" },
   openGraph: {
-    title: "PowerPoint to PDF â€“ Convert PPTX to PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PowerPoint to PDF – Convert PPTX to PDF Free | ToolMint",
     description:
       "Convert PowerPoint presentations to PDF online free. Upload .pptx and download a high-quality PDF instantly. No signup.",
     url: "/tools/powerpoint-to-pdf",
-    images: [{ url: "/og/powerpoint-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -61,11 +64,11 @@ const faqs = [
   },
   {
     q: "How do I convert a large PPTX to PDF quickly?",
-    a: "Upload your file and click Convert â€” there are no extra steps. Very large files with many high-resolution images may take a bit longer to process, but there is no size limit for typical presentation files.",
+    a: "Upload your file and click Convert — there are no extra steps. Very large files with many high-resolution images may take a bit longer to process, but there is no size limit for typical presentation files.",
   },
   {
     q: "Can I convert Google Slides to PDF?",
-    a: "Google Slides can be downloaded as a .pptx file first (File â†’ Download â†’ Microsoft PowerPoint), then uploaded here for conversion to PDF.",
+    a: "Google Slides can be downloaded as a .pptx file first (File → Download → Microsoft PowerPoint), then uploaded here for conversion to PDF.",
   },
   {
     q: "Why is my PowerPoint PDF blurry?",
@@ -104,9 +107,13 @@ export default function PowerPointToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PowerPoint to PDF Online for Free
         </h1>
+
+        <ToolStatusNotice slug="powerpoint-to-pdf" />
+        <ProcessingBadge slug="powerpoint-to-pdf" />
+        <ToolAnalytics slug="powerpoint-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn .pptx slide decks into PDF documents with ToolMint. Upload your presentation and get
-          a clean PDF where each slide becomes a page â€” no account, no software, instant download.
+          a clean PDF where each slide becomes a page — no account, no software, instant download.
         </p>
 
         <div className="mt-8">
@@ -164,13 +171,13 @@ export default function PowerPointToPdfPage() {
               Does PDF Preserve Slide Animations?
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
-              No. PDF is a static document format â€” it captures a single visual state per page and
+              No. PDF is a static document format — it captures a single visual state per page and
               cannot play animations, transitions, or embedded video. When converting a presentation
               with animated elements, each slide is rendered at its final animation state, which
               means build-in animations are shown in their completed form. If your presentation
               relies heavily on step-by-step animations to guide a live audience, the PDF will not
               replicate that experience. For a static handout, conference paper, or archive copy,
-              however, this is not a limitation â€” the PDF captures the content and layout of every
+              however, this is not a limitation — the PDF captures the content and layout of every
               slide clearly.
             </p>
           </div>

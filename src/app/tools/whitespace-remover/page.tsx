@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import WhitespaceRemoverTool from "@/components/whitespace-remover-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Whitespace Remover – Strip Extra Spaces, Tabs & Blank Lines Online Free",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/whitespace-remover" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Whitespace Remover – Strip Extra Spaces, Tabs & Blank Lines | ToolMint",
     description:
       "Remove extra spaces, blank lines, and tabs from text instantly. Multiple cleanup modes, live preview. Free, browser-based.",
@@ -106,6 +109,9 @@ export default function WhitespaceRemoverPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Whitespace Remover – Strip Extra Spaces, Tabs & Blank Lines Online
         </h1>
+
+        <ProcessingBadge slug="whitespace-remover" />
+        <ToolAnalytics slug="whitespace-remover" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Remove extra spaces, trim whitespace, delete blank lines, and convert tabs to spaces
           with ToolMint. Toggle multiple cleanup modes at once and see the result update in

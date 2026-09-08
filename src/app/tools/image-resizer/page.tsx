@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageResizerTool from "@/components/image-resizer-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Resize Images Online to Any Dimension – Free, No Signup",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-resizer" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Resize Images to Any Dimension – Free Online | ToolMint",
     description: "Resize JPG, PNG, and WebP images to exact pixel dimensions or percentage. Browser-based, no signup.",
     url: "/tools/image-resizer",
@@ -95,6 +98,9 @@ export default function ImageResizerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Resize Images Online to Any Dimension
         </h1>
+
+        <ProcessingBadge slug="image-resizer" />
+        <ToolAnalytics slug="image-resizer" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Change image dimensions to exact pixels or a percentage of the original. Supports JPG,
           PNG, and WebP with aspect ratio lock to prevent distortion. Runs entirely in your browser.

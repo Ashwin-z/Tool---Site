@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import GpaCalculatorTool from "@/components/gpa-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "GPA Calculator – Compute Semester GPA and CGPA Online",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/gpa-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "GPA Calculator – Semester GPA, CGPA & 10-Point Scale | ToolMint",
     description:
       "Calculate semester GPA and CGPA with US 4.0, India 10-point, UK, or custom grading scales. Free, instant.",
@@ -104,6 +107,9 @@ export default function GpaCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           GPA Calculator – Semester GPA, CGPA & 10-Point Scale
         </h1>
+
+        <ProcessingBadge slug="gpa-calculator" />
+        <ToolAnalytics slug="gpa-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate semester GPA and cumulative CGPA online for free. Supports US 4.0 scale,
           India 10-point CGPA, UK degree classification, and custom grading scales. Enter

@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageRotateFlipTool from "@/components/image-rotate-flip-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Rotate and Flip Images Online – Free, No Software Needed",
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-rotate-flip" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Rotate and Flip Images Online – Free | ToolMint",
     description: "Rotate 90/180/270 degrees or flip images horizontally and vertically. Free, browser-based.",
     url: "/tools/image-rotate-flip",
@@ -58,6 +61,9 @@ export default function ImageRotateFlipPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Rotate and Flip Images Online for Free
         </h1>
+
+        <ProcessingBadge slug="image-rotate-flip" />
+        <ToolAnalytics slug="image-rotate-flip" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Fix sideways photos, create mirror effects, and rotate images to any angle. Supports JPG,
           PNG, and WebP — all processing runs locally in your browser.

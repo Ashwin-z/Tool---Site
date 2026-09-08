@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contact Us | ToolMint",
+  title: "Contact Us",
   description:
     "Get in touch with ToolMint for feedback, support, bug reports, or partnership inquiries.",
   alternates: { canonical: "/contact" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Contact Us | ToolMint",
     description:
       "Get in touch with ToolMint for feedback, support, bug reports, or partnership inquiries.",

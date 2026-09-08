@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import OgTagGeneratorTool from "@/components/og-tag-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Meta Tag Generator – Create SEO, Open Graph & Twitter Card Tags Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/meta-tag-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Meta Tag Generator – SEO, Open Graph & Twitter Card Tags | ToolMint",
     description:
       "Generate or import meta tags for SEO and social sharing. Create Open Graph, Twitter Card, title, and description tags with live preview.",
@@ -104,6 +107,9 @@ export default function MetaTagGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Meta Tag Generator – Create SEO, Open Graph & Twitter Card Tags
         </h1>
+
+        <ProcessingBadge slug="meta-tag-generator" />
+        <ToolAnalytics slug="meta-tag-generator" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate the complete meta tag block for any page — SEO title, meta description, Open Graph,
           and Twitter Card tags — in one place. Import existing tags from any URL to audit and fix

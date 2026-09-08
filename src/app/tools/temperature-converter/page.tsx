@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TemperatureConverterTool from "@/components/temperature-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Temperature Converter – Celsius to Fahrenheit, Kelvin & More Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/temperature-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Temperature Converter – Celsius to Fahrenheit, Kelvin & More | ToolMint",
     description:
       "Convert between 8 temperature scales including Delisle, Newton, and Rømer. Includes reference points and context-aware fun facts.",
@@ -102,6 +105,9 @@ export default function TemperatureConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Temperature Converter – Celsius, Fahrenheit, Kelvin & 5 More Scales
         </h1>
+
+        <ProcessingBadge slug="temperature-converter" />
+        <ToolAnalytics slug="temperature-converter" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert between 8 temperature scales — Celsius, Fahrenheit, Kelvin, Rankine, Delisle, Newton,
           Réaumur, and Rømer. Includes an all-scales comparison table, a built-in reference points section

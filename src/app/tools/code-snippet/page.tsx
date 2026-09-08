@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import CodeSnippetTool from "@/components/code-snippet-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "HTML CSS JS Playground – Live Code Preview Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/code-snippet" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "HTML CSS JS Playground – Live Code Preview Online | ToolMint",
     description:
       "Write HTML, CSS, and JavaScript and see an instant live preview. Free in-browser playground — no signup needed.",
@@ -96,6 +99,9 @@ export default function CodeSnippetPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Code Snippet Playground – Live HTML, CSS & JS Preview
         </h1>
+
+        <ProcessingBadge slug="code-snippet" />
+        <ToolAnalytics slug="code-snippet" category="developer" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Three separate editors — HTML, CSS, and JavaScript — with a sandboxed live preview
           that updates in real time as you type. No run button, no backend, no signup. The

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import WorkHoursCalculatorTool from "@/components/work-hours-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Work Hours Calculator – Track Hours, Overtime & Pay Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/work-hours-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Work Hours Calculator – Timesheet, Overtime & Pay | ToolMint",
     description:
       "Calculate work hours per day or week, deduct lunch breaks, compute overtime, and estimate total pay. Free timesheet calculator.",
@@ -104,6 +107,9 @@ export default function WorkHoursCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Work Hours Calculator – Track Hours, Overtime & Pay
         </h1>
+
+        <ProcessingBadge slug="work-hours-calculator" />
+        <ToolAnalytics slug="work-hours-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate total work hours across shifts, deduct break times, compute overtime, and
           estimate total pay. Works for daily, weekly, and multi-shift schedules. Useful for

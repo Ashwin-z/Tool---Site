@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import CropPdfTool from "@/components/crop-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Crop PDF Pages Online Free â€“ Trim PDF Margins",
+  title: "Crop PDF Pages Online Free – Trim PDF Margins",
   description:
     "Crop PDF pages online for free. Remove unwanted margins or trim page areas instantly. No signup required.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/crop-pdf" },
   openGraph: {
-    title: "Crop PDF Pages Online Free â€“ Trim PDF Margins | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Crop PDF Pages Online Free – Trim PDF Margins | ToolMint",
     description:
       "Crop PDF pages online for free. Remove unwanted margins or trim page areas instantly. No signup required.",
     url: "/tools/crop-pdf",
-    images: [{ url: "/og/crop-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -40,7 +42,7 @@ const useCases = [
   },
   {
     title: "Focus on specific content",
-    desc: "Crop a PDF page to show only the relevant portion â€” a chart, a section of a drawing, or a specific table area.",
+    desc: "Crop a PDF page to show only the relevant portion — a chart, a section of a drawing, or a specific table area.",
   },
 ];
 
@@ -105,6 +107,9 @@ export default function CropPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Crop PDF Pages Online for Free
         </h1>
+
+        <ProcessingBadge slug="crop-pdf" />
+        <ToolAnalytics slug="crop-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Trim the visible area of PDF pages with ToolMint. Remove unwanted margins, scanner
           borders, or excess whitespace by defining a crop area and applying it to any or all pages.
@@ -150,7 +155,7 @@ export default function CropPdfPage() {
               What Does Cropping a PDF Page Actually Do?
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
-              Cropping a PDF page changes the crop box â€” a rectangle that defines which portion of
+              Cropping a PDF page changes the crop box — a rectangle that defines which portion of
               the page content is visible to viewers. Content outside the crop box is not deleted
               from the file structure; it is hidden from display. This is different from cropping
               an image, where pixels outside the selection are permanently removed. In practical
@@ -172,7 +177,7 @@ export default function CropPdfPage() {
               preview shows where the borders end and the content begins. Apply to all pages to
               clean up a multi-page scanned document consistently. For documents with slightly
               inconsistent scan alignment, applying the crop to all pages may still leave small
-              borders on some pages â€” these can be adjusted per page for precise trimming.
+              borders on some pages — these can be adjusted per page for precise trimming.
             </p>
           </div>
         </section>

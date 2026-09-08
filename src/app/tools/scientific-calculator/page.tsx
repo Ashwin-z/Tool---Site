@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import ScientificCalculatorTool from "@/components/scientific-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Scientific Calculator – Sin, Cos, Tan, Log & More Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/scientific-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Scientific Calculator – Trig, Log, Exponents & More | ToolMint",
     description:
       "Full scientific calculator online with sin, cos, tan, log, ln, square root, and exponents. Works in degrees and radians.",
@@ -104,6 +107,9 @@ export default function ScientificCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Scientific Calculator – Sin, Cos, Tan, Log & Exponents Online Free
         </h1>
+
+        <ProcessingBadge slug="scientific-calculator" />
+        <ToolAnalytics slug="scientific-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           A full-featured scientific calculator in your browser. Compute trigonometric
           functions (sin, cos, tan, arcsin, arccos, arctan), logarithms, square roots,

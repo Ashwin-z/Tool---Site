@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import NumberToWordsTool from "@/components/number-to-words-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Number to Words Converter – Spell Out Any Number in English Free",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/number-to-words" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Number to Words Converter – Spell Out Any Number in English | ToolMint",
     description:
       "Convert numbers to English words. Western and Indian numbering, ordinal, and currency formats. Free, instant, browser-based.",
@@ -106,6 +109,9 @@ export default function NumberToWordsPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Number to Words Converter – Spell Out Any Number in English
         </h1>
+
+        <ProcessingBadge slug="number-to-words" />
+        <ToolAnalytics slug="number-to-words" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert any number to its English word form with ToolMint. Supports Western and
           Indian numbering systems, ordinal numbers, and currency formatting for USD, EUR,

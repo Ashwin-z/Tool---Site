@@ -7,6 +7,7 @@ import { spawn } from "child_process";
 import { tmpdir } from "os";
 
 import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+import { isToolDown, maintenanceResponse } from "@/lib/tool-status";
 
 export const maxDuration = 120; // 2 min max runtime
 
@@ -91,6 +92,13 @@ function formatGhostscriptError(stderr: string, code: number): string {
 }
 
 export async function POST(request: NextRequest) {
+  // Batch 0: this tool depends on a binary that is not working in production.
+  // Fail fast with an honest 503 rather than accepting an upload we cannot process.
+  // Delete the entry in src/lib/tool-status.ts to re-enable this route.
+  if (isToolDown("pdf-to-pdfa")) {
+    return maintenanceResponse("pdf-to-pdfa");
+  }
+
   const rl = checkRateLimit(`pdf-to-pdfa:${getClientIp(request)}`, { maxRequests: 8, windowMs: 60_000 });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });

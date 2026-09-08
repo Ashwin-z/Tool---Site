@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import PercentageCalculatorTool from "@/components/percentage-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Percentage Calculator – Find X% of Y, Increase, Decrease & Reverse",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/percentage-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Percentage Calculator – X% of Y, Increase, Decrease & Reverse | ToolMint",
     description:
       "Find any percentage, calculate increase or decrease, work out reverse percentages, and compare differences. Free, instant.",
@@ -104,6 +107,9 @@ export default function PercentageCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Percentage Calculator – Find X% of Y, Increase, Decrease & Reverse
         </h1>
+
+        <ProcessingBadge slug="percentage-calculator" />
+        <ToolAnalytics slug="percentage-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Solve any percentage problem instantly. Find what X% of Y is, calculate percentage
           increase or decrease between two numbers, work out what percentage one number is of

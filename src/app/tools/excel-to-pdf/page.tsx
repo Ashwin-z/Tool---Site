@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import ExcelToPdfTool from "@/components/excel-to-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Excel to PDF Converter â€“ Convert XLSX to PDF Free",
+  title: "Excel to PDF Converter – Convert XLSX to PDF Free",
   description:
     "Convert Excel spreadsheets to PDF online for free. Upload .xlsx or .xls and get a perfectly formatted PDF. No signup.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/excel-to-pdf" },
   openGraph: {
-    title: "Excel to PDF Converter â€“ Convert XLSX to PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Excel to PDF Converter – Convert XLSX to PDF Free | ToolMint",
     description:
       "Convert Excel spreadsheets to PDF online for free. Upload .xlsx or .xls and get a perfectly formatted PDF. No signup.",
     url: "/tools/excel-to-pdf",
-    images: [{ url: "/og/excel-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -53,7 +56,7 @@ const steps = [
 const faqs = [
   {
     q: "Does Excel to PDF preserve formulas?",
-    a: "No. The PDF shows the calculated values of formula cells, not the formulas themselves. This is usually the desired behavior when sharing data â€” recipients see the result, not the underlying calculation.",
+    a: "No. The PDF shows the calculated values of formula cells, not the formulas themselves. This is usually the desired behavior when sharing data — recipients see the result, not the underlying calculation.",
   },
   {
     q: "How do I convert multiple Excel sheets to PDF?",
@@ -104,9 +107,13 @@ export default function ExcelToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert Excel to PDF Online for Free
         </h1>
+
+        <ToolStatusNotice slug="excel-to-pdf" />
+        <ProcessingBadge slug="excel-to-pdf" />
+        <ToolAnalytics slug="excel-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn .xlsx and .xls spreadsheets into PDF documents with ToolMint. Upload your Excel file
-          and download a clean, print-ready PDF â€” no account, no software required.
+          and download a clean, print-ready PDF — no account, no software required.
         </p>
 
         <div className="mt-8">
@@ -164,7 +171,7 @@ export default function ExcelToPdfPage() {
               How to Fit an Excel Sheet on One PDF Page
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
-              Before converting, open the Excel file and go to Page Layout â†’ Scale to Fit. Set
+              Before converting, open the Excel file and go to Page Layout → Scale to Fit. Set
               Width to 1 page and Height to 1 page (or adjust only width for tall datasets). This
               tells Excel to shrink the content to fit within a single page when it renders the
               sheet. Alternatively, reduce the font size and narrow column widths to bring the data

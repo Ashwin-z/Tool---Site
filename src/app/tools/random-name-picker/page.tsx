@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import RandomNamePickerTool from "@/components/random-name-picker-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Random Name Picker – Pick Winner from List Free Online",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/random-name-picker" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Random Name Picker – Pick Winner from List Free Online | ToolMint",
     description:
       "Enter a list of names, choose how many winners to pick, allow duplicates if needed, and track recent picks in your browser.",
@@ -101,6 +104,9 @@ export default function RandomNamePickerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Random Name Picker – Pick Winners, Teams &amp; Classroom Names
         </h1>
+
+        <ProcessingBadge slug="random-name-picker" />
+        <ToolAnalytics slug="random-name-picker" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Enter a list of names and randomly pick one or more winners instantly. Built for raffles,
           giveaways, classroom picks, and team selection, with duplicate mode, animated draws, and recent

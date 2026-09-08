@@ -1,4 +1,4 @@
-﻿import { getToolBySlug } from "@/lib/tool-categories";
+import { getToolBySlug } from "@/lib/tool-categories";
 
 type Props = { slug: string; name?: string; description?: string };
 

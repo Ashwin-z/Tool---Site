@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import Base64EncoderDecoderTool from "@/components/base64-encoder-decoder-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Base64 Encoder / Decoder – Encode & Decode Text and Files Online Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/base64-encoder-decoder" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Base64 Encoder / Decoder – Encode & Decode Text & Files Online | ToolMint",
     description:
       "Encode text or files to Base64, decode Base64 strings back to plain text. UTF-8 safe, runs entirely in your browser.",
@@ -96,6 +99,9 @@ export default function Base64EncoderDecoderPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Base64 Encoder / Decoder – Text & File Support
         </h1>
+
+        <ProcessingBadge slug="base64-encoder-decoder" />
+        <ToolAnalytics slug="base64-encoder-decoder" category="developer" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Encode any text or file to Base64 — or decode a Base64 string back to plain text —
           all in real time inside your browser. UTF-8 safe with drag-and-drop file support for

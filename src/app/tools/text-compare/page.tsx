@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TextCompareTool from "@/components/text-compare-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Text Compare Online – Find Differences Between Two Texts Free",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/text-compare" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Text Compare Online – Find Differences Between Two Texts | ToolMint",
     description:
       "Compare two texts side by side. Additions, deletions, and unchanged lines highlighted in color. Free, browser-based.",
@@ -106,6 +109,9 @@ export default function TextComparePage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Text Compare – Find Differences Between Two Texts Online
         </h1>
+
+        <ProcessingBadge slug="text-compare" />
+        <ToolAnalytics slug="text-compare" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste two versions of any text and instantly see what changed. Additions are highlighted
           in green, deletions in red, and unchanged lines stay neutral. Toggle case-insensitive

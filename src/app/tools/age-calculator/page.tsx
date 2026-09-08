@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import AgeCalculatorTool from "@/components/age-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Age Calculator – Find Your Exact Age in Years, Months & Days",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/age-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Age Calculator – Exact Age in Years, Months, Days & Hours | ToolMint",
     description:
       "Find your exact age from any date of birth — in years, months, days, and hours. Plus days until next birthday.",
@@ -104,6 +107,9 @@ export default function AgeCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Age Calculator – Find Exact Age from Date of Birth
         </h1>
+
+        <ProcessingBadge slug="age-calculator" />
+        <ToolAnalytics slug="age-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Enter any date of birth to instantly find the exact age in years, months, days, hours,
           and minutes as of today or any custom reference date. Also shows days until the next

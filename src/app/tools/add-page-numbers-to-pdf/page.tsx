@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import AddPageNumbersTool from "@/components/add-page-numbers-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Add Page Numbers to PDF Online Free",
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/add-page-numbers-to-pdf" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Add Page Numbers to PDF Online Free | ToolMint",
     description:
       "Add page numbers to PDF documents online for free. Choose position, font, and starting number. No signup needed.",
     url: "/tools/add-page-numbers-to-pdf",
-    images: [{ url: "/og/add-page-numbers-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -66,7 +68,7 @@ const faqs = [
   },
   {
     q: "How do I add page numbers to a PDF without Acrobat?",
-    a: "Upload your PDF here, configure the numbering settings, and download the result. No Adobe Acrobat or any other installed software is needed â€” the tool runs entirely in your browser.",
+    a: "Upload your PDF here, configure the numbering settings, and download the result. No Adobe Acrobat or any other installed software is needed — the tool runs entirely in your browser.",
   },
   {
     q: "Can I choose the font and size of page numbers?",
@@ -105,6 +107,9 @@ export default function AddPageNumbersToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Add Page Numbers to PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="add-page-numbers-to-pdf" />
+        <ToolAnalytics slug="add-page-numbers-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Number the pages of any PDF document with ToolMint. Customize the position (header
           or footer), alignment, font size, starting number, and the page range to number. A

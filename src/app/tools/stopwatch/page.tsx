@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import StopwatchTool from "@/components/stopwatch-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Online Stopwatch – Countdown Timer with Lap Splits Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/stopwatch" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Online Stopwatch – Countdown Timer with Lap Splits | ToolMint",
     description:
       "Run a stopwatch with lap tracking or switch to countdown mode. Centisecond precision, browser-based timing.",
@@ -101,6 +104,9 @@ export default function StopwatchPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Online Stopwatch &amp; Countdown Timer with Lap Splits
         </h1>
+
+        <ProcessingBadge slug="stopwatch" />
+        <ToolAnalytics slug="stopwatch" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Use a clean online stopwatch with lap splits, or switch to countdown mode for a quick timer.
           Runs entirely in the browser with centisecond precision and smooth updates powered

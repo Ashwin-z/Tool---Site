@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free Online Tools - PDF, Image, Text, SEO & Calculators | ToolMint",
     description:
       "80+ free browser-based tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",

@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import SignPdfTool from "@/components/sign-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Sign PDF Online Free â€“ Add Digital Signature",
+  title: "Sign PDF Online Free – Add Digital Signature",
   description:
     "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/sign-pdf" },
   openGraph: {
-    title: "Sign PDF Online Free â€“ Add Digital Signature | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Sign PDF Online Free – Add Digital Signature | ToolMint",
     description:
       "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
     url: "/tools/sign-pdf",
-    images: [{ url: "/og/sign-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -54,11 +56,11 @@ const steps = [
 const faqs = [
   {
     q: "Is an online PDF signature legally valid?",
-    a: "Electronic signatures are legally valid in most countries under laws like the eSign Act (US), eIDAS (EU), and equivalent regulations in many other jurisdictions. The legal weight depends on the type of signature and the context â€” a simple drawn signature is accepted for most commercial agreements.",
+    a: "Electronic signatures are legally valid in most countries under laws like the eSign Act (US), eIDAS (EU), and equivalent regulations in many other jurisdictions. The legal weight depends on the type of signature and the context — a simple drawn signature is accepted for most commercial agreements.",
   },
   {
     q: "What is the difference between a digital and electronic signature?",
-    a: "An electronic signature is any electronic indicator of intent to sign â€” a drawn signature, typed name, or uploaded image. A digital signature is a specific cryptographic mechanism that uses certificates to verify the signer's identity and detect tampering. ToolMint provides electronic signatures; certified digital signatures require a certificate authority.",
+    a: "An electronic signature is any electronic indicator of intent to sign — a drawn signature, typed name, or uploaded image. A digital signature is a specific cryptographic mechanism that uses certificates to verify the signer's identity and detect tampering. ToolMint provides electronic signatures; certified digital signatures require a certificate authority.",
   },
   {
     q: "Can I sign a PDF on my phone?",
@@ -105,9 +107,12 @@ export default function SignPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Add Digital Signature to PDF Online – Free, No Software
         </h1>
+
+        <ProcessingBadge slug="sign-pdf" />
+        <ToolAnalytics slug="sign-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Add your signature to any PDF document with ToolMint. Draw, type, or upload a signature
-          image, place it anywhere on the page, and download the signed PDF â€” no account required.
+          image, place it anywhere on the page, and download the signed PDF — no account required.
         </p>
 
         <div className="mt-8">
@@ -152,8 +157,8 @@ export default function SignPdfPage() {
               Electronic signatures are legally recognized in most countries for most types of
               agreements. In the United States, the ESIGN Act and UETA make electronic signatures
               enforceable for contracts and agreements. The EU's eIDAS regulation similarly
-              recognizes electronic signatures. For most business contracts â€” freelance agreements,
-              service contracts, rental agreements, and corporate approvals â€” an electronic
+              recognizes electronic signatures. For most business contracts — freelance agreements,
+              service contracts, rental agreements, and corporate approvals — an electronic
               signature placed on a PDF is legally sufficient. Exceptions include wills, real
               estate deeds in some jurisdictions, and certain government forms that specifically
               require wet (physical) signatures. When in doubt about legal requirements for a
@@ -167,7 +172,7 @@ export default function SignPdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               There are three main types of PDF signatures. A simple electronic signature is a
-              visual representation â€” a drawn, typed, or uploaded image of your signature â€”
+              visual representation — a drawn, typed, or uploaded image of your signature —
               placed on the PDF. It carries intent but no cryptographic verification. An advanced
               electronic signature includes identity verification tied to the signer, often via
               email confirmation or SMS. A qualified digital signature (QES) is backed by a

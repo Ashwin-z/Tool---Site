@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import ColorConverterTool from "@/components/color-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Color Converter – HEX to RGB, RGB to HSL, Visual Color Picker Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/color-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Color Converter – HEX to RGB, RGB to HSL, Visual Color Picker | ToolMint",
     description:
       "Convert between HEX, RGB, and HSL color formats with a visual 2D color picker, hue slider, and one-click CSS copy.",
@@ -102,6 +105,9 @@ export default function ColorConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Color Converter – HEX, RGB &amp; HSL with Visual Color Picker
         </h1>
+
+        <ProcessingBadge slug="color-converter" />
+        <ToolAnalytics slug="color-converter" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert between HEX, RGB, and HSL color formats with a visual 2D color picker and hue slider.
           All three formats sync in real time — type in any field and every other format updates instantly.

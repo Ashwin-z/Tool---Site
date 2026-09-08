@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import PdfToPdfaTool from "@/components/pdf-to-pdfa-tool";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to PDF/A Converter â€“ Archivable PDF Free",
+  title: "PDF to PDF/A Converter – Archivable PDF Free",
   description:
     "Convert PDF to PDF/A format online for free. Create long-term archivable PDFs that meet ISO standards. No signup.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-pdfa" },
   openGraph: {
-    title: "PDF to PDF/A Converter â€“ Archivable PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PDF to PDF/A Converter – Archivable PDF Free | ToolMint",
     description:
       "Convert PDF to PDF/A format online for free. Create long-term archivable PDFs that meet ISO standards. No signup.",
     url: "/tools/pdf-to-pdfa",
-    images: [{ url: "/og/pdf-to-pdfa.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -69,7 +72,7 @@ const faqs = [
   },
   {
     q: "What file size difference should I expect?",
-    a: "PDF/A files are often slightly larger than standard PDFs because fonts must be fully embedded and some optimization techniques are not permitted. The increase is typically 10â€“30% depending on how many fonts are used.",
+    a: "PDF/A files are often slightly larger than standard PDFs because fonts must be fully embedded and some optimization techniques are not permitted. The increase is typically 10–30% depending on how many fonts are used.",
   },
 ];
 
@@ -104,9 +107,13 @@ export default function PdfToPdfaPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to PDF/A Online for Free
         </h1>
+
+        <ToolStatusNotice slug="pdf-to-pdfa" />
+        <ProcessingBadge slug="pdf-to-pdfa" />
+        <ToolAnalytics slug="pdf-to-pdfa" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Create archival-compliant PDF/A documents with ToolMint. Upload a standard PDF and
-          download a PDF/A file that meets ISO long-term archiving standards â€” no account required.
+          download a PDF/A file that meets ISO long-term archiving standards — no account required.
         </p>
 
         <div className="mt-8">
@@ -151,7 +158,7 @@ export default function PdfToPdfaPage() {
               PDF/A stands for PDF for Archiving. It is an ISO-standardized version of PDF that
               removes features that could make a file unreadable in the future. Standard PDFs can
               reference external fonts, link to remote resources, include JavaScript, and use
-              encryption â€” all of which create external dependencies. If those resources change
+              encryption — all of which create external dependencies. If those resources change
               or become unavailable, the PDF may not render correctly. PDF/A prohibits these
               features and requires that everything needed to display the document is embedded
               within the file itself. This makes PDF/A the correct format for any document that

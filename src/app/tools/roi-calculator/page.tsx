@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import ROICalculatorTool from "@/components/roi-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "ROI Calculator – Calculate Return on Investment Instantly",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/roi-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "ROI Calculator – Return on Investment, Annualized Return & Payback Period | ToolMint",
     description:
       "Calculate ROI percentage, net profit, annualized return, and payback period from any investment instantly.",
@@ -104,6 +107,9 @@ export default function ROICalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           ROI Calculator – Calculate Return on Investment Instantly
         </h1>
+
+        <ProcessingBadge slug="roi-calculator" />
+        <ToolAnalytics slug="roi-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate the return on any investment instantly. Enter the cost and the net return
           to see ROI percentage, net profit, and payback period. Add duration to compare

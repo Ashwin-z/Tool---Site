@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 
 import { resolvePdfcpuPath, runPdfcpu, sanitizePdfFileName } from "@/lib/server-pdfcpu";
 import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
+import { isToolDown, maintenanceResponse } from "@/lib/tool-status";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,6 +17,13 @@ const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 const ALLOWED_PERMISSIONS = new Set(["none", "print", "all"]);
 
 export async function POST(request: Request) {
+  // Batch 0: this tool depends on a binary that is not working in production.
+  // Fail fast with an honest 503 rather than accepting an upload we cannot process.
+  // Delete the entry in src/lib/tool-status.ts to re-enable this route.
+  if (isToolDown("protect-pdf")) {
+    return maintenanceResponse("protect-pdf");
+  }
+
   const rl = checkRateLimit(`protect-pdf:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
   if (!rl.allowed) {
     return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });

@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RedactPdfTool from "@/components/redact-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Redact PDF Online Free â€“ Hide Sensitive Text",
+  title: "Redact PDF Online Free – Hide Sensitive Text",
   description:
     "Permanently redact sensitive text and images from PDFs online for free. GDPR and compliance-ready. No signup.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/redact-pdf" },
   openGraph: {
-    title: "Redact PDF Online Free â€“ Hide Sensitive Text | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Redact PDF Online Free – Hide Sensitive Text | ToolMint",
     description:
       "Permanently redact sensitive text and images from PDFs online for free. GDPR and compliance-ready. No signup.",
     url: "/tools/redact-pdf",
-    images: [{ url: "/og/redact-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -48,7 +50,7 @@ const steps = [
   { title: "Upload a PDF", desc: "Select the PDF containing sensitive content to redact." },
   { title: "Select areas to redact", desc: "Draw black boxes over the text or regions you want to permanently hide." },
   { title: "Apply redaction", desc: "Confirm the redaction to permanently remove the content." },
-  { title: "Download", desc: "Save the redacted PDF â€” the hidden content cannot be recovered." },
+  { title: "Download", desc: "Save the redacted PDF — the hidden content cannot be recovered." },
 ];
 
 const faqs = [
@@ -70,7 +72,7 @@ const faqs = [
   },
   {
     q: "Is online PDF redaction GDPR compliant?",
-    a: "The redaction output meets GDPR requirements for removing personal data if properly applied to all instances of the data. The processing of the file should comply with your organization's data handling policies â€” if the document is highly sensitive, review whether browser-based processing meets your compliance standards.",
+    a: "The redaction output meets GDPR requirements for removing personal data if properly applied to all instances of the data. The processing of the file should comply with your organization's data handling policies — if the document is highly sensitive, review whether browser-based processing meets your compliance standards.",
   },
 ];
 
@@ -105,6 +107,9 @@ export default function RedactPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Redact PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="redact-pdf" />
+        <ToolAnalytics slug="redact-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Permanently hide sensitive text and content from PDF documents with ToolMint. Draw
           redaction boxes over areas to remove, apply the redaction, and download a secure PDF
@@ -156,7 +161,7 @@ export default function RedactPdfPage() {
               be extracted by copying, searching, or inspecting the file structure. True redaction
               matters because documents shared with only visual black boxes can have their hidden
               content recovered by removing the overlaid shape. Proper redaction has legal and
-              compliance significance â€” courts, government agencies, and regulated industries
+              compliance significance — courts, government agencies, and regulated industries
               require redacted documents to meet standards that ensure the information is
               genuinely irrecoverable.
             </p>
@@ -172,7 +177,7 @@ export default function RedactPdfPage() {
               formats. Redaction is a more thorough process: it marks the area for removal,
               flattens the content, replaces the marked region with an opaque fill, and scrubs
               the underlying text data from the file. The key difference is that redaction is
-              designed to be forensically sound â€” it is used in contexts where you must be
+              designed to be forensically sound — it is used in contexts where you must be
               able to certify that the removed information cannot be reconstructed. Simple text
               deletion in an editor does not provide the same guarantee.
             </p>

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import PythonCodeEditorTool from "@/components/python-code-editor-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Python Code Editor – Run Python Online Without Installing Anything",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/python-code-editor" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Python Code Editor – Run Python Online Free in Browser | ToolMint",
     description:
       "Write and run Python right in your browser. Powered by Pyodide — no install, no server, with stdin simulation and output console.",
@@ -96,6 +99,9 @@ export default function PythonCodeEditorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Python Code Editor – Run Python in Your Browser
         </h1>
+
+        <ProcessingBadge slug="python-code-editor" />
+        <ToolAnalytics slug="python-code-editor" category="developer" />
         <p className="mt-3 max-w-4xl text-sm leading-7 text-muted md:text-base">
           Write and execute Python code entirely in your browser — powered by Pyodide
           (WebAssembly CPython). Simulate stdin input, view stdout and stderr in a clean

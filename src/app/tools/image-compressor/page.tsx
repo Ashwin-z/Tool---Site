@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageCompressorTool from "@/components/image-compressor-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Compress Images Online Without Losing Quality – Free Tool",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-compressor" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Compress Images Without Losing Quality – Free Online | ToolMint",
     description:
       "Reduce JPG, PNG, and WebP file sizes by up to 90% without visible quality loss. Browser-based, no signup.",
@@ -104,6 +107,9 @@ export default function ImageCompressorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Compress Images Online Without Losing Quality
         </h1>
+
+        <ProcessingBadge slug="image-compressor" />
+        <ToolAnalytics slug="image-compressor" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Shrink JPG, PNG, and WebP images by up to 90% with no visible quality loss. Adjust the
           quality slider, set a maximum width, and choose the output format — all processing runs

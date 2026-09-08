@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfSecurityTool from "@/components/pdf-security-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Unlock PDF â€“ Remove PDF Password Online Free",
+  title: "Unlock PDF – Remove PDF Password Online Free",
   description:
     "Remove password protection from PDF files online for free. Unlock encrypted PDFs instantly. No signup required.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/unlock-pdf" },
   openGraph: {
-    title: "Unlock PDF â€“ Remove PDF Password Online Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Unlock PDF – Remove PDF Password Online Free | ToolMint",
     description:
       "Remove password protection from PDF files online for free. Unlock encrypted PDFs instantly. No signup required.",
     url: "/tools/unlock-pdf",
-    images: [{ url: "/og/unlock-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -54,7 +57,7 @@ const steps = [
 const faqs = [
   {
     q: "Can I unlock a PDF I forgot the password to?",
-    a: "No. This tool removes protection only when you provide the correct password. PDF encryption is designed to be unbreakable without the password â€” there is no legitimate online recovery for truly forgotten passwords.",
+    a: "No. This tool removes protection only when you provide the correct password. PDF encryption is designed to be unbreakable without the password — there is no legitimate online recovery for truly forgotten passwords.",
   },
   {
     q: "Is it legal to remove a PDF password?",
@@ -105,9 +108,13 @@ export default function UnlockPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Unlock PDF Online for Free
         </h1>
+
+        <ToolStatusNotice slug="unlock-pdf" />
+        <ProcessingBadge slug="unlock-pdf" />
+        <ToolAnalytics slug="unlock-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Remove password protection from a PDF with ToolMint. Enter the password to authorize
-          decryption and download an unlocked copy â€” no account, no software required.
+          decryption and download an unlocked copy — no account, no software required.
         </p>
 
         <div className="mt-8">
@@ -167,7 +174,7 @@ export default function UnlockPdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               PDF files can have two types of restrictions. An open password requires a password
-              to open the file â€” ToolMint removes this when you supply the correct password.
+              to open the file — ToolMint removes this when you supply the correct password.
               Permission restrictions limit actions like printing, copying, and editing but do not
               prevent the file from being opened. Some permission-restricted PDFs can be unlocked
               without a password because the restrictions rely on application compliance rather

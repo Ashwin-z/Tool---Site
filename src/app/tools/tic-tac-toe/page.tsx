@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TicTacToeTool from "@/components/tic-tac-toe-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Tic Tac Toe Online Free – Play vs AI or 2 Player No Download",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/tic-tac-toe" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Tic Tac Toe Online Free – Play vs AI or 2 Player | ToolMint",
     description:
       "Play Tic Tac Toe against a smart AI or challenge a friend. Free, instant, no download required.",
@@ -103,6 +106,9 @@ export default function TicTacToePage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Tic Tac Toe Online — Play vs AI or 2 Player Free
         </h1>
+
+        <ProcessingBadge slug="tic-tac-toe" />
+        <ToolAnalytics slug="tic-tac-toe" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Play the classic Tic Tac Toe game right in your browser. Challenge a smart AI opponent on easy
           or hard difficulty, or switch to 2-player mode for local multiplayer. Score tracking keeps the

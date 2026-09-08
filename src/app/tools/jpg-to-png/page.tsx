@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import JpgToPngTool from "@/components/jpg-to-png-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Convert JPG to PNG Online – Lossless, Free, No Signup",
@@ -17,6 +19,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/jpg-to-png" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Convert JPG to PNG Online – Free Lossless | ToolMint",
     description: "Convert JPG to lossless PNG with transparency support. Free, browser-based, no signup.",
     url: "/tools/jpg-to-png",
@@ -57,6 +60,9 @@ export default function JpgToPngPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert JPG to PNG Online – Lossless, Free
         </h1>
+
+        <ProcessingBadge slug="jpg-to-png" />
+        <ToolAnalytics slug="jpg-to-png" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert JPEG images to lossless PNG format for editing, transparency support, and sharp
           graphics. Runs entirely in your browser with no file uploads.

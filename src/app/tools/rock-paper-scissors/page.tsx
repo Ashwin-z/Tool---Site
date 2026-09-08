@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import RockPaperScissorsTool from "@/components/rock-paper-scissors-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Rock Paper Scissors Online Free – Play vs Computer No Install",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/rock-paper-scissors" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Rock Paper Scissors Online Free – Play vs Computer | ToolMint",
     description:
       "Play unlimited rounds of Rock Paper Scissors against the computer. Track wins, losses, and your overall win rate.",
@@ -103,6 +106,9 @@ export default function RockPaperScissorsPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Rock Paper Scissors Online — Play vs Computer Free
         </h1>
+
+        <ProcessingBadge slug="rock-paper-scissors" />
+        <ToolAnalytics slug="rock-paper-scissors" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Play the classic Rock Paper Scissors game against the computer. Pick your move, see instant
           results, and track your wins, losses, and overall win rate with a detailed game history.

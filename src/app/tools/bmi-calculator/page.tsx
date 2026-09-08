@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import BmiCalculatorTool from "@/components/bmi-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "BMI Calculator – Check Body Mass Index with Healthy Weight Range",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/bmi-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "BMI Calculator – Healthy Weight Range, BMI Category & BMI Prime | ToolMint",
     description:
       "Enter height and weight in metric or imperial. Get BMI score, category, healthy weight range, and BMI Prime instantly.",
@@ -104,6 +107,9 @@ export default function BmiCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           BMI Calculator – Body Mass Index with Healthy Weight Range
         </h1>
+
+        <ProcessingBadge slug="bmi-calculator" />
+        <ToolAnalytics slug="bmi-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Enter your height and weight in metric or imperial units to instantly see your Body Mass
           Index, BMI category, the healthy weight range for your height, and your BMI Prime.

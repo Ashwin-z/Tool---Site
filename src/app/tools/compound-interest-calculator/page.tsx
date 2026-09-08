@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import CompoundInterestCalculatorTool from "@/components/compound-interest-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Compound Interest Calculator – See How Money Grows Over Time",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/compound-interest-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Compound Interest Calculator – Investment Growth with Year-by-Year Breakdown | ToolMint",
     description:
       "See how money grows with compound interest. Compare simple vs compound. Monthly, quarterly, or annual compounding. Free.",
@@ -104,6 +107,9 @@ export default function CompoundInterestCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Compound Interest Calculator – See How Your Money Grows Over Time
         </h1>
+
+        <ProcessingBadge slug="compound-interest-calculator" />
+        <ToolAnalytics slug="compound-interest-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate how an investment or savings account grows with compound interest. Enter
           principal, annual rate, tenure, and compounding frequency to see the final amount,

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import OgTagGeneratorTool from "@/components/og-tag-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/og-tag-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview | ToolMint",
     description:
       "Generate Open Graph and Twitter Card meta tags instantly. Live social preview card, 6 OG types, 4 Twitter card types. Copy-ready HTML output.",
@@ -96,6 +99,9 @@ export default function OgTagGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           OG Tag Generator – Open Graph & Twitter Card Tags with Live Preview
         </h1>
+
+        <ProcessingBadge slug="og-tag-generator" />
+        <ToolAnalytics slug="og-tag-generator" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate Open Graph and Twitter Card meta tags with a live social media preview — see
           exactly how your link will appear on Facebook, LinkedIn, Slack, and Twitter before you

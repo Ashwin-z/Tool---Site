@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfMergerTool from "@/components/pdf-merger-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Merge PDF Files Online Free â€“ Combine PDFs",
+  title: "Merge PDF Files Online Free – Combine PDFs",
   description:
     "Merge multiple PDF files into one document online for free. Drag, reorder, and combine PDFs instantly. No signup required.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/merge-pdf" },
   openGraph: {
-    title: "Merge PDF Files Online Free â€“ Combine PDFs | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Merge PDF Files Online Free – Combine PDFs | ToolMint",
     description:
       "Merge multiple PDF files into one document online for free. Drag, reorder, and combine PDFs instantly. No signup required.",
     url: "/tools/merge-pdf",
-    images: [{ url: "/og/merge-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -105,6 +107,9 @@ export default function MergePdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Merge PDF Files Into One Document – Free Online
         </h1>
+
+        <ProcessingBadge slug="merge-pdf" />
+        <ToolAnalytics slug="merge-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Combine multiple PDF documents into a single file with ToolMint. Upload up to 25 PDFs,
           drag to reorder them, and download one merged document entirely in your browser. A practical
@@ -166,7 +171,7 @@ export default function MergePdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               The right order depends on how the merged document will be read. For professional
-              submissions, put the most important document first â€” a cover letter before a resume,
+              submissions, put the most important document first — a cover letter before a resume,
 import WebAppSchema from "@/components/web-app-schema";
               or a summary report before detailed appendices. For archive packets, chronological order
               tends to be most intuitive. For client handoffs, match the order of a table of contents

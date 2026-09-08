@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import SitemapGeneratorTool from "@/components/sitemap-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "XML Sitemap Generator – Create & Submit a Sitemap for Any Website Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/sitemap-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "XML Sitemap Generator – Auto-Crawl & Download sitemap.xml | ToolMint",
     description:
       "Auto-crawl websites up to 1000 pages or paste URLs manually. Set changefreq, priority, lastmod — download sitemap.xml instantly.",
@@ -96,6 +99,9 @@ export default function SitemapGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           XML Sitemap Generator – Auto Crawl or Manual URL Entry
         </h1>
+
+        <ProcessingBadge slug="sitemap-generator" />
+        <ToolAnalytics slug="sitemap-generator" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate a valid XML sitemap for any website in seconds. Auto-crawl up to 1000 pages to
           discover all internal URLs automatically, or paste your own list and configure

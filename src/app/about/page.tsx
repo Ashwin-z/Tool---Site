@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "About ToolMint — Free Online Tools for Everyone",
+  title: { absolute: "About ToolMint — Free Online Tools for Everyone" },
   description:
     "Learn about ToolMint, a free suite of 80+ online tools for PDFs, images, text, calculations, SEO, and more. No signup, no watermark, no limits.",
   alternates: { canonical: "/about" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "About ToolMint — Free Online Tools for Everyone",
     description:
       "Learn about ToolMint, a free suite of 80+ online tools for PDFs, images, text, calculations, SEO, and more.",

@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import PngToJpgTool from "@/components/png-to-jpg-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Convert PNG to JPG Online – Free, Instant, No Signup",
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/png-to-jpg" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Convert PNG to JPG Free Online – Instant | ToolMint",
     description: "Convert PNG to JPG instantly. Reduce file size and remove transparency. Free, browser-based.",
     url: "/tools/png-to-jpg",
@@ -65,6 +68,9 @@ export default function PngToJpgPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PNG to JPG Online – Free, Instant
         </h1>
+
+        <ProcessingBadge slug="png-to-jpg" />
+        <ToolAnalytics slug="png-to-jpg" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert PNG images to JPG format to reduce file size and remove transparency. Fully
           browser-based — your images are never uploaded to a server.

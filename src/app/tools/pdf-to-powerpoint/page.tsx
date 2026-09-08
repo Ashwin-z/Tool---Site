@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import PdfToPowerpointTool from "@/components/pdf-to-powerpoint-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to PowerPoint â€“ Convert PDF to PPTX Free",
+  title: "PDF to PowerPoint – Convert PDF to PPTX Free",
   description:
     "Convert PDF files to editable PowerPoint presentations online for free. Fast, accurate, no signup needed.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-powerpoint" },
   openGraph: {
-    title: "PDF to PowerPoint â€“ Convert PDF to PPTX Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PDF to PowerPoint – Convert PDF to PPTX Free | ToolMint",
     description:
       "Convert PDF files to editable PowerPoint presentations online for free. Fast, accurate, no signup needed.",
     url: "/tools/pdf-to-powerpoint",
-    images: [{ url: "/og/pdf-to-powerpoint.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -104,9 +106,12 @@ export default function PdfToPowerpointPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert PDF to PowerPoint Online for Free
         </h1>
+
+        <ProcessingBadge slug="pdf-to-powerpoint" />
+        <ToolAnalytics slug="pdf-to-powerpoint" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Turn a PDF into an editable .pptx presentation with ToolMint. Upload your PDF and get a
-          PowerPoint file where each page becomes a slide â€” ready to edit in Microsoft PowerPoint
+          PowerPoint file where each page becomes a slide — ready to edit in Microsoft PowerPoint
           or Google Slides. No account required.
         </p>
 
@@ -149,11 +154,11 @@ export default function PdfToPowerpointPage() {
               Why Convert a PDF Presentation to PowerPoint?
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
-              PDF is a final-state format â€” it is ideal for reading and sharing but not for editing.
+              PDF is a final-state format — it is ideal for reading and sharing but not for editing.
               If you receive a presentation as a PDF and need to update its content, change the
               branding, add slides, or use it as a starting template, converting to PPTX gives you
               a workable file. Teams also convert PDFs to PowerPoint when repurposing content from
-              reports or whitepapers â€” each page becomes a slide that can be rearranged or redesigned.
+              reports or whitepapers — each page becomes a slide that can be rearranged or redesigned.
               For archiving, keeping a .pptx version alongside the PDF allows future editing without
               starting from scratch.
             </p>
@@ -167,7 +172,7 @@ export default function PdfToPowerpointPage() {
               Yes, but the level of editability depends on how the PDF was created. PDFs made from
               PowerPoint files typically convert with text that can be selected and edited in the
               .pptx output. PDFs created from scanned documents or complex desktop publishing
-              layouts are converted as images on slides â€” the visual content is preserved, but text
+              layouts are converted as images on slides — the visual content is preserved, but text
               cannot be edited directly without OCR post-processing. In both cases, you can add new
               text boxes, change backgrounds, reorder slides, and apply themes in PowerPoint after
               conversion.

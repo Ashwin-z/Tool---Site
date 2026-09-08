@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TextCaseConverterTool from "@/components/text-case-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Text Case Converter – Change to UPPERCASE, lowercase, Title Case & More",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/text-case-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Text Case Converter – UPPERCASE, lowercase, Title Case & More | ToolMint",
     description:
       "Instantly convert text to any case: UPPERCASE, lowercase, Title Case, camelCase, snake_case, kebab-case. Free, browser-based.",
@@ -106,6 +109,9 @@ export default function TextCaseConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Text Case Converter – Change to UPPERCASE, lowercase, Title Case & More
         </h1>
+
+        <ProcessingBadge slug="text-case-converter" />
+        <ToolAnalytics slug="text-case-converter" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert text between UPPERCASE, lowercase, Title Case, Sentence case, camelCase,
           snake_case, and kebab-case with ToolMint. Paste your text, click the case you want,

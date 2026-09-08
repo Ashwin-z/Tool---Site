@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import BreakevenCalculatorTool from "@/components/breakeven-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Break-Even Calculator – Find Your Break-Even Point in Units & Sales",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/breakeven-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Break-Even Calculator – Units, Revenue & Contribution Margin | ToolMint",
     description:
       "Find how many units to sell or how much revenue to generate to cover all costs. Free break-even analysis tool.",
@@ -104,6 +107,9 @@ export default function BreakevenCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Break-Even Calculator – Find Your Break-Even Point in Units & Revenue
         </h1>
+
+        <ProcessingBadge slug="breakeven-calculator" />
+        <ToolAnalytics slug="breakeven-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate how many units you need to sell or how much revenue you need to generate
           to cover all your costs. Enter fixed costs, variable cost per unit, and selling

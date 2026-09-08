@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import LoanEmiCalculatorTool from "@/components/loan-emi-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Loan EMI Calculator – Monthly Payment, Total Interest & Amortization",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/loan-emi-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Loan EMI Calculator – Monthly Payment, Interest & Amortization | ToolMint",
     description:
       "Calculate monthly EMI, total interest, and amortization schedule for any home, car, or personal loan instantly.",
@@ -104,6 +107,9 @@ export default function LoanEmiCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Loan EMI Calculator – Monthly Payment, Total Interest & Amortization Schedule
         </h1>
+
+        <ProcessingBadge slug="loan-emi-calculator" />
+        <ToolAnalytics slug="loan-emi-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Estimate your monthly loan payment accurately before you borrow. Enter the loan
           amount, annual interest rate, and tenure to see EMI, total interest payable, total

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import LengthConverterTool from "@/components/length-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Length Converter – km to Miles, Meters to Feet, cm to Inches Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/length-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Length Converter – km to Miles, Meters to Feet, cm to Inches | ToolMint",
     description:
       "Convert between 12 length units instantly. Metric, imperial, nautical miles, and light years with an all-units comparison table.",
@@ -100,6 +103,9 @@ export default function LengthConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Length Converter – km to Miles, Meters to Feet & More
         </h1>
+
+        <ProcessingBadge slug="length-converter" />
+        <ToolAnalytics slug="length-converter" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert between 12 length units — metric (km, m, cm, mm, μm, nm), imperial (mi, yd, ft, in),
           nautical miles, and light years. Get your result instantly and see all units compared at a glance.

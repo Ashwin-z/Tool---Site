@@ -1,4 +1,4 @@
-﻿export type CategoryHubContent = {
+export type CategoryHubContent = {
   h1?: string;
   intro: string[];
   highlights: { title: string; desc: string }[];
@@ -8,9 +8,9 @@
 
 export const categoryHubContent: Record<string, CategoryHubContent> = {
   pdf: {
-    h1: "Free PDF Tools Online â€“ No Signup Required",
+    h1: "Free PDF Tools Online – No Signup Required",
     intro: [
-      "ToolMint offers free PDF tools online for the document tasks you repeat every week: compressing PDFs for email, merging files into one packet, splitting out specific pages, converting between Office formats and PDF, and securing or signing documents before sharing them. Every tool runs in your browser â€” no account, no watermark, no software to install.",
+      "ToolMint offers free PDF tools online for the document tasks you repeat every week: compressing PDFs for email, merging files into one packet, splitting out specific pages, converting between Office formats and PDF, and securing or signing documents before sharing them. Every tool runs in your browser — no account, no watermark, no software to install.",
       "This collection is organized by task rather than by format, because the right starting point is usually the job you need to finish, not the file type you have. Whether you need to prepare a document for a portal upload, extract data from a PDF report, or add a signature to a contract, the tools here cover the full workflow.",
     ],
     workflows: [

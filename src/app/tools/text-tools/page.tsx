@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ToolCategoryHub from "@/components/tool-category-hub";
 
 export const metadata: Metadata = {
-  title: "Free Online Text Tools â€” Word Counter, Text Compare, Case Converter & More",
+  title: "Free Online Text Tools — Word Counter, Text Compare, Case Converter & More",
   description:
     "7 free online text tools on ToolMint. Count words and characters, compare texts, change case, reverse text, remove whitespace and check grammar. No signup required.",
   keywords: [
@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/text-tools" },
   openGraph: {
-    title: "Free Online Text Tools â€” Word Counter, Compare & More | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Free Online Text Tools — Word Counter, Compare & More | ToolMint",
     description:
       "7 free browser-based text tools. Count words, compare texts, convert case and clean up text.",
     url: "/tools/text-tools",

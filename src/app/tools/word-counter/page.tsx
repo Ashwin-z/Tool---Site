@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import WordCounterTool from "@/components/word-counter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Free Online Word Counter – Count Words, Characters & Reading Time",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/word-counter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free Online Word Counter – Count Words, Characters & Reading Time | ToolMint",
     description:
       "Real-time word, character, sentence, and reading time counts. Paste any text and see stats instantly. No signup.",
@@ -106,6 +109,9 @@ export default function WordCounterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Free Online Word Counter – Count Words, Characters & Reading Time
         </h1>
+
+        <ProcessingBadge slug="word-counter" />
+        <ToolAnalytics slug="word-counter" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Count words, characters, sentences, paragraphs, and estimated reading time in real
           time with ToolMint. Type directly or paste text from any source and the stats update

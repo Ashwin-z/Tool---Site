@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import WifiSpeedCheckerTool from "@/components/wifi-speed-checker-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Internet Speed Test – Check WiFi Speed, Ping & Jitter Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/wifi-speed-checker" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Internet Speed Test – Check WiFi Speed, Ping & Jitter Free | ToolMint",
     description:
       "Test download, upload, ping, and jitter from your browser with live gauge feedback plus IP, ISP, and server details.",
@@ -101,6 +104,9 @@ export default function WifiSpeedCheckerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Internet Speed Test — Download, Upload, Ping &amp; Jitter
         </h1>
+
+        <ProcessingBadge slug="wifi-speed-checker" />
+        <ToolAnalytics slug="wifi-speed-checker" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Test your download speed, upload speed, ping, and jitter directly from your browser. Also
           shows your IP address, ISP metadata, server details, and a live gauge while the test runs,

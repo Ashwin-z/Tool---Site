@@ -1,9 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { blogPosts } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
-  title: "Free Online Tool Guides, Tips & How-Tos – ToolMint Blog",
+  title: { absolute: "Free Online Tool Guides, Tips & How-Tos – ToolMint Blog" },
   description:
     "Step-by-step guides for PDF tools, image editing, calculators, SEO, developer utilities, converters, and more. Written for people who need a clear answer fast.",
   keywords: [
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/blog" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free Online Tool Guides, Tips & How-Tos | ToolMint Blog",
     description:
       "Step-by-step guides for PDF tools, image editing, calculators, SEO, developer utilities, and more. No fluff — clear answers fast.",

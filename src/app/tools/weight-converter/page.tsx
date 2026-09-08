@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import WeightConverterTool from "@/components/weight-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Weight Converter – kg to lbs, Pounds to kg, Stone to kg Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/weight-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Weight Converter – kg to lbs, Pounds to kg, Stone to kg | ToolMint",
     description:
       "Convert between 11 weight units including carats and both US/Imperial tons. Instant results with an all-units comparison table.",
@@ -100,6 +103,9 @@ export default function WeightConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Weight Converter – kg to lbs, Pounds to kg & More
         </h1>
+
+        <ProcessingBadge slug="weight-converter" />
+        <ToolAnalytics slug="weight-converter" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert between 11 weight and mass units — kilograms, pounds, ounces, stones, grams, milligrams,
           micrograms, metric tons, US short tons, imperial long tons, and carats. Instant results with

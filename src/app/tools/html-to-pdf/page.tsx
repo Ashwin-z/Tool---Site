@@ -1,13 +1,15 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import HtmlToPdfTool from "@/components/html-to-pdf-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "HTML to PDF Converter â€“ Convert Webpage to PDF Free",
+  title: "HTML to PDF Converter – Convert Webpage to PDF Free",
   description:
-    "Convert HTML files or code to PDF online for free. Preserves CSS styles and layout. Browser-based, no signup required.",
+    "Convert HTML files, pasted code, or a web page URL to PDF online for free. Preserves CSS styles and layout. No signup required.",
   keywords: [
     "html to pdf",
     "webpage to pdf",
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/html-to-pdf" },
   openGraph: {
-    title: "HTML to PDF Converter â€“ Convert Webpage to PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "HTML to PDF Converter – Convert Webpage to PDF Free | ToolMint",
     description:
-      "Convert HTML files or code to PDF online for free. Preserves CSS styles and layout. Browser-based, no signup required.",
+      "Convert HTML files, pasted code, or a web page URL to PDF online for free. Preserves CSS styles and layout. No signup required.",
     url: "/tools/html-to-pdf",
-    images: [{ url: "/og/html-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -62,7 +64,7 @@ const faqs = [
   },
   {
     q: "How do I convert an HTML email template to PDF?",
-    a: "If the template is hosted online, paste its URL. For a local HTML file, you can open it in your browser first and use the address bar URL, which typically starts with file:// â€” note that some converters do not support local file:// URLs.",
+    a: "If the template is hosted online, paste its URL. For a local HTML file, you can open it in your browser first and use the address bar URL, which typically starts with file:// — note that some converters do not support local file:// URLs.",
   },
   {
     q: "Why is my HTML PDF layout broken?",
@@ -105,9 +107,12 @@ export default function HtmlToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert HTML to PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="html-to-pdf" />
+        <ToolAnalytics slug="html-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Save any webpage as a PDF document with ToolMint. Paste a live URL and download a fully
-          rendered, print-ready PDF that captures the page exactly as it appears in a browser â€”
+          rendered, print-ready PDF that captures the page exactly as it appears in a browser —
           including CSS styles, images, and JavaScript-generated content.
         </p>
 
@@ -150,7 +155,7 @@ export default function HtmlToPdfPage() {
               Common Uses for HTML to PDF Conversion
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
-              Archiving web content is one of the most frequent use cases â€” saving a news article,
+              Archiving web content is one of the most frequent use cases — saving a news article,
               documentation page, or terms and conditions document as a PDF creates a permanent
               record that does not change if the original page is updated or taken down. Developers
               and designers use HTML to PDF to generate printable invoices, statements, and reports
@@ -170,7 +175,7 @@ export default function HtmlToPdfPage() {
               Yes, when the conversion uses a full browser rendering engine. ToolMint renders the
               URL in a real browser context before converting, which means external stylesheets,
               inline CSS, web fonts, and CSS Grid and Flexbox layouts all render as they would in a
-              browser. The main limitations are media queries â€” some pages use CSS that specifically
+              browser. The main limitations are media queries — some pages use CSS that specifically
               hides or rearranges content for print, which affects how the PDF looks. Backgrounds
               set with CSS may also be omitted depending on the print CSS settings of the page.
               If a page renders correctly in a browser but the PDF looks wrong, the issue is usually

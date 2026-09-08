@@ -3,7 +3,7 @@ import Link from "next/link";
 import { toolCategories } from "@/lib/tool-categories";
 
 export const metadata: Metadata = {
-  title: "Sitemap | ToolMint",
+  title: "Sitemap",
   description: "Browse important pages, categories, and featured tools on ToolMint.",
 };
 

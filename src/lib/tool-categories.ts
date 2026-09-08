@@ -1,4 +1,4 @@
-﻿export type ToolInfo = { name: string; slug: string; desc: string };
+export type ToolInfo = { name: string; slug: string; desc: string };
 
 export type ToolCategory = {
   id: string;
@@ -185,7 +185,7 @@ export function getToolBySlug(slug: string): ToolInfo | undefined {
   return undefined;
 }
 
-/** Custom related tools map â€” 4 curated links per tool for optimal internal linking */
+/** Custom related tools map — 4 curated links per tool for optimal internal linking */
 export const toolRelatedMap: Record<string, string[]> = {
   "compress-pdf": ["merge-pdf", "split-pdf", "pdf-to-jpg", "edit-pdf"],
   "merge-pdf": ["compress-pdf", "split-pdf", "image-to-pdf", "pdf-to-word"],

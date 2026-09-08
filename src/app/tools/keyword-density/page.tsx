@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import KeywordDensityTool from "@/components/keyword-density-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Keyword Density Checker – Analyze Keyword Frequency in Any Text Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/keyword-density" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Keyword Density Checker – Unigrams, Bigrams & Trigrams | ToolMint",
     description:
       "Check keyword frequency and density % for any text. Analyze single words, bigrams, and trigrams with stop word filter. Free, 100% browser-side.",
@@ -96,6 +99,9 @@ export default function KeywordDensityPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Keyword Density Checker – Unigrams, Bigrams & Trigrams
         </h1>
+
+        <ProcessingBadge slug="keyword-density" />
+        <ToolAnalytics slug="keyword-density" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste any text and instantly analyze keyword frequency and density percentages — for
           single keywords, two-word bigrams, or three-word trigrams. Toggle a built-in stop word

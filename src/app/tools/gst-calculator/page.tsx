@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import GSTCalculatorTool from "@/components/gst-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "GST Calculator – Add or Remove GST from Any Price Instantly",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/gst-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "GST Calculator – Add or Remove GST, Reverse Rate & Invoice Totals | ToolMint",
     description:
       "Add GST to a base price, remove GST from an inclusive amount, or reverse-calculate the tax rate. Free India GST calculator.",
@@ -104,6 +107,9 @@ export default function GSTCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           GST Calculator – Add or Remove GST from Any Price Instantly
         </h1>
+
+        <ProcessingBadge slug="gst-calculator" />
+        <ToolAnalytics slug="gst-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Calculate GST for India instantly. Add GST to a base price to get the inclusive total,
           remove GST from an inclusive amount to find the base price, or reverse-calculate the

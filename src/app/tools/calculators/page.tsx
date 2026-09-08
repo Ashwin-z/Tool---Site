@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/calculators" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free Online Calculators - EMI, BMI, Interest & More | ToolMint",
     description:
       "15 free calculators for finance, health, math, gaming, and everyday calculations. No signup required.",

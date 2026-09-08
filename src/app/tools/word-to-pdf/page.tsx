@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WordToPdfTool from "@/components/word-to-pdf-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Word to PDF Converter â€“ Convert DOCX to PDF Free",
+  title: "Word to PDF Converter – Convert DOCX to PDF Free",
   description:
     "Convert Word documents to PDF online for free. Upload .doc or .docx and get a perfect PDF instantly. No signup required.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/word-to-pdf" },
   openGraph: {
-    title: "Word to PDF Converter â€“ Convert DOCX to PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Word to PDF Converter – Convert DOCX to PDF Free | ToolMint",
     description:
       "Convert Word documents to PDF online for free. Upload .doc or .docx and get a perfect PDF instantly. No signup required.",
     url: "/tools/word-to-pdf",
-    images: [{ url: "/og/word-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -36,7 +39,7 @@ const useCases = [
   },
   {
     title: "Portal and form submissions",
-    desc: "Government portals, job applications, and academic systems commonly require PDF uploads â€” convert your .docx before submitting.",
+    desc: "Government portals, job applications, and academic systems commonly require PDF uploads — convert your .docx before submitting.",
   },
   {
     title: "Print-ready files",
@@ -69,7 +72,7 @@ const faqs = [
   },
   {
     q: "Is it better to save as PDF from Word or use a converter?",
-    a: "Saving directly from Word (File â†’ Save As â†’ PDF) gives the most accurate result because Word handles its own formatting. An online converter is the right choice when you do not have Word installed or are working on a shared or mobile device.",
+    a: "Saving directly from Word (File → Save As → PDF) gives the most accurate result because Word handles its own formatting. An online converter is the right choice when you do not have Word installed or are working on a shared or mobile device.",
   },
 ];
 
@@ -104,6 +107,10 @@ export default function WordToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert Word to PDF Online for Free
         </h1>
+
+        <ToolStatusNotice slug="word-to-pdf" />
+        <ProcessingBadge slug="word-to-pdf" />
+        <ToolAnalytics slug="word-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert .doc and .docx files to PDF with ToolMint. Upload your Word document and download
           a properly formatted PDF in seconds. No account, no watermark, no software to install.
@@ -151,7 +158,7 @@ export default function WordToPdfPage() {
               A .docx file looks different depending on the version of Microsoft Word or the
               application used to open it. Recipients using Google Docs, LibreOffice, or an older
               version of Word may see shifted paragraphs, missing fonts, or broken table layouts.
-              PDF eliminates this variability â€” the document looks identical on every device, screen
+              PDF eliminates this variability — the document looks identical on every device, screen
               size, and operating system. PDF also prevents casual editing, which matters when you
               are sharing a final contract, a report, or a resume. For anything where appearance and
               content integrity matter, PDF is the right format to share.
@@ -165,7 +172,7 @@ export default function WordToPdfPage() {
             <p className="mt-4 text-sm leading-7 text-muted">
               In most cases, yes. Standard formatting including fonts, bold and italic styling,
               headings, lists, tables, and embedded images all convert cleanly. The main exception
-              is non-standard fonts that are not embedded in the file â€” if the converter cannot find
+              is non-standard fonts that are not embedded in the file — if the converter cannot find
               the font, it substitutes a default, which can change text spacing. Track changes and
               comments are typically stripped from the PDF output, which is usually the desired
               behavior when sharing a final version. Headers, footers, and page numbers convert

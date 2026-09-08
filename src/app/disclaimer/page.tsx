@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Disclaimer | ToolMint",
+  title: "Disclaimer",
   description: "Read ToolMint's legal disclaimer regarding tool outputs, accuracy, and liability.",
   alternates: { canonical: "/disclaimer" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Disclaimer | ToolMint",
     description: "Read ToolMint's legal disclaimer regarding tool outputs, accuracy, and liability.",
     url: "/disclaimer",

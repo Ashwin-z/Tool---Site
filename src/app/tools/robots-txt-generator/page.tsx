@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import RobotsTxtGeneratorTool from "@/components/robots-txt-generator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Robots.txt Generator – Create a robots.txt File for Any Website Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/robots-txt-generator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Robots.txt Generator – Platform Detection & Sensitive Path Blocker | ToolMint",
     description:
       "Auto-detects WordPress, Shopify, OpenCart and sensitive paths to generate a valid robots.txt. Download instantly. Free.",
@@ -96,6 +99,9 @@ export default function RobotsTxtGeneratorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Robots.txt Generator – Platform Detection & Sensitive Path Blocker
         </h1>
+
+        <ProcessingBadge slug="robots-txt-generator" />
+        <ToolAnalytics slug="robots-txt-generator" category="seo" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Generate a ready-to-use robots.txt file for any website. Enter your URL and the tool
           automatically detects your CMS (WordPress, Shopify, OpenCart), scans for sensitive paths

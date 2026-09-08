@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ToolCategoryHub from "@/components/tool-category-hub";
 
 export const metadata: Metadata = {
-  title: "Free Online Image Tools â€” Compress, Resize, Crop & Convert Images",
+  title: "Free Online Image Tools — Compress, Resize, Crop & Convert Images",
   description:
     "9 free online image tools on ToolMint. Compress, resize, crop images, convert between JPG, PNG, WebP and PDF, and extract text with OCR. No signup required.",
   keywords: [
@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-tools" },
   openGraph: {
-    title: "Free Online Image Tools â€” Compress, Resize & Convert | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Free Online Image Tools — Compress, Resize & Convert | ToolMint",
     description:
       "9 free browser-based image tools. Compress, resize, crop, convert, and OCR images with no signup.",
     url: "/tools/image-tools",

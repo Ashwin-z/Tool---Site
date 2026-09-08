@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import ComparePdfTool from "@/components/compare-pdf-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Compare PDF Files Online Free â€“ PDF Diff Tool",
+  title: "Compare PDF Files Online Free – PDF Diff Tool",
   description:
     "Compare two PDF documents online for free. Highlight differences in text and layout side by side. No signup required.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/compare-pdf" },
   openGraph: {
-    title: "Compare PDF Files Online Free â€“ PDF Diff Tool | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Compare PDF Files Online Free – PDF Diff Tool | ToolMint",
     description:
       "Compare two PDF documents online for free. Highlight differences in text and layout side by side. No signup required.",
     url: "/tools/compare-pdf",
-    images: [{ url: "/og/compare-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -105,9 +107,12 @@ export default function ComparePdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Compare PDF Files Online for Free
         </h1>
+
+        <ProcessingBadge slug="compare-pdf" />
+        <ToolAnalytics slug="compare-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Find differences between two PDF documents with ToolMint. Upload the original and
-          revised versions to see added, removed, and changed text highlighted side by side â€”
+          revised versions to see added, removed, and changed text highlighted side by side —
           no account required.
         </p>
 

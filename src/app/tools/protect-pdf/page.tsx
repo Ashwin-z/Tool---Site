@@ -1,11 +1,14 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfSecurityTool from "@/components/pdf-security-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolStatusNotice from "@/components/tool-status-notice";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Protect PDF with Password â€“ Encrypt PDF Free",
+  title: "Protect PDF with Password – Encrypt PDF Free",
   description:
     "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
   keywords: [
@@ -20,11 +23,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/protect-pdf" },
   openGraph: {
-    title: "Protect PDF with Password â€“ Encrypt PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "Protect PDF with Password – Encrypt PDF Free | ToolMint",
     description:
       "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
     url: "/tools/protect-pdf",
-    images: [{ url: "/og/protect-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -54,7 +57,7 @@ const steps = [
 const faqs = [
   {
     q: "What is the difference between open password and permission password?",
-    a: "An open password (user password) is required to open the file at all. A permission password (owner password) controls what actions are allowed after opening â€” printing, copying, and editing. You can set one or both.",
+    a: "An open password (user password) is required to open the file at all. A permission password (owner password) controls what actions are allowed after opening — printing, copying, and editing. You can set one or both.",
   },
   {
     q: "Can a password-protected PDF be cracked?",
@@ -62,7 +65,7 @@ const faqs = [
   },
   {
     q: "How do I password protect a PDF on mobile?",
-    a: "Open ToolMint in your mobile browser, upload the PDF, set your password, and download the protected file. No app installation is required â€” the tool works in any mobile browser.",
+    a: "Open ToolMint in your mobile browser, upload the PDF, set your password, and download the protected file. No app installation is required — the tool works in any mobile browser.",
   },
   {
     q: "Does protecting a PDF change its file size?",
@@ -105,9 +108,13 @@ export default function ProtectPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Password Protect PDF Online – AES-256 Encryption Free
         </h1>
+
+        <ToolStatusNotice slug="protect-pdf" />
+        <ProcessingBadge slug="protect-pdf" />
+        <ToolAnalytics slug="protect-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Lock a PDF with AES-256 encryption using ToolMint. Add an open password, set sharing
-          permissions, and download a protected PDF â€” no account, no software required.
+          permissions, and download a protected PDF — no account, no software required.
         </p>
 
         <div className="mt-8">
@@ -150,7 +157,7 @@ export default function ProtectPdfPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               PDF security has two distinct layers. The first is the open password (also called
-              the user password), which controls access to the file â€” recipients must enter this
+              the user password), which controls access to the file — recipients must enter this
               password to open the PDF at all. The second is the owner password (also called the
               permissions password), which controls what a recipient can do once the file is open.
               With an owner password, you can prevent printing, copying text, filling in form
@@ -172,7 +179,7 @@ export default function ProtectPdfPage() {
               weak point is always the password itself. Short passwords, dictionary words, or easily
               guessed combinations can be cracked by automated tools in seconds or minutes. Use a
               password of at least 12 characters with a mix of letters, numbers, and symbols for
-              any document that requires genuine security. Store the password separately â€” there is
+              any document that requires genuine security. Store the password separately — there is
               no recovery mechanism built into the PDF format.
             </p>
           </div>

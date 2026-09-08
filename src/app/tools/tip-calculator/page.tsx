@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TipCalculatorTool from "@/components/tip-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Tip Calculator – Calculate Tips and Split Bills Between Friends",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/tip-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Tip Calculator – Split Bills Between Friends & Calculate Gratuity | ToolMint",
     description:
       "Calculate tips, split bills between any number of people, and compare tip percentages. Free, instant.",
@@ -104,6 +107,9 @@ export default function TipCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Tip Calculator – Calculate Tips and Split Bills Between Friends
         </h1>
+
+        <ProcessingBadge slug="tip-calculator" />
+        <ToolAnalytics slug="tip-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Enter the bill amount, choose a tip percentage, and split between any number of
           people instantly. See the tip amount, total bill with tip, and exact amount owed

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import CalorieCalculatorTool from "@/components/calorie-calculator-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Calorie Calculator – Daily Calorie Needs for Weight Loss or Gain",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/calorie-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Calorie Calculator – Daily Needs for Weight Loss, Maintenance & Gain | ToolMint",
     description:
       "Find your TDEE and daily calorie target for weight loss, maintenance, or muscle gain based on your stats and activity level.",
@@ -104,6 +107,9 @@ export default function CalorieCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Calorie Calculator – Daily Calorie Needs for Weight Loss, Maintenance & Gain
         </h1>
+
+        <ProcessingBadge slug="calorie-calculator" />
+        <ToolAnalytics slug="calorie-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Find out how many calories you need per day based on your age, gender, height,
           weight, and activity level. See your BMR, TDEE, and the daily calorie target for

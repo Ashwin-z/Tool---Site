@@ -9,6 +9,7 @@ export const metadata: Metadata = {
     "ToolMint offers 80+ free online tools - compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
   alternates: { canonical: "/" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "ToolMint - Free Online PDF Tools, Converters & Calculators",
     description:
       "80+ free online tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",

@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import TextReverserTool from "@/components/text-reverser-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Text Reverser Online – Reverse Text, Words & Characters Free",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/text-reverser" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Text Reverser Online – Reverse Text, Words & Characters | ToolMint",
     description:
       "Reverse entire text, flip word order, or reverse characters in each word. Instant, browser-based, free.",
@@ -106,6 +109,9 @@ export default function TextReverserPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Text Reverser – Reverse Text, Words & Characters Online Free
         </h1>
+
+        <ProcessingBadge slug="text-reverser" />
+        <ToolAnalytics slug="text-reverser" category="text" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Reverse your entire text, flip the word order, or reverse the characters in each
           word with ToolMint. Choose the reversal mode that fits your need and copy the

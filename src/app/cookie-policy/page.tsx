@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | ToolMint",
+  title: "Cookie Policy",
   description: "Learn how ToolMint uses cookies for analytics, ads, and site functionality.",
   alternates: { canonical: "/cookie-policy" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Cookie Policy | ToolMint",
     description: "Learn how ToolMint uses cookies for analytics, ads, and site functionality.",
     url: "/cookie-policy",

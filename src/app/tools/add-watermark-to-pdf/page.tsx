@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import AddWatermarkTool from "@/components/add-watermark-tool-loader";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Add Watermark to PDF Online Free",
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/add-watermark-to-pdf" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Add Watermark to PDF Online Free | ToolMint",
     description:
       "Add text or image watermarks to PDF files online for free. Customize position, opacity, and size. No signup required.",
     url: "/tools/add-watermark-to-pdf",
-    images: [{ url: "/og/add-watermark-to-pdf.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -58,7 +60,7 @@ const faqs = [
   },
   {
     q: "How do I add a 'Confidential' watermark to a PDF?",
-    a: "Select text watermark, type 'CONFIDENTIAL' in the text field, set the rotation to 45 degrees, and reduce opacity to around 30â€“50% for a professional-looking stamp across every page.",
+    a: "Select text watermark, type 'CONFIDENTIAL' in the text field, set the rotation to 45 degrees, and reduce opacity to around 30–50% for a professional-looking stamp across every page.",
   },
   {
     q: "Can I remove a watermark added by this tool?",
@@ -105,9 +107,12 @@ export default function AddWatermarkToPdfPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Add Watermark to PDF Online for Free
         </h1>
+
+        <ProcessingBadge slug="add-watermark-to-pdf" />
+        <ToolAnalytics slug="add-watermark-to-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Stamp any PDF with a text or image watermark using ToolMint. Adjust the position,
-          alignment, rotation, opacity, and mosaic tiling, then choose which pages to apply it to â€”
+          alignment, rotation, opacity, and mosaic tiling, then choose which pages to apply it to —
           all in your browser without uploading to any server.
         </p>
 
@@ -157,7 +162,7 @@ export default function AddWatermarkToPdfPage() {
               creative work and research, overlaying a copyright notice or website URL discourages
               unauthorized redistribution. Brands use watermarks to embed their identity in
               proposals, reports, and presentations even when the document is shared as a plain
-              PDF. The key is matching the watermark style â€” opacity, position, and size â€” to the
+              PDF. The key is matching the watermark style — opacity, position, and size — to the
               use case, so it communicates the right message without making the content unreadable.
             </p>
           </div>
@@ -171,7 +176,7 @@ export default function AddWatermarkToPdfPage() {
               rendered as vector elements. They are ideal for status labels like DRAFT, SAMPLE, or
               CONFIDENTIAL. Image watermarks are better when you want to embed a logo, seal, or
               signature-style graphic that matches your brand identity. The downside is that image
-              watermarks need a transparent PNG to look good against page content â€” a JPEG with a
+              watermarks need a transparent PNG to look good against page content — a JPEG with a
               white background will produce a visible white box. For most document workflows, a
               text watermark with a diagonal rotation, subtle opacity, and centered position covers
               the majority of use cases cleanly and quickly.

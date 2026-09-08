@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import GrammarCheckerTool from "@/components/grammar-checker-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Free Grammar Checker Online – Fix Spelling & Grammar Instantly",
@@ -22,6 +24,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/grammar-checker" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Free Grammar Checker Online – Fix Spelling & Grammar Instantly | ToolMint",
     description:
       "Instantly find and fix spelling, capitalization, and grammar errors. Fast browser-based checks, no signup.",
@@ -106,6 +109,9 @@ export default function GrammarCheckerPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Free Grammar Checker – Fix Spelling & Grammar Errors Online
         </h1>
+
+        <ProcessingBadge slug="grammar-checker" />
+        <ToolAnalytics slug="grammar-checker" category="text" />
 
         <p className="mt-4 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste your text and click &ldquo;Check Grammar&rdquo; to instantly find spelling mistakes,

@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfToTextTool from "@/components/pdf-to-text-tool";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Text (OCR) â€“ Extract Text from PDF Free",
+  title: "PDF to Text (OCR) – Extract Text from PDF Free",
   description:
     "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
   keywords: [
@@ -20,11 +22,11 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/pdf-to-text" },
   openGraph: {
-    title: "PDF to Text (OCR) â€“ Extract Text from PDF Free | ToolMint",
+    images: ["/opengraph-image"],
+    title: "PDF to Text (OCR) – Extract Text from PDF Free | ToolMint",
     description:
       "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
     url: "/tools/pdf-to-text",
-    images: [{ url: "/og/pdf-to-text.png" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -61,7 +63,7 @@ const faqs = [
   },
   {
     q: "What languages does OCR support?",
-    a: "ToolMint's OCR supports the most common Latin-script languages including English, French, German, Spanish, Italian, and Portuguese. Support for other scripts varies â€” check the tool for current language options.",
+    a: "ToolMint's OCR supports the most common Latin-script languages including English, French, German, Spanish, Italian, and Portuguese. Support for other scripts varies — check the tool for current language options.",
   },
   {
     q: "Why is my extracted text scrambled or wrong?",
@@ -104,9 +106,12 @@ export default function PdfToTextPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Extract Text from Scanned PDF Online – Free OCR Tool
         </h1>
+
+        <ProcessingBadge slug="pdf-to-text" />
+        <ToolAnalytics slug="pdf-to-text" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Pull text out of any PDF document with ToolMint. Works on digital PDFs and scanned
-          documents using OCR. Copy the output or download it as a text file â€” no account required.
+          documents using OCR. Copy the output or download it as a text file — no account required.
         </p>
 
         <div className="mt-8">
@@ -149,8 +154,8 @@ export default function PdfToTextPage() {
             </h2>
             <p className="mt-4 text-sm leading-7 text-muted">
               OCR stands for Optical Character Recognition. It is a technology that analyzes the
-              visual content of an image â€” whether a photograph, a scanned page, or a PDF rendered
-              as an image â€” and identifies letter shapes to reconstruct text. The process involves
+              visual content of an image — whether a photograph, a scanned page, or a PDF rendered
+              as an image — and identifies letter shapes to reconstruct text. The process involves
               preprocessing the image for contrast and orientation, segmenting the image into lines
               and characters, comparing character shapes against trained letter models, and
               assembling the recognized characters into words and sentences. Modern OCR engines

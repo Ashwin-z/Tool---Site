@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import FileSizeConverterTool from "@/components/file-size-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "File Size Converter – MB to GB, KB to MB, SI vs IEC Units Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/file-size-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "File Size Converter – MB to GB, KB to MB, SI vs IEC Units | ToolMint",
     description:
       "Convert between 12 file size units including SI (KB/MB/GB) and IEC binary (KiB/MiB/GiB) formats with real-world quick reference cards.",
@@ -102,6 +105,9 @@ export default function FileSizeConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           File Size Converter – MB to GB, KB to MB, SI & IEC Binary Units
         </h1>
+
+        <ProcessingBadge slug="file-size-converter" />
+        <ToolAnalytics slug="file-size-converter" category="converters" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert between 12 file size units — bits, bytes, KB, MB, GB, TB, PB (SI decimal) and KiB, MiB,
           GiB, TiB, PiB (IEC binary). See both systems side by side, understand the MB vs MiB difference,

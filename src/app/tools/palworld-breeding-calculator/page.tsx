@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import PalworldBreedingTool from "@/components/palworld-breeding-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Palworld Breeding Calculator – Find Breeding Combinations & Child Pals",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/palworld-breeding-calculator" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Palworld Breeding Calculator – Child Pal & Combinations Finder | ToolMint",
     description:
       "Select two parent Pals to instantly see the resulting child Pal. Plan breeding combinations and discover rare Pal recipes.",
@@ -104,6 +107,9 @@ export default function PalworldBreedingCalculatorPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Palworld Breeding Calculator – Find Child Pal for Any Two Parents
         </h1>
+
+        <ProcessingBadge slug="palworld-breeding-calculator" />
+        <ToolAnalytics slug="palworld-breeding-calculator" category="calculators" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Select any two parent Pals to instantly see what child they produce. Discover
           breeding combinations for rare and legendary Pals, plan multi-generation breeding

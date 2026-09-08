@@ -3,6 +3,8 @@ import RelatedTools from "@/components/related-tools";
 import YouTubeThumbnailDownloaderTool from "@/components/youtube-thumbnail-downloader-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "YouTube Thumbnail Downloader – Download HD Thumbnail Free",
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/youtube-thumbnail-downloader" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "YouTube Thumbnail Downloader – Download HD Thumbnail Free | ToolMint",
     description:
       "Paste a YouTube URL or video ID and download thumbnails in 5 available resolutions. No signup needed.",
@@ -101,6 +104,9 @@ export default function YouTubeThumbnailDownloaderPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           YouTube Thumbnail Downloader — All Sizes, No Signup
         </h1>
+
+        <ProcessingBadge slug="youtube-thumbnail-downloader" />
+        <ToolAnalytics slug="youtube-thumbnail-downloader" category="more" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Paste any YouTube video URL or plain video ID and download its thumbnail in all available
           resolutions. Supports standard watch URLs, Shorts, embeds, and youtu.be links, then shows

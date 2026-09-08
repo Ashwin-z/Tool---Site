@@ -1,8 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogPosts, getBlogPost } from "@/lib/blog-posts";
 import { getToolBySlug } from "@/lib/tool-categories";
+import { clampDescription, stripBrand, withBrand } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -14,16 +15,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getBlogPost(slug);
   if (!post) return {};
+  // Some metaTitle values already end in "| ToolMint"; the layout template
+  // appends it too, so strip it here and let exactly one suffix through.
+  const headline = stripBrand(post.metaTitle ?? post.title);
+  const description = clampDescription(post.description);
+
   return {
-    title: post.metaTitle ?? post.title,
-    description: post.description,
+    title: headline,
+    description,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
-      title: post.metaTitle ?? post.title,
-      description: post.description,
+    images: ["/opengraph-image"],
+      title: withBrand(headline),
+      description,
       url: `/blog/${post.slug}`,
       type: "article",
       publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt ?? post.publishedAt,
     },
   };
 }
@@ -55,7 +63,7 @@ export default async function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
     author: { "@type": "Organization", name: "ToolMint", url: "https://toolmint.tools" },
     publisher: { "@type": "Organization", name: "ToolMint", url: "https://toolmint.tools" },
     mainEntityOfPage: { "@type": "WebPage", "@id": `https://toolmint.tools/blog/${post.slug}` },

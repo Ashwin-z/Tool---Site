@@ -1,11 +1,11 @@
-﻿export type BlogSection = {
+export type BlogSection = {
   heading: string;
   body: string;
   list?: string[];
 };
 export type BlogPost = {
   slug: string; title: string; metaTitle?: string; description: string;
-  publishedAt: string; category: string; readTime: number; excerpt: string;
+  publishedAt: string; updatedAt?: string; category: string; readTime: number; excerpt: string;
   intro: string; sections: BlogSection[];
   faqs: { q: string; a: string }[];
   relatedToolSlugs: string[]; relatedPostSlugs?: string[];

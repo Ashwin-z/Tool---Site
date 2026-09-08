@@ -1,8 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import RelatedTools from "@/components/related-tools";
 import ImageConverterTool from "@/components/image-converter-tool";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import WebAppSchema from "@/components/web-app-schema";
+import ProcessingBadge from "@/components/processing-badge";
+import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
   title: "Convert Images Between JPG, PNG, WebP & More – Free Online",
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/tools/image-converter" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Image Format Converter – JPG, PNG, WebP, GIF Free | ToolMint",
     description: "Convert between JPG, PNG, WebP, GIF, BMP, and TIFF online free. Batch support, no signup.",
     url: "/tools/image-converter",
@@ -59,6 +62,9 @@ export default function ImageConverterPage() {
         <h1 className="font-display text-3xl font-bold leading-[1.1] tracking-[-0.02em] text-foreground md:text-5xl">
           Convert Images Between JPG, PNG, WebP and More
         </h1>
+
+        <ProcessingBadge slug="image-converter" />
+        <ToolAnalytics slug="image-converter" category="image" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
           Convert images between all major formats — JPG, PNG, WebP, GIF, BMP, and TIFF. Batch
           convert multiple files at once. All processing runs in your browser.

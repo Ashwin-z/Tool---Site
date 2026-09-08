@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | ToolMint",
+  title: "Terms of Service",
   description:
     "Read the terms governing your use of ToolMint's free online tools, including user obligations, intellectual property, and liability limitations.",
   alternates: { canonical: "/terms" },
   openGraph: {
+    images: ["/opengraph-image"],
     title: "Terms of Service | ToolMint",
     description:
       "Read the terms governing your use of ToolMint's free online tools, including user obligations, intellectual property, and liability limitations.",
