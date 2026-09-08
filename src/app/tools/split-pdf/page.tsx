@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Split PDF Online Free – Extract PDF Pages",
+  title: "Split PDF in Your Browser – No Upload",
   description:
-    "Split a PDF into separate pages or extract a page range online for free. Fast, easy, no signup needed.",
+    "Extract pages or split a PDF into separate files without uploading it. Everything runs on your device. Free, no signup, no watermark.",
   keywords: [
     "split pdf",
     "extract pdf pages",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/split-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Split PDF Online Free – Extract PDF Pages | ToolMint",
+    title: "Split PDF in Your Browser – No Upload | ToolMint",
     description:
-      "Split a PDF into separate pages or extract a page range online for free. Fast, easy, no signup needed.",
+      "Extract pages or split a PDF into separate files without uploading it. Everything runs on your device. Free, no signup, no watermark.",
     url: "/tools/split-pdf",
   },
   twitter: { card: "summary_large_image" },

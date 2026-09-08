@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { analytics, classifyError, sizeBucket } from "@/lib/analytics";
+import { renderPageThumbnail } from "@/lib/pdfjs-loader";
 
 /** Identity for every analytics event this tool emits. */
 const TOOL = { tool_slug: "merge-pdf", category: "pdf", processing_mode: "browser" } as const;
@@ -55,26 +56,9 @@ function truncateName(fileName: string, maxLength = 28): string {
 
 async function renderPdfPreview(bytes: ArrayBuffer): Promise<string | null> {
   if (typeof window === "undefined") return null;
-
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-
-  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-  }
-
-  const pdf = await pdfjs.getDocument({ data: bytes }).promise;
-  const page = await pdf.getPage(1);
-  const viewport = page.getViewport({ scale: 0.55 });
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  if (!context) return null;
-
-  canvas.width = Math.ceil(viewport.width);
-  canvas.height = Math.ceil(viewport.height);
-
-  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
-  return canvas.toDataURL("image/png", 0.92);
+  // Shared loader: pdf.js and its worker both come from this site's own
+  // /vendor/pdfjs. This used to fetch the worker from unpkg.com.
+  return renderPageThumbnail(bytes, 1, 0.55);
 }
 
 async function readQueuedPdf(file: File): Promise<QueuedPdf> {
@@ -326,6 +310,7 @@ export default function PdfMergerTool() {
                 type="file"
                 accept=".pdf,application/pdf"
                 multiple
+                aria-label="Choose PDF files to merge"
                 className="hidden"
                 onChange={(e) => {
                   void addFiles(e.target.files);
@@ -359,7 +344,7 @@ export default function PdfMergerTool() {
                     e.stopPropagation();
                     handleReset();
                   }}
-                  className="text-[10px] font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
+                  className="inline-flex min-h-11 items-center px-2 text-[10px] font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
                 >
                   Clear all
                 </button>
@@ -456,7 +441,7 @@ export default function PdfMergerTool() {
                             type="button"
                             onClick={() => handleMove(index, index - 1)}
                             disabled={index === 0}
-                            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
+                            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
                           >
                             ↑ Up
                           </button>
@@ -464,14 +449,14 @@ export default function PdfMergerTool() {
                             type="button"
                             onClick={() => handleMove(index, index + 1)}
                             disabled={index === queue.length - 1}
-                            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
+                            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 dark:border-transparent dark:bg-surface-3/50 dark:text-white dark:hover:bg-surface-3 dark:disabled:bg-surface-3/30 dark:disabled:text-white/40"
                           >
                             ↓ Down
                           </button>
                           <button
                             type="button"
                             onClick={() => handleRemove(item.id)}
-                            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition hover:border-red-300 hover:bg-red-100 dark:border-transparent dark:bg-red-500/10 dark:text-red-200 dark:hover:bg-red-500/20"
+                            className="inline-flex min-h-11 items-center justify-center rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition hover:border-red-300 hover:bg-red-100 dark:border-transparent dark:bg-red-500/10 dark:text-red-200 dark:hover:bg-red-500/20"
                           >
                             Remove
                           </button>
@@ -487,7 +472,7 @@ export default function PdfMergerTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+        <div role="alert" className="rounded-2xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
           {errorMessage}
         </div>
       )}
@@ -526,7 +511,7 @@ export default function PdfMergerTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
+        <div role="status" aria-live="polite" className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
@@ -542,7 +527,7 @@ export default function PdfMergerTool() {
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div role="status" aria-live="polite" className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10 text-center">

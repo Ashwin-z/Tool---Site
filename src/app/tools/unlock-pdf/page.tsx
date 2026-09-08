@@ -8,9 +8,9 @@ import ToolStatusNotice from "@/components/tool-status-notice";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Unlock PDF – Remove PDF Password Online Free",
+  title: "Remove a PDF Password – No Upload",
   description:
-    "Remove password protection from PDF files online for free. Unlock encrypted PDFs instantly. No signup required.",
+    "Remove the password from a PDF you can already open, without uploading it. Works with RC4 and AES encryption. Free, no signup.",
   keywords: [
     "unlock pdf",
     "remove pdf password online",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/unlock-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Unlock PDF – Remove PDF Password Online Free | ToolMint",
+    title: "Remove a PDF Password – No Upload | ToolMint",
     description:
-      "Remove password protection from PDF files online for free. Unlock encrypted PDFs instantly. No signup required.",
+      "Remove the password from a PDF you can already open, without uploading it. Works with RC4 and AES encryption. Free, no signup.",
     url: "/tools/unlock-pdf",
   },
   twitter: { card: "summary_large_image" },
@@ -118,7 +118,7 @@ export default function UnlockPdfPage() {
         </p>
 
         <div className="mt-8">
-          <PdfSecurityTool mode="unlock" />
+          <PdfSecurityTool operation="unlock" />
         </div>
 
         <section className="mt-16">

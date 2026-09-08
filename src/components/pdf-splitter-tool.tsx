@@ -4,6 +4,20 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import JSZip from "jszip";
 import { PDFDocument } from "pdf-lib";
+import { renderPageThumbnail } from "@/lib/pdfjs-loader";
+import { analytics, classifyError, sizeBucket } from "@/lib/analytics";
+
+/** Identity for every analytics event this tool emits. */
+const TOOL = { tool_slug: "split-pdf", category: "pdf", processing_mode: "browser" } as const;
+
+/** Bucketed so an exact document page count is never transmitted. */
+function pageBucket(n: number): string {
+  if (n <= 1) return "1";
+  if (n <= 10) return "2-10";
+  if (n <= 50) return "11-50";
+  if (n <= 200) return "51-200";
+  return "200+";
+}
 
 const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
 
@@ -71,26 +85,9 @@ async function loadUploadedPdf(file: File): Promise<UploadedPdf> {
 
 async function renderPdfPagePreview(bytes: ArrayBuffer, pageNumber: number): Promise<string | null> {
   if (typeof window === "undefined") return null;
-
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-
-  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-  }
-
-  const pdf = await pdfjs.getDocument({ data: bytes.slice(0) }).promise;
-  const page = await pdf.getPage(pageNumber);
-  const viewport = page.getViewport({ scale: 0.42 });
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  if (!context) return null;
-
-  canvas.width = Math.ceil(viewport.width);
-  canvas.height = Math.ceil(viewport.height);
-
-  await page.render({ canvasContext: context, viewport, canvas } as never).promise;
-  return canvas.toDataURL("image/png", 0.92);
+  // Shared loader: pdf.js and its worker both come from this site's own
+  // /vendor/pdfjs. This used to fetch the worker from unpkg.com.
+  return renderPageThumbnail(bytes, pageNumber, 0.42);
 }
 
 function buildRangePreviewCards(
@@ -500,6 +497,7 @@ export default function PdfSplitterTool() {
   );
 
   const handleReset = useCallback(() => {
+    analytics.toolReset(TOOL);
     setUploaded(null);
     setResult(null);
     setErrorMessage(null);
@@ -512,6 +510,7 @@ export default function PdfSplitterTool() {
   }, []);
 
   const handleDownloadAll = useCallback(() => {
+    analytics.toolDownload({ ...TOOL, output_type: "zip", file_count: result?.files.length ?? 0 });
     if (!result?.zipBlob) return;
     const url = URL.createObjectURL(result.zipBlob);
     const link = document.createElement("a");
@@ -522,6 +521,7 @@ export default function PdfSplitterTool() {
   }, [result]);
 
   const handleDownloadSingle = useCallback((file: OutputFile) => {
+    analytics.toolDownload({ ...TOOL, output_type: "pdf", file_count: 1, file_size_bucket: sizeBucket(file.blob.size) });
     const url = URL.createObjectURL(file.blob);
     const link = document.createElement("a");
     link.href = url;
@@ -560,12 +560,23 @@ export default function PdfSplitterTool() {
   const handleSplit = useCallback(async () => {
     if (!uploaded) {
       setErrorMessage("Upload a PDF before splitting.");
+      analytics.toolError({ ...TOOL, failure_type: "invalid_input" });
       return;
     }
 
     setProcessing(true);
     setErrorMessage(null);
     setResult(null);
+
+    const startedAt = performance.now();
+    analytics.toolStart({
+      ...TOOL,
+      file_type: "pdf",
+      file_count: 1,
+      file_size_bucket: sizeBucket(uploaded.file.size),
+      split_mode: tab,
+      page_count_bucket: pageBucket(uploaded.pageCount),
+    });
 
     try {
       const sourceBytes = uploaded.bytes;
@@ -643,9 +654,27 @@ export default function PdfSplitterTool() {
 
       const zipBlob = await zipOutputFiles(files);
       setResult({ files, zipBlob });
+
+      analytics.toolComplete({
+        ...TOOL,
+        file_type: "pdf",
+        output_type: files.length > 1 ? "zip" : "pdf",
+        file_count: files.length,
+        file_size_bucket: sizeBucket(zipBlob?.size ?? 0),
+        split_mode: tab,
+        page_count_bucket: pageBucket(uploaded.pageCount),
+        duration_ms: Math.round(performance.now() - startedAt),
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to split PDF.";
       setErrorMessage(message);
+      analytics.toolError({
+        ...TOOL,
+        file_type: "pdf",
+        file_size_bucket: sizeBucket(uploaded.file.size),
+        split_mode: tab,
+        failure_type: classifyError(error),
+      });
     } finally {
       setProcessing(false);
     }
@@ -678,6 +707,7 @@ export default function PdfSplitterTool() {
                 ref={inputRef}
                 type="file"
                 accept=".pdf,application/pdf"
+                aria-label="Choose a PDF to split"
                 className="hidden"
                 onChange={(e) => {
                   void addFile(e.target.files);
@@ -714,7 +744,7 @@ export default function PdfSplitterTool() {
                     e.stopPropagation();
                     handleReset();
                   }}
-                  className="text-xs font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
+                  className="inline-flex min-h-11 items-center px-2 text-xs font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
                 >
                   Remove
                 </button>
@@ -725,7 +755,7 @@ export default function PdfSplitterTool() {
       )}
 
       {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
+        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
           {errorMessage}
         </div>
       )}
@@ -1108,7 +1138,7 @@ export default function PdfSplitterTool() {
       )}
 
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
+        <div role="status" aria-live="polite" className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
@@ -1124,7 +1154,7 @@ export default function PdfSplitterTool() {
 
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div role="status" aria-live="polite" className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
 
             <div className="flex flex-col items-center px-5 py-10">

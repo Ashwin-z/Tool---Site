@@ -9,7 +9,8 @@
  * available or not functioning on the production Windows host —
  *   - Ghostscript (`gs` / `gswin64c.exe`)  -> pdf-to-pdfa
  *     (compress-pdf was rebuilt browser-side in Batch 1A and is no longer here)
- *   - pdfcpu                               -> protect-pdf, unlock-pdf
+ *     (protect-pdf and unlock-pdf were rebuilt in the browser in Batch 1B
+ *      and are no longer here — see src/lib/pdf-security.ts)
  *   - Microsoft Word/Excel via PowerShell COM automation
  *                                          -> word-to-pdf, excel-to-pdf,
  *                                             powerpoint-to-pdf, pdf-to-word
@@ -46,18 +47,6 @@ export const TOOL_OUTAGES: Record<string, ToolOutage> = {
     cause: "Ghostscript binary unavailable on production host",
     userMessage: "PDF/A conversion is temporarily offline while we replace the conversion engine.",
     alternatives: ["compress-pdf", "split-pdf"],
-  },
-  "protect-pdf": {
-    observedStatus: 503,
-    cause: "pdfcpu binary unavailable on production host",
-    userMessage:
-      "PDF password protection is temporarily offline while we rebuild it to run in your browser.",
-    alternatives: ["redact-pdf"],
-  },
-  "unlock-pdf": {
-    observedStatus: 503,
-    cause: "pdfcpu binary unavailable on production host",
-    userMessage: "PDF unlocking is temporarily offline while we replace the engine behind it.",
   },
   "word-to-pdf": {
     observedStatus: 500,

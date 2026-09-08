@@ -1,98 +1,34 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
-
 import { NextResponse } from "next/server";
-
-import { resolvePdfcpuPath, runPdfcpu, sanitizePdfFileName } from "@/lib/server-pdfcpu";
-import { checkRateLimit, getClientIp, rateLimitHeaders } from "@/lib/rate-limit";
-import { isToolDown, maintenanceResponse } from "@/lib/tool-status";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
-
-async function tryDecrypt(pdfcpuPath: string, inputPath: string, outputPath: string, password: string) {
-  await runPdfcpu(pdfcpuPath, ["decrypt", "-upw", password, "--", inputPath, outputPath]);
+/**
+ * RETIRED in Batch 1B.
+ *
+ * PDF password protection and removal now run entirely in the visitor's
+ * browser (src/lib/pdf-security.ts), using WebCrypto for AES plus small local
+ * RC4/MD5 implementations for legacy files. No PDF and no password is sent
+ * here any more.
+ *
+ * This route previously shelled out to the `pdfcpu` binary, which is not
+ * installed on the production host — it returned HTTP 503 to every user.
+ *
+ * Kept as an explicit 410 rather than deleted so a stale cached client gets a
+ * clear answer, and so the reason is recorded where someone would look for it.
+ */
+export async function POST() {
+  return NextResponse.json(
+    {
+      error:
+        "PDF password tools now run in your browser and no longer use this endpoint. Reload the page to get the current version.",
+      code: "ENDPOINT_RETIRED",
+      movedTo: "client-side",
+    },
+    { status: 410, headers: { "Cache-Control": "no-store" } },
+  );
 }
 
-async function tryDecryptWithOwnerPassword(pdfcpuPath: string, inputPath: string, outputPath: string, password: string) {
-  await runPdfcpu(pdfcpuPath, ["decrypt", "-opw", password, "--", inputPath, outputPath]);
-}
-
-export async function POST(request: Request) {
-  // Batch 0: this tool depends on a binary that is not working in production.
-  // Fail fast with an honest 503 rather than accepting an upload we cannot process.
-  // Delete the entry in src/lib/tool-status.ts to re-enable this route.
-  if (isToolDown("unlock-pdf")) {
-    return maintenanceResponse("unlock-pdf");
-  }
-
-  const rl = checkRateLimit(`unlock-pdf:${getClientIp(request)}`, { maxRequests: 10, windowMs: 60_000 });
-  if (!rl.allowed) {
-    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429, headers: rateLimitHeaders(rl) });
-  }
-
-  const tempDir = await mkdtemp(path.join(os.tmpdir(), "toolmint-unlock-pdf-"));
-
-  try {
-    const pdfcpuPath = await resolvePdfcpuPath();
-    if (!pdfcpuPath) {
-      return NextResponse.json(
-        { error: "PDF unlock is temporarily unavailable. Please try again later." },
-        { status: 503 },
-      );
-    }
-
-    const formData = await request.formData();
-    const file = formData.get("file");
-    const password = String(formData.get("password") ?? "").trim();
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Upload a PDF file." }, { status: 400 });
-    }
-
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
-      return NextResponse.json({ error: "Only PDF files are supported." }, { status: 400 });
-    }
-
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: "File size exceeds the 100 MB limit." }, { status: 400 });
-    }
-
-    if (!password) {
-      return NextResponse.json({ error: "Enter the PDF password to unlock the file." }, { status: 400 });
-    }
-
-    const inputPath = path.join(tempDir, "input.pdf");
-    const outputPath = path.join(tempDir, "output.pdf");
-    await writeFile(inputPath, Buffer.from(await file.arrayBuffer()));
-
-    try {
-      await tryDecrypt(pdfcpuPath, inputPath, outputPath, password);
-    } catch (error) {
-      try {
-        await tryDecryptWithOwnerPassword(pdfcpuPath, inputPath, outputPath, password);
-      } catch {
-        throw error;
-      }
-    }
-
-    const outputBytes = await readFile(outputPath);
-    const outputName = sanitizePdfFileName(file.name, "_unlocked");
-
-    return new NextResponse(new Uint8Array(outputBytes), {
-      headers: {
-        "content-type": "application/pdf",
-        "content-disposition": `attachment; filename="${outputName}"`,
-        "x-file-name": encodeURIComponent(outputName),
-      },
-    });
-  } catch (error) {
-    console.error("[unlock-pdf]", error);
-    return NextResponse.json({ error: "Failed to unlock PDF. Check that the password is correct." }, { status: 500 });
-  } finally {
-    await rm(tempDir, { recursive: true, force: true }).catch(() => undefined);
-  }
+export async function GET() {
+  return POST();
 }

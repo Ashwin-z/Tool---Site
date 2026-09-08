@@ -8,9 +8,9 @@ import ToolStatusNotice from "@/components/tool-status-notice";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Protect PDF with Password – Encrypt PDF Free",
+  title: "Password Protect a PDF – AES-256, No Upload",
   description:
-    "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
+    "Add AES-256 password protection to a PDF without uploading it. The file and the password never leave your device. Free, no signup.",
   keywords: [
     "protect pdf",
     "password protect pdf online",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/protect-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Protect PDF with Password – Encrypt PDF Free | ToolMint",
+    title: "Password Protect a PDF – AES-256, No Upload | ToolMint",
     description:
-      "Add a password to your PDF online for free. Encrypt and protect PDF documents from unauthorized access. No signup.",
+      "Add AES-256 password protection to a PDF without uploading it. The file and the password never leave your device. Free, no signup.",
     url: "/tools/protect-pdf",
   },
   twitter: { card: "summary_large_image" },
@@ -42,22 +42,22 @@ const useCases = [
     desc: "Protect proposals, invoices, or creative work files you share with clients so the documents cannot be forwarded or opened by others.",
   },
   {
-    title: "Restrict editing and printing",
-    desc: "Set permission-level passwords to prevent recipients from printing, copying, or modifying a PDF even after they open it.",
+    title: "Anything you cannot upload",
+    desc: "Medical records, HR files, and legal documents you are not permitted to send to a third-party server. Encryption happens on your own device.",
   },
 ];
 
 const steps = [
-  { title: "Upload a PDF", desc: "Select the PDF you want to protect before sharing or storing it." },
-  { title: "Set a password", desc: "Create the open password required to access the protected file." },
-  { title: "Set permissions", desc: "Optionally restrict printing, copying, and editing." },
-  { title: "Download", desc: "Save the encrypted, password-protected PDF." },
+  { title: "Choose a PDF", desc: "The file is read by this page. It is not uploaded anywhere." },
+  { title: "Set a password", desc: "Type it twice. Anyone opening the file will need it." },
+  { title: "Encrypt", desc: "Your browser applies AES-256 encryption on your device." },
+  { title: "Download", desc: "Save the protected PDF. Store the password somewhere safe." },
 ];
 
 const faqs = [
   {
-    q: "What is the difference between open password and permission password?",
-    a: "An open password (user password) is required to open the file at all. A permission password (owner password) controls what actions are allowed after opening — printing, copying, and editing. You can set one or both.",
+    q: "Can I restrict printing or copying instead of setting a password?",
+    a: "This tool does not offer permission-only protection, and that is deliberate. A permissions password (the PDF \"owner password\") does not encrypt anything — it simply sets a flag asking the reader to disable printing or copying, and most PDF software will ignore it or strip it in seconds. Offering it would look like security without being security. What this tool does instead is real encryption: without the password, the file cannot be read at all.",
   },
   {
     q: "Can a password-protected PDF be cracked?",
@@ -113,12 +113,13 @@ export default function ProtectPdfPage() {
         <ProcessingBadge slug="protect-pdf" />
         <ToolAnalytics slug="protect-pdf" category="pdf" />
         <p className="mt-3 max-w-3xl text-sm leading-7 text-muted md:text-base">
-          Lock a PDF with AES-256 encryption using ToolMint. Add an open password, set sharing
-          permissions, and download a protected PDF — no account, no software required.
+          Add a password to a PDF using AES-256 encryption — the strongest the PDF format
+          defines. The encryption happens inside this page on your own device, so a contract or a
+          medical record is never uploaded to us or anyone else. No account, nothing to install.
         </p>
 
         <div className="mt-8">
-          <PdfSecurityTool mode="protect" />
+          <PdfSecurityTool operation="protect" />
         </div>
 
         <section className="mt-16">

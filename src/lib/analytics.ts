@@ -66,6 +66,14 @@ export type ToolEventParams = {
   compression_mode?: string;
   /** Bucketed size reduction, e.g. "70%+". Never an exact per-file figure. */
   reduction_bucket?: string;
+  /** "protect" | "unlock" — which security operation was run. */
+  operation_type?: string;
+  /** Encryption scheme REMOVED by unlock, e.g. "AES-256". Never a password. */
+  encryption_scheme?: string;
+  /** How the pages were chosen in split-pdf: "ranges" | "every-page" | "extract". */
+  split_mode?: string;
+  /** Bucketed page count, e.g. "11-50". Never an exact document page count. */
+  page_count_bucket?: string;
 };
 
 export type ToolEventName =

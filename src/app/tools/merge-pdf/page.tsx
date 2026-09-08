@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Merge PDF Files Online Free – Combine PDFs",
+  title: "Merge PDF in Your Browser – No Upload",
   description:
-    "Merge multiple PDF files into one document online for free. Drag, reorder, and combine PDFs instantly. No signup required.",
+    "Combine PDF files into one without uploading them. Drag to reorder, merge on your own device, download instantly. Free, no signup, no watermark.",
   keywords: [
     "merge pdf files online",
     "combine pdf files",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/merge-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Merge PDF Files Online Free – Combine PDFs | ToolMint",
+    title: "Merge PDF in Your Browser – No Upload | ToolMint",
     description:
-      "Merge multiple PDF files into one document online for free. Drag, reorder, and combine PDFs instantly. No signup required.",
+      "Combine PDF files into one without uploading them. Drag to reorder, merge on your own device, download instantly. Free, no signup, no watermark.",
     url: "/tools/merge-pdf",
   },
   twitter: { card: "summary_large_image" },

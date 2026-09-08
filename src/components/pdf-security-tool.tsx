@@ -1,290 +1,448 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
+import { analytics, sizeBucket } from "@/lib/analytics";
+import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
+import {
+  MIN_PASSWORD_LENGTH,
+  PROTECT_SCHEME_BLURB,
+  type ProtectResult,
+  SecurityError,
+  type SecurityOperation,
+  type UnlockResult,
+} from "@/lib/pdf-security-types";
 
-type PdfSecurityMode = "protect" | "unlock";
-type PermissionMode = "none" | "print" | "all";
+const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
-type Props = {
-  mode: PdfSecurityMode;
-};
+type Props = { operation: SecurityOperation };
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
+type Done =
+  | { kind: "protect"; name: string; blob: Blob; result: ProtectResult }
+  | { kind: "unlock"; name: string; blob: Blob; result: UnlockResult };
 
-function downloadBlob(blob: Blob, fileName: string) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  link.click();
-  URL.revokeObjectURL(url);
-}
+const isPdf = (f: File) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
 
-export default function PdfSecurityTool({ mode }: Props) {
-  const isProtect = mode === "protect";
+export default function PdfSecurityTool({ operation }: Props) {
+  const protectMode = operation === "protect";
+  // Memoised so it does not re-create every render and invalidate the
+  // useCallback hooks that depend on it.
+  const TOOL = useMemo(
+    () =>
+      ({
+        tool_slug: protectMode ? "protect-pdf" : "unlock-pdf",
+        category: "pdf",
+        processing_mode: "browser",
+        operation_type: operation,
+      }) as const,
+    [protectMode, operation],
+  );
+
   const [file, setFile] = useState<File | null>(null);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState("");
+  const [done, setDone] = useState<Done | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [userPassword, setUserPassword] = useState("");
-  const [ownerPassword, setOwnerPassword] = useState("");
-  const [permission, setPermission] = useState<PermissionMode>("none");
-  const [unlockPassword, setUnlockPassword] = useState("");
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const headingId = useId();
+  const pwId = useId();
+  const confirmId = useId();
+  const errorId = useId();
 
-  const title = isProtect ? "Protect PDF" : "Unlock PDF";
-  const subtitle = isProtect
-    ? "Add password protection with AES-256 encryption and control viewer permissions."
-    : "Remove PDF password protection when you know the correct password.";
+  useEffect(() => () => abortRef.current?.abort(), []);
 
-  const ctaLabel = isProtect ? "Protect PDF" : "Unlock PDF";
-  const endpoint = isProtect ? "/api/tools/protect-pdf" : "/api/tools/unlock-pdf";
-
-  const canSubmit = useMemo(() => {
-    if (!file || processing) return false;
-    return isProtect ? userPassword.trim().length >= 4 : unlockPassword.trim().length > 0;
-  }, [file, isProtect, processing, unlockPassword, userPassword]);
-
-  const setSelectedFile = useCallback((nextFile: File | null) => {
-    if (!nextFile) return;
-    if (nextFile.size > MAX_FILE_SIZE) {
-      setErrorMessage(`File exceeds the 1GB size limit.`);
+  const choose = useCallback((list: FileList | File[] | null) => {
+    const picked = list ? Array.from(list) : [];
+    const pdf = picked.find(isPdf);
+    if (!pdf) {
+      setError("That is not a PDF. Choose a file ending in .pdf.");
       return;
     }
-    if (!nextFile.name.toLowerCase().endsWith(".pdf")) {
-      setErrorMessage("Please choose a PDF file.");
+    if (pdf.size > MAX_FILE_SIZE) {
+      setError(`That file is over ${formatBytes(MAX_FILE_SIZE)}, which is too large to process in the browser.`);
       return;
     }
-
-    setFile(nextFile);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    setFile(pdf);
+    setDone(null);
+    setError(null);
   }, []);
 
-  const onInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedFile(event.target.files?.[0] ?? null);
-  }, [setSelectedFile]);
+  const reset = useCallback(() => {
+    abortRef.current?.abort();
+    analytics.toolReset(TOOL);
+    setFile(null);
+    // Clearing the password state is the only place it ever lived.
+    setPassword("");
+    setConfirmPassword("");
+    setDone(null);
+    setError(null);
+    setProgress(0);
+    setStage("");
+    setBusy(false);
+    if (inputRef.current) inputRef.current.value = "";
+  }, [TOOL]);
 
-  const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragOver(false);
-    setSelectedFile(event.dataTransfer.files?.[0] ?? null);
-  }, [setSelectedFile]);
+  const run = useCallback(async () => {
+    if (!file || busy) return;
 
-  const handleSubmit = useCallback(async () => {
-    if (!file) return;
+    if (protectMode) {
+      if (!password) return setError("Enter a password to protect this PDF with.");
+      if (password.length < MIN_PASSWORD_LENGTH) {
+        return setError(`Use at least ${MIN_PASSWORD_LENGTH} characters.`);
+      }
+      if (password !== confirmPassword) return setError("The two passwords do not match.");
+    }
 
-    setProcessing(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setBusy(true);
+    setError(null);
+    setDone(null);
+    setProgress(0);
+
+    analytics.toolStart({
+      ...TOOL,
+      file_type: "pdf",
+      file_count: 1,
+      file_size_bucket: sizeBucket(file.size),
+    });
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
+      // pdf-lib plus the crypto engine are ~450KB, fetched on first use only.
+      const { protectPdf, unlockPdf } = await import("@/lib/pdf-security");
+      const buffer = await file.arrayBuffer();
+      const opts = {
+        password,
+        signal: controller.signal,
+        onProgress: (f: number, note: string) => {
+          setProgress(f);
+          setStage(note);
+        },
+      };
 
-      if (isProtect) {
-        formData.append("userPassword", userPassword.trim());
-        formData.append("ownerPassword", ownerPassword.trim());
-        formData.append("permission", permission);
+      const base = sanitizeBaseName(file.name);
+      if (protectMode) {
+        const result = await protectPdf(buffer, opts);
+        setDone({
+          kind: "protect",
+          name: `${base}-protected.pdf`,
+          blob: new Blob([new Uint8Array(result.bytes)], { type: "application/pdf" }),
+          result,
+        });
+        analytics.toolComplete({
+          ...TOOL,
+          file_type: "pdf",
+          output_type: "pdf",
+          file_size_bucket: sizeBucket(result.outputSize),
+          duration_ms: result.durationMs,
+        });
       } else {
-        formData.append("password", unlockPassword.trim());
+        const result = await unlockPdf(buffer, opts);
+        setDone({
+          kind: "unlock",
+          name: `${base}-unlocked.pdf`,
+          blob: new Blob([new Uint8Array(result.bytes)], { type: "application/pdf" }),
+          result,
+        });
+        analytics.toolComplete({
+          ...TOOL,
+          file_type: "pdf",
+          output_type: "pdf",
+          file_size_bucket: sizeBucket(result.outputSize),
+          duration_ms: result.durationMs,
+          // The scheme we removed is useful; the password never is.
+          encryption_scheme: result.removed.label,
+        });
       }
-
-      const response = await fetch(endpoint, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        let message = isProtect ? "Failed to protect PDF." : "Failed to unlock PDF.";
-        try {
-          const data = (await response.json()) as { error?: string };
-          if (data.error) message = data.error;
-        } catch {
-          const text = await response.text();
-          if (text) message = text;
-        }
-        throw new Error(message);
+      // Password is no longer needed once the file is produced.
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      const se = err instanceof SecurityError ? err : null;
+      if (se?.code === "cancelled") {
+        setError("Cancelled. Your file was not changed.");
+      } else {
+        setError(se?.message ?? "Something went wrong. Please try a different file.");
+        analytics.toolError({
+          ...TOOL,
+          file_type: "pdf",
+          file_size_bucket: sizeBucket(file.size),
+          // NOTE: only the category of failure is sent, never the password.
+          failure_type:
+            se?.code === "wrong-password" || se?.code === "password-required"
+              ? "invalid_input"
+              : se?.code === "unsupported-encryption" ||
+                  se?.code === "not-encrypted" ||
+                  se?.code === "already-encrypted" ||
+                  se?.code === "corrupt" ||
+                  se?.code === "empty"
+                ? "unsupported_file"
+                : "processing_failed",
+        });
       }
-
-      const blob = await response.blob();
-      const fileName = decodeURIComponent(
-        response.headers.get("x-file-name") ?? `${file.name.replace(/\.pdf$/i, "")}_${mode}.pdf`,
-      );
-      const ownerGenerated = response.headers.get("x-owner-password-generated") === "true";
-
-      downloadBlob(blob, fileName);
-      setSuccessMessage(
-        isProtect
-          ? ownerGenerated
-            ? "PDF protected and downloaded. An internal owner password was generated automatically."
-            : "PDF protected and downloaded successfully."
-          : "PDF unlocked and downloaded successfully.",
-      );
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : isProtect ? "Failed to protect PDF." : "Failed to unlock PDF.");
     } finally {
-      setProcessing(false);
+      setBusy(false);
+      setProgress(0);
+      setStage("");
+      abortRef.current = null;
     }
-  }, [endpoint, file, isProtect, mode, ownerPassword, permission, unlockPassword, userPassword]);
+  }, [file, busy, protectMode, password, confirmPassword, TOOL]);
 
-  const resetState = useCallback(() => {
-    setFile(null);
-    setErrorMessage(null);
-    setSuccessMessage(null);
-    setUserPassword("");
-    setOwnerPassword("");
-    setUnlockPassword("");
-    setPermission("none");
-    if (inputRef.current) inputRef.current.value = "";
-  }, []);
+  const download = useCallback(() => {
+    if (!done) return;
+    analytics.toolDownload({
+      ...TOOL,
+      output_type: "pdf",
+      file_count: 1,
+      file_size_bucket: sizeBucket(done.blob.size),
+    });
+    downloadBlob(done.blob, done.name);
+  }, [done, TOOL]);
+
+  const btn =
+    "min-h-11 rounded-xl px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c63ff]";
+  const ghost =
+    "min-h-11 rounded-xl border px-4 py-2.5 text-sm font-medium transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c63ff]";
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
-      <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#ff6584] to-[#38d9a9]" />
+    <section aria-labelledby={headingId} className="flex flex-col gap-5">
+      <h2 id={headingId} className="sr-only">
+        {protectMode ? "Add a password to a PDF" : "Remove a password from a PDF"}
+      </h2>
 
-      <div className="grid gap-6 px-5 py-5 lg:grid-cols-[1.2fr_0.8fr] lg:px-6 lg:py-6">
-        <div className="space-y-4">
-          <div>
-            <div className="inline-flex rounded-full border border-border bg-surface/50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#9fa1b7]">
-              PDF Security
-            </div>
-            <h2 className="mt-3 font-display text-2xl font-bold text-white">{title}</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">{subtitle}</p>
-          </div>
-
+      {!done ? (
+        <>
           <div
-            onDrop={onDrop}
-            onDragOver={(event) => {
-              event.preventDefault();
+            onDragOver={(e) => {
+              e.preventDefault();
               setDragOver(true);
             }}
             onDragLeave={() => setDragOver(false)}
-            className={`rounded-2xl border border-dashed px-5 py-8 text-center transition ${dragOver ? "border-[#6c63ff] bg-[#6c63ff]/10" : "border-border bg-surface/30"}`}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOver(false);
+              choose(e.dataTransfer.files);
+            }}
+            className="rounded-2xl border-2 border-dashed p-6 text-center transition sm:p-9"
+            style={{
+              borderColor: dragOver ? "#6c63ff" : "var(--border)",
+              background: dragOver ? "rgba(108,99,255,.06)" : "var(--surface-1)",
+            }}
           >
-            <input ref={inputRef} type="file" accept="application/pdf" onChange={onInputChange} className="hidden" />
-            <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-[#6c63ff]/15 text-2xl text-[#b7b2ff]">🔐</div>
-            <h3 className="text-base font-semibold text-white">Drop your PDF here</h3>
-            <p className="mt-2 text-sm text-muted">
-              {isProtect ? "Upload one PDF to lock it with a password." : "Upload one protected PDF and enter its password to unlock it."}
+            <p className="text-3xl" aria-hidden>
+              {protectMode ? "🔒" : "🔓"}
             </p>
-            <button
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#111118] transition hover:bg-[#f2f2f7]"
-            >
-              Choose PDF
+            <p className="mt-3 font-semibold text-foreground">
+              {file ? file.name : protectMode ? "Choose a PDF to protect" : "Choose a locked PDF"}
+            </p>
+            <p className="mx-auto mt-1 max-w-md text-sm leading-6" style={{ color: "var(--muted)" }}>
+              {file
+                ? formatBytes(file.size)
+                : `Drag and drop, or browse. Up to ${formatBytes(MAX_FILE_SIZE)}.`}
+            </p>
+            <button type="button" onClick={() => inputRef.current?.click()} className={`${btn} mt-5 text-white`} style={{ background: "#6c63ff" }}>
+              {file ? "Choose a different PDF" : "Choose PDF"}
             </button>
-
-            {file ? (
-              <div className="mt-5 rounded-2xl border border-border bg-surface/50 p-4 text-left">
-                <div className="text-sm font-semibold text-white">{file.name}</div>
-                <div className="mt-1 text-xs text-[#9fa1b7]">{formatBytes(file.size)}</div>
-              </div>
-            ) : null}
+            <input
+              ref={inputRef}
+              type="file"
+              accept="application/pdf,.pdf"
+              className="sr-only"
+              aria-label={protectMode ? "Choose a PDF to password protect" : "Choose a password-protected PDF"}
+              onChange={(e) => choose(e.target.files)}
+            />
           </div>
 
-          {errorMessage ? (
-            <div className="rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
-              {errorMessage}
-            </div>
-          ) : null}
-
-          {successMessage ? (
-            <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-              {successMessage}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="rounded-2xl border border-border bg-surface/30 p-5">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8c8ea6]">Settings</div>
-
-          <div className="mt-4 space-y-4">
-            {isProtect ? (
-              <>
-                <label className="grid gap-2">
-                  <span className="text-sm text-[#d8d8e6]">Open password</span>
-                  <input
-                    type="password"
-                    value={userPassword}
-                    onChange={(event) => setUserPassword(event.target.value)}
-                    placeholder="Required to open the PDF"
-                    className="rounded-2xl border border-border bg-surface/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[#6c63ff]/60"
-                  />
-                </label>
-
-                <label className="grid gap-2">
-                  <span className="text-sm text-[#d8d8e6]">Owner password (optional)</span>
-                  <input
-                    type="password"
-                    value={ownerPassword}
-                    onChange={(event) => setOwnerPassword(event.target.value)}
-                    placeholder="Auto-generated if left empty"
-                    className="rounded-2xl border border-border bg-surface/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[#6c63ff]/60"
-                  />
-                </label>
-
-                <label className="grid gap-2">
-                  <span className="text-sm text-[#d8d8e6]">Permissions</span>
-                  <select
-                    value={permission}
-                    onChange={(event) => setPermission(event.target.value as PermissionMode)}
-                    className="rounded-2xl border border-border bg-surface/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[#6c63ff]/60"
-                  >
-                    <option value="none" className="bg-white text-black">No viewer permissions</option>
-                    <option value="print" className="bg-white text-black">Allow printing</option>
-                    <option value="all" className="bg-white text-black">Allow all permissions</option>
-                  </select>
-                </label>
-              </>
-            ) : (
-              <label className="grid gap-2">
-                <span className="text-sm text-[#d8d8e6]">PDF password</span>
-                <input
-                  type="password"
-                  value={unlockPassword}
-                  onChange={(event) => setUnlockPassword(event.target.value)}
-                  placeholder="Enter the current password"
-                  className="rounded-2xl border border-border bg-surface/50 px-4 py-3 text-sm text-white outline-none transition focus:border-[#6c63ff]/60"
-                />
+          {file ? (
+            <div className="rounded-2xl border p-5" style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}>
+              <label htmlFor={pwId} className="block text-sm font-semibold text-foreground">
+                {protectMode ? "Password to set" : "Password for this PDF"}
               </label>
-            )}
+              <p className="mt-1 text-xs leading-5" style={{ color: "var(--muted)" }}>
+                {protectMode
+                  ? `At least ${MIN_PASSWORD_LENGTH} characters. Anyone opening the file will need it — if you lose it, the file cannot be recovered.`
+                  : "Enter the password you normally type to open this file. Leave it empty if the PDF opens without one but is restricted."}
+              </p>
 
-            <div className="rounded-2xl border border-border bg-surface/50 p-4 text-sm leading-7 text-[#adb0c5]">
-              {isProtect
-                ? "Protect PDF uses the bundled native pdfcpu engine with AES-256 encryption. Your file is processed on the server and the protected PDF is returned for download."
-                : "Unlock PDF removes password protection using the password you enter. If the password is wrong, the original PDF is left untouched and an error is shown."}
+              <div className="mt-3 flex gap-2">
+                <input
+                  id={pwId}
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !protectMode) run();
+                  }}
+                  autoComplete="new-password"
+                  spellCheck={false}
+                  disabled={busy}
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? errorId : undefined}
+                  className="min-h-11 flex-1 rounded-xl border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#6c63ff]"
+                  style={{ borderColor: "var(--border)", background: "var(--surface-2)", color: "var(--foreground)" }}
+                  placeholder={protectMode ? "Choose a password" : "Password"}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className={ghost}
+                  style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+
+              {protectMode ? (
+                <>
+                  <label htmlFor={confirmId} className="mt-4 block text-sm font-semibold text-foreground">
+                    Confirm password
+                  </label>
+                  <input
+                    id={confirmId}
+                    type={showPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      setError(null);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") run();
+                    }}
+                    autoComplete="new-password"
+                    spellCheck={false}
+                    disabled={busy}
+                    className="mt-2 min-h-11 w-full rounded-xl border px-3 py-2 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#6c63ff]"
+                    style={{ borderColor: "var(--border)", background: "var(--surface-2)", color: "var(--foreground)" }}
+                    placeholder="Type it again"
+                  />
+                  <p className="mt-3 text-xs leading-5" style={{ color: "var(--muted-2)" }}>
+                    {PROTECT_SCHEME_BLURB} The password is used here in your browser and is never
+                    sent anywhere, stored, or logged.
+                  </p>
+                </>
+              ) : null}
             </div>
+          ) : null}
 
-            <div className="flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className="rounded-full bg-[#ff4d6d] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#ff365a] disabled:cursor-not-allowed disabled:bg-[#8f4151]"
-              >
-                {processing ? `${ctaLabel}…` : ctaLabel}
+          {error ? (
+            <p
+              id={errorId}
+              role="alert"
+              className="rounded-xl border px-4 py-3 text-sm leading-6"
+              style={{ borderColor: "rgba(239,68,68,.4)", background: "rgba(239,68,68,.08)", color: "#fca5a5" }}
+            >
+              {error}
+            </p>
+          ) : null}
+
+          {file ? (
+            busy ? (
+              <div className="flex flex-col gap-3">
+                <div
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(progress * 100)}
+                  aria-label={protectMode ? "Encryption progress" : "Decryption progress"}
+                  className="h-2 w-full overflow-hidden rounded-full"
+                  style={{ background: "var(--surface-2)" }}
+                >
+                  <div className="h-full rounded-full transition-all" style={{ width: `${Math.max(4, progress * 100)}%`, background: "#6c63ff" }} />
+                </div>
+                <p role="status" aria-live="polite" className="text-sm" style={{ color: "var(--muted)" }}>
+                  {stage || "Working"}
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                <button type="button" onClick={run} className={`${btn} text-white`} style={{ background: "#6c63ff" }}>
+                  {protectMode ? "Protect PDF" : "Remove password"}
+                </button>
+                <button type="button" onClick={reset} className={ghost} style={{ borderColor: "var(--border)", color: "var(--foreground)" }}>
+                  Clear
+                </button>
+              </div>
+            )
+          ) : null}
+        </>
+      ) : (
+        <div className="flex flex-col gap-4" role="region" aria-live="polite">
+          <div className="rounded-2xl border p-5" style={{ borderColor: "rgba(34,197,94,.35)", background: "rgba(34,197,94,.07)" }}>
+            <p className="font-semibold" style={{ color: "#86efac" }}>
+              {done.kind === "protect" ? "PDF protected with AES-256" : `Password removed (${done.result.removed.label})`}
+            </p>
+            <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
+              {done.kind === "protect"
+                ? "Anyone opening this file will be asked for the password you chose. Keep it somewhere safe — there is no way to recover the file without it."
+                : "This copy opens without a password. The original file on your device is unchanged."}
+            </p>
+
+            <dl className="mt-4 grid grid-cols-3 gap-3">
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>Pages</dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">{done.result.pageCount}</dd>
+              </div>
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>Size</dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">{formatBytes(done.result.outputSize)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>Took</dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">{(done.result.durationMs / 1000).toFixed(1)}s</dd>
+              </div>
+            </dl>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button type="button" onClick={download} className={`${btn} text-white`} style={{ background: "#6c63ff" }}>
+                Download {done.kind === "protect" ? "protected" : "unlocked"} PDF
               </button>
-              <button
-                type="button"
-                onClick={resetState}
-                disabled={processing}
-                className="rounded-full border border-border px-5 py-2.5 text-sm font-medium text-[#c7c8d8] transition hover:bg-surface/60 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Reset
+              <button type="button" onClick={reset} className={ghost} style={{ borderColor: "var(--border)", color: "var(--foreground)" }}>
+                Do another
               </button>
             </div>
           </div>
+
+          <div className="rounded-2xl border p-5" style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}>
+            <h3 className="font-semibold text-foreground">Next steps</h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {(done.kind === "protect"
+                ? [
+                    { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Shrink it before emailing." },
+                    { name: "Sign PDF", href: "/tools/sign-pdf", desc: "Add a signature." },
+                    { name: "Unlock PDF", href: "/tools/unlock-pdf", desc: "Remove the password later." },
+                  ]
+                : [
+                    { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Make it smaller." },
+                    { name: "Merge PDF", href: "/tools/merge-pdf", desc: "Combine it with others." },
+                    { name: "Split PDF", href: "/tools/split-pdf", desc: "Pull out the pages you need." },
+                  ]
+              ).map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="rounded-xl border p-3 transition hover:-translate-y-0.5"
+                  style={{ borderColor: "var(--border)", background: "var(--surface-2)" }}
+                >
+                  <span className="block text-sm font-semibold text-foreground">{t.name}</span>
+                  <span className="mt-0.5 block text-xs" style={{ color: "var(--muted)" }}>{t.desc}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </section>
   );
 }
