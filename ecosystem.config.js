@@ -1,0 +1,1 @@
+﻿module.exports={apps:[{name:'tool-site',script:'node_modules/next/dist/bin/next',args:'start',cwd:'C:/Users/Administrator/Documents/ToolMint.tools/Tool---Site/Tool---Site/tool-site',env:{NODE_ENV:'production',PORT:'3001'},watch:false,autorestart:true,max_restarts:5,restart_delay:3000}]}
