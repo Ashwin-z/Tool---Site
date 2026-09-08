@@ -13,7 +13,6 @@ const popularTools = [
   { icon: "\u{2702}\u{FE0F}", name: "Split PDF", desc: "Split one PDF by range, fixed intervals, or selected pages.", tag: "New", href: "/tools/split-pdf" },
   { icon: "\u{1F504}", name: "Rotate PDF", desc: "Rotate PDF pages left or right with a live preview.", tag: "New", href: "/tools/rotate-pdf" },
   { icon: "\u{1F5BC}\u{FE0F}", name: "Image to PDF", desc: "Combine up to 25 image files into a single PDF.", tag: "New", href: "/tools/image-to-pdf" },
-  { icon: "\u{1F4DD}", name: "Word to PDF", desc: "Convert DOCX files to PDF in your browser.", tag: "New", href: "/tools/word-to-pdf" },
   { icon: "\u{1F3E6}", name: "EMI Calculator", desc: "Monthly loan installments with full interest breakdown.", tag: "Hot", href: "/tools/loan-emi-calculator" },
   { icon: "\u{1F511}", name: "Password Generator", desc: "Create strong, secure passwords with custom rules.", tag: "New", href: "/tools/password-generator" },
   { icon: "\u{1F524}", name: "Case Converter", desc: "Switch between UPPER, lower, Title, and camelCase.", tag: "Popular", href: "/tools/text-case-converter" },

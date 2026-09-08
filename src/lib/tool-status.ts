@@ -35,38 +35,6 @@ export type ToolOutage = {
 };
 
 export const TOOL_OUTAGES: Record<string, ToolOutage> = {
-  "pdf-to-word": {
-    observedStatus: 500,
-    cause: "Conversion pipeline failing on production host",
-    userMessage:
-      "PDF to Word conversion is temporarily offline while we replace the conversion engine.",
-    alternatives: ["pdf-to-text", "pdf-to-excel"],
-  },
-  "pdf-to-pdfa": {
-    observedStatus: 503,
-    cause: "Ghostscript binary unavailable on production host",
-    userMessage: "PDF/A conversion is temporarily offline while we replace the conversion engine.",
-    alternatives: ["compress-pdf", "split-pdf"],
-  },
-  "word-to-pdf": {
-    observedStatus: 500,
-    cause: "Microsoft Word COM automation unavailable on production host",
-    userMessage: "Word to PDF conversion is temporarily offline while we replace the converter.",
-    alternatives: ["image-to-pdf", "html-to-pdf"],
-  },
-  "excel-to-pdf": {
-    observedStatus: 500,
-    cause: "Microsoft Excel COM automation unavailable on production host",
-    userMessage: "Excel to PDF conversion is temporarily offline while we replace the converter.",
-    alternatives: ["html-to-pdf"],
-  },
-  "powerpoint-to-pdf": {
-    observedStatus: 500,
-    cause: "Microsoft PowerPoint COM automation unavailable on production host (untested, same pipeline)",
-    userMessage:
-      "PowerPoint to PDF conversion is temporarily offline while we replace the converter.",
-    alternatives: ["image-to-pdf"],
-  },
 };
 
 export function isToolDown(slug: string): boolean {

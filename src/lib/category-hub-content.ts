@@ -27,7 +27,6 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
         title: "Assemble a final PDF packet",
         desc: "Turn source files into PDFs, combine them in the right order, then add numbering, watermarks, or signatures before sharing the final version.",
         links: [
-          { label: "Word to PDF", href: "/tools/word-to-pdf" },
           { label: "Image to PDF", href: "/tools/image-to-pdf" },
           { label: "Merge PDF", href: "/tools/merge-pdf" },
           { label: "Sign PDF", href: "/tools/sign-pdf" },

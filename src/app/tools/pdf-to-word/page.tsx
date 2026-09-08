@@ -8,9 +8,9 @@ import ToolStatusNotice from "@/components/tool-status-notice";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Word Converter – Convert PDF to DOCX Free",
+  title: "PDF to Word in Your Browser – No Upload",
   description:
-    "Convert PDF to editable Word document online for free. Accurate formatting, instant DOCX download. No signup required.",
+    "Turn a PDF into an editable .docx without uploading it. Text, headings and images are extracted on your device. Free, no signup.",
   keywords: [
     "pdf to word",
     "pdf to docx",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/pdf-to-word" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "PDF to Word Converter – Convert PDF to DOCX Free | ToolMint",
+    title: "PDF to Word in Your Browser – No Upload | ToolMint",
     description:
-      "Convert PDF to editable Word document online for free. Accurate formatting, instant DOCX download. No signup required.",
+      "Turn a PDF into an editable .docx without uploading it. Text, headings and images are extracted on your device. Free, no signup.",
     url: "/tools/pdf-to-word",
   },
   twitter: { card: "summary_large_image" },
@@ -54,6 +54,14 @@ const steps = [
 ];
 
 const faqs = [
+  {
+    q: "How accurate is the conversion?",
+    a: "Text comes across reliably — on our test documents between 78% and 96% of words were recovered, with headings inferred from font sizes and images carried over. What it does not do is rebuild complex layout: multi-column pages, and tables drawn with ruled lines rather than as real table objects, come through as positioned text rather than as Word tables. If your PDF is mostly prose, expect a good result. If it is a heavily designed layout, expect to tidy it up.",
+  },
+  {
+    q: "What happens with a scanned PDF?",
+    a: "A scanned page has no text layer to extract, so each page is embedded into the Word document as an image instead. You get an editable file, but the words in the scan are still pictures. To get real text out of a scan, use PDF to Text, which runs OCR.",
+  },
   {
     q: "Why does my PDF to Word conversion look wrong?",
     a: "Complex multi-column layouts, tables with merged cells, and decorative fonts are the most common causes of formatting issues. The converter reconstructs the layout from the PDF's internal structure, which does not always match what you see visually.",

@@ -80,7 +80,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Is PDF to Word conversion free?", a: "Yes. ToolMint PDF to Word converter is completely free with no signup, no watermark." },
       { q: "Can I convert Word back to PDF after editing?", a: "Yes. Use the Word to PDF tool to convert your edited .docx file back to a PDF." },
     ],
-    relatedToolSlugs: ["pdf-to-word", "word-to-pdf", "pdf-to-text", "pdf-to-excel"],
+    relatedToolSlugs: ["pdf-to-word", "pdf-to-text", "pdf-to-excel"],
     relatedPostSlugs: ["how-to-extract-text-from-scanned-pdf", "pdf-vs-word-document-format"],
   },
   {
@@ -119,7 +119,7 @@ export const blogPosts: BlogPost[] = [
       { heading: "What Makes PDF/A Different from a Regular PDF", body: "A standard PDF can reference external fonts, link to external resources, include encrypted content, and embed scripts. These features create dependencies on external resources that may not exist in 20 years.\n\nPDF/A removes those dependencies entirely. All fonts must be embedded. All color spaces must be defined in a standard way. External content references are prohibited. JavaScript and encryption are not allowed." },
       { heading: "PDF/A Versions Explained", body: "PDF/A-1 is the strictest version, required by many government and legal archiving systems. PDF/A-2 adds support for JPEG2000 compression, layers, and digital signatures. It is a good default for most new archiving workflows. PDF/A-3 allows embedding of arbitrary file types as attachments and is used in e-invoicing standards such as ZUGFeRD.\n\nFor most use cases, PDF/A-2 is the right choice unless a specific variant is required." },
       { heading: "Who Needs PDF/A", body: "Government agencies and courts in many countries require PDF/A for electronic filings, especially in the EU. Law firms and compliance teams convert signed contracts to PDF/A for long-term records retention. Universities use PDF/A for theses and research data that must remain accessible for decades." },
-      { heading: "How to Convert a PDF to PDF/A Online", body: "Open the ToolMint PDF to PDF/A tool. Upload the PDF you want to convert. The tool validates the document structure and embeds any fonts or color profiles needed. Select the PDF/A variant if prompted — PDF/A-2b is a good default. Click Convert and download the resulting file.\n\nNote that files containing encryption, JavaScript actions, or DRM restrictions must have those elements removed first." },
+      { heading: "How to Produce a PDF/A File", body: "The reliable route is the program that created the document. Word offers File > Save As > PDF > Options > ISO 19005-1 compliant (PDF/A). LibreOffice has a PDF/A checkbox in its export dialog. Adobe Acrobat Pro can convert an existing PDF and report exactly which rules a file breaks. To check any file, veraPDF is the free industry-standard validator.\n\nToolMint does not offer a PDF/A converter. PDF/A requires every font used to be embedded in the file, and a browser cannot add a font program that was never there. We measured this with veraPDF: only image-only scans passed, while ordinary text documents failed on the font-embedding rule. A converter that quietly produced non-compliant files would defeat the point of archiving." },
       { heading: "Limitations of PDF/A", body: "Because PDF/A prohibits encryption, a PDF/A file cannot be password protected. Organizations typically store the PDF/A version in a secured document management system.\n\nPDF/A also prohibits JavaScript and complex interactive form fields, which means interactive forms cannot be converted to PDF/A while retaining their interactivity." },
     ],
     faqs: [
@@ -128,7 +128,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Why does my PDF fail PDF/A conversion?", a: "The most common reasons are: the file is encrypted, it contains JavaScript, or it references external font resources. Remove those elements first, then retry." },
       { q: "Which PDF/A version should I use?", a: "PDF/A-2b is a good default for general archiving. Check the requirements of the system you are submitting to if a specific variant is required." },
     ],
-    relatedToolSlugs: ["pdf-to-pdfa", "protect-pdf", "compress-pdf", "redact-pdf"],
+    relatedToolSlugs: ["protect-pdf", "compress-pdf", "redact-pdf"],
     relatedPostSlugs: ["how-to-password-protect-a-pdf", "how-to-redact-a-pdf"],
   },
   {
@@ -248,7 +248,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Is a PDF or a Word document more professional?", a: "For external documents, PDF is the professional standard. For internal collaboration, Word is appropriate." },
       { q: "Can I convert a PDF back to Word for editing?", a: "Yes. ToolMint PDF to Word converter handles both text-based and scanned PDFs." },
     ],
-    relatedToolSlugs: ["pdf-to-word", "word-to-pdf", "compress-pdf", "protect-pdf"],
+    relatedToolSlugs: ["pdf-to-word", "compress-pdf", "protect-pdf"],
     relatedPostSlugs: ["how-to-convert-pdf-to-word", "how-to-compress-pdf-without-losing-quality"],
   },
   {
@@ -454,7 +454,7 @@ export const blogPosts: BlogPost[] = [
     sections: [
       { heading: "Why Word Documents Lose Formatting", body: "Word uses system-installed fonts. If your document uses a font the recipient does not have, Word substitutes the closest match — which changes line breaks, spacing, and page layout. Different versions of Word also handle table spacing and image placement differently.\n\nPDF embeds the fonts and renders the page as a fixed image-like representation. There is nothing to substitute and nothing to shift." },
       { heading: "When to Convert Word to PDF", body: "Final documents sent externally: resumes, proposals, reports, and contracts should be PDF before they leave your hands. Application portals: most job and government portals require PDF format. Archiving: PDFs are better long-term archives because they do not depend on software compatibility.\n\nKeep the Word source file for editing. Convert to PDF only for the final version you share." },
-      { heading: "How to Convert Word to PDF Online", body: "Open the ToolMint Word to PDF tool. Click upload or drag your DOCX file into the upload area. The tool converts the document while preserving fonts, images, tables, and formatting. Click Download to save the PDF.\n\nThe conversion happens on the server using a compatible rendering engine, so the result closely matches how the document looks in Word. No Word installation is required." },
+      { heading: "The Best Way to Convert Word to PDF", body: "Use Word itself: File > Save As (or Export) and choose PDF. Word is the only program that knows exactly how it laid your document out, so its own export is the most faithful result available, it is free, and the file never leaves your computer.\n\nOn a Mac, Pages and the system Print dialog both offer Save as PDF. In Google Docs use File > Download > PDF Document. LibreOffice Writer has a direct Export as PDF button.\n\nToolMint does not offer a Word to PDF converter. Every browser-based approach we tested discarded page size, margins, columns and font choices, which is precisely what a Word export needs to preserve." },
       { heading: "What Gets Preserved and What Does Not", body: "Preserved: text formatting (bold, italic, size), paragraph spacing, images, tables, headers and footers, page margins, and most list formatting.\n\nMay change: advanced Word features like tracked changes, comments, form fields, and complex SmartArt may render differently. Macros do not transfer to PDF." },
       { heading: "After Converting: Check Before Sending", body: "Open the converted PDF and scan through it before sending. Check that page breaks fall in the right places, images are not cropped or stretched, and table borders are intact.\n\nIf something looks wrong, return to the Word document, simplify the problematic section, and convert again. Common problems include wide tables that overflow the page margin and images with tight text wrapping." },
     ],
@@ -464,7 +464,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Can I convert password-protected Word documents?", a: "Password-protected DOCX files must be unlocked in Word before upload. The online converter cannot process files that require a Word password to open." },
       { q: "What is the file size limit for Word to PDF conversion?", a: "Standard document sizes convert without issue. Very large files with many high-resolution images may take longer but are generally supported." },
     ],
-    relatedToolSlugs: ["word-to-pdf", "pdf-to-word", "compress-pdf", "protect-pdf"],
+    relatedToolSlugs: ["pdf-to-word", "compress-pdf", "protect-pdf"],
     relatedPostSlugs: ["how-to-convert-pdf-to-word", "pdf-vs-word-document-format"],
   },
   {
@@ -478,7 +478,7 @@ export const blogPosts: BlogPost[] = [
     sections: [
       { heading: "Why Convert a Presentation to PDF", body: "Sharing decks after a meeting: a PDF handout is more practical for reference than a live PPTX file. Client or investor presentations: sharing a PDF avoids accidental edits or slides loading incorrectly on a different system. Archiving: PDFs are lighter and more stable for long-term storage than PPTX.\n\nPDF also loads faster in browsers and email clients than PowerPoint files, making it the better format for web sharing." },
       { heading: "Each Slide Becomes One Page", body: "When you convert a PPTX to PDF, each slide becomes a separate page in the PDF. Animations and transitions are not included — each slide is rendered as a static image of its final state.\n\nIf your presentation has hidden slides, most conversion tools do not include them in the PDF by default. Check whether your tool converts all slides or only visible ones." },
-      { heading: "How to Convert PowerPoint to PDF Online", body: "Open the ToolMint PowerPoint to PDF tool. Upload your PPTX or PPT file. The tool renders each slide as a page in the output PDF, preserving fonts, images, shapes, and background colors. Download the converted PDF.\n\nFor presentations with custom fonts, the output quality depends on whether those fonts were embedded in the PowerPoint file." },
+      { heading: "The Best Way to Convert PowerPoint to PDF", body: "Use PowerPoint itself: File > Export > Create PDF/XPS, or File > Save As and pick PDF. The export dialog also lets you choose slides, handouts or notes pages, which no third-party converter matches.\n\nGoogle Slides offers File > Download > PDF Document, and Keynote has Export To > PDF. All of them keep fonts, shapes and backgrounds intact.\n\nToolMint does not offer a PowerPoint to PDF converter. Rendering PPTX faithfully means reimplementing DrawingML, theme inheritance and slide-master chains, and anything less mangles the deck." },
       { heading: "Slides vs. Notes View in PDF", body: "Standard conversion creates one PDF page per slide showing the slide content only. If you want the notes included, some tools offer a notes view option that places the slide at the top and the speaker notes below, similar to a printed handout format." },
       { heading: "Reducing File Size After Conversion", body: "Presentations with many high-resolution images often convert to large PDFs. After conversion, run the file through the Compress PDF tool to reduce size for email or web sharing.\n\nFor print quality, keep the full resolution version. For web sharing or email attachments, a compressed version reduces load time and attachment friction." },
     ],
@@ -488,7 +488,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Can I convert a PPT (old format) as well as PPTX?", a: "Yes. Both PPT and PPTX formats are supported by most conversion tools." },
       { q: "How do I share just a few slides, not the whole presentation?", a: "Convert the full presentation to PDF first, then use the Split PDF tool to extract the specific pages you want to share." },
     ],
-    relatedToolSlugs: ["powerpoint-to-pdf", "compress-pdf", "split-pdf", "merge-pdf"],
+    relatedToolSlugs: ["compress-pdf", "split-pdf", "merge-pdf"],
     relatedPostSlugs: ["how-to-split-a-pdf-into-pages", "how-to-compress-pdf-without-losing-quality"],
   },
   {
@@ -502,7 +502,7 @@ export const blogPosts: BlogPost[] = [
     sections: [
       { heading: "Why Spreadsheets Look Different for Every Recipient", body: "Excel files contain live formulas, dynamic data connections, and formatting instructions that depend on the software interpreting them. If the recipient has a different version of Excel, LibreOffice, or Google Sheets, column widths may collapse, borders may disappear, and chart rendering may shift.\n\nPDF removes this variability. The output is a fixed-format rendering of the spreadsheet exactly as you see it." },
       { heading: "Print Area and What Gets Converted", body: "If you have set a print area in Excel, the conversion tool will typically include only that area. If no print area is set, the entire populated range is converted.\n\nMultiple sheets in a workbook can each become a separate page in the PDF or be included selectively. Check your tool settings to confirm which sheets are included in the output." },
-      { heading: "How to Convert Excel to PDF Online", body: "Open the ToolMint Excel to PDF tool. Upload your XLSX or XLS file. The tool renders the spreadsheet as a PDF, preserving table borders, cell formatting, merged cells, and chart positions. Download the PDF.\n\nFor workbooks with multiple sheets, check whether the output includes all sheets or only the active one." },
+      { heading: "The Best Way to Convert Excel to PDF", body: "Use Excel itself: File > Export > Create PDF/XPS, or File > Print and choose Save as PDF. Excel is the only program that evaluates your formulas and knows your print area, page breaks and scaling.\n\nBefore exporting, set the print area and use Page Layout > Scale to Fit so wide sheets do not spill across pages. Google Sheets offers File > Download > PDF with the same controls.\n\nToolMint does not offer an Excel to PDF converter. Browser spreadsheet libraries do not evaluate formulas, so a converted workbook can silently print zeros where your totals should be." },
       { heading: "Handling Wide Tables", body: "Wide spreadsheets that exceed the page width are a common problem in Excel-to-PDF conversion. The standard options are landscape orientation, scaling to fit the page, or splitting across multiple pages.\n\nFor presentation to clients or management, scaling to fit is usually the cleanest option. For data archives where every column must be legible, landscape with a larger paper size works better." },
       { heading: "After Conversion: Edit the Source, Not the PDF", body: "If numbers or data need to change after conversion, always edit the original Excel file and reconvert. Editing the PDF directly is impractical for data-heavy spreadsheets.\n\nFor presentations that include spreadsheet data alongside slides or text, merge the converted PDF with other documents using the Merge PDF tool." },
     ],
@@ -512,7 +512,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Can I convert only one sheet from a multi-sheet workbook?", a: "Most tools convert the active or first sheet by default. Some tools let you choose which sheets to include." },
       { q: "Why is my converted Excel PDF cutting off columns?", a: "The spreadsheet extends beyond the page width. Try setting landscape orientation in your tool settings or scale the output to fit the page." },
     ],
-    relatedToolSlugs: ["excel-to-pdf", "pdf-to-excel", "compress-pdf", "merge-pdf"],
+    relatedToolSlugs: ["pdf-to-excel", "compress-pdf", "merge-pdf"],
     relatedPostSlugs: ["how-to-extract-pdf-tables-into-excel", "how-to-merge-pdf-files-online"],
   },
   {
@@ -584,7 +584,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Will the extraction preserve number formatting?", a: "Basic numbers are usually extracted accurately. Currency symbols, thousand separators, and date formats may require adjustment in Excel after extraction." },
       { q: "What if the PDF has tables across multiple pages?", a: "Tables that span multiple pages are detected by most tools and combined into a single table in the output. Verify the boundary rows where pages join." },
     ],
-    relatedToolSlugs: ["pdf-to-excel", "excel-to-pdf", "pdf-to-text", "pdf-to-word"],
+    relatedToolSlugs: ["pdf-to-excel", "pdf-to-text", "pdf-to-word"],
     relatedPostSlugs: ["how-to-extract-text-from-scanned-pdf", "how-to-convert-excel-to-pdf"],
   }
 
@@ -826,7 +826,7 @@ export const blogPosts: BlogPost[] = [
       { q: "Can I do this on a phone without a computer?", a: "Yes. Open the Compress PDF tool in your phone browser, upload the file from your files app, compress, and download. No app installation needed." },
       { q: "What if I have a DOCX file instead of PDF?", a: "Convert your Word document to PDF first using the Word to PDF tool, then compress if needed." },
     ],
-    relatedToolSlugs: ["compress-pdf", "image-to-pdf", "word-to-pdf", "split-pdf"],
+    relatedToolSlugs: ["compress-pdf", "image-to-pdf", "split-pdf"],
     relatedPostSlugs: ["pdf-file-too-large-to-email-how-to-fix", "how-to-compress-pdf-without-losing-quality"],
   }
   ,{

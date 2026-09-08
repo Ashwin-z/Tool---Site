@@ -1,14 +1,38 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getToolSlugFromHref, isToolAvailableSlug } from "./lib/tool-availability";
+import { getToolSlugFromHref, isToolAvailableSlug, isToolRetiredSlug } from "./lib/tool-availability";
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
 
   const toolSlug = getToolSlugFromHref(request.nextUrl.pathname);
+  // NOTE: these responses must build their OWN Headers. Reusing the headers
+  // from NextResponse.next() carries Next's internal pass-through marker,
+  // which makes the router override the status we set (a 410 came back as
+  // a 404 until this was fixed).
+  const terminalHeaders = (contentType: string) =>
+    new Headers({
+      "X-Robots-Tag": "noindex, nofollow",
+      "Content-Type": contentType,
+      "Cache-Control": "no-store",
+    });
+
+  if (toolSlug && isToolRetiredSlug(toolSlug)) {
+    // 410 Gone, not 404: these tools were deliberately withdrawn after a
+    // documented feasibility assessment and are not returning at this URL.
+    // 410 tells search engines to drop the URL instead of retrying it.
+    return new NextResponse(
+      "This tool has been retired. It depended on server-side Office conversion that could not be " +
+        "made reliable, and a browser version could not reach an acceptable quality bar. " +
+        "See https://toolmint.tools/tools/pdf-tools for the tools that do work.",
+      { status: 410, headers: terminalHeaders("text/plain; charset=utf-8") },
+    );
+  }
   if (toolSlug && !isToolAvailableSlug(toolSlug)) {
-    response.headers.set("X-Robots-Tag", "noindex, nofollow");
-    return new NextResponse("Not Found", { status: 404, headers: response.headers });
+    return new NextResponse("Not Found", {
+      status: 404,
+      headers: terminalHeaders("text/plain; charset=utf-8"),
+    });
   }
 
   // ── Security headers ──────────────────────────────────────

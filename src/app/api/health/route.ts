@@ -22,16 +22,11 @@ export const dynamic = "force-dynamic";
  */
 
 const BINARIES: { name: string; candidates: string[]; neededBy: string[] }[] = [
-  {
-    name: "ghostscript",
-    candidates: ["gswin64c.exe", "gswin32c.exe", "gs"],
-    neededBy: ["compress-pdf", "pdf-to-pdfa"],
-  },
-  {
-    name: "pdfcpu",
-    candidates: ["pdfcpu.exe", "pdfcpu"],
-    neededBy: ["protect-pdf", "unlock-pdf"],
-  },
+  // Batch 1C: nothing depends on an external binary any more. Ghostscript
+  // (compress-pdf, pdf-to-pdfa) and pdfcpu (protect-pdf, unlock-pdf) were
+  // both eliminated by the browser rebuilds; the last Office-COM converters
+  // were retired. This list is intentionally empty — if it ever grows again,
+  // that is a signal the architecture has regressed.
 ];
 
 function probe(cmd: string, args: string[], timeoutMs = 4000): Promise<boolean> {

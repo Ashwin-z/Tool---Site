@@ -1040,40 +1040,18 @@ async function buildDocx(pages: PageData[]): Promise<Blob> {
   return Packer.toBlob(doc);
 }
 
-/* ── Server-side conversion via Word COM (high fidelity) ─ */
-
-async function convertViaServer(file: File): Promise<Blob | null> {
-  try {
-    const form = new FormData();
-    form.append("file", file);
-    const res = await fetch("/api/tools/pdf-to-word", {
-      method: "POST",
-      body: form,
-    });
-    if (!res.ok) return null;
-    const ct = res.headers.get("content-type") ?? "";
-    if (!ct.includes("officedocument")) return null;
-    return res.blob();
-  } catch {
-    return null;
-  }
-}
-
-/* ── Main conversion — server-first, client fallback ───── */
+/* ── Conversion — entirely in the browser ──────────────── */
 
 async function convertPdfToDocx(
   file: File,
   onStatus?: (msg: string) => void,
 ): Promise<Blob> {
-  // Try high-fidelity server-side conversion first (uses Microsoft Word engine)
-  onStatus?.("Processing with high-fidelity engine — preserving layout, images & fonts…");
-  const serverBlob = await convertViaServer(file);
-  if (serverBlob && serverBlob.size > 500) {
-    return serverBlob;
-  }
-
-  // Fallback to client-side conversion
-  onStatus?.("Using browser-based conversion…");
+  // Batch 1C: the previous "server-first" path called an endpoint backed by
+  // Microsoft Word COM automation, which is not available in production and
+  // returned 500 to every user. Every visitor was already falling through to
+  // this browser converter, but only after a wasted failed upload. The upload
+  // is gone; the file now stays on the device.
+  onStatus?.("Reading document…");
   const pdfjs = await getPdfjs();
   const OPS = pdfjs.OPS;
   const buffer = new Uint8Array(await file.arrayBuffer());

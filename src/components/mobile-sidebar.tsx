@@ -37,9 +37,6 @@ const pdfSections: ToolSection[] = [
     heading: "Convert to PDF",
     items: [
       { name: "Image to PDF", desc: "Bundle images into PDF", href: "/tools/image-to-pdf", badge: "New" },
-      { name: "Word to PDF", desc: "Convert DOCX files", href: "/tools/word-to-pdf", badge: "New" },
-      { name: "PowerPoint to PDF", desc: "Convert slides", href: "/tools/powerpoint-to-pdf", badge: "New" },
-      { name: "Excel to PDF", desc: "Convert spreadsheets", href: "/tools/excel-to-pdf", badge: "New" },
       { name: "HTML to PDF", desc: "Save webpages as PDF", href: "/tools/html-to-pdf", badge: "New" },
     ],
   },
@@ -50,7 +47,6 @@ const pdfSections: ToolSection[] = [
       { name: "PDF to Word", desc: "Convert PDF to DOCX", href: "/tools/pdf-to-word", badge: "New" },
       { name: "PDF to PowerPoint", desc: "Convert PDF to PPTX", href: "/tools/pdf-to-powerpoint", badge: "New" },
       { name: "PDF to Excel", desc: "Convert PDF to XLSX", href: "/tools/pdf-to-excel", badge: "New" },
-      { name: "PDF to PDF/A", desc: "Archive-ready PDF", href: "/tools/pdf-to-pdfa", badge: "New" },
       { name: "PDF to Text (OCR)", desc: "Extract text from scanned PDFs", href: "/tools/pdf-to-text", badge: "New" },
     ],
   },
