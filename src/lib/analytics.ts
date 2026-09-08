@@ -62,6 +62,10 @@ export type ToolEventParams = {
   failure_type?: FailureType;
   /** Milliseconds, rounded. */
   duration_ms?: number;
+  /** Which compression preset the user chose (compress-pdf). */
+  compression_mode?: string;
+  /** Bucketed size reduction, e.g. "70%+". Never an exact per-file figure. */
+  reduction_bucket?: string;
 };
 
 export type ToolEventName =

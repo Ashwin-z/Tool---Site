@@ -16,7 +16,7 @@ export type ProcessingMode = "browser" | "server" | "server-fetch";
 
 /** The user's file is uploaded to ToolMint's server, processed, then deleted. */
 const SERVER_UPLOAD_TOOLS = new Set<string>([
-  "compress-pdf",
+  // "compress-pdf" moved to browser-side processing in Batch 1A.
   "excel-to-pdf",
   "html-to-pdf",
   "pdf-to-excel",
