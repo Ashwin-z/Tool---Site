@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "ToolMint",
     short_name: "ToolMint",
     description:
-      "ToolMint offers 80+ free online tools for PDFs, images, calculators, code, and more.",
+      "Free browser tools for PDFs, images and calculations. Your file is never uploaded.",
     start_url: "/",
     scope: "/",
     display: "standalone",

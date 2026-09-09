@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
 import PdfMergerTool from "@/components/pdf-merger-tool";
@@ -194,6 +195,32 @@ import WebAppSchema from "@/components/web-app-schema";
               </div>
             ))}
           </dl>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            After merging
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
+            A merged file is the sum of its parts, so it is usually the largest PDF you now own — that is why compressing is the common next step.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Merged files are big. Get it under an email limit." },
+              { name: "Sign PDF", href: "/tools/sign-pdf", desc: "Sign the assembled packet before sending it." },
+              { name: "Protect PDF", href: "/tools/protect-pdf", desc: "Add a password if the packet is confidential." },
+              { name: "Split PDF", href: "/tools/split-pdf", desc: "Changed your mind about the order? Pull pages back out." },
+            ].map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="rounded-xl border border-white/10 bg-white/[.02] p-4 transition hover:-translate-y-0.5 hover:border-white/20"
+              >
+                <h3 className="font-semibold text-foreground">{t.name}</h3>
+                <p className="mt-1 text-xs leading-5 text-muted">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <RelatedTools slug="merge-pdf" />

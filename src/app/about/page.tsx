@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BRAND_META_DESCRIPTION, SITE_HOST, TOOL_COUNT } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: { absolute: "About ToolMint — Free Online Tools for Everyone" },
   description:
-    "Learn about ToolMint, a free suite of 80+ online tools for PDFs, images, text, calculations, SEO, and more. No signup, no watermark, no limits.",
+    BRAND_META_DESCRIPTION,
   alternates: { canonical: "/about" },
   openGraph: {
     images: ["/opengraph-image"],
     title: "About ToolMint — Free Online Tools for Everyone",
     description:
-      "Learn about ToolMint, a free suite of 80+ online tools for PDFs, images, text, calculations, SEO, and more.",
+      BRAND_META_DESCRIPTION,
     url: "/about",
   },
 };
 
 const stats = [
-  { label: "Free Tools", value: "80+" },
+  { label: "Free Tools", value: `${TOOL_COUNT}` },
   { label: "Categories", value: "8" },
   { label: "Signup Required", value: "None" },
   { label: "Cost", value: "Free" },
@@ -56,10 +57,34 @@ export default function AboutPage() {
           </p>
         </section>
 
+
+        <section>
+          <h2 className="font-display text-xl font-bold text-foreground">
+            Which ToolMint is this?
+          </h2>
+          <p className="mb-3">
+            A fair question, because the name is not unique. Several unrelated websites and products
+            also call themselves ToolMint — some offer online utilities, others sell AI software or
+            newsletters. We are not affiliated with any of them, and we cannot speak for how they
+            handle your files.
+          </p>
+          <p className="mb-3">
+            This ToolMint is <strong>{SITE_HOST}</strong> and nothing else. If you arrived from a
+            search result or a link, check the address bar. Anything published elsewhere — pricing,
+            accounts, language options, mobile apps — is not ours.
+          </p>
+          <p>
+            What distinguishes this site is not a slogan but something you can check yourself: open
+            your browser&rsquo;s developer tools, switch to the Network tab, and run any of our PDF
+            tools. No request carrying your document is made, because the work happens on your own
+            device. That is the whole product.
+          </p>
+        </section>
+
         <section>
           <h2 className="font-display text-xl font-bold text-foreground">What We Offer</h2>
           <p className="mb-3">
-            ToolMint provides a growing collection of 80+ tools across multiple categories:
+            ToolMint provides {TOOL_COUNT} tools across several categories:
           </p>
           <ul className="list-disc space-y-1 pl-6">
             <li>

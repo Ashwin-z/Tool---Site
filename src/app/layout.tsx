@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Syne } from "next/font/google";
 import "./globals.css";
 import AnalyticsScripts from "@/components/analytics-scripts";
+import { BRAND_META_DESCRIPTION } from "@/lib/brand";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
 import SiteNav from "@/components/site-nav";
@@ -27,10 +28,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://toolmint.tools"),
   title: {
     template: "%s | ToolMint",
-    default: "ToolMint - Free Online PDF Tools, Converters & Calculators",
+    default: "ToolMint – Browser Tools That Never Upload Your File",
   },
-  description:
-    "ToolMint offers 80+ free online tools - compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
+  description: BRAND_META_DESCRIPTION,
   keywords: [
     "free online tools",
     "pdf tools online",

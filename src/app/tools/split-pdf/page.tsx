@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
 import PdfSplitterTool from "@/components/pdf-splitter-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
@@ -194,6 +195,32 @@ export default function SplitPdfPage() {
               </div>
             ))}
           </dl>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            After splitting
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
+            Splitting usually happens because a file was too big or contained pages meant for different people. Both of those have an obvious next move.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Shrink the extracted pages before sending them." },
+              { name: "Merge PDF", href: "/tools/merge-pdf", desc: "Recombine the pieces in a different order." },
+              { name: "PDF to JPG", href: "/tools/pdf-to-jpg", desc: "Turn the pages you kept into images." },
+              { name: "Protect PDF", href: "/tools/protect-pdf", desc: "Password-protect the section you are sharing." },
+            ].map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="rounded-xl border border-white/10 bg-white/[.02] p-4 transition hover:-translate-y-0.5 hover:border-white/20"
+              >
+                <h3 className="font-semibold text-foreground">{t.name}</h3>
+                <p className="mt-1 text-xs leading-5 text-muted">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <RelatedTools slug="split-pdf" />

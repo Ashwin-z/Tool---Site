@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Free Online Tools - PDF, Image, Text, SEO, Calculator & More",
   description:
-    "Browse 80+ free online tools on ToolMint. Compress, merge, split and convert PDFs, edit images, format code, calculate finances, check SEO, and more. No signup required.",
+    "Browse every free tool on ToolMint — PDFs, images, text, code, SEO and calculators. PDF tools run in your browser and never upload your file. No signup.",
   keywords: [
     "free online tools",
     "pdf tools online",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     images: ["/opengraph-image"],
     title: "Free Online Tools - PDF, Image, Text, SEO & Calculators | ToolMint",
     description:
-      "80+ free browser-based tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
+      "free browser-based tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
     url: "/tools",
   },
 };

@@ -299,7 +299,18 @@ export default function RedactPdfTool() {
 
   const currentBox = useMemo(() => pdf?.pageBoxes[currentPage - 1], [currentPage, pdf]);
   const currentAspect = currentBox ? currentBox.width / currentBox.height : 1 / 1.414;
-  const editorWidth = Math.round(BASE_EDITOR_WIDTH * zoom);
+  // The editor used a fixed 780px, which overflows a phone viewport and made
+  // the drag-to-redact interaction unusable on mobile (verified: 0 marks at
+  // 390x844). Clamp to the viewport so the page always fits the screen.
+  const [viewportWidth, setViewportWidth] = useState<number | null>(null);
+  useEffect(() => {
+    const measure = () => setViewportWidth(window.innerWidth);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+  const availableWidth = viewportWidth ? Math.max(280, viewportWidth - 96) : BASE_EDITOR_WIDTH;
+  const editorWidth = Math.round(Math.min(BASE_EDITOR_WIDTH, availableWidth) * zoom);
   const editorHeight = Math.round(editorWidth / currentAspect);
   const searchEntries = useMemo(() => mergeFragmentsToSearchLines(textFragments), [textFragments]);
 
@@ -644,7 +655,7 @@ export default function RedactPdfTool() {
 
   return (
     <div className="overflow-hidden rounded-[28px] border border-border bg-surface shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
-      <input ref={fileInputRef} type="file" accept="application/pdf" onChange={onFileInput} className="hidden" />
+      <input ref={fileInputRef} type="file" accept="application/pdf" aria-label="Choose a PDF to redact" onChange={onFileInput} className="hidden" />
 
       {!pdf ? (
         <section
@@ -679,7 +690,7 @@ export default function RedactPdfTool() {
             </div>
           ) : null}
           {errorMessage ? (
-            <div className="mx-auto mt-4 max-w-xl rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+            <div role="alert" className="mx-auto mt-4 max-w-xl rounded-2xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
               {errorMessage}
             </div>
           ) : null}
@@ -810,6 +821,12 @@ export default function RedactPdfTool() {
                     ref={editorCanvasRef}
                     className={`relative overflow-hidden rounded-[24px] border border-black/10 bg-white shadow-[0_24px_60px_rgba(0,0,0,0.2)] ${interactionMode === "manual" ? "cursor-crosshair" : "cursor-default"}`}
                     style={{ width: `${editorWidth}px`, height: `${editorHeight}px`, touchAction: interactionMode === "manual" ? "none" : "auto" }}
+                    role="application"
+                    aria-label={
+                      interactionMode === "manual"
+                        ? "Page preview. Drag to draw a redaction box, or use Search text to mark words without dragging."
+                        : "Page preview. Switch to Manual redact to draw a box, or use Search text to mark words."
+                    }
                     onPointerDown={onCanvasPointerDown}
                     onPointerMove={onCanvasPointerMove}
                     onPointerUp={onCanvasPointerUp}
@@ -990,7 +1007,7 @@ export default function RedactPdfTool() {
               </div>
 
               {statusMessage ? (
-                <div className="mt-5 rounded-2xl border border-border bg-surface/30 px-4 py-3 text-sm text-foreground/75">
+                <div role="status" aria-live="polite" className="mt-5 rounded-2xl border border-border bg-surface/30 px-4 py-3 text-sm text-foreground/75">
                   {statusMessage}
                 </div>
               ) : null}

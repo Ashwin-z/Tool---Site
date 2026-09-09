@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import RelatedTools from "@/components/related-tools";
 import PdfToWordTool from "@/components/pdf-to-word-tool-loader";
 import ToolBreadcrumbs from "@/components/tool-breadcrumbs";
@@ -204,6 +205,32 @@ export default function PdfToWordPage() {
               </div>
             ))}
           </dl>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            After converting
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-muted">
+            Word is the right target for prose. If what you actually wanted was the numbers or a scanned page, one of these fits better.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { name: "PDF to Excel", href: "/tools/pdf-to-excel", desc: "If it was tables you were after, not paragraphs." },
+              { name: "PDF to Text (OCR)", href: "/tools/pdf-to-text", desc: "If the PDF is a scan with no text layer." },
+              { name: "Compress PDF", href: "/tools/compress-pdf", desc: "Keep the original PDF, just smaller." },
+              { name: "Split PDF", href: "/tools/split-pdf", desc: "Convert only the pages you need." },
+            ].map((t) => (
+              <Link
+                key={t.href}
+                href={t.href}
+                className="rounded-xl border border-white/10 bg-white/[.02] p-4 transition hover:-translate-y-0.5 hover:border-white/20"
+              >
+                <h3 className="font-semibold text-foreground">{t.name}</h3>
+                <p className="mt-1 text-xs leading-5 text-muted">{t.desc}</p>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <RelatedTools slug="pdf-to-word" />

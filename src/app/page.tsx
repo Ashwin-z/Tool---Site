@@ -2,17 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import HomeWordCounter from "@/components/home-word-counter";
 import { toolCategories } from "@/lib/tool-categories";
+import { BRAND_META_DESCRIPTION, TOOL_COUNT, organizationSchema, webSiteSchema } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "ToolMint - Free Online PDF Tools, Converters & Calculators",
-  description:
-    "ToolMint offers 80+ free online tools - compress, merge, split and convert PDFs, edit images, format code, calculate finances and more. No signup required.",
+  title: { absolute: "ToolMint – Browser Tools That Never Upload Your File" },
+  description: BRAND_META_DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "ToolMint - Free Online PDF Tools, Converters & Calculators",
+    title: { absolute: "ToolMint – Browser Tools That Never Upload Your File" },
     description:
-      "80+ free online tools for PDFs, images, text, code, SEO, and calculators. No signup, no watermark.",
+      "Free browser tools for PDFs, images, text and calculations. Your file is never uploaded. No signup, no watermark.",
     url: "/",
   },
 };
@@ -56,21 +56,8 @@ const faqs = [
 ];
 
 export default function Home() {
-  const orgSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "ToolMint",
-    url: "https://toolmint.tools",
-    logo: "https://toolmint.tools/branding/toolmint-logo-512.png",
-    sameAs: [],
-  };
-
-  const webSiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "ToolMint",
-    url: "https://toolmint.tools",
-  };
+  const orgSchema = organizationSchema();
+  const siteSchema = webSiteSchema();
 
   const featuredCategories = toolCategories
     .filter((category): category is (typeof toolCategories)[number] & { path: string } => Boolean(category.path))
@@ -84,7 +71,7 @@ export default function Home() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
       />
       <main className="mx-auto max-w-6xl px-6 pb-16 pt-14">
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#6c63ff]/30 bg-[#6c63ff]/12 px-3 py-1 text-xs text-[#b6b2ff]">
@@ -134,7 +121,7 @@ export default function Home() {
           </div>
           <div className="mt-6">
             <Link href="/tools" className="text-sm font-medium text-[#6c63ff] transition hover:underline">
-              Browse all 80+ tools -&gt;
+              Browse all tools -&gt;
             </Link>
           </div>
         </section>
