@@ -109,6 +109,74 @@ have already written about redaction failure.
 
 ---
 
+## 3b. THE FIRST MESSAGE — ready to send, RSF
+
+**Destination (verified 2026-09-09):** the RSF Resources contact form.
+`https://resources.rsf.org/contact-us/` states *"For any inquiry or suggestion,
+please fill in our contact form"*, which points at
+`https://training.rsf.org/contact-us/`. That page confirms the form and states
+that *"Data entered through the contact form will NEVER be shared or made
+public."*
+
+**Why this destination:** `resources.rsf.org` is a catalogue of journalist
+safety resources and already carries an **External resources** section linking
+third-party tools. A verification tool for failed redaction fits that section on
+its merits.
+
+**Reply address:** whatever address is entered must actually receive mail. See
+the blocker at the top of this file — at the time of writing,
+`hello@toolmint.tools` does not.
+
+**Do not paste the SEO framing from any other pitch.** No mention of links,
+authority or ranking. The argument is editorial usefulness only.
+
+---
+
+> Subject: A free browser-based tool for checking whether a PDF redaction actually worked
+>
+> Hello,
+>
+> I maintain ToolMint, a small independent set of browser-based document tools,
+> and I wanted to suggest one of them for your external resources section —
+> though I'd rather explain the problem first and let you judge whether it earns
+> a place.
+>
+> When a document is "redacted" by drawing a black box over text, the text is
+> usually still in the file. Selecting the area and copying it reveals the
+> original wording. This is how most published redaction failures have happened,
+> and it is invisible in the one place people check, which is the screen. It is a
+> direct source-protection risk for anyone publishing documents they have
+> redacted themselves, or handling documents redacted by someone else.
+>
+> The PDF Redaction Checker reads a PDF and reports text that is still
+> recoverable: text sitting under a shape or an image, text set to render
+> invisibly, text painted the same colour as its background, and document
+> properties worth reviewing. It reports the page each finding came from.
+>
+> Two things that may matter for your audience specifically:
+>
+> It runs entirely in the browser. The file is not uploaded anywhere, which can
+> be confirmed in the browser's own network tab. A document being redacted is
+> sensitive by definition, so this seemed like the only defensible design.
+>
+> The method and its limits are published on the page rather than summarised.
+> It reads text, so a signature or photograph hidden under a box is outside what
+> it can see, and it says so. There is also a scanned-document case worth knowing
+> about: a searchable scan is an image with an invisible text layer over it, so
+> drawing a black box on the picture leaves that layer intact.
+>
+> The tool: https://toolmint.tools/tools/pdf-redaction-checker
+> How it works and what it cannot do:
+> https://toolmint.tools/tools/pdf-redaction-checker#methodology
+>
+> It is free, needs no account, and there is nothing to buy. If it is not a fit
+> for the catalogue, no reply is needed at all — and if any of the technical
+> description above is wrong, I would genuinely like to know.
+>
+> Thank you for your time.
+
+---
+
 ## 4. Methodology summary (one paragraph, quotable)
 
 > The checker walks each page's drawing instructions in order and rebuilds every

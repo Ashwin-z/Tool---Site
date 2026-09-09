@@ -53,12 +53,19 @@ export default function ContactPage() {
           <p className="mt-1 text-sm text-foreground/75">
             Questions, feedback, or bug reports
           </p>
-          <a
-            href="mailto:hello@toolmint.tools"
-            className="mt-3 inline-block text-sm font-medium text-accent-light transition hover:text-foreground"
-          >
-            hello@toolmint.tools
-          </a>
+          {CONTACT.contactWorks ? (
+            <a
+              href={`mailto:${CONTACT.general}`}
+              className="mt-3 inline-block text-sm font-medium text-accent-light transition hover:text-foreground"
+            >
+              {CONTACT.general}
+            </a>
+          ) : (
+            <p className="mt-3 text-sm font-medium text-foreground/60">
+              <span className="line-through">{CONTACT.general}</span>{" "}
+              <span className="text-xs">(not receiving mail yet)</span>
+            </p>
+          )}
         </div>
 
         <div className="rounded-xl border border-border bg-surface p-5">
@@ -66,12 +73,19 @@ export default function ContactPage() {
           <p className="mt-1 text-sm text-foreground/75">
             Collaboration or advertising inquiries
           </p>
-          <a
-            href="mailto:partnerships@toolmint.tools"
-            className="mt-3 inline-block text-sm font-medium text-accent-light transition hover:text-foreground"
-          >
-            partnerships@toolmint.tools
-          </a>
+          {CONTACT.contactWorks ? (
+            <a
+              href={`mailto:${CONTACT.partnerships}`}
+              className="mt-3 inline-block text-sm font-medium text-accent-light transition hover:text-foreground"
+            >
+              {CONTACT.partnerships}
+            </a>
+          ) : (
+            <p className="mt-3 text-sm font-medium text-foreground/60">
+              <span className="line-through">{CONTACT.partnerships}</span>{" "}
+              <span className="text-xs">(not receiving mail yet)</span>
+            </p>
+          )}
         </div>
       </div>
 
