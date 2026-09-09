@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to JPG Converter – Convert PDF Pages to Images Free",
+  title: "PDF to JPG in Your Browser – No Upload",
   description:
-    "Convert PDF pages to high-quality JPG images online for free. Download pages individually or as a zip. No signup.",
+    "Turn PDF pages into JPG images without uploading the file. Everything happens on your device. Free, no signup, no watermark.",
   keywords: [
     "pdf to jpg",
     "pdf to image",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/pdf-to-jpg" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "PDF to JPG Converter – Convert PDF Pages to Images Free | ToolMint",
+    title: "PDF to JPG in Your Browser – No Upload | ToolMint",
     description:
-      "Convert PDF pages to high-quality JPG images online for free. Download pages individually or as a zip. No signup.",
+      "Turn PDF pages into JPG images without uploading the file. Everything happens on your device. Free, no signup, no watermark.",
     url: "/tools/pdf-to-jpg",
   },
   twitter: { card: "summary_large_image" },

@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Text (OCR) – Extract Text from PDF Free",
+  title: "PDF to Text (OCR) in Your Browser – No Upload",
   description:
-    "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
+    "Extract text from a scanned PDF without uploading it. The OCR runs on your own device, so the document never reaches a server. Free, no signup.",
   keywords: [
     "pdf to text",
     "extract text from pdf",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/pdf-to-text" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "PDF to Text (OCR) – Extract Text from PDF Free | ToolMint",
+    title: "PDF to Text (OCR) in Your Browser – No Upload | ToolMint",
     description:
-      "Extract text from PDF files online using OCR. Works on scanned PDFs and images. Free, no signup, copy or download output.",
+      "Extract text from a scanned PDF without uploading it. The OCR runs on your own device, so the document never reaches a server. Free, no signup.",
     url: "/tools/pdf-to-text",
   },
   twitter: { card: "summary_large_image" },

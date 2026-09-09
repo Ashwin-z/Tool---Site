@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Redact PDF Online Free – Hide Sensitive Text",
+  title: "Redact a PDF – Text Removed, Not Just Covered",
   description:
-    "Permanently redact sensitive text and images from PDFs online for free. GDPR and compliance-ready. No signup.",
+    "Black out sensitive text so it cannot be recovered. Each page is rebuilt as an image, so the words underneath are gone. Runs in your browser — no upload.",
   keywords: [
     "redact pdf online free",
     "pdf redaction tool",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/redact-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Redact PDF Online Free – Hide Sensitive Text | ToolMint",
+    title: "Redact a PDF – Text Removed, Not Just Covered | ToolMint",
     description:
-      "Permanently redact sensitive text and images from PDFs online for free. GDPR and compliance-ready. No signup.",
+      "Black out sensitive text so it cannot be recovered. Each page is rebuilt as an image, so the words underneath are gone. Runs in your browser — no upload.",
     url: "/tools/redact-pdf",
   },
   twitter: { card: "summary_large_image" },
@@ -37,8 +37,8 @@ const useCases = [
     desc: "Remove names, addresses, account numbers, and other personally identifiable information from court filings or legal exhibits before public disclosure.",
   },
   {
-    title: "GDPR and data privacy",
-    desc: "Redact personal data from documents before sharing them externally to comply with GDPR, HIPAA, or other data protection requirements.",
+    title: "Removing personal data",
+    desc: "Remove names, addresses, account numbers and other personal data from documents before sharing them externally. Whether that satisfies GDPR, HIPAA or any other obligation is a decision for you and your organisation — a tool cannot make you compliant.",
   },
   {
     title: "Confidential business information",
@@ -196,6 +196,36 @@ export default function RedactPdfPage() {
               </div>
             ))}
           </dl>
+        </section>
+
+        <section className="mt-16">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            Why a black box is not redaction
+          </h2>
+          <div className="mt-4 max-w-3xl space-y-4 text-sm leading-7 text-muted">
+            <p>
+              The most common way people ruin a redaction is to draw a black rectangle over the
+              text in a PDF editor. It looks right on screen, but the words are still in the file
+              underneath the box. Anyone can select the text, copy it, or extract it with a script.
+              Redactions have been undone this way in court filings and government releases.
+            </p>
+            <p>
+              This tool does not draw boxes over your text. It renders every page to a flat image,
+              paints the blacked-out areas onto that image, and then builds a completely new PDF
+              from those images. The original text layer is not copied across — it is discarded.
+              There is nothing underneath the black to recover, because the words no longer exist
+              in the file you download.
+            </p>
+            <p>
+              That has a real cost, and you should know about it before you use it:{" "}
+              <strong className="text-foreground">
+                the text in the redacted PDF is no longer selectable or searchable
+              </strong>
+              , and the file may be larger, because every page is now a picture. That is the
+              trade-off for a redaction that actually holds. Keep your original if you still need
+              an editable copy.
+            </p>
+          </div>
         </section>
 
         <RelatedTools slug="redact-pdf" />

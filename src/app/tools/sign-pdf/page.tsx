@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "Sign PDF Online Free – Add Digital Signature",
+  title: "Sign a PDF in Your Browser – No Upload",
   description:
-    "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
+    "Add a signature, initials or a date to a PDF without uploading it. The contract is signed on your own device and never sent to a server. Free, no signup.",
   keywords: [
     "sign pdf online free",
     "add signature to pdf",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/sign-pdf" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "Sign PDF Online Free – Add Digital Signature | ToolMint",
+    title: "Sign a PDF in Your Browser – No Upload | ToolMint",
     description:
-      "Sign PDF documents online for free. Draw, type, or upload your signature and add it anywhere. No signup required.",
+      "Add a signature, initials or a date to a PDF without uploading it. The contract is signed on your own device and never sent to a server. Free, no signup.",
     url: "/tools/sign-pdf",
   },
   twitter: { card: "summary_large_image" },

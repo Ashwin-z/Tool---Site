@@ -7,9 +7,9 @@ import ProcessingBadge from "@/components/processing-badge";
 import ToolAnalytics from "@/components/tool-analytics";
 
 export const metadata: Metadata = {
-  title: "PDF to Excel Converter – Extract PDF Tables Free",
+  title: "PDF to Excel in Your Browser – No Upload",
   description:
-    "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
+    "Pull tables out of a PDF into a spreadsheet without uploading the file. Rows, columns and merged cells are detected on your device. Free, no signup.",
   keywords: [
     "pdf to excel",
     "pdf to xlsx",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tools/pdf-to-excel" },
   openGraph: {
     images: ["/opengraph-image"],
-    title: "PDF to Excel Converter – Extract PDF Tables Free | ToolMint",
+    title: "PDF to Excel in Your Browser – No Upload | ToolMint",
     description:
-      "Convert PDF to Excel spreadsheet online for free. Extract tables and data into editable XLSX format instantly. No signup.",
+      "Pull tables out of a PDF into a spreadsheet without uploading the file. Rows, columns and merged cells are detected on your device. Free, no signup.",
     url: "/tools/pdf-to-excel",
   },
   twitter: { card: "summary_large_image" },
