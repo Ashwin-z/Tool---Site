@@ -69,12 +69,34 @@ force a merge.
 
 #### Step 2 — then this repo can be pushed
 
+> **The placeholder trap — this actually happened.** In Batch 11 the remote had
+> been configured as literally `git@github.com:<OWNER>/toolmint.git`. The
+> template below was pasted without substituting the account name. GitHub
+> rejects it with *"is not a valid repository name"*, so nothing could ever be
+> pushed — but `git remote -v` showed an origin, which made the blocker look
+> cleared and cost a batch. **Substitute the owner before running this.**
+
 ```bash
 cd C:/Users/Ashwin/Documents/tool-site
-git remote add origin git@github.com:<owner>/toolmint.git
-git remote -v
-git push -u origin master          # pushes all 16 commits, no rewrite, no squash
+
+OWNER=your-github-account            # <-- set this to the real account first
+case "$OWNER" in *your-github-account*|*'<'*) echo "STOP: set OWNER first"; exit 1;; esac
+
+git remote add origin "git@github.com:$OWNER/toolmint.git"
+git ls-remote origin >/dev/null && echo "remote reachable"   # fails loudly if wrong
+git push -u origin master            # all 17 commits, no rewrite, no squash
 ```
+
+Then confirm with:
+
+```bash
+node scripts/check-deploy-ready.mjs
+```
+
+It validates that the remote has no unsubstituted placeholder, is actually
+reachable, that the target commit is pushed, that the rollback baseline exists,
+and that no real `.env` is tracked. It exits non-zero while deployment cannot
+proceed, so a deploy should never be claimed while it fails.
 
 Do not force-push. The history is linear and does not need rewriting.
 
