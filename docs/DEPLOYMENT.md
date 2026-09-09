@@ -17,7 +17,7 @@ serving the pre-Batch-0 baseline (`ad63b06`, deployed 2026-05-17).
 | `/contact` | 1 live `mailto:` + "within 1-2 business days" | no live mailto, no promise |
 | `/about` | says "privacy-first", no operator section | differentiated, operator section |
 | Homepage tool count | "80+ tools" / "82 tools" | derived count, 77 |
-| `/api/health` | returns HTML | JSON health endpoint (Batch 0) |
+| `/api/health` | **HTTP 404** (renders the HTML 404 page) | 200, JSON health endpoint (Batch 0) |
 | Sitemap URLs | 179 | 176 |
 | Processing badge on tool pages | absent | present |
 
@@ -34,20 +34,122 @@ serving the pre-Batch-0 baseline (`ad63b06`, deployed 2026-05-17).
 4. **Every "it isn't ranking" measurement was measuring a page that isn't
    published.** See the correction in `docs/AUTHORITY-BASELINE.md`.
 
-### The immediate blocker: there is no git remote
+### The immediate blocker: no remote, and the repo cannot create one
 
-`git remote -v` returns nothing. The deploy procedure below says
-`git pull  # once a remote exists` — it still does not. The production server
-therefore has no way to fetch these 14 commits.
+**Verified 2026-09-09 (Batch 9).**
 
-**Required, in order:**
+`git remote -v` is empty. The deploy procedure below says
+`git pull  # once a remote exists` — it still does not exist, so the production
+server has no way to fetch these commits.
 
-1. Create a private remote (GitHub/GitLab) and `git push` this repository.
-2. On the production host, point the deploy directory at that remote.
-3. Run the deploy procedure below.
-4. Re-run the verification block, then re-check the live URLs in the table above.
+#### What this environment can and cannot do
+
+| Capability | State |
+|---|---|
+| GitHub SSH authentication | **works** — authenticates as `neuraventis` via `~/.ssh/id_ed25519_neuraventis` |
+| Create a GitHub repository | **not possible** — needs the API (no token present) or the web UI |
+| `gh` CLI | not installed |
+| SSH to production (`158.220.103.173:22`) | **closed/filtered** |
+| RDP to production (`:3389`) | open, but needs interactive Administrator login |
+| Direct app port (`:3001`) | closed externally — correct, it sits behind Caddy |
+
+GitHub does **not** auto-create a repository on push, so working SSH auth is not
+enough on its own. Two decisions are also the owner's, not the agent's: which
+account or organisation ToolMint should live under (the authenticated identity
+is `neuraventis`, a different business), and whether to grant deploy access.
+
+#### Step 1 — owner action, roughly two minutes
+
+Create an **empty private** repository. Do not initialise it with a README,
+.gitignore or licence — the history already exists and an initial commit would
+force a merge.
+
+- Web UI: <https://github.com/new> → Private → **no** initialisation files.
+- Or with a token: `gh repo create <owner>/toolmint --private`
+
+#### Step 2 — then this repo can be pushed
+
+```bash
+cd C:/Users/Ashwin/Documents/tool-site
+git remote add origin git@github.com:<owner>/toolmint.git
+git remote -v
+git push -u origin master          # pushes all 16 commits, no rewrite, no squash
+```
+
+Do not force-push. The history is linear and does not need rewriting.
+
+#### Step 3 — point production at the remote
+
+Production has no SSH access from here, so this runs on the server over RDP:
+
+```powershell
+cd C:\Users\Administrator\Documents\ToolMint.tools\Tool---Site\Tool---Site\tool-site
+
+# one-off: back up the current live state before anything changes
+Copy-Item .next ..\next-backup-ad63b06 -Recurse
+Copy-Item .env.production ..\env-backup.production   # if it exists
+
+git init                       # if the deploy dir is not already a repo
+git remote add origin git@github.com:<owner>/toolmint.git
+git fetch origin
+git checkout -f e3c2fc1        # the intended release, not master
+```
+
+#### Step 4 — build and restart
+
+```powershell
+npm ci
+npm run build
+node scripts/audit-metadata.mjs   # abort if this fails
+pm2 restart tool-site
+pm2 save
+```
+
+`.env.example` is now tracked (it was previously excluded by the `.env*` rule,
+which meant a fresh clone had no template to copy). Copy it to `.env.production`
+and fill in values — everything in it is empty except `NODE_ENV` and `PORT`.
+
+#### Step 5 — verify the gap actually closed
+
+```bash
+for u in /tools/pdf-redaction-checker /blog/how-to-tell-if-pdf-redaction-failed; do
+  curl -s -o /dev/null -w "$u %{http_code}\n" https://toolmint.tools$u   # expect 200
+done
+for u in /tools/word-to-pdf /tools/excel-to-pdf /tools/powerpoint-to-pdf /tools/pdf-to-pdfa; do
+  curl -s -o /dev/null -w "$u %{http_code}\n" https://toolmint.tools$u   # expect 410
+done
+curl -s https://toolmint.tools/api/health          # expect JSON, not HTML
+curl -s https://toolmint.tools/contact | grep -c 'href="mailto:'   # expect 0
+```
 
 Until step 1 happens, no other work on this project can reach a user.
+
+### Rollback — verified 2026-09-09
+
+The mechanism was tested this batch with a throwaway git worktree, without
+touching production: `ad63b06` checks out cleanly and yields a complete tree
+(its registry contains 82 tool slugs, which matches the "82 tools" copy still
+being served live — independent confirmation that production is that commit).
+
+`git fsck` is clean and all 16 commits are intact.
+
+To restore the baseline on the server:
+
+```powershell
+cd C:\Users\Administrator\Documents\ToolMint.tools\Tool---Site\Tool---Site\tool-site
+git checkout -f ad63b06
+npm ci
+npm run build
+pm2 restart tool-site
+```
+
+Faster, if the pre-deploy backup from step 3 exists: stop PM2, restore
+`..\next-backup-ad63b06` over `.next`, restart. PM2 keeps the old process alive
+until the restart, so downtime is a few seconds either way.
+
+**Must be preserved across any rollback:** `.env.production` (not in git),
+the Caddy configuration (not in this repo), and the PM2 process registration
+(`pm2 save`).
 
 ## Source of truth
 

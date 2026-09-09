@@ -32,6 +32,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but the template MUST ship. DEPLOYMENT.md tells the server to copy
+# .env.example to .env.production after cloning; if the template is ignored it
+# does not exist on a fresh clone and that step silently fails. Every value in
+# it is empty except NODE_ENV and PORT, so there is nothing secret to leak.
+!.env.example
 
 # vercel
 .vercel
