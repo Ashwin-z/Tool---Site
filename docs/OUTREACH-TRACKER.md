@@ -58,7 +58,16 @@ has been read by a human, since automated access is blocked.
 
 ### Why nothing has been sent
 
-**Status as of 2026-09-09 (Batch 7): still not sent. Do not record otherwise.**
+**Status as of 2026-09-09 (Batch 8): still not sent. Do not record otherwise.**
+
+> **A second, harder blocker was found in Batch 8.** The Redaction Checker
+> returns **HTTP 404 on live production** — it has never been deployed. Sending
+> the RSF pitch would have pointed a journalist at an error page. That is worse
+> than a bouncing reply address and worse than not writing at all, and it would
+> have spent the highest-value target in the list on a broken link.
+>
+> **Deploy before sending. Then re-check the live URL returns 200.**
+> See `docs/DEPLOYMENT.md`.
 
 The blocker is not the contact path, and it is no longer the provider decision
 either — that is settled (Zoho free; see `docs/DNS-EMAIL.md` §1, with the exact
@@ -102,7 +111,7 @@ editorial contact first.
 | Global Investigative Journalism Network | Investigative journalism | `gijn.org/resource/digital-security/` | **1185** | Maintains standing digital-security resource lists; document handling is core to their audience | Checker + methodology | Editorial | Contact page returns 403 to automated access — read it manually before sending | | | | queued (second move) | |
 | Freedom of the Press Foundation | Press freedom / security tooling | `freedom.press` | **14701** | Builds Dangerzone, a PDF-sanitising tool — the topic is already theirs; publishes journalist security guides | Checker + methodology | Research | | | | | queued | |
 | NoUploadTools | Privacy tool directory | `nouploadtools.com/submit` | lookup failed | Explicit submission path with published review criteria (local processing, offline support, clear API disclosure); PDF category currently lists 6 tools | Checker | Short | Yes — `/submit` form | | | | queued | |
-| Reporters Without Borders — resources | Journalism safety | `resources.rsf.org` | **773** (apex) | Catalogue of journalist-safety resources with an existing *External resources* section for third-party tools | Checker + `#methodology` | §3b (RSF-specific) | **Yes — form at `training.rsf.org/contact-us/`** | not sent | | | **selected, blocked on return address** | send when MX resolves |
+| Reporters Without Borders — resources | Journalism safety | `resources.rsf.org` | **773** (apex) | Catalogue of journalist-safety resources with an existing *External resources* section for third-party tools | Checker + `#methodology` | §3b (RSF-specific) | **Yes — form at `training.rsf.org/contact-us/`** | not sent | | | **selected; blocked on (1) checker is 404 in production, (2) return address** | send after deploy + MX |
 | Centre for Investigative Journalism | Source protection training | `tcij.org/source-protection-programme/spp/` | **43797** | Runs source-protection training with Freedom of the Press Foundation; failed redaction is a source-exposure risk | Guide | Editorial | | | | | queued | |
 
 ## Tier 2 — good targets, send after Tier 1 feedback

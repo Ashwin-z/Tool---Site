@@ -66,9 +66,18 @@ Checked 2026-09-09 by searching for the brand and for category terms.
 **Indexed and appearing:** `toolmint.tools/`, `/tools`, `/tools/pdf-tools`,
 `/tools/redact-pdf`.
 
-**Not yet appearing:** `/tools/pdf-redaction-checker` does not surface for
-"pdf redaction checker". The page is days old, so this is expected rather than a
-problem — but it is the baseline to measure against.
+**Not appearing:** `/tools/pdf-redaction-checker` and
+`/blog/how-to-tell-if-pdf-redaction-failed`.
+
+> **Correction (Batch 8).** An earlier version of this file attributed that
+> absence to the pages being new, and called it "expected rather than a
+> problem". That was wrong. Both URLs return **HTTP 404 on live production** —
+> they were never deployed. A search engine cannot index a page that does not
+> exist. The cause is the deployment gap documented in `docs/DEPLOYMENT.md`,
+> not crawl latency, and no amount of SEO work changes it.
+
+This also invalidates any conclusion about the checker's ranking potential
+drawn before deployment: the experiment has not actually been run yet.
 
 ## Brand and entity confusion — worse, not better
 
@@ -100,6 +109,83 @@ strongest available lever for making the entity distinguishable.
   ever comes up.
 - `nutrient.io` has published a redaction-verification article — commercial PDF
   SDK vendors are entering the topic.
+
+## SERP forensics — 2026-09-09 (Batch 8)
+
+Observed by running each query and reading the result set. **Positions are not
+recorded**: the search tool returns a result set, not ranked positions, and
+inventing them would be worse than omitting them. No search volume is given
+anywhere below — none is available without paid credentials.
+
+| Query | Dominant intent | What actually ranks | ToolMint | Attackable? |
+|---|---|---|---|---|
+| `pdf redaction checker` | Transactional — do the task now | **6 of 6 results are tools.** textfixer, pdfxray, lazytools, tamperlens, redactvault, redactifyai. No articles, no major vendor. | Absent (404) | **Yes — best target** |
+| `verify redacted pdf` | Mixed tool + reference | Tools, plus `nutrient.io` (SDK vendor article) and a **Cornell University IT knowledge-base page** | Absent | **Yes** |
+| `failed pdf redaction` | Informational | **ABA judges' journal PDF**, a court e-filing help-desk article, Argelius Labs research, vendor blogs | Absent | Moderate |
+| `hidden text in pdf` | **Mismatched** | Adobe community forums, Smallpdf *"Invisible Text in PDFs: What It Is and How to **Add** It"*, UPDF/Wondershare *"How to **Hide** Text in PDF"* | Absent | **No — wrong intent** |
+| `redact pdf online` | Transactional, vendor-owned | Xodo, Smallpdf, PDF24, PDF4me, pdfFiller, Evernote, PDFAid | Absent | No — authority-gated |
+
+### The one keyword finding that changes a decision
+
+**`hidden text in pdf` is the wrong target and should be dropped.** Its SERP is
+people trying to *add* invisible text, hide text deliberately, or troubleshoot an
+OCR layer — not people checking whether a redaction failed. It currently appears
+in the checker page's `keywords` array and is echoed in the supporting post's
+framing. The nearest queries with matching intent are `verify redacted pdf` and
+`failed pdf redaction`.
+
+This is recorded, not implemented. It is a two-line change and belongs in the
+next SEO wave, not in a deployment/outreach batch.
+
+### Smallest set of meaningful SEO actions
+
+Deliberately not "write more content" — the cluster already covers the intent.
+
+1. **Deploy.** Everything below is theoretical until the pages return 200.
+2. **Retarget `hidden text in pdf`** to `verify redacted pdf` / `failed pdf
+   redaction` on the checker page and the supporting post.
+3. **Nothing else.** `pdf redaction checker` is a pure tool SERP with no large
+   incumbent and no article competition. The existing page is the right shape
+   for it. The constraint is publication and references, not content volume.
+
+## Authority learning — what earns references here
+
+Observed from who actually appears across these SERPs, not assumed.
+
+**Page types that earn citations in this niche:**
+
+- **Open-source tooling with published method.** Free Law Project's `x-ray`
+  reached Hacker News and is cited by others' research. It is a library, not a
+  web tool.
+- **Original research with a taxonomy.** Argelius Labs' redaction-failure
+  research is cited precisely because it enumerates failure modes and names real
+  cases.
+- **Professional-body writing.** The ABA judges' journal article on redaction
+  failures ranks for the informational query — bar associations publish here.
+- **Knowledge-base pages.** Two appeared that had not been identified before: a
+  **Cornell University IT knowledge base** article and **Qoppa's PDF Studio KB**
+  on checking whether a document is redacted correctly. Vendor and university
+  KBs rank for verification intent and are a genuine citation destination type.
+
+**Who cites this material:** bar associations and legal-tech writers, university
+IT and law-clinic pages, court e-filing help desks, security researchers, and PDF
+software vendors documenting their own tooling.
+
+**Does the checker have plausible destinations beyond RSF?** Yes — but the
+strongest are not more journalism organisations. On this evidence the next
+categories to consider, after the RSF result is known, are:
+
+1. **Security research / PDF tooling communities** — Argelius already cites
+   x-ray, so the citation behaviour is demonstrated.
+2. **University IT and law-clinic knowledge bases** — they already publish
+   "check your redaction" guidance and do link to external tools.
+3. **Legal-tech writers and bar-association publications** — the ABA result
+   shows this audience publishes on the topic.
+
+Journalism organisations remain a good fit for the *audience*, but the observed
+citation behaviour in this niche is strongest among technical and legal-reference
+publishers. **No list is being built from this yet** — the point is to learn from
+the first move before scaling, and the first move has not been made.
 
 ## Measurement plan
 

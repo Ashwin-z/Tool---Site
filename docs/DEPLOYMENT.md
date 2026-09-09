@@ -2,6 +2,53 @@
 
 Last verified: 2026-09-08 (Batch 0).
 
+## PRODUCTION IS 14 COMMITS BEHIND — nothing since Batch 0 is live
+
+**Measured 2026-09-09 against `https://toolmint.tools` (Batch 8).**
+
+Every batch from 0 to 7 exists only in this repository. The live site is still
+serving the pre-Batch-0 baseline (`ad63b06`, deployed 2026-05-17).
+
+| Evidence | Live production | This repo |
+|---|---|---|
+| `/tools/pdf-redaction-checker` | **HTTP 404** | exists, tested |
+| `/blog/how-to-tell-if-pdf-redaction-failed` | **HTTP 404** | exists, tested |
+| Retired tools (`word-to-pdf`, `excel-to-pdf`, `pdf-to-pdfa`) | HTTP 200 — still listed | 410, retired in Batch 1C |
+| `/contact` | 1 live `mailto:` + "within 1-2 business days" | no live mailto, no promise |
+| `/about` | says "privacy-first", no operator section | differentiated, operator section |
+| Homepage tool count | "80+ tools" / "82 tools" | derived count, 77 |
+| `/api/health` | returns HTML | JSON health endpoint (Batch 0) |
+| Sitemap URLs | 179 | 176 |
+| Processing badge on tool pages | absent | present |
+
+### Why this matters more than any SEO or outreach work
+
+1. **The linkable asset does not exist publicly.** The Redaction Checker is a
+   404. Outreach pointing a journalist at it would have sent them to an error
+   page — far worse than never writing.
+2. **The live contact page is making a false promise right now.** It offers a
+   working `mailto:` and a 1–2 business day response on a mailbox with no MX
+   record. Batches 5 and 7 fixed this in the repo; the fix was never shipped.
+3. **The browser-side PDF rebuild is not live.** The server-dependent tools that
+   caused the original commercial failure are still the ones being served.
+4. **Every "it isn't ranking" measurement was measuring a page that isn't
+   published.** See the correction in `docs/AUTHORITY-BASELINE.md`.
+
+### The immediate blocker: there is no git remote
+
+`git remote -v` returns nothing. The deploy procedure below says
+`git pull  # once a remote exists` — it still does not. The production server
+therefore has no way to fetch these 14 commits.
+
+**Required, in order:**
+
+1. Create a private remote (GitHub/GitLab) and `git push` this repository.
+2. On the production host, point the deploy directory at that remote.
+3. Run the deploy procedure below.
+4. Re-run the verification block, then re-check the live URLs in the table above.
+
+Until step 1 happens, no other work on this project can reach a user.
+
 ## Source of truth
 
 **`C:\Users\Ashwin\Documents\tool-site` is the production source.**
