@@ -1279,6 +1279,7 @@ export default function PdfToWordTool() {
                 type="file"
                 accept=".pdf"
                 multiple
+                aria-label="Choose PDF files to convert to Word"
                 className="hidden"
                 onChange={(e) => {
                   addFiles(e.target.files);
@@ -1313,7 +1314,7 @@ export default function PdfToWordTool() {
                     e.stopPropagation();
                     handleReset();
                   }}
-                  className="text-[10px] font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
+                  className="inline-flex min-h-11 items-center px-2 text-[10px] font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
                 >
                   Clear all
                 </button>
@@ -1329,7 +1330,7 @@ export default function PdfToWordTool() {
                     </div>
                     <button
                       onClick={() => removeFile(item.id)}
-                      className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/20"
+                      className="inline-flex min-h-11 items-center justify-center rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/20"
                     >
                       Remove
                     </button>
@@ -1364,7 +1365,7 @@ export default function PdfToWordTool() {
 
       {/* ── Processing ── */}
       {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
+        <div role="status" aria-live="polite" className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
           <div className="relative h-16 w-16">
             <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
             <div
@@ -1397,7 +1398,7 @@ export default function PdfToWordTool() {
       {/* ── Results ── */}
       {result && (
         <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
+          <div role="status" aria-live="polite" className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
             <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
             <div className="flex flex-col items-center px-5 py-10 text-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-3xl text-emerald-400">

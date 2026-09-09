@@ -17,11 +17,11 @@ export type ProcessingMode = "browser" | "server" | "server-fetch";
 /** The user's file is uploaded to ToolMint's server, processed, then deleted. */
 const SERVER_UPLOAD_TOOLS = new Set<string>([
   // compress-pdf moved to browser-side processing in Batch 1A.
+  // pdf-to-excel followed in Batch 1D — the last PDF tool that uploaded a file.
   // pdf-to-word followed in Batch 1C; excel/word/powerpoint-to-pdf and
   // pdf-to-pdfa were retired in Batch 1C (see tool-availability.ts).
   // protect-pdf and unlock-pdf followed in Batch 1B (src/lib/pdf-security.ts).
   "html-to-pdf",
-  "pdf-to-excel",
 ]);
 
 /**

@@ -5,7 +5,7 @@ import { toolCategories } from "@/lib/tool-categories";
 export const metadata: Metadata = {
   title: "Free PDF Tools Online – No Signup Required",
   description:
-    "Free PDF tools to compress, merge, split, convert, edit and secure PDFs. No signup, no watermark. Most tools run entirely in your browser.",
+    "Free PDF tools to compress, merge, split, convert, edit and secure PDFs. Every tool that takes a PDF runs in your browser — your file is never uploaded. No signup, no watermark.",
   keywords: [
     "free pdf tools online",
     "pdf tools no signup",

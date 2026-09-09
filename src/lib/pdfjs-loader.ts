@@ -23,6 +23,27 @@ export const PDFJS_VERSION = "5.5.207";
 export const PDFJS_LIB_URL = "/vendor/pdfjs/pdf.mjs";
 export const PDFJS_WORKER_URL = "/vendor/pdfjs/pdf.worker.min.mjs";
 
+/**
+ * Vendored in Batch 1D from node_modules/pdfjs-dist. pdf.js fetches only the
+ * specific font or CMap a document actually needs, so these cost nothing until
+ * used. Without them, text extraction degrades on documents that rely on the
+ * standard 14 fonts or on CJK encodings — which matters for PDF to Excel and
+ * PDF to Word. Trailing slashes are required by pdf.js.
+ */
+export const PDFJS_STANDARD_FONTS_URL = "/vendor/pdfjs/standard_fonts/";
+export const PDFJS_CMAPS_URL = "/vendor/pdfjs/cmaps/";
+
+/** Options every tool should pass to getDocument, so extraction is consistent. */
+export function pdfDocumentOptions(data: ArrayBuffer | Uint8Array) {
+  return {
+    data,
+    standardFontDataUrl: PDFJS_STANDARD_FONTS_URL,
+    cMapUrl: PDFJS_CMAPS_URL,
+    cMapPacked: true,
+    useSystemFonts: true,
+  };
+}
+
 type PdfJsModule = {
   GlobalWorkerOptions: { workerSrc: string };
   getDocument: (src: unknown) => { promise: Promise<PdfJsDocument> };

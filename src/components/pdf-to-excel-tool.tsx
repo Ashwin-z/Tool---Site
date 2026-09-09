@@ -1,407 +1,376 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import JSZip from "jszip";
+import Link from "next/link";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+
+import { analytics, sizeBucket } from "@/lib/analytics";
+import { downloadBlob, formatBytes, sanitizeBaseName } from "@/lib/client-pdf-utils";
 import {
-  downloadBlob,
-  formatBytes,
-  sanitizeBaseName,
-} from "@/lib/client-pdf-utils";
+  EXCEL_CAPABILITIES,
+  ExcelError,
+  type ExcelResult,
+  MAX_FILE_SIZE,
+} from "@/lib/pdf-to-excel-types";
 
-/* ── Constants ─────────────────────────────────────────── */
+const TOOL = { tool_slug: "pdf-to-excel", category: "pdf", processing_mode: "browser" } as const;
 
-const MAX_FILES = 25;
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
-
-/* ── Types ─────────────────────────────────────────────── */
-
-type QueuedPdf = {
-  id: string;
-  file: File;
-};
-
-type ConvertedDoc = {
-  fileName: string;
-  blob: Blob;
-};
-
-type ConversionResult = {
-  files: ConvertedDoc[];
-  zipBlob: Blob | null;
-};
-
-/* ── Helpers ───────────────────────────────────────────── */
-
-let idCounter = 0;
-function uid(): string {
-  return `pdf_${++idCounter}_${Date.now()}`;
+/** Bucketed so an exact document page count is never transmitted. */
+function pageBucket(n: number): string {
+  if (n <= 1) return "1";
+  if (n <= 10) return "2-10";
+  if (n <= 50) return "11-50";
+  return "50+";
 }
 
-async function convertPdfToExcel(file: File): Promise<{ blob: Blob; warning: string | null }> {
-  const formData = new FormData();
-  formData.append("file", file);
+type Done = { name: string; blob: Blob; result: ExcelResult };
 
-  const response = await fetch("/api/tools/pdf-to-excel", {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    let message = "Failed to convert the PDF file to Excel.";
-    try {
-      const payload = (await response.json()) as { error?: string };
-      if (payload?.error) message = payload.error;
-    } catch {
-      // ignore JSON parsing issues
-    }
-    throw new Error(message);
-  }
-
-  const warningHeader = response.headers.get("X-Conversion-Warning");
-  const warning = warningHeader ? decodeURIComponent(warningHeader) : null;
-
-  return {
-    blob: await response.blob(),
-    warning,
-  };
-}
-
-async function zipConvertedFiles(files: ConvertedDoc[]): Promise<Blob | null> {
-  if (files.length <= 1) return files[0]?.blob ?? null;
-
-  const zip = new JSZip();
-  files.forEach((f) => zip.file(f.fileName, f.blob));
-  return zip.generateAsync({
-    type: "blob",
-    compression: "DEFLATE",
-    compressionOptions: { level: 6 },
-  });
-}
-
-/* ── Component ─────────────────────────────────────────── */
+const isPdf = (f: File) => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
 
 export default function PdfToExcelTool() {
-  const [queue, setQueue] = useState<QueuedPdf[]>([]);
-  const [processing, setProcessing] = useState(false);
-  const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [file, setFile] = useState<File | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [stage, setStage] = useState("");
+  const [done, setDone] = useState<Done | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [result, setResult] = useState<ConversionResult | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const headingId = useId();
+  const errorId = useId();
 
-  /* ── File handling ── */
+  useEffect(() => () => abortRef.current?.abort(), []);
 
-  const addFiles = useCallback(
-    (fileList: FileList | null) => {
-      if (!fileList) return;
-
-      const pdfs = Array.from(fileList).filter((f) => /\.pdf$/i.test(f.name));
-      if (!pdfs.length) {
-        setErrorMessage("Please upload PDF files.");
-        return;
-      }
-
-      const oversized = pdfs.filter((f) => f.size > MAX_FILE_SIZE);
-      const validPdfs = pdfs.filter((f) => f.size <= MAX_FILE_SIZE);
-
-      if (oversized.length) {
-        setErrorMessage(`${oversized.length} file${oversized.length > 1 ? "s" : ""} exceeded the ${MAX_FILE_SIZE / (1024 * 1024)}MB size limit and ${oversized.length > 1 ? "were" : "was"} skipped.`);
-      }
-
-      if (!validPdfs.length) return;
-
-      const remainingSlots = MAX_FILES - queue.length;
-      if (remainingSlots <= 0) {
-        setErrorMessage(`You can convert a maximum of ${MAX_FILES} PDF files at a time.`);
-        return;
-      }
-
-      const limited = validPdfs.slice(0, remainingSlots);
-      setQueue((prev) => [...prev, ...limited.map((file) => ({ id: uid(), file }))]);
-      setResult(null);
-      if (validPdfs.length > remainingSlots) {
-        setErrorMessage(`Only the first ${remainingSlots} file${remainingSlots > 1 ? "s were" : " was"} added.`);
-      }
-    },
-    [queue.length],
-  );
-
-  const removeFile = useCallback((id: string) => {
-    setQueue((prev) => prev.filter((item) => item.id !== id));
-    setResult(null);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setDragOver(false);
-      addFiles(e.dataTransfer.files);
-    },
-    [addFiles],
-  );
-
-  /* ── Conversion ── */
-
-  const handleConvert = useCallback(async () => {
-    if (!queue.length) return;
-
-    setProcessing(true);
-    setErrorMessage(null);
-    setResult(null);
-    setProgress({ current: 0, total: queue.length });
-
-    try {
-      const files: ConvertedDoc[] = [];
-
-      for (let i = 0; i < queue.length; i++) {
-        setProgress({ current: i + 1, total: queue.length });
-        const file = queue[i].file;
-        const { blob, warning } = await convertPdfToExcel(file);
-        if (warning) {
-          setErrorMessage(warning);
-        }
-        files.push({
-          fileName: `${sanitizeBaseName(file.name)}.xlsx`,
-          blob,
-        });
-      }
-
-      const zipBlob = await zipConvertedFiles(files);
-      setResult({ files, zipBlob });
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Failed to convert one or more PDF files.",
-      );
-    } finally {
-      setProcessing(false);
+  const choose = useCallback((list: FileList | File[] | null) => {
+    const pdf = (list ? Array.from(list) : []).find(isPdf);
+    if (!pdf) {
+      setError("That is not a PDF. Choose a file ending in .pdf.");
+      return;
     }
-  }, [queue]);
-
-  /* ── Downloads ── */
-
-  const handleDownloadAll = useCallback(() => {
-    if (!result?.zipBlob) return;
-    const fileName = result.files.length > 1 ? "pdf-to-excel.zip" : result.files[0].fileName;
-    downloadBlob(result.zipBlob, fileName);
-  }, [result]);
-
-  const handleDownloadSingle = useCallback((file: ConvertedDoc) => {
-    downloadBlob(file.blob, file.fileName);
+    if (pdf.size > MAX_FILE_SIZE) {
+      setError(`That file is over ${formatBytes(MAX_FILE_SIZE)}, which is too large to process in the browser.`);
+      return;
+    }
+    setFile(pdf);
+    setDone(null);
+    setError(null);
   }, []);
 
-  /* ── Reset ── */
-
-  const handleReset = useCallback(() => {
-    setQueue([]);
-    setResult(null);
-    setErrorMessage(null);
-    setProgress({ current: 0, total: 0 });
+  const reset = useCallback(() => {
+    abortRef.current?.abort();
+    analytics.toolReset(TOOL);
+    setFile(null);
+    setDone(null);
+    setError(null);
+    setProgress(0);
+    setStage("");
+    setBusy(false);
     if (inputRef.current) inputRef.current.value = "";
   }, []);
 
-  const totalSize = queue.reduce((sum, item) => sum + item.file.size, 0);
+  const run = useCallback(async () => {
+    if (!file || busy) return;
 
-  /* ── UI ── */
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setBusy(true);
+    setError(null);
+    setDone(null);
+    setProgress(0);
+
+    analytics.toolStart({
+      ...TOOL,
+      file_type: "pdf",
+      file_count: 1,
+      file_size_bucket: sizeBucket(file.size),
+    });
+
+    try {
+      // pdfjs + the exceljs browser build are ~1MB together, so the engine is
+      // fetched on first conversion rather than on page load.
+      const { convertPdfToExcel } = await import("@/lib/pdf-to-excel");
+      const buffer = await file.arrayBuffer();
+      const result = await convertPdfToExcel(buffer, {
+        signal: controller.signal,
+        onProgress: (f, note) => {
+          setProgress(f);
+          setStage(note);
+        },
+      });
+
+      const blob = new Blob([new Uint8Array(result.bytes)], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      setDone({ name: `${sanitizeBaseName(file.name)}.xlsx`, blob, result });
+
+      analytics.toolComplete({
+        ...TOOL,
+        file_type: "pdf",
+        output_type: "xlsx",
+        file_count: 1,
+        file_size_bucket: sizeBucket(result.outputSize),
+        page_count_bucket: pageBucket(result.pageCount),
+        duration_ms: result.durationMs,
+      });
+    } catch (err) {
+      const ee = err instanceof ExcelError ? err : null;
+      if (ee?.code === "cancelled") {
+        setError("Cancelled. Your file was not changed.");
+      } else {
+        setError(ee?.message ?? "Something went wrong converting this PDF.");
+        analytics.toolError({
+          ...TOOL,
+          file_type: "pdf",
+          file_size_bucket: sizeBucket(file.size),
+          failure_type:
+            ee?.code === "encrypted" || ee?.code === "corrupt" || ee?.code === "no-text-layer"
+              ? "unsupported_file"
+              : ee?.code === "too-large"
+                ? "file_too_large"
+                : "processing_failed",
+        });
+      }
+    } finally {
+      setBusy(false);
+      setProgress(0);
+      setStage("");
+      abortRef.current = null;
+    }
+  }, [file, busy]);
+
+  const download = useCallback(() => {
+    if (!done) return;
+    analytics.toolDownload({
+      ...TOOL,
+      output_type: "xlsx",
+      file_count: 1,
+      file_size_bucket: sizeBucket(done.blob.size),
+    });
+    downloadBlob(done.blob, done.name);
+  }, [done]);
+
+  const btn =
+    "min-h-11 rounded-xl px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c63ff]";
+  const ghost =
+    "min-h-11 rounded-xl border px-4 py-2.5 text-sm font-medium transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c63ff]";
 
   return (
-    <div className="space-y-4">
-      {!result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
-          <div className="h-[2px] w-full bg-gradient-to-r from-[#6c63ff] via-[#38d9a9] to-[#ff6584]" />
+    <section aria-labelledby={headingId} className="flex flex-col gap-5">
+      <h2 id={headingId} className="sr-only">
+        Convert a PDF to an Excel spreadsheet
+      </h2>
 
-          <div className="px-5 py-5">
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                setDragOver(true);
-              }}
-              onDragLeave={() => setDragOver(false)}
-              onDrop={handleDrop}
-              onClick={() => inputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed py-14 transition ${
-                dragOver
-                  ? "border-[#6c63ff] bg-[#6c63ff]/5"
-                  : queue.length
-                    ? "border-emerald-500/40 bg-emerald-500/5"
-                    : "border-border hover:border-border-strong"
-              }`}
-            >
-              <input
-                ref={inputRef}
-                type="file"
-                accept=".pdf"
-                multiple
-                className="hidden"
-                onChange={(e) => {
-                  addFiles(e.target.files);
-                  if (inputRef.current) inputRef.current.value = "";
-                }}
-              />
-
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#6c63ff]/10 text-3xl">
-                📊
-              </div>
-              <p className="mt-3 text-sm font-semibold text-white">
-                Drop your PDF files here or <span className="text-[#6c63ff]">browse</span>
-              </p>
-              <p className="mt-1 text-xs text-muted-2">
-                Convert up to {MAX_FILES} PDF files into editable Excel sheets. Best results are achieved with table-based PDFs; complex magazine-style layouts may only convert partially.
-              </p>
-            </div>
-          </div>
-
-          {queue.length > 0 && (
-            <div className="border-t border-border">
-              <div className="flex items-center justify-between px-5 py-3">
-                <h3 className="font-display text-sm font-bold text-white">
-                  {queue.length} PDF file{queue.length > 1 ? "s" : ""} selected
-                  <span className="ml-2 text-xs font-normal text-muted-2">
-                    ({formatBytes(totalSize)} total)
-                  </span>
-                </h3>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleReset();
-                  }}
-                  className="text-[10px] font-semibold text-[#ff6584] transition hover:text-[#ff8da6]"
-                >
-                  Clear all
-                </button>
-              </div>
-
-              <div className="max-h-80 divide-y divide-white/5 overflow-y-auto px-5 pb-3">
-                {queue.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 py-3">
-                    <span className="text-base">📄</span>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-white">{item.file.name}</p>
-                      <p className="text-[10px] text-muted-2">{formatBytes(item.file.size)}</p>
-                    </div>
-                    <button
-                      onClick={() => removeFile(item.id)}
-                      className="rounded-lg bg-red-500/10 px-3 py-2 text-xs font-semibold text-red-200 transition hover:bg-red-500/20"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {errorMessage && !processing && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-200">
-          {errorMessage}
-        </div>
-      )}
-
-      {queue.length > 0 && !result && !processing && (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface">
-          <div className="border-t border-border px-5 py-4 text-center">
+      {!done ? (
+        <>
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOver(false);
+              choose(e.dataTransfer.files);
+            }}
+            className="rounded-2xl border-2 border-dashed p-6 text-center transition sm:p-9"
+            style={{
+              borderColor: dragOver ? "#6c63ff" : "var(--border)",
+              background: dragOver ? "rgba(108,99,255,.06)" : "var(--surface-1)",
+            }}
+          >
+            <p className="text-3xl" aria-hidden>
+              📊
+            </p>
+            <p className="mt-3 font-semibold text-foreground">
+              {file ? file.name : "Choose a PDF with tables in it"}
+            </p>
+            <p className="mx-auto mt-1 max-w-md text-sm leading-6" style={{ color: "var(--muted)" }}>
+              {file ? formatBytes(file.size) : `Drag and drop, or browse. Up to ${formatBytes(MAX_FILE_SIZE)}.`}
+            </p>
             <button
-              onClick={handleConvert}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className={`${btn} mt-5 text-white`}
+              style={{ background: "#6c63ff" }}
             >
-              📊 Convert to Excel
+              {file ? "Choose a different PDF" : "Choose PDF"}
             </button>
-          </div>
-        </div>
-      )}
-
-      {processing && (
-        <div className="flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-border bg-surface px-5 py-12">
-          <div className="relative h-16 w-16">
-            <div className="absolute inset-0 animate-spin rounded-full border-4 border-border border-t-[#6c63ff]" />
-            <div
-              className="absolute inset-2 animate-spin rounded-full border-4 border-border border-b-[#38d9a9]"
-              style={{ animationDirection: "reverse", animationDuration: "0.8s" }}
+            <input
+              ref={inputRef}
+              type="file"
+              accept="application/pdf,.pdf"
+              className="sr-only"
+              aria-label="Choose a PDF to convert to Excel"
+              onChange={(e) => choose(e.target.files)}
             />
           </div>
-          <p className="text-sm font-semibold text-white">
-            {queue.length > 1
-              ? `Converting file ${progress.current} of ${progress.total}…`
-              : "Converting PDF to Excel…"}
-          </p>
-          <p className="text-xs text-muted-2">
-            This may take a minute — the server is extracting table-like text and building your spreadsheet.
-          </p>
-          {queue.length > 1 && (
-            <div className="h-1.5 w-48 overflow-hidden rounded-full bg-surface-3">
-              <div
-                className="h-full rounded-full bg-[#6c63ff] transition-all duration-300"
-                style={{
-                  width: `${progress.total ? (progress.current / progress.total) * 100 : 0}%`,
-                }}
-              />
+
+          {/* Honest expectations, shown BEFORE the user commits time */}
+          <div
+            className="rounded-2xl border p-5"
+            style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}
+          >
+            <h3 className="text-sm font-semibold text-foreground">What you will get</h3>
+            <ul className="mt-2 space-y-1.5 text-sm leading-6" style={{ color: "var(--muted)" }}>
+              {EXCEL_CAPABILITIES.does.map((d) => (
+                <li key={d} className="flex gap-2">
+                  <span aria-hidden style={{ color: "#4ade80" }}>
+                    ✓
+                  </span>
+                  {d}
+                </li>
+              ))}
+            </ul>
+            <h3 className="mt-4 text-sm font-semibold text-foreground">What it will not do</h3>
+            <ul className="mt-2 space-y-1.5 text-sm leading-6" style={{ color: "var(--muted)" }}>
+              {EXCEL_CAPABILITIES.doesNot.map((d) => (
+                <li key={d} className="flex gap-2">
+                  <span aria-hidden style={{ color: "var(--muted-2)" }}>
+                    ✕
+                  </span>
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {error ? (
+            <p
+              id={errorId}
+              role="alert"
+              className="rounded-xl border px-4 py-3 text-sm leading-6"
+              style={{ borderColor: "rgba(239,68,68,.4)", background: "rgba(239,68,68,.08)", color: "#fca5a5" }}
+            >
+              {error}
+            </p>
+          ) : null}
+
+          {file ? (
+            busy ? (
+              <div className="flex flex-col gap-3">
+                <div
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={Math.round(progress * 100)}
+                  aria-label="Conversion progress"
+                  className="h-2 w-full overflow-hidden rounded-full"
+                  style={{ background: "var(--surface-2)" }}
+                >
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${Math.max(4, progress * 100)}%`, background: "#6c63ff" }}
+                  />
+                </div>
+                <p role="status" aria-live="polite" className="text-sm" style={{ color: "var(--muted)" }}>
+                  {stage || "Working"}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => abortRef.current?.abort()}
+                  className={ghost}
+                  style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                <button type="button" onClick={run} className={`${btn} text-white`} style={{ background: "#6c63ff" }}>
+                  Convert to Excel
+                </button>
+                <button
+                  type="button"
+                  onClick={reset}
+                  className={ghost}
+                  style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
+                >
+                  Clear
+                </button>
+              </div>
+            )
+          ) : null}
+        </>
+      ) : (
+        <div className="flex flex-col gap-4" role="region" aria-live="polite">
+          <div
+            className="rounded-2xl border p-5"
+            style={{ borderColor: "rgba(34,197,94,.35)", background: "rgba(34,197,94,.07)" }}
+          >
+            <p className="font-semibold" style={{ color: "#86efac" }}>
+              Spreadsheet ready
+            </p>
+            <p className="mt-2 text-sm leading-6" style={{ color: "var(--muted)" }}>
+              One worksheet per page. Open it and check the numbers before you rely on them — table
+              detection is an inference, not a guarantee.
+            </p>
+
+            <dl className="mt-4 grid grid-cols-3 gap-3">
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>
+                  Worksheets
+                </dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">{done.result.pageCount}</dd>
+              </div>
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>
+                  Size
+                </dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">
+                  {formatBytes(done.result.outputSize)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs" style={{ color: "var(--muted)" }}>
+                  Took
+                </dt>
+                <dd className="text-lg font-bold tabular-nums text-foreground">
+                  {(done.result.durationMs / 1000).toFixed(1)}s
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <button type="button" onClick={download} className={`${btn} text-white`} style={{ background: "#6c63ff" }}>
+                Download XLSX
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className={ghost}
+                style={{ borderColor: "var(--border)", color: "var(--foreground)" }}
+              >
+                Convert another
+              </button>
             </div>
-          )}
+          </div>
+
+          <div className="rounded-2xl border p-5" style={{ borderColor: "var(--border)", background: "var(--surface-1)" }}>
+            <h3 className="font-semibold text-foreground">Next steps</h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              {[
+                { name: "PDF to Word", href: "/tools/pdf-to-word", desc: "Get the text as a document instead." },
+                { name: "PDF to Text (OCR)", href: "/tools/pdf-to-text", desc: "For scanned pages with no text layer." },
+                { name: "Split PDF", href: "/tools/split-pdf", desc: "Pull out just the pages with tables." },
+              ].map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="rounded-xl border p-3 transition hover:-translate-y-0.5"
+                  style={{ borderColor: "var(--border)", background: "var(--surface-2)" }}
+                >
+                  <span className="block text-sm font-semibold text-foreground">{t.name}</span>
+                  <span className="mt-0.5 block text-xs" style={{ color: "var(--muted)" }}>
+                    {t.desc}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       )}
-
-      {result && (
-        <>
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-[0_20px_60px_rgba(0,0,0,.55)]">
-            <div className="h-[2px] w-full bg-gradient-to-r from-[#38d9a9] to-[#6c63ff]" />
-            <div className="flex flex-col items-center px-5 py-10 text-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-3xl text-emerald-400">
-                ✓
-              </div>
-              <h3 className="mt-4 font-display text-xl font-bold text-white">
-                {result.files.length === 1 ? "Your Excel spreadsheet is ready!" : "Your Excel spreadsheets are ready!"}
-              </h3>
-              <button
-                onClick={handleDownloadAll}
-                className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#6c63ff] px-8 py-3 text-sm font-bold text-white shadow-[0_4px_20px_rgba(108,99,255,.4)] transition hover:bg-[#5a52e0]"
-              >
-                ⬇ Download {result.files.length > 1 ? "All (ZIP)" : "XLSX"}
-              </button>
-              <p className="mt-4 text-sm text-muted">
-                {result.files.length} PDF file{result.files.length > 1 ? "s" : ""} converted to Excel.
-              </p>
-            </div>
-
-            {result.files.length > 1 && (
-              <div className="border-t border-border">
-                <div className="max-h-60 divide-y divide-white/5 overflow-y-auto px-5 py-2">
-                  {result.files.map((f) => (
-                    <div key={f.fileName} className="flex items-center gap-3 py-2">
-                      <span className="text-base">📊</span>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-white">{f.fileName}</p>
-                        <p className="text-[10px] text-muted-2">{formatBytes(f.blob.size)}</p>
-                      </div>
-                      <button
-                        onClick={() => handleDownloadSingle(f)}
-                        className="rounded-lg bg-surface-3/50 px-3 py-1.5 text-[10px] font-semibold text-muted transition hover:bg-surface-3 hover:text-foreground"
-                      >
-                        ⬇ Download
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border border-border bg-surface px-5 py-4 text-center">
-            <button
-              onClick={handleReset}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[.03]"
-            >
-              Convert More PDFs
-            </button>
-          </div>
-        </>
-      )}
-
-      <div className="rounded-xl border border-amber-500/10 bg-amber-500/5 px-4 py-3 text-center">
-        <p className="text-[11px] leading-relaxed text-amber-200/70">
-          ⚠️ This tool is under active development. Some complex tables, merged cells, scanned PDFs, or advanced layouts may not convert perfectly.
-        </p>
-      </div>
-    </div>
+    </section>
   );
 }

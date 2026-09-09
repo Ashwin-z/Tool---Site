@@ -10,7 +10,7 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
   pdf: {
     h1: "Free PDF Tools Online – No Signup Required",
     intro: [
-      "ToolMint offers free PDF tools online for the document tasks you repeat every week: compressing PDFs for email, merging files into one packet, splitting out specific pages, converting between Office formats and PDF, and securing or signing documents before sharing them. Every tool runs in your browser — no account, no watermark, no software to install.",
+      "ToolMint offers free PDF tools online for the document tasks you repeat every week: compressing PDFs for email, merging files into one packet, splitting out specific pages, pulling content back out into Word, Excel or plain text, and securing or signing documents before sharing them. Every tool that takes a PDF runs in your browser, so the file never leaves your device — no account, no watermark, no software to install.",
       "This collection is organized by task rather than by format, because the right starting point is usually the job you need to finish, not the file type you have. Whether you need to prepare a document for a portal upload, extract data from a PDF report, or add a signature to a contract, the tools here cover the full workflow.",
     ],
     workflows: [
@@ -50,7 +50,7 @@ export const categoryHubContent: Record<string, CategoryHubContent> = {
       { title: "Practical Editing", desc: "Handle common document fixes such as watermarks, page numbers, annotations, and page layout changes without installing heavy desktop software." },
     ],
     faqs: [
-      { q: "Are ToolMint PDF tools browser-based or server-based?", a: "The PDF collection favors local browser processing where possible, especially for editing, rotation, cropping, redaction, and comparison. Some conversion-heavy jobs may use secure server-side processing when the task requires it." },
+      { q: "Are ToolMint PDF tools browser-based or server-based?", a: "Every tool that accepts a PDF file processes it entirely in your browser — compressing, merging, splitting, editing, converting to Word or Excel, protecting and unlocking all happen on your own device, and the file is never uploaded. The one exception is HTML to PDF, which takes a web address rather than a PDF: our server has to fetch that page for you, because a browser cannot read a third-party site directly." },
       { q: "Who are these PDF tools built for?", a: "They are most useful for students, office teams, freelancers, recruiters, accountants, legal staff, and small business owners who need fast document fixes without a full PDF software subscription." },
       { q: "How do I choose the right PDF tool for a task?", a: "Start with the job you are trying to finish, not the file format alone. If you need a smaller upload, use compression. If you need one final packet, merge. If you need editable content, convert the PDF to Word, Excel, or text." },
       { q: "What makes this collection different from a thin tool directory?", a: "Each PDF page is being built as a task-focused landing page with use cases, limitations, related workflows, and clear internal paths so visitors can solve the entire document task in one place." },

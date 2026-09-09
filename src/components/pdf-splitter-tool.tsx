@@ -775,7 +775,7 @@ export default function PdfSplitterTool() {
                     setResult(null);
                     setErrorMessage(null);
                   }}
-                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                  className={`inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition ${
                     tab === value
                       ? "bg-[#6c63ff] text-white shadow-[0_4px_20px_rgba(108,99,255,.35)]"
                       : "bg-surface-3/50 text-muted hover:bg-surface-3 hover:text-foreground"
@@ -804,7 +804,7 @@ export default function PdfSplitterTool() {
                       setRangeMode(value);
                       setResult(null);
                     }}
-                    className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                    className={`inline-flex min-h-11 items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold transition ${
                       rangeMode === value
                         ? "bg-[#6c63ff] text-white"
                         : "bg-surface-3/50 text-muted hover:bg-surface-3 hover:text-foreground"
@@ -943,7 +943,7 @@ export default function PdfSplitterTool() {
                       {fixedRangesPreview.map((range, index) => (
                         <span
                           key={`${range.from}-${range.to}`}
-                          className="rounded-full border border-border bg-surface-2 px-3 py-1.5 text-xs text-[#c7c7d8]"
+                          className="rounded-full border border-border bg-surface-2 inline-flex min-h-11 items-center px-3 py-1.5 text-xs text-[#c7c7d8]"
                         >
                           Part {index + 1}: {range.from}-{range.to}
                         </span>
