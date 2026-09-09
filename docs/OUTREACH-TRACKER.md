@@ -58,7 +58,20 @@ has been read by a human, since automated access is blocked.
 
 ### Why nothing has been sent
 
-The blocker is not the contact path. It is the **return address**.
+**Status as of 2026-09-09 (Batch 7): still not sent. Do not record otherwise.**
+
+The blocker is not the contact path, and it is no longer the provider decision
+either — that is settled (Zoho free; see `docs/DNS-EMAIL.md` §1, with the exact
+records in §3). What remains is two manual steps only the domain owner can take:
+
+1. Create the Zoho mailbox for `hello@toolmint.tools` (needs owner signup).
+2. Add MX, SPF, DKIM and DMARC at Name.com (needs owner login).
+
+Neither is possible from the repository environment: there is no Name.com
+credential, no mail-provider API key, no MCP integration and no local MTA. That
+was re-verified this batch, not assumed.
+
+Until those are done, the blocker is the **return address**.
 
 `toolmint.tools` still has no MX record, so `hello@toolmint.tools` bounces. A
 form submission to the single highest-value target, carrying a reply address
@@ -67,7 +80,13 @@ address of the site's operator was deliberately not substituted — that is thei
 decision to make and not something to disclose to a third party on their behalf.
 
 Send the moment `node scripts/check-email-dns.mjs` exits 0 **and** a real test
-message has been received. The message text is already written.
+message has actually been received and replied to. The message text is already
+written and checked: `docs/OUTREACH-REDACTION-CHECKER.md` §3b — 394 words, no
+SEO or link framing, direct checker URL, limitations stated.
+
+When it is sent, set the RSF row's outcome to `sent` with the date, and set
+reply status to `awaiting response`. **A form confirmation page is not success**
+— only an actual reply or a published reference is.
 
 ## Tier 1 — send first
 

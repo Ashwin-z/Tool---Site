@@ -34,98 +34,141 @@ This cannot be fixed in code. It requires DNS changes at Name.com.
 
 ## What to do
 
-### 1. Choose a mail provider
+Everything below requires a Name.com login and a provider signup. Neither is
+available to the agent working in this repository: there is no Name.com
+credential, no mail-provider API key, no MCP integration and no local MTA. The
+records are therefore written out for manual entry, and **nothing here should be
+treated as done until the verification in step 4 passes**.
 
-| Option | Cost | Notes |
+Re-verified 2026-09-09 (Batch 7): still no MX, SPF, DKIM or DMARC.
+
+### 1. Provider decision
+
+The requirement is a real mailbox — not forwarding — that can receive at
+`hello@toolmint.tools`, send as that address, and support SPF, DKIM and DMARC.
+
+| Option | Cost | Verdict |
 |---|---|---|
-| **Name.com email forwarding** | free/cheap | Simplest. Forwards `hello@toolmint.tools` to a personal Gmail. Receive-only. **Recommended to unblock immediately.** |
-| Zoho Mail | free tier | Real mailbox, can send as `hello@toolmint.tools`. |
-| Google Workspace | ~$6/user/mo | Overkill for now. |
+| **Zoho Mail — free plan** | £0 | **Recommended to unblock.** Real mailbox, 1 custom domain, 5 users, full SPF/DKIM/DMARC. As of 2026 the free tier is **webmail only** — no IMAP/POP/ActiveSync — and availability is tied to specific regions and data centres. |
+| Fastmail | ~$60/yr | The upgrade if outreach volume grows or deliverability disappoints. Mature, strong sending reputation, proper apps. |
+| Migadu (Micro) | ~$19/yr | Fine, but the Micro tier caps outgoing mail at ~20/day account-wide. |
+| Purelymail | ~$10/yr | Cheapest with a real mailbox, but minimal and self-support. |
+| Google Workspace | ~$6/user/mo | Overkill here. |
+| Name.com forwarding | free/cheap | **No longer sufficient.** Receive-only: you cannot send *as* the address, and it gives you no DKIM. |
 
-Forwarding was enough when the only requirement was that mail *arrives*.
+**Choose Zoho free.** It clears the actual blocker at zero cost, and the
+webmail-only restriction does not matter for this use: the first outreach
+destination (RSF) is a **web form**, so the mailbox only has to *receive* the
+reply. Revisit Fastmail if and when outreach becomes routine.
 
-**It is no longer enough.** Batch 5 produced an outreach campaign, and that
-changes the requirement in two ways:
+### 2. Create the mailbox (owner, manual)
 
-1. **You need to send *as* the address, not just receive at it.** Pitching a
-   journalist from a personal Gmail while the site lists `hello@toolmint.tools`
-   is an inconsistency the recipient will notice, and it undercuts a pitch whose
-   whole basis is credibility. Name.com forwarding is receive-only.
-2. **You need SPF, DKIM and DMARC, or the mail will be filtered.** A domain with
-   no authentication records sending cold mail to newsrooms, law-firm IT
-   departments and government FOI offices has close to the worst possible
-   deliverability profile — those are precisely the recipients running strict
-   filtering. The message will not bounce; it will silently land in spam, which
-   is worse, because you will read the absence of replies as disinterest.
+1. Sign up at `zoho.com/mail` → choose the **free plan** → "Add your own domain".
+2. Enter `toolmint.tools` and complete domain verification (Zoho will offer a
+   TXT or CNAME record — add whichever it gives you; the value is generated for
+   your account and cannot be predicted here).
+3. Create the mailbox `hello@toolmint.tools` as the first user.
+4. **Note which data centre the account was created in.** This determines the
+   MX and SPF values below and is the single easiest thing to get wrong.
 
-For outreach, pick a provider that gives a real mailbox and a DKIM key. Zoho's
-free tier does; forwarding does not.
+### 3. Add the DNS records at Name.com
 
-### Sending history
+Name.com → Domains → `toolmint.tools` → DNS Records.
 
-A domain that has never sent mail has no reputation. Do not send the whole
-campaign on day one. Send a handful, spaced out, and only expand once replies
-are arriving normally. This is the same reason Batch 6 recommends starting with
-five targets rather than fifty.
+**No conflicts exist.** The domain currently has an `A` record
+(`158.220.103.173`) and nothing else relevant: no MX, no TXT, no `_dmarc`. None
+of the records below collide with the `A` record or with the site's hosting.
 
-### 2. Add the records at Name.com
+#### MX — required to receive
 
-Log in → Domains → `toolmint.tools` → DNS Records.
+For an account in Zoho's **`.com` (US) data centre**, per Zoho's documentation:
 
-**MX** — exact values come from whichever provider you pick. Do not guess them;
-copy them from the provider's setup screen. Shape:
+| Type | Host | Answer | Priority | TTL |
+|---|---|---|---|---|
+| MX | `@` | `mx.zoho.com` | 10 | 3600 |
+| MX | `@` | `mx2.zoho.com` | 20 | 3600 |
+| MX | `@` | `mx3.zoho.com` | 50 | 3600 |
 
-```
-Type: MX   Host: @   Answer: <provider mail host>   Priority: 10   TTL: 3600
-```
+> **Region trap.** Zoho's own documentation states: *"The TLD for the MX record
+> will vary based on the DC in which your data is hosted in Zoho."* If the
+> account was created in the EU, India, Australia or Japan data centre, the
+> hosts are **not** `.com` — they will be `.eu`, `.in`, `.com.au` or `.jp`.
+> **Copy the exact values from Admin Console → Tools & Configurations rather
+> than the table above** if the account is not on `.com`. Guessing here means
+> mail silently fails.
 
-**SPF** — one TXT record only. Never publish two SPF records; that breaks SPF.
+#### SPF — one record only
 
-```
-Type: TXT  Host: @   Answer: v=spf1 include:<provider-spf-domain> ~all
-```
+| Type | Host | Answer | TTL |
+|---|---|---|---|
+| TXT | `@` | `v=spf1 include:zoho.com ~all` | 3600 |
 
-**DMARC** — start in monitor mode so nothing is rejected while you verify:
+Adjust the include to match the data centre if not on `.com`. **Never publish
+two SPF records** — that is a permanent error condition and receivers will treat
+the domain as unauthenticated. There is currently no SPF record, so this is a
+clean add.
 
-```
-Type: TXT  Host: _dmarc   Answer: v=DMARC1; p=none; rua=mailto:hello@toolmint.tools
-```
+#### DKIM — values cannot be written here
 
-Move to `p=quarantine` after a couple of weeks of clean reports.
+DKIM keys are generated per domain by the provider. **There is no correct value
+to pre-write, and inventing one would publish a broken record.**
 
-**DKIM** — only if the provider issues a key. It will give you an exact host
-(e.g. `selector1._domainkey`) and value. Copy verbatim.
+In Zoho: Admin Console → Domains → `toolmint.tools` → Email Configuration →
+DKIM → add a selector (Zoho's default is `zoho`) and it generates the key. Then:
 
-### 3. Verify
+| Type | Host | Answer | TTL |
+|---|---|---|---|
+| TXT | `zoho._domainkey` | *(the long `v=DKIM1; k=rsa; p=…` string Zoho shows)* | 3600 |
 
-Allow up to an hour for propagation, then:
+Copy it verbatim, including the whole `p=` value. Then click **Verify** in Zoho.
 
-```bash
-nslookup -type=MX toolmint.tools 8.8.8.8
-nslookup -type=TXT toolmint.tools 8.8.8.8
-nslookup -type=TXT _dmarc.toolmint.tools 8.8.8.8
-```
+#### DMARC — start in monitor mode
 
-Or simply run:
+This one is owner-defined rather than provider-specific, so it is exact:
+
+| Type | Host | Answer | TTL |
+|---|---|---|---|
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:hello@toolmint.tools` | 3600 |
+
+`p=none` observes without rejecting anything. Move to `p=quarantine` after a
+couple of weeks of clean reports — not before, or legitimate mail may vanish.
+
+### 4. Verify — DNS first, then actual mail
 
 ```bash
 node scripts/check-email-dns.mjs
 ```
 
-Then send a real message to `hello@toolmint.tools` from an outside account and
-confirm it arrives. **DNS records resolving is not proof that mail is delivered** —
-only a received test message is. The script deliberately reports "configured",
-never "working", for this reason.
+It exits non-zero until MX, SPF, DKIM and DMARC are all present, and it
+deliberately reports "configured", never "working".
 
-Once a test message has actually arrived, set `CONTACT.contactWorks = true` in
-`src/lib/brand.ts`. The notice on `/contact` disappears on its own and the
-response-time line comes back.
+**DNS resolving is not proof of delivery.** Then, and only then:
 
-### 4. Then, and only then
+1. Send a message from an outside account **to** `hello@toolmint.tools`.
+   Confirm it arrives in the Zoho mailbox.
+2. Reply **from** `hello@toolmint.tools` to that outside account. Confirm it
+   arrives and that the From address really is `hello@toolmint.tools`.
+3. In the received copy, open "Show original"/"View source" and confirm
+   `spf=pass`, `dkim=pass` and `dmarc=pass` in the Authentication-Results header.
 
-Re-apply to AdSense. A publisher site with a non-functioning contact address is
-a poor look during a manual review, and it is the cheapest of the outstanding
-problems to fix.
+### 5. Only then flip the flag
+
+Set `CONTACT.contactWorks = true` in `src/lib/brand.ts`. The "not receiving mail
+yet" notice on `/contact` disappears on its own, the addresses become live
+`mailto:` links again, and the response-time line returns.
+
+### 6. Then send the RSF message
+
+The message is written and destination-specific: `docs/OUTREACH-REDACTION-CHECKER.md`
+§3b. Submit it through the verified form at `training.rsf.org/contact-us/`,
+using `hello@toolmint.tools` as the reply address, then set the RSF row in
+`docs/OUTREACH-TRACKER.md` to `sent` with the date.
+
+### Sending history
+
+A domain that has never sent mail has no reputation. Do not send a campaign in
+one burst. This is the same reason the outreach plan starts with a single
+message rather than fifty.
 
 ## Note on `ads.txt`
 
