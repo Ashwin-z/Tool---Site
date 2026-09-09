@@ -25,9 +25,15 @@ Harmonic-centrality rank; lower is more authoritative.
 | Domain | In crawl | In rankings | Harmonic rank |
 |---|---|---|---|
 | **toolmint.tools** | **no** | **no** | **not in graph** |
+| justice.gov | yes | yes | 262 |
+| archives.gov | yes | yes | 394 |
+| rsf.org | yes | yes | 773 |
 | gijn.org | yes | yes | 1,185 |
+| uscourts.gov | yes | yes | 2,804 |
 | freedom.press | yes | yes | 14,701 |
+| tcij.org | yes | yes | 43,797 |
 | journaliststoolbox.org | yes | yes | 476,082 |
+| nouploadtools.com | lookup failed | — | — |
 | smallpdf.com | yes | yes | 3,397 |
 | ilovepdf.com | yes | yes | 4,144 |
 | textfixer.com | yes | yes | 13,277 |
@@ -35,6 +41,13 @@ Harmonic-centrality rank; lower is more authoritative.
 | redactable.com | yes | yes | 248,125 |
 | lazytools.io | no | no | not in graph |
 | redactr.io | no | no | not in graph |
+
+Two caveats on reading this table. Authority was measured on the **apex
+domain**, but some target pages live on subdomains (`resources.rsf.org`), and
+harmonic rank does not necessarily transfer to a subdomain. And the three most
+authoritative domains here — `justice.gov`, `archives.gov`, `uscourts.gov` — are
+the ones *least* likely to link out, which is exactly why authority alone is a
+bad way to order outreach.
 
 **The headline number is that toolmint.tools is still absent entirely.** This is
 the single metric this whole effort exists to change. The success condition for

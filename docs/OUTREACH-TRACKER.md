@@ -25,13 +25,20 @@ pattern from another organisation.
 
 ## Tier 1 — send first
 
+**RSF and GIJN are the two co-leads.** `rsf.org` measures 773 and `gijn.org`
+1185, both more authoritative than `smallpdf.com` (3397). RSF's apex is the
+stronger of the two, but the target catalogue sits on `resources.rsf.org` and
+subdomain authority is not guaranteed to follow the apex — so treat them as a
+pair rather than a strict ranking, and send to whichever has a findable
+editorial contact first.
+
 | Target | Category | URL | Authority | Why relevant | Destination | Pitch | Contact found? | Date sent | Response | Link | Outcome | Follow-up |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | Global Investigative Journalism Network | Investigative journalism | `gijn.org/resource/digital-security/` | **1185** | Maintains standing digital-security resource lists for investigative journalists worldwide; document handling is core to their audience | Checker + methodology | Editorial | | | | | queued | |
 | Freedom of the Press Foundation | Press freedom / security tooling | `freedom.press` | **14701** | Builds Dangerzone, a PDF-sanitising tool — the topic is already theirs; publishes journalist security guides | Checker + methodology | Research | | | | | queued | |
-| NoUploadTools | Privacy tool directory | `nouploadtools.com/submit` | not in graph | Explicit submission path with published review criteria (local processing, offline support, clear API disclosure); PDF category currently lists 6 tools | Checker | Short | Yes — `/submit` form | | | | queued | |
-| Reporters Without Borders — resources | Journalism safety | `resources.rsf.org` | pending | Maintains a catalogue of digital-safety self-training resources | Guide + checker | Editorial | | | | | queued | |
-| Centre for Investigative Journalism | Source protection training | `tcij.org/source-protection-programme/spp/` | pending | Runs source-protection training with Freedom of the Press Foundation; failed redaction is a source-exposure risk | Guide | Editorial | | | | | queued | |
+| NoUploadTools | Privacy tool directory | `nouploadtools.com/submit` | lookup failed | Explicit submission path with published review criteria (local processing, offline support, clear API disclosure); PDF category currently lists 6 tools | Checker | Short | Yes — `/submit` form | | | | queued | |
+| Reporters Without Borders — resources | Journalism safety | `resources.rsf.org` | **773** (apex) | Maintains a catalogue of digital-safety self-training resources | Guide + checker | Editorial | | | | | queued | |
+| Centre for Investigative Journalism | Source protection training | `tcij.org/source-protection-programme/spp/` | **43797** | Runs source-protection training with Freedom of the Press Foundation; failed redaction is a source-exposure risk | Guide | Editorial | | | | | queued | |
 
 ## Tier 2 — good targets, send after Tier 1 feedback
 
