@@ -447,6 +447,15 @@ export default function PdfRedactionCheckerTool() {
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/tools/redact-pdf"
+                onClick={() =>
+                  // Which next step the result led to, and nothing else. No
+                  // document, no recovered text, no metadata value.
+                  analytics.toolNextAction({
+                    ...TOOL,
+                    output_type: resultType(report),
+                    operation_type: "redact-pdf",
+                  })
+                }
                 className="min-h-11 inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6c63ff]"
                 style={{ background: "#6c63ff" }}
               >

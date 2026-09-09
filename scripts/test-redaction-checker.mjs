@@ -43,6 +43,7 @@ const CASES = [
   [FIX, "rc-invisible-text", "LEAK", "invisible OCR-mode text"],
   [FIX, "rc-white-text", "LEAK", "white-on-white text"],
   [FIX, "rc-image-overlay", "LEAK", "opaque image over live text"],
+  [FIX, "rc-scan-ocr-blackbox", "LEAK", "OCR text under a box on a scanned page"],
   [FIX, "rc-metadata-leak", "CLEAN", "page clean; metadata shown for review"],
   [FIX, "rc-true-redaction", "CLEAN", "text genuinely removed"],
   [FIX, "rc-no-redaction", "CLEAN", "ordinary document"],

@@ -134,16 +134,16 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "how-to-redact-a-pdf",
     title: "How to Redact a PDF - Permanently Remove Sensitive Information",
-    metaTitle: "How to Redact a PDF Online Free - Permanently Hide Sensitive Text",
+    metaTitle: "How to Redact a PDF So Text Cannot Be Recovered",
     description: "Learn how to permanently redact sensitive text and data from a PDF before sharing it. Free online tool. Covers legal, GDPR, and compliance use cases.",
     publishedAt: "2026-05-15", category: "PDF Tools", readTime: 5,
     excerpt: "Simply drawing a black box over text in a PDF does not actually remove it. True redaction permanently deletes the underlying content.",
     intro: "Many people believe that drawing a black rectangle over sensitive text in a PDF makes that information inaccessible. It does not. The underlying text is still present in the PDF data layer and can be selected, copied, or extracted by anyone who removes the black shape. True redaction permanently removes the content from the file structure.",
     sections: [
       { heading: "Why Black-Box Covering Is Not Real Redaction", body: "When you draw a filled rectangle over text in a PDF editor, you are adding a visual layer on top of the document. The original text remains in the PDF content stream beneath the rectangle. Open the file in any PDF reader, select all text, and you can copy the hidden content as if the rectangle were not there.\n\nIn several high-profile cases, confidential information in court documents was recovered from files that had been visually obscured but not properly redacted." },
-      { heading: "What True Redaction Does", body: "Proper redaction works in two steps. First, the tool marks the selected area for removal. Second, it flattens the page content, replaces the marked region with a solid fill, and removes the underlying text or image data from the PDF content stream. The original data is not merely hidden — it is deleted.\n\nAfter true redaction is applied, the area contains no recoverable text, image pixels, or metadata." },
+      { heading: "What True Redaction Does", body: "Proper redaction works in two steps. First, the tool marks the selected area for removal. Second, it flattens the page content, replaces the marked region with a solid fill, and removes the underlying text or image data from the PDF content stream. The original data is not merely hidden — it is deleted.\n\nAfter true redaction is applied, the area contains no recoverable text or image pixels. Document properties such as Title and Author are stored separately from page content and are not cleared by redaction, so they need removing in their own step." },
       { heading: "What to Redact in Common Document Types", body: "Legal filings typically require redacting Social Security numbers, financial account numbers, home addresses, dates of birth, and medical record numbers.\n\nFor GDPR and data privacy compliance, any personal data — names, email addresses, phone numbers, identification numbers — that should not be disclosed when sharing externally must be redacted." },
-      { heading: "How to Redact a PDF Online - Step by Step", body: "Open the ToolMint Redact PDF tool. Upload the PDF containing sensitive content. Use the selection tool to draw redaction boxes over all areas to be permanently hidden. Review the marked areas carefully. Click Apply Redaction to permanently remove the content. Download the redacted PDF.\n\nVerify the redaction by confirming no text is selectable beneath the black fill before sharing." },
+      { heading: "How to Redact a PDF Online - Step by Step", body: "Open the ToolMint Redact PDF tool. Upload the PDF containing sensitive content. Use the selection tool to draw redaction boxes over all areas to be permanently hidden. Review the marked areas carefully. Click Apply Redaction to permanently remove the content. Download the redacted PDF.\n\nVerify the redaction before sharing: try to select and copy the area beneath the black fill, and run the finished file through the PDF Redaction Checker, which reports any text still recoverable on any page." },
       { heading: "After Redaction: Additional Security Steps", body: "After redacting a document, consider cleaning document metadata — PDFs store author information and software identifiers that can reveal information about the document origin. Adding password protection can prevent unauthorized access.\n\nFor GDPR compliance, apply redaction to all copies of the document, not just the version being shared." },
     ],
     faqs: [
@@ -152,8 +152,8 @@ export const blogPosts: BlogPost[] = [
       { q: "Does redacting a PDF reduce file size?", a: "Slightly. Removing text content reduces the file data footprint, but the difference is small for most documents." },
       { q: "Can I redact images and photos in a PDF, not just text?", a: "Yes. ToolMint redaction tool allows you to draw boxes over any area of the page." },
     ],
-    relatedToolSlugs: ["redact-pdf", "protect-pdf", "sign-pdf", "compare-pdf"],
-    relatedPostSlugs: ["how-to-password-protect-a-pdf", "how-to-sign-a-pdf-online-free"],
+    relatedToolSlugs: ["redact-pdf", "pdf-redaction-checker", "protect-pdf", "sign-pdf"],
+    relatedPostSlugs: ["how-to-tell-if-pdf-redaction-failed", "how-to-password-protect-a-pdf"],
   },
   {
     slug: "how-to-password-protect-a-pdf",
@@ -2058,6 +2058,61 @@ export const blogPosts: BlogPost[] = [
     ],
     relatedToolSlugs: ["rock-paper-scissors", "tic-tac-toe", "random-number-generator", "random-name-picker"],
     relatedPostSlugs: ["how-to-play-tic-tac-toe-vs-computer", "how-to-pick-random-winner-giveaway"],
+  },
+  {
+    slug: "how-to-tell-if-pdf-redaction-failed",
+    title: "How to Tell If a PDF Redaction Failed",
+    metaTitle: "How to Tell If a PDF Redaction Failed",
+    description: "Five ways a PDF redaction leaks the text it was meant to remove, how to test for each one by hand, and how to check a whole document at once.",
+    publishedAt: "2026-09-09", category: "PDF Tools", readTime: 6,
+    excerpt: "A black box over a name does not remove the name. Here are the failure patterns that actually occur, the manual tests that catch them, and the one that no manual test will find.",
+    intro: "Redaction fails silently. The document looks finished — black bars in all the right places — and the text underneath is still sitting in the file, one copy-and-paste away. This has happened to law firms, government agencies and newsrooms, and it keeps happening because the failure is invisible in exactly the place people check: the screen. This guide covers the failure patterns that actually occur, how to test for each one yourself, and where manual testing runs out.",
+    sections: [
+      {
+        heading: "The three-second test",
+        body: "Open the PDF, drag-select across the black bar as if you were highlighting a sentence, copy, and paste into any text editor.\n\nIf the redacted words appear, the redaction failed. That is the whole test, and it catches the most common failure on its own.\n\nTwo cautions. A negative result proves less than it looks: if the text sits under an image rather than a drawn shape, or if it is present but invisible somewhere else on the page, selection may miss it entirely. And in some viewers the selection highlight is hidden behind the black bar, so you cannot see what you have grabbed — paste anyway and look at the result rather than the page.",
+      },
+      {
+        heading: "Why a black box is not a redaction",
+        body: "A PDF page is a list of drawing instructions carried out in order. \"Write this text here\" is one instruction; \"fill this rectangle with black\" is another. Drawing the rectangle after the text hides it from view, but the instruction to write the text is still in the file, unchanged.\n\nReal redaction deletes that instruction. The distinction matters because almost every tool that can draw a shape will happily draw one over text, and nothing in the interface warns you that the words survive. Highlighting text in black has the same problem, as does covering it with a white box on a white page — invisible to the eye, fully intact in the file.",
+      },
+      {
+        heading: "The five failure patterns",
+        body: "These are the ones worth testing for, in rough order of how often they turn up:",
+        list: [
+          "Text under a filled shape. A rectangle drawn over live text. Caught by the copy test.",
+          "Text under a pasted image. Someone patches a screenshot over the line instead of drawing a shape. Selection often skips it, because there is no text where you are dragging — the text is beneath the picture.",
+          "Invisible text. Text set to render invisibly. It appears nowhere on screen or in print, so there is no black bar to select, and no visual cue that anything is there.",
+          "Text the same colour as its background. White on white, or any colour matched to the fill behind it. Looks blank, extracts perfectly.",
+          "Content left in document properties. The page is genuinely clean, but the name is still in Title, Author, Subject or Keywords, where it travels with the file.",
+        ],
+      },
+      {
+        heading: "The scanned-document trap",
+        body: "This one deserves its own section because it defeats the intuition that a scan is safe.\n\nA searchable scan is a picture of a page with an invisible text layer laid over it — that layer is what makes the text selectable. If someone redacts the scan by drawing a black box on the picture, the picture is covered but the invisible layer underneath is untouched. The words are still extractable, and because the visible page is an image, nothing about it looks like live text.\n\nWe built exactly this case as a test fixture: a scanned page with a full OCR layer and a black box drawn over one line. The canary text was still recoverable with an independent PDF library. If you are redacting anything that came from a scanner, assume the text layer exists until you have checked.",
+      },
+      {
+        heading: "What a search test can and cannot prove",
+        body: "Searching the finished PDF for a redacted word is a reasonable second check, and it catches cases that selection misses — including some invisible text.\n\nBut it only finds what you think to search for. You can search for a name you know you removed; you cannot search for the account number in an exhibit you did not read closely, or for the third occurrence of a term you only remembered twice. Search confirms specific removals. It does not survey the document.",
+      },
+      {
+        heading: "Checking the whole document at once",
+        body: "The manual tests each cover part of the problem and none covers all of it. Selection misses images and invisible text. Search misses anything you do not think to type. Neither looks at document properties.\n\nThe PDF Redaction Checker runs the equivalent checks across every page and reports what is still recoverable, along with the page it came from. It runs inside your browser — the file is never uploaded, which matters because a document being redacted is sensitive by definition.\n\nIt is not a complete security audit, and the page says so plainly. It reads text, so a signature, photograph or chart hidden under a box is outside what it can see. It cannot tell you whether text that is plainly visible should have been removed. A clear result means these checks found nothing recoverable — not that the document is safe to publish.",
+      },
+      {
+        heading: "If the check finds something",
+        body: "Redact the document again with a tool that removes the underlying text rather than covering it, then check the result. Verifying the finished file is the step people skip, and it is the only one that would have caught any of the published failures.\n\nWork on a copy and keep the original intact — redaction is meant to be irreversible, so there is no undo once it is applied correctly. Clear the document properties in the same pass. Then run the finished file through the checker before it leaves your machine.",
+      },
+    ],
+    faqs: [
+      { q: "Can redacted text really be recovered that easily?", a: "When the redaction was only a shape drawn over the text, yes — selecting and copying the area is usually enough, and a short script can extract it from every page at once. That is why the failure keeps producing news stories: no special tooling is required." },
+      { q: "Does flattening a PDF to images fix a failed redaction?", a: "Converting each page to an image does remove the text layer, so the words are no longer extractable. The trade-off is that the document stops being searchable or selectable, and file size usually increases. It also does not clear document properties, which are stored separately." },
+      { q: "Is a scanned PDF automatically safe to redact with a black box?", a: "No. If the scan was processed for searchable text, an invisible text layer sits over the image and survives anything drawn on top of it. Check whether you can select text on the page; if you can, the layer exists." },
+      { q: "Does printing to PDF remove hidden text?", a: "Printing to PDF re-renders the visible page, which usually drops text hidden under shapes, and it resets some document properties. It is not a reliable redaction method on its own — behaviour varies by application, and metadata inside embedded images can survive. Verify the output rather than assuming." },
+      { q: "What does the checker not detect?", a: "It analyses text. Non-text content hidden under a box — a signature, photo, chart or map — is invisible to it. It also cannot judge whether visible content is sensitive, cannot read earlier saved revisions inside a file, and cannot open password-protected PDFs." },
+    ],
+    relatedToolSlugs: ["pdf-redaction-checker", "redact-pdf", "pdf-to-text", "protect-pdf"],
+    relatedPostSlugs: ["how-to-password-protect-a-pdf", "how-to-extract-text-from-scanned-pdf"],
   },
 ];
 

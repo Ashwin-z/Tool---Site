@@ -95,6 +95,23 @@ def build(out, font):
     d.set_metadata({"title": "Memo", "subject": SECRET, "keywords": "payroll, " + SECRET})
     d.save(f"{out}/rc-metadata-leak.pdf"); d.close()
 
+    # 8b. THE REAL-WORLD CASE: a scanned page carrying a full invisible OCR
+    #     layer, with a black box drawn over part of the scan. The picture is
+    #     covered but the OCR text under the box survives. This exists to prove
+    #     the OCR-layer rule never masks a genuine leak: text covered by a shape
+    #     must be reported even when the page as a whole looks like a scan.
+    src = fitz.open(); sp = base_page(src, font)
+    pix = sp.get_pixmap(dpi=150)
+    d = fitz.open(); p = d.new_page(width=595, height=842)
+    p.insert_image(fitz.Rect(0, 0, 595, 842), pixmap=pix)
+    p.insert_font(fontname="F", fontfile=font)
+    p.insert_text((60, 80), "Confidential Memo", fontsize=18, fontname="F", render_mode=3)
+    p.insert_text((60, 140), SECRET, fontsize=12, fontname="F", render_mode=3)
+    p.insert_text((60, 200), "This paragraph is meant to stay visible.",
+                  fontsize=11, fontname="F", render_mode=3)
+    p.draw_rect(box, color=(0, 0, 0), fill=(0, 0, 0))
+    d.save(f"{out}/rc-scan-ocr-blackbox.pdf"); d.close(); src.close()
+
     # ---------------- cases that MUST NOT be flagged ----------------
 
     # 9. Text genuinely removed. A black box remains, but nothing under it.
@@ -218,6 +235,7 @@ EXPECTED = [
     ("rc-white-text",         True,        True),
     ("rc-image-overlay",      True,        True),
     ("rc-metadata-leak",      True,        True),   # in metadata, not on the page
+    ("rc-scan-ocr-blackbox",  True,        True),   # OCR text under a box on a scan
     ("rc-no-redaction",       True,        False),  # recoverable because VISIBLE
     ("rc-true-redaction",     False,       False),
     ("rc-benign-table",       False,       False),
@@ -262,5 +280,5 @@ if __name__ == "__main__":
     if not os.path.exists(args.font):
         sys.exit(f"Font not found: {args.font}  (pass --font <path to a .ttf>)")
     build(args.out, args.font)
-    print(f"Built 18 fixtures in {args.out}/")
+    print(f"Built 19 fixtures in {args.out}/")
     sys.exit(1 if verify(args.out) else 0)

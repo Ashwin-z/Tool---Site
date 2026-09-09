@@ -106,6 +106,13 @@ The corpus separates two facts that are easy to conflate:
 plain sight. The checker must **not** flag it. A checker that flags visible text
 is a text extractor with an alarm attached.
 
+`rc-scan-ocr-blackbox` guards the opposite mistake. It is a scanned page with a
+full invisible OCR layer and a black box drawn over one line — the picture is
+covered, the OCR text under the box is not. It exists to prove the OCR-layer
+rule never masks a real leak: text covered by a shape is reported even when the
+page as a whole looks like a scan. This case was added in Batch 5 after search
+research surfaced it as a documented real-world failure mode.
+
 ### Cross-implementation check
 
 Verdicts were compared against `x-ray`, which is built on PyMuPDF:
@@ -126,7 +133,7 @@ claims to cover — they are not defects in it.
 
 | | Count | Basis |
 |---|---|---|
-| True positives | 8 | Leak fixtures, each independently confirmed by PyMuPDF |
+| True positives | 9 | Leak fixtures, each independently confirmed by PyMuPDF |
 | True negatives | 15 | 6 benign fixtures + 9 real published PDFs |
 | False positives | **0** | After the Form XObject, opacity, rectangle-only and size-floor fixes |
 | False negatives | 1 | `rc-vector-signature` — documented limitation |

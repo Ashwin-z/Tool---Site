@@ -215,7 +215,7 @@ export default function PdfRedactionCheckerPage() {
         </section>
 
         {/* --------------------------------------------------------- limitations */}
-        <section className="mt-16">
+        <section id="limitations" className="mt-16 scroll-mt-24">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             What this tool cannot check
           </h2>
@@ -235,7 +235,7 @@ export default function PdfRedactionCheckerPage() {
         </section>
 
         {/* --------------------------------------------------------- methodology */}
-        <section className="mt-16">
+        <section id="methodology" className="mt-16 scroll-mt-24">
           <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
             Methodology
           </h2>
@@ -257,10 +257,11 @@ export default function PdfRedactionCheckerPage() {
               marker appears to cover.
             </p>
             <p>
-              It is validated against fifteen purpose-built fixtures — six leak types, six
+              It is validated against sixteen purpose-built fixtures — nine leak types, four
               legitimate documents that must <em>not</em> flag, two flattened scans, and one case
               it is expected to miss — every one of which is independently verified with PyMuPDF,
-              a different PDF library, so the tests are not circular. It is additionally measured
+              a different PDF library, so the tests are not circular. Three further fixtures cover
+              encrypted, corrupt and 300-page documents. It is additionally measured
               against nine real published PDFs (US government publications, IRS forms, arXiv
               papers and a shareholder letter; 169 pages, roughly 26,700 text runs), on which it
               currently reports zero false positives.
@@ -281,6 +282,139 @@ export default function PdfRedactionCheckerPage() {
               text, image overlays and document properties, which x-ray does not claim to cover.
             </p>
           </div>
+        </section>
+
+        {/* ------------------------------------------------- test evidence */}
+        <section id="testing" className="mt-16 scroll-mt-24">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How this was tested
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
+            Fixtures are built <em>and</em> verified with PyMuPDF, a different PDF library from the
+            one this checker runs on, so the expectations are not derived from the code being
+            tested. These figures describe how it performed on that corpus. They are not an accuracy
+            guarantee for your document, and they do not extend to the limitations listed above.
+          </p>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[34rem] border-collapse text-sm">
+              <caption className="sr-only">Measured results on the test corpus</caption>
+              <thead>
+                <tr className="border-b border-white/10 text-left">
+                  <th scope="col" className="py-2 pr-4 font-semibold text-foreground">Result</th>
+                  <th scope="col" className="py-2 pr-4 font-semibold text-foreground">Count</th>
+                  <th scope="col" className="py-2 font-semibold text-foreground">Basis</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Leaks correctly found</td>
+                  <td className="py-2 pr-4 tabular-nums">9</td>
+                  <td className="py-2">Each independently confirmed recoverable by PyMuPDF</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Correctly reported clean</td>
+                  <td className="py-2 pr-4 tabular-nums">15</td>
+                  <td className="py-2">Six benign fixtures plus nine real published PDFs</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">False alarms</td>
+                  <td className="py-2 pr-4 tabular-nums">0</td>
+                  <td className="py-2">On that corpus, after fixing the causes described below</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4">Known misses</td>
+                  <td className="py-2 pr-4 tabular-nums">1</td>
+                  <td className="py-2">
+                    A signature under a box &mdash; non-text content, kept as a deliberate failing case
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-muted">
+            The real-world half of that corpus was nine published documents from different
+            generators &mdash; US government publications, IRS forms with heavy shading and form
+            fields, two LaTeX papers with figures, and a shareholder letter &mdash; totalling 169
+            pages and roughly 26,700 text runs.
+          </p>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
+            Two false-alarm sources were found during that measurement, and both mattered more than
+            the detections. A four-page scanned government memo produced 878 findings, one for every
+            word: a perfectly normal OCR layer. Uncorrected, this tool would have fired on every
+            scanned document in existence. Separately, an early revision flagged sixteen cells of an
+            ordinary shaded table because it ignored draw order.
+          </p>
+        </section>
+
+        {/* --------------------------------------------------- scope comparison */}
+        <section id="comparison" className="mt-16 scroll-mt-24">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+            How this compares with x-ray
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">
+            <a
+              href="https://github.com/freelawproject/x-ray"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="underline decoration-dotted underline-offset-4 hover:text-foreground"
+            >
+              x-ray
+            </a>{" "}
+            is the Free Law Project&rsquo;s open-source bad-redaction detector, built on a different
+            PDF library and run across a very large corpus of court filings. Several of the rules
+            used here were adopted from it. The two tools have <em>different scopes</em>, not
+            different quality: x-ray documents its scope as rectangles over text, and anything
+            outside that is simply not what it sets out to cover.
+          </p>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[34rem] border-collapse text-sm">
+              <caption className="sr-only">Scope comparison, verified on identical fixtures</caption>
+              <thead>
+                <tr className="border-b border-white/10 text-left">
+                  <th scope="col" className="py-2 pr-4 font-semibold text-foreground">Case</th>
+                  <th scope="col" className="py-2 pr-4 font-semibold text-foreground">x-ray</th>
+                  <th scope="col" className="py-2 font-semibold text-foreground">This checker</th>
+                </tr>
+              </thead>
+              <tbody className="text-muted">
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Text under a rectangle</td>
+                  <td className="py-2 pr-4">Detects</td>
+                  <td className="py-2">Detects</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Ordinary documents (no false alarm)</td>
+                  <td className="py-2 pr-4">Clean</td>
+                  <td className="py-2">Clean</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">White-on-white text</td>
+                  <td className="py-2 pr-4">Outside its scope</td>
+                  <td className="py-2">Detects</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Text under a pasted image</td>
+                  <td className="py-2 pr-4">Outside its scope</td>
+                  <td className="py-2">Detects</td>
+                </tr>
+                <tr className="border-b border-white/5">
+                  <td className="py-2 pr-4">Document properties</td>
+                  <td className="py-2 pr-4">Outside its scope</td>
+                  <td className="py-2">Reports for review</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4">Runs without installing anything</td>
+                  <td className="py-2 pr-4">No &mdash; Python library and CLI</td>
+                  <td className="py-2">Yes &mdash; in the browser</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-5 max-w-3xl text-sm leading-7 text-muted">
+            On identical fixtures the two agree on every case inside x-ray&rsquo;s documented scope.
+            For processing PDFs in bulk or inside a pipeline, x-ray is the better fit; this tool
+            exists for the person with one document and no ability to install software.
+          </p>
         </section>
 
         {/* --------------------------------------------------- how to redact well */}
@@ -307,6 +441,16 @@ export default function PdfRedactionCheckerPage() {
               </Link>{" "}
               rebuilds each redacted page as an image, so no text layer survives — then check the
               output here to confirm.
+            </p>
+            <p>
+              For the failure patterns themselves, and the manual tests that catch each one, see{" "}
+              <Link
+                href="/blog/how-to-tell-if-pdf-redaction-failed"
+                className="underline decoration-dotted underline-offset-4 hover:text-foreground"
+              >
+                how to tell if a PDF redaction failed
+              </Link>
+              .
             </p>
           </div>
         </section>

@@ -60,8 +60,25 @@ These are **never** sent, and the helper API makes it hard to send them by accid
 | `tool_reset` | user clears the tool | reference impl: `merge-pdf` |
 | `tool_copy` | user copies the output | helper ready, not yet wired |
 | `tool_share` | user shares a result | helper ready, not yet wired |
+| `tool_next_action` | user acts on a result, e.g. checker → Redact PDF | wired: `pdf-redaction-checker` |
 | `search` | site search submitted | helper ready, not yet wired |
 | `outbound_click` | external link clicked | helper ready, not yet wired |
+
+### PDF Redaction Checker result labels
+
+`tool_complete` and `tool_next_action` from `pdf-redaction-checker` carry
+`output_type`, which is one of a fixed set of verdict labels:
+
+| Label | Meaning |
+|---|---|
+| `no_detected_leaks` | none of the checks found recoverable text |
+| `text_overlay_risk` | text found under an opaque shape or image |
+| `invisible_text_risk` | invisible or background-coloured text found |
+| `metadata_risk` | page clean, but author-supplied document properties present |
+| `multiple_risks` | more than one channel reported something |
+
+This label is the ONLY thing about a checked document that ever leaves the
+browser. The file, the recovered text and every metadata value stay local.
 
 ### Parameters
 

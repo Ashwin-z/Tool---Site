@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { CONTACT } from "@/lib/brand";
+
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
@@ -24,8 +26,25 @@ export default function ContactPage() {
 
       <h1 className="font-display mt-4 text-4xl font-bold leading-[1.1] tracking-[-0.02em]">Contact Us</h1>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
-        Have a question, suggestion, or found a bug? We&apos;d love to hear from you. Use the email
-        addresses below to get in touch.
+        Have a question, suggestion, or found a bug? We&apos;d love to hear from you.
+      </p>
+      {!CONTACT.contactWorks && (
+        /* toolmint.tools has no MX record, so mail to these addresses bounces
+           silently. Saying so is better than letting someone write a message
+           that is never delivered - especially a journalist or researcher
+           checking a claim. Flip CONTACT.contactWorks once a test message has
+           actually been received; this notice disappears on its own. */
+        <p
+          role="note"
+          className="mt-4 max-w-2xl rounded-xl border border-border bg-surface p-4 text-sm leading-6 text-foreground/80"
+        >
+          <strong>Email delivery is not active yet.</strong> Mail sent to the addresses below
+          currently bounces because the domain has no mail records configured. The addresses are
+          listed so you know where to reach us once that is fixed — please do not rely on them
+          today.
+        </p>
+      )}
+      <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
       </p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -59,8 +78,9 @@ export default function ContactPage() {
       <div className="mt-10 rounded-xl border border-border bg-surface p-6">
         <h2 className="font-display text-lg font-bold text-foreground">Response Time</h2>
         <p className="mt-2 text-sm leading-7 text-foreground/75">
-          We aim to respond to all inquiries within 1-2 business days. For urgent issues, please include
-          &quot;Urgent&quot; in your email subject line.
+          {CONTACT.contactWorks
+            ? "We aim to respond to all inquiries within 1-2 business days. For urgent issues, please include “Urgent” in your email subject line."
+            : "No response time can be promised while email delivery is inactive, because messages are not reaching us at all."}
         </p>
       </div>
     </main>

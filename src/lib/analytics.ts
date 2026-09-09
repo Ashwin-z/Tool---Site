@@ -84,7 +84,9 @@ export type ToolEventName =
   | "tool_download"
   | "tool_share"
   | "tool_reset"
-  | "tool_copy";
+  | "tool_copy"
+  /** The user acted on a result, e.g. went from the checker to Redact PDF. */
+  | "tool_next_action";
 
 function send(name: string, params: Record<string, unknown> = {}) {
   if (!analyticsEnabled || typeof window === "undefined" || !window.gtag) return;
@@ -111,6 +113,8 @@ export const analytics = {
   toolShare: (p: ToolEventParams) => trackTool("tool_share", p),
   toolReset: (p: ToolEventParams) => trackTool("tool_reset", p),
   toolCopy: (p: ToolEventParams) => trackTool("tool_copy", p),
+  /** `output_type` carries the destination slug — never anything user-supplied. */
+  toolNextAction: (p: ToolEventParams) => trackTool("tool_next_action", p),
 
   /** Site search. The term is sanitised before it is sent. */
   search: (term: string, resultCount?: number) =>
