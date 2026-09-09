@@ -138,6 +138,39 @@ for (const url of [CHECKER, GUIDE]) {
   await p.close();
 }
 
+// ------------------------------------------- 8. OUTREACH LANDING EXPERIENCE
+// A journalist or researcher arriving cold must be able to answer these from
+// the page itself, without asking. If any of them stops being answerable, the
+// asset stops being citable.
+console.log("\n=== OUTREACH LANDING (can a stranger answer these?) ===");
+{
+  const p = await browser.newPage();
+  await p.goto(`${BASE}${CHECKER}`, { waitUntil: "domcontentloaded", timeout: 120000 });
+  const text = await p.evaluate(() => document.querySelector("main").innerText);
+  const questions = [
+    ["What does it detect?", /black box|under a (black )?box|invisible text/i],
+    ["What does it NOT detect?", /cannot check|cannot detect|outside what it can see/i],
+    ["Is the file uploaded?", /never uploaded|does not leave|stays on your device|in your browser/i],
+    ["How was it tested?", /how this was tested|independently|PyMuPDF|fixtures/i],
+    ["Why trust the result?", /methodology|draw order|false alarm/i],
+    ["How does it compare?", /x-ray/i],
+    ["What do I do next?", /Redact PDF/i],
+  ];
+  for (const [q, re] of questions) log(re.test(text), `checker page answers: ${q}`);
+  await p.close();
+}
+{
+  const p = await browser.newPage();
+  await p.goto(`${BASE}/about`, { waitUntil: "domcontentloaded", timeout: 120000 });
+  const text = await p.evaluate(() => document.querySelector("main").innerText);
+  log(/Who Runs ToolMint/i.test(text), "about page says who operates ToolMint");
+  log(/independent project|not a company/i.test(text), "about page states the operating model");
+  // Batch 3 established we do not use the phrase both name-collision
+  // competitors lead with; it identifies the category, not us.
+  log(!/privacy[- ]first/i.test(text), "about page avoids the contested 'privacy-first' phrasing");
+  await p.close();
+}
+
 await browser.close();
 console.log(`\n${failures} failure(s)`);
 process.exitCode = failures ? 1 : 0;

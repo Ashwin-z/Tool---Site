@@ -10,11 +10,18 @@ be sent automatically.
 > worse than not sending at all. `/contact` now says so plainly, and
 > `CONTACT.contactWorks` in `src/lib/brand.ts` stays `false` until a test
 > message has actually been received. **Fix DNS before sending anything.**
-> See `docs/DNS-EMAIL.md`.
+> Check state at any time with `node scripts/check-email-dns.mjs` — it exits
+> non-zero while outreach must not start. See `docs/DNS-EMAIL.md`.
+>
+> **Receiving is not the only requirement.** The domain also has no SPF, DKIM or
+> DMARC. Cold mail from an unauthenticated domain to newsrooms and law-firm IT
+> departments is filtered rather than bounced, so the absence of replies would
+> look like disinterest when it is actually spam placement. Fix authentication
+> before the first send, not after.
 
 ---
 
-## 1. Short pitch (cold, 4 sentences)
+## 1. Pitch A — short (cold, for directories and busy editors)
 
 > Most "redacted" PDFs that leak do so the same way: a black box is drawn over
 > the text, and the text is never removed. I built a free checker that reads a
@@ -29,7 +36,7 @@ be sent automatically.
 >
 > If it is useful for your readers: https://toolmint.tools/tools/pdf-redaction-checker
 
-## 2. Longer editorial pitch
+## 2. Pitch B — editorial (for writers and resource maintainers)
 
 > Redaction fails silently. The document looks finished, and the text underneath
 > is one copy-and-paste away. It has happened to law firms, government agencies
@@ -64,7 +71,45 @@ be sent automatically.
 > Page: https://toolmint.tools/tools/pdf-redaction-checker
 > Guide: https://toolmint.tools/blog/how-to-tell-if-pdf-redaction-failed
 
-## 3. Methodology summary (one paragraph, quotable)
+## 3. Pitch C — research (for security researchers and tool authors)
+
+Use this where the recipient will judge the method before the product: security
+researchers, digital forensics practitioners, PDF tooling maintainers, people who
+have already written about redaction failure.
+
+> I have been working on browser-side detection of failed PDF redaction, and two
+> results seemed worth sharing regardless of whether the tool is of interest.
+>
+> The first is that **draw order is the entire problem**. An early revision
+> flagged sixteen cells of an ordinary shaded table and a report cover's own
+> white-on-navy title as hidden text, because it compared geometry without
+> comparing paint order. A filled box only conceals text painted before it.
+> Every naive "text under a rectangle" implementation has this failure mode, and
+> it is not visible until you test against ordinary documents rather than against
+> deliberately broken ones.
+>
+> The second is the **scanned-OCR case**. A searchable scan is an image with an
+> invisible text layer over it. Draw a black box on the image and the text layer
+> survives. Suppressing invisible text as "just OCR" is necessary — one four-page
+> scanned government memo produced 878 findings, one per word — but the
+> suppression has to be scoped so it never applies to text that is *covered*. We
+> keep a fixture for exactly this case.
+>
+> Fixtures are generated and independently verified with PyMuPDF, so the
+> expectations do not come from the code under test, and the corpus includes
+> ordinary published documents specifically to measure false alarms. Verdicts
+> agree with Free Law Project's x-ray on every case inside its documented scope.
+>
+> Method: https://toolmint.tools/tools/pdf-redaction-checker#methodology
+> Testing: https://toolmint.tools/tools/pdf-redaction-checker#testing
+>
+> If any of that is wrong I would genuinely like to know.
+
+**Which pitch for which target** is recorded per-row in `docs/OUTREACH-TRACKER.md`.
+
+---
+
+## 4. Methodology summary (one paragraph, quotable)
 
 > The checker walks each page's drawing instructions in order and rebuilds every
 > text run with its position, colour and rendering mode. Draw order matters
@@ -75,7 +120,7 @@ be sent automatically.
 > is not reported as hidden content — but text covered by a shape is still
 > reported even on such a page.
 
-## 4. What the tool is (neutral description for a directory or roundup)
+## 5. What the tool is (neutral description for a directory or roundup)
 
 > **PDF Redaction Checker** — a free browser-based tool that checks whether a
 > PDF's redactions actually removed the text or only covered it. Detects text
@@ -83,7 +128,7 @@ be sent automatically.
 > document properties for review. Runs entirely on the user's device; the file is
 > never uploaded. Limitations published. No account required.
 
-## 5. How to describe the relationship to x-ray
+## 6. How to describe the relationship to x-ray
 
 Always accurately, and never as a criticism. Suggested wording:
 
@@ -96,7 +141,7 @@ Always accurately, and never as a criticism. Suggested wording:
 
 Do not claim x-ray "misses" things. It does not set out to cover them.
 
-## 6. Link destination
+## 7. Link destination
 
 | Audience | Send them to |
 |---|---|
@@ -108,7 +153,7 @@ The tool page is the canonical destination. It carries the methodology, the
 limitations and the test evidence, so a single link gives a writer everything
 needed to describe it accurately.
 
-## 7. Visual asset recommendation
+## 8. Visual asset recommendation
 
 No screenshots exist yet. The two worth producing, in this order:
 
@@ -121,7 +166,7 @@ No screenshots exist yet. The two worth producing, in this order:
 Use `rc-black-box.pdf` from `scripts/redaction-fixtures.py` so the canary string
 is obviously synthetic and no real data is ever shown.
 
-## 8. Key facts that can be cited
+## 9. Key facts that can be cited
 
 Every figure below is measured and reproducible via `scripts/redaction-fixtures.py`
 and `scripts/test-redaction-checker.mjs`. None is an accuracy guarantee.
@@ -142,6 +187,28 @@ and `scripts/test-redaction-checker.mjs`. None is an accuracy guarantee.
 - A 300-page document is analysed in about **2 seconds**.
 
 ---
+
+## Targets
+
+The category table below is the long list. The **tiered, researched shortlist
+with authority data and per-row status lives in `docs/OUTREACH-TRACKER.md`** —
+use that to actually run the campaign.
+
+Research highlights worth knowing before writing:
+
+- **GIJN** (`gijn.org`) has a Common Crawl harmonic rank of **1185**, which is
+  more authoritative than `smallpdf.com` (3397). It maintains standing
+  digital-security resource lists. It is the single highest-value target.
+- **Freedom of the Press Foundation** (rank 14701) builds *Dangerzone*, a
+  PDF-sanitising tool. The subject is already theirs, which cuts both ways: high
+  relevance, but they are builders more than linkers. Lead with method, not tool.
+- **NoUploadTools** publishes explicit review criteria — local processing,
+  offline support, open-source availability, clear disclosure of API calls — and
+  has a `/submit` path. ToolMint meets all but open-source. Its PDF category
+  currently lists six tools. This is the most immediately actionable target.
+- **US federal court and FOI `.gov` pages** define the redaction duty and warn
+  against black boxes, but effectively never link to third-party commercial
+  tools. High relevance, near-zero link probability — Tier 3, not Tier 1.
 
 ## Target categories
 

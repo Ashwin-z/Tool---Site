@@ -34,7 +34,7 @@ export default function AboutPage() {
         About ToolMint
       </h1>
       <p className="mt-3 max-w-3xl text-sm leading-7 text-muted">
-        Your go-to destination for fast, free, and privacy-first online tools.
+        Free browser tools for PDFs, images and text. Your file never leaves your device.
       </p>
 
       {/* Stats */}
@@ -123,11 +123,13 @@ export default function AboutPage() {
         </section>
 
         <section>
-          <h2 className="font-display text-xl font-bold text-foreground">Privacy First</h2>
+          <h2 className="font-display text-xl font-bold text-foreground">Your File Stays On Your Device</h2>
           <p>
             Most ToolMint tools process your files and data entirely in your browser. Your documents,
             images, and text are never uploaded to our servers unless the tool explicitly requires server-side
-            processing (which is clearly stated on the tool page). We believe your data should stay yours.
+            processing, which is stated on the tool page itself. You do not have to take that on trust:
+            open your browser&apos;s Network tab while a tool runs and you can see for yourself that no
+            request carries your file.
           </p>
         </section>
 
@@ -161,6 +163,44 @@ export default function AboutPage() {
               based on user feedback.
             </li>
           </ul>
+        </section>
+
+        <section>
+          <h2 className="font-display text-xl font-bold text-foreground">Who Runs ToolMint</h2>
+          <p>
+            ToolMint is an independent project, not a company. It is built and maintained by one
+            developer, has no investors, and does not sell data or resell anything you upload — the
+            PDF tools have nothing to sell, because they never receive your file in the first place.
+          </p>
+          <p className="mt-3">
+            Where a tool makes a claim that can be checked, the working is published rather than
+            asserted. The{" "}
+            <Link href="/tools/pdf-redaction-checker" className="text-accent-light hover:text-foreground">
+              PDF Redaction Checker
+            </Link>{" "}
+            documents its{" "}
+            <Link
+              href="/tools/pdf-redaction-checker#methodology"
+              className="text-accent-light hover:text-foreground"
+            >
+              detection method
+            </Link>
+            , the{" "}
+            <Link
+              href="/tools/pdf-redaction-checker#limitations"
+              className="text-accent-light hover:text-foreground"
+            >
+              cases it cannot detect
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/tools/pdf-redaction-checker#testing"
+              className="text-accent-light hover:text-foreground"
+            >
+              how it was tested
+            </Link>
+            , including the cases where it fails.
+          </p>
         </section>
 
         <section>

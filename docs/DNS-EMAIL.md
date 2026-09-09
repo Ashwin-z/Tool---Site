@@ -1,6 +1,10 @@
 # DNS and email — required manual action
 
-Verified 2026-09-08 against `8.8.8.8`.
+Verified 2026-09-08 against `8.8.8.8`. **Re-verified 2026-09-09 (Batch 6):
+state unchanged — still no MX, SPF, DKIM or DMARC.**
+
+Run `node scripts/check-email-dns.mjs` to re-check at any time. It exits
+non-zero while outreach must not start.
 
 ## Current state
 
@@ -38,7 +42,31 @@ This cannot be fixed in code. It requires DNS changes at Name.com.
 | Zoho Mail | free tier | Real mailbox, can send as `hello@toolmint.tools`. |
 | Google Workspace | ~$6/user/mo | Overkill for now. |
 
-Forwarding is enough today — the requirement is that mail *arrives*.
+Forwarding was enough when the only requirement was that mail *arrives*.
+
+**It is no longer enough.** Batch 5 produced an outreach campaign, and that
+changes the requirement in two ways:
+
+1. **You need to send *as* the address, not just receive at it.** Pitching a
+   journalist from a personal Gmail while the site lists `hello@toolmint.tools`
+   is an inconsistency the recipient will notice, and it undercuts a pitch whose
+   whole basis is credibility. Name.com forwarding is receive-only.
+2. **You need SPF, DKIM and DMARC, or the mail will be filtered.** A domain with
+   no authentication records sending cold mail to newsrooms, law-firm IT
+   departments and government FOI offices has close to the worst possible
+   deliverability profile — those are precisely the recipients running strict
+   filtering. The message will not bounce; it will silently land in spam, which
+   is worse, because you will read the absence of replies as disinterest.
+
+For outreach, pick a provider that gives a real mailbox and a DKIM key. Zoho's
+free tier does; forwarding does not.
+
+### Sending history
+
+A domain that has never sent mail has no reputation. Do not send the whole
+campaign on day one. Send a handful, spaced out, and only expand once replies
+are arriving normally. This is the same reason Batch 6 recommends starting with
+five targets rather than fifty.
 
 ### 2. Add the records at Name.com
 
@@ -78,9 +106,20 @@ nslookup -type=TXT toolmint.tools 8.8.8.8
 nslookup -type=TXT _dmarc.toolmint.tools 8.8.8.8
 ```
 
+Or simply run:
+
+```bash
+node scripts/check-email-dns.mjs
+```
+
 Then send a real message to `hello@toolmint.tools` from an outside account and
 confirm it arrives. **DNS records resolving is not proof that mail is delivered** —
-only a received test message is.
+only a received test message is. The script deliberately reports "configured",
+never "working", for this reason.
+
+Once a test message has actually arrived, set `CONTACT.contactWorks = true` in
+`src/lib/brand.ts`. The notice on `/contact` disappears on its own and the
+response-time line comes back.
 
 ### 4. Then, and only then
 
